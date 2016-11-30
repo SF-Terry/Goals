@@ -1,38 +1,33 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown } from 'semantic-ui-react'
-var storekeeper = require('../js/storekeeper.js');
+let storekeeper = require('../js/storekeeper.js');
+let settings = storekeeper.settings;
+let tasks = storekeeper.settings;
 
-/* test storekeeper start */
-console.dir(storekeeper);
-let interval = 1000;
-
-// email
-// add, modify, delete
-setTimeout(() => {storekeeper.settings.push({email: 'test1@todolist.com'}); console.log("email adding");}, interval + 1000);
-setTimeout(() => {storekeeper.settings[0].email = 'test2@todolist.com'; console.log("email modifiing");}, interval + 1000);
-setTimeout(() => {storekeeper.settings.splice(0,1); console.log("email deleting");  console.log("Testing email completed!"); }, interval + 1000);
-
-// tasks
-// add modify delete
-setTimeout(() => {storekeeper.tasks.push({name: 'task1', level: 'a'}); console.log("task adding");}, interval + 1000);
-setTimeout(() => {storekeeper.tasks[0].name = 'task2'; console.log("task modifiing");}, interval + 1000);
-setTimeout(() => {storekeeper.tasks[0].level = 'b'; console.log("task modifiing");}, interval + 1000);
-setTimeout(() => {storekeeper.tasks.splice(0,1); console.log("task deleting");  console.log("Testing task completed!"); }, interval + 1000);
-
-/* test storekeeper end */
-
-
+tasks.push("testBrowser")
+tasks[0] = "testBrowser2"
 
 // ListContainer
 class ListContainer extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			test: '\nEmpty'
+		}
+		var that = this;
+		setTimeout(() => {
+			that.setState({
+				test: '<br/>' + localStorage['todolistStorekeeper']
+			});
+		}, 3000);
 	}
 	render() {
 		return (
 			<div>
-				ListContainer
+				ListContainer123
+				{tasks[0]}
+				{this.state.test}
 			</div>
 		);
 	}
