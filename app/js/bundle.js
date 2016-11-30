@@ -83,10 +83,6 @@
 
 	var _semanticUiReact = __webpack_require__(184);
 
-	var _observe = __webpack_require__(1018);
-
-	var _observe2 = _interopRequireDefault(_observe);
-
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -108,24 +104,31 @@
 			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
-	/*let storekeeper = require('../js/storekeeper.js');
-	let settings = storekeeper.settings;
-	let tasks = storekeeper.settings;*/
 
-	/*let observe = function(o, fn) {
-	  return new Proxy(o, {
-	    set(target, property, value) {
-	      fn(property, value);
-	      target[property] = value;
-	    },
-	  })
-	};
-	*/
+	var storekeeper = __webpack_require__(714);
+	var settings = storekeeper.settings;
+	var tasks = storekeeper.settings;
 
-	console.log(_observe2.default);
+	// email
+	// add, modify, delete
+	var interval = 1000;
+	// setTimeout(() => {settings.push({email: 'test1@todolist.com'}); console.log("email adding");}, interval + 1000);
+	// setTimeout(() => {settings[0].email = 'test2@todolist.com'; console.log("email modifiing");}, interval + 1000);
+	// setTimeout(() => {settings.splice(0,1); console.log("email deleting");  console.log("Testing email completed!"); }, interval + 1000);
 
-	/*tasks.push("testBrowser")
-	tasks[0] = "testBrowser2"*/
+	// tasks
+	// add modify delete
+	setTimeout(function () {
+		tasks.push({ name: 'task1', level: 'a' });console.log("task adding");
+	}, interval + 1000);
+	setTimeout(function () {
+		tasks[0].name = 'task2';console.log("task modifiing");
+	}, interval + 1000);
+	setTimeout(function () {
+		tasks[0].level = 'b';console.log("task modifiing");
+	}, interval + 1000);
+	// setTimeout(() => {tasks.splice(0,1); console.log("task deleting");  console.log("Testing task completed!"); }, interval + 1000);
+
 
 	// ListContainer
 
@@ -144,11 +147,11 @@
 				test: 'Empty'
 			};
 
-			// setTimeout(() => {
-			// 	that.setState({
-			// 		test: 'changed'
-			// 	});
-			// }, 3000);
+			setTimeout(function () {
+				that.setState({
+					test: localStorage['todolistStorekeeper']
+				});
+			}, 3000);
 			/* test compatibility end */
 			return _this;
 		}
@@ -57465,7 +57468,113 @@
 	exports.default = StatisticValue;
 
 /***/ },
-/* 714 */,
+/* 714 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
+
+	var _observe = __webpack_require__(1018);
+
+	var _observe2 = _interopRequireDefault(_observe);
+
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
+
+	var Storekeeper = function () {
+		function Storekeeper(name) {
+			_classCallCheck(this, Storekeeper);
+
+			// temp add
+			localStorage.removeItem("todolistStorekeeper");
+
+			var that = this;
+
+			this.uniqueSaveLibrary = [];
+
+			this.filterdObj = {};
+
+			this.init(name);
+
+			// observe change and sync data
+			var _changedCallback = function _changedCallback() {
+				console.log("something changed");
+				that.filterdObj.settings = that.settings;
+				that.filterdObj.tasks = that.tasks;
+				localStorage[name] = JSON.stringify(that.filterdObj);
+				console.log("localStorage now is: ", localStorage[name]);
+				console.log("storekeeperis: ", that);
+			};
+			this.observeChange(_changedCallback);
+		}
+
+		_createClass(Storekeeper, [{
+			key: "init",
+			value: function init(name) {
+				var value = localStorage[name];
+				var isExsitName = Boolean(value);
+
+				// init data
+				this.settings = [];
+				this.tasks = [];
+
+				// load localStorage's data to 
+				if (isExsitName) {
+					var data = JSON.parse(localStorage[name]);
+					var isDataCorrect = Array.isArray(data.settings) && Array.isArray(data.tasks);
+					if (isDataCorrect) {
+						this.settings = data.settings;
+						this.tasks = data.tasks;
+					}
+					if (!isDataCorrect) {
+						throw "localStorage data error: Name: " + name + "  Localstorage data:" + localStorage[name].toString();
+					}
+				}
+				// active localStorage
+				if (!isExsitName) {
+					var initData = {
+						settings: this.settings,
+						tasks: this.tasks
+					};
+					localStorage[name] = JSON.stringify(initData);
+				}
+			}
+		}, {
+			key: "observeChange",
+			value: function observeChange(changedCallback) {
+				(0, _observe2.default)(this, function () {
+					changedCallback();
+				});
+			}
+		}, {
+			key: "saveUniqueSaveLibrary",
+			value: function saveUniqueSaveLibrary(obj) {
+				this.uniqueSaveLibrary.push(obj);
+			}
+		}]);
+
+		return Storekeeper;
+	}();
+
+	module.exports = new Storekeeper("todolistStorekeeper");
+
+/***/ },
 /* 715 */
 /***/ function(module, exports, __webpack_require__) {
 

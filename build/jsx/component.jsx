@@ -1,25 +1,25 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown } from 'semantic-ui-react'
-/*let storekeeper = require('../js/storekeeper.js');
+let storekeeper = require('../js/storekeeper.js');
 let settings = storekeeper.settings;
-let tasks = storekeeper.settings;*/
+let tasks = storekeeper.settings;
 
-/*let observe = function(o, fn) {
-  return new Proxy(o, {
-    set(target, property, value) {
-      fn(property, value);
-      target[property] = value;
-    },
-  })
-};
-*/
 
-import observe from '../js/observe.js';
-console.log(observe);
+// email
+// add, modify, delete
+let interval = 1000;
+// setTimeout(() => {settings.push({email: 'test1@todolist.com'}); console.log("email adding");}, interval + 1000);
+// setTimeout(() => {settings[0].email = 'test2@todolist.com'; console.log("email modifiing");}, interval + 1000);
+// setTimeout(() => {settings.splice(0,1); console.log("email deleting");  console.log("Testing email completed!"); }, interval + 1000);
 
-/*tasks.push("testBrowser")
-tasks[0] = "testBrowser2"*/
+// tasks
+// add modify delete
+setTimeout(() => {tasks.push({name: 'task1', level: 'a'}); console.log("task adding");}, interval + 1000);
+setTimeout(() => {tasks[0].name = 'task2'; console.log("task modifiing");}, interval + 1000);
+setTimeout(() => {tasks[0].level = 'b'; console.log("task modifiing");}, interval + 1000);
+// setTimeout(() => {tasks.splice(0,1); console.log("task deleting");  console.log("Testing task completed!"); }, interval + 1000);
+
 
 // ListContainer
 class ListContainer extends React.Component {
@@ -32,12 +32,11 @@ class ListContainer extends React.Component {
 			test: 'Empty'
 		}
 
-
-		// setTimeout(() => {
-		// 	that.setState({
-		// 		test: 'changed'
-		// 	});
-		// }, 3000);
+		setTimeout(() => {
+			that.setState({
+				test: localStorage['todolistStorekeeper']
+			});
+		}, 3000);
 		/* test compatibility end */
 	}
 	render() {
