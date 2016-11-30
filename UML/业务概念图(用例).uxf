@@ -5,7 +5,7 @@
     <id>UMLActor</id>
     <coordinates>
       <x>84</x>
-      <y>378</y>
+      <y>336</y>
       <w>42</w>
       <h>77</h>
     </coordinates>
@@ -16,7 +16,7 @@
     <id>Relation</id>
     <coordinates>
       <x>133</x>
-      <y>182</y>
+      <y>140</y>
       <w>91</w>
       <h>238</h>
     </coordinates>
@@ -27,7 +27,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>210</x>
-      <y>175</y>
+      <y>133</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -38,7 +38,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>70</y>
+      <y>28</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -49,7 +49,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>77</y>
+      <y>35</y>
       <w>84</w>
       <h>126</h>
     </coordinates>
@@ -60,7 +60,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>294</y>
+      <y>252</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -71,7 +71,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>182</y>
+      <y>140</y>
       <w>84</w>
       <h>140</h>
     </coordinates>
@@ -82,7 +82,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>119</y>
+      <y>77</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -93,7 +93,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>126</y>
+      <y>84</y>
       <w>84</w>
       <h>77</h>
     </coordinates>
@@ -104,7 +104,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>175</y>
+      <y>133</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -115,7 +115,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>182</y>
+      <y>140</y>
       <w>84</w>
       <h>21</h>
     </coordinates>
@@ -126,7 +126,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>224</y>
+      <y>182</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -137,7 +137,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>182</y>
+      <y>140</y>
       <w>84</w>
       <h>70</h>
     </coordinates>
@@ -148,7 +148,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>210</x>
-      <y>448</y>
+      <y>406</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -159,7 +159,7 @@
     <id>Relation</id>
     <coordinates>
       <x>133</x>
-      <y>399</y>
+      <y>357</y>
       <w>91</w>
       <h>77</h>
     </coordinates>
@@ -170,7 +170,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>378</y>
+      <y>336</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -181,7 +181,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>427</y>
+      <y>385</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -192,7 +192,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>385</y>
+      <y>343</y>
       <w>84</w>
       <h>91</h>
     </coordinates>
@@ -203,7 +203,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>434</y>
+      <y>392</y>
       <w>84</w>
       <h>42</h>
     </coordinates>
@@ -214,7 +214,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>469</y>
+      <y>427</y>
       <w>84</w>
       <h>28</h>
     </coordinates>
@@ -225,7 +225,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>455</y>
+      <y>413</y>
       <w>84</w>
       <h>42</h>
     </coordinates>
@@ -236,7 +236,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>357</x>
-      <y>518</y>
+      <y>476</y>
       <w>112</w>
       <h>35</h>
     </coordinates>
@@ -247,7 +247,7 @@
     <id>Relation</id>
     <coordinates>
       <x>287</x>
-      <y>455</y>
+      <y>413</y>
       <w>84</w>
       <h>98</h>
     </coordinates>
@@ -258,7 +258,7 @@
     <id>UMLUseCase</id>
     <coordinates>
       <x>224</x>
-      <y>672</y>
+      <y>630</y>
       <w>203</w>
       <h>28</h>
     </coordinates>
@@ -269,7 +269,7 @@
     <id>Relation</id>
     <coordinates>
       <x>133</x>
-      <y>399</y>
+      <y>357</y>
       <w>105</w>
       <h>301</h>
     </coordinates>

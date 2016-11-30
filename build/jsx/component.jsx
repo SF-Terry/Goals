@@ -1,50 +1,55 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown } from 'semantic-ui-react'
+import observe from '../js/observe.js';
 let storekeeper = require('../js/storekeeper.js');
 let settings = storekeeper.settings;
-let tasks = storekeeper.settings;
+let tasks = storekeeper.tasks;
 
 
-// email
-// add, modify, delete
-let interval = 1000;
-// setTimeout(() => {settings.push({email: 'test1@todolist.com'}); console.log("email adding");}, interval + 1000);
-// setTimeout(() => {settings[0].email = 'test2@todolist.com'; console.log("email modifiing");}, interval + 1000);
-// setTimeout(() => {settings.splice(0,1); console.log("email deleting");  console.log("Testing email completed!"); }, interval + 1000);
+setTimeout(() => {
+	tasks[2].name = 'task8';
+}, 3000);
+// TaskList
+class TaskList extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			tasks: tasks
+		}
 
-// tasks
-// add modify delete
-setTimeout(() => {tasks.push({name: 'task1', level: 'a'}); console.log("task adding");}, interval + 1000);
-setTimeout(() => {tasks[0].name = 'task2'; console.log("task modifiing");}, interval + 1000);
-setTimeout(() => {tasks[0].level = 'b'; console.log("task modifiing");}, interval + 1000);
-// setTimeout(() => {tasks.splice(0,1); console.log("task deleting");  console.log("Testing task completed!"); }, interval + 1000);
+		this.observeChange();
 
+	}
+
+	observeChange() {
+		var that = this;
+		observe(tasks, () => {
+			that.setState({
+				tasks: tasks
+			});
+		});	
+	}
+
+	render() {
+		var tasks = this.state.tasks;
+		return <ul>
+			{tasks.map((task, index) => (<li key={index}>{task.level}&nbsp;&nbsp;{task.name}</li>))}
+		</ul>;
+	}
+}
 
 // ListContainer
 class ListContainer extends React.Component {
 	constructor(props) {
 		super(props);
-		/* test compatibility start */
-		var that = this;
-
-		this.state = {
-			test: 'Empty'
-		}
-
-		setTimeout(() => {
-			that.setState({
-				test: localStorage['todolistStorekeeper']
-			});
-		}, 3000);
-		/* test compatibility end */
 	}
 	render() {
+		const taskTypes = this.props.taskTypes;
+		const taskType = this.props.taskType;
 		return (
 			<div>
-				ListContainer123
-				<br/>
-				{this.state.test}
+				<TaskList taskTypes={taskTypes} taskType={taskType}  />
 			</div>
 		);
 	}

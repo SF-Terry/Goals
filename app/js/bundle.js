@@ -83,6 +83,10 @@
 
 	var _semanticUiReact = __webpack_require__(184);
 
+	var _observe = __webpack_require__(1018);
+
+	var _observe2 = _interopRequireDefault(_observe);
+
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -107,59 +111,71 @@
 
 	var storekeeper = __webpack_require__(714);
 	var settings = storekeeper.settings;
-	var tasks = storekeeper.settings;
+	var tasks = storekeeper.tasks;
 
-	// email
-	// add, modify, delete
-	var interval = 1000;
-	// setTimeout(() => {settings.push({email: 'test1@todolist.com'}); console.log("email adding");}, interval + 1000);
-	// setTimeout(() => {settings[0].email = 'test2@todolist.com'; console.log("email modifiing");}, interval + 1000);
-	// setTimeout(() => {settings.splice(0,1); console.log("email deleting");  console.log("Testing email completed!"); }, interval + 1000);
+	setTimeout(function () {
+		tasks[2].name = 'task8';
+	}, 3000);
+	// TaskList
 
-	// tasks
-	// add modify delete
-	setTimeout(function () {
-		tasks.push({ name: 'task1', level: 'a' });console.log("task adding");
-	}, interval + 1000);
-	setTimeout(function () {
-		tasks[0].name = 'task2';console.log("task modifiing");
-	}, interval + 1000);
-	setTimeout(function () {
-		tasks[0].level = 'b';console.log("task modifiing");
-	}, interval + 1000);
-	// setTimeout(() => {tasks.splice(0,1); console.log("task deleting");  console.log("Testing task completed!"); }, interval + 1000);
+	var TaskList = function (_React$Component) {
+		_inherits(TaskList, _React$Component);
 
+		function TaskList(props) {
+			_classCallCheck(this, TaskList);
+
+			var _this = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+
+			_this.state = {
+				tasks: tasks
+			};
+
+			_this.observeChange();
+
+			return _this;
+		}
+
+		_createClass(TaskList, [{
+			key: 'observeChange',
+			value: function observeChange() {
+				var that = this;
+				(0, _observe2.default)(tasks, function () {
+					that.setState({
+						tasks: tasks
+					});
+				});
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var tasks = this.state.tasks;
+				return _react2.default.createElement('ul', null, tasks.map(function (task, index) {
+					return _react2.default.createElement('li', { key: index }, task.level, '\xA0\xA0', task.name);
+				}));
+			}
+		}]);
+
+		return TaskList;
+	}(_react2.default.Component);
 
 	// ListContainer
 
-	var ListContainer = function (_React$Component) {
-		_inherits(ListContainer, _React$Component);
+
+	var ListContainer = function (_React$Component2) {
+		_inherits(ListContainer, _React$Component2);
 
 		function ListContainer(props) {
 			_classCallCheck(this, ListContainer);
 
-			/* test compatibility start */
-			var _this = _possibleConstructorReturn(this, (ListContainer.__proto__ || Object.getPrototypeOf(ListContainer)).call(this, props));
-
-			var that = _this;
-
-			_this.state = {
-				test: 'Empty'
-			};
-
-			setTimeout(function () {
-				that.setState({
-					test: localStorage['todolistStorekeeper']
-				});
-			}, 3000);
-			/* test compatibility end */
-			return _this;
+			return _possibleConstructorReturn(this, (ListContainer.__proto__ || Object.getPrototypeOf(ListContainer)).call(this, props));
 		}
 
 		_createClass(ListContainer, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement('div', null, 'ListContainer123', _react2.default.createElement('br', null), this.state.test);
+				var taskTypes = this.props.taskTypes;
+				var taskType = this.props.taskType;
+				return _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskTypes: taskTypes, taskType: taskType }));
 			}
 		}]);
 
@@ -169,8 +185,8 @@
 	// TitleBar
 
 
-	var TitleBar = function (_React$Component2) {
-		_inherits(TitleBar, _React$Component2);
+	var TitleBar = function (_React$Component3) {
+		_inherits(TitleBar, _React$Component3);
 
 		function TitleBar(props) {
 			_classCallCheck(this, TitleBar);
@@ -199,8 +215,8 @@
 	// TaskListContainer
 
 
-	var TaskListContainer = function (_React$Component3) {
-		_inherits(TaskListContainer, _React$Component3);
+	var TaskListContainer = function (_React$Component4) {
+		_inherits(TaskListContainer, _React$Component4);
 
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
@@ -221,8 +237,8 @@
 	// DayTaskContainer
 
 
-	var DayTaskContainer = function (_React$Component4) {
-		_inherits(DayTaskContainer, _React$Component4);
+	var DayTaskContainer = function (_React$Component5) {
+		_inherits(DayTaskContainer, _React$Component5);
 
 		function DayTaskContainer() {
 			_classCallCheck(this, DayTaskContainer);
@@ -244,8 +260,8 @@
 	// LongTaskContainer
 
 
-	var LongTaskContainer = function (_React$Component5) {
-		_inherits(LongTaskContainer, _React$Component5);
+	var LongTaskContainer = function (_React$Component6) {
+		_inherits(LongTaskContainer, _React$Component6);
 
 		function LongTaskContainer() {
 			_classCallCheck(this, LongTaskContainer);
@@ -267,8 +283,8 @@
 	// ToDoList
 
 
-	var ToDoList = function (_React$Component6) {
-		_inherits(ToDoList, _React$Component6);
+	var ToDoList = function (_React$Component7) {
+		_inherits(ToDoList, _React$Component7);
 
 		function ToDoList() {
 			_classCallCheck(this, ToDoList);
@@ -57502,7 +57518,7 @@
 			_classCallCheck(this, Storekeeper);
 
 			// temp add
-			localStorage.removeItem("todolistStorekeeper");
+			// localStorage.removeItem("todolistStorekeeper");
 
 			var that = this;
 
@@ -57514,12 +57530,12 @@
 
 			// observe change and sync data
 			var _changedCallback = function _changedCallback() {
-				console.log("something changed");
+				// console.log("something changed");
 				that.filterdObj.settings = that.settings;
 				that.filterdObj.tasks = that.tasks;
 				localStorage[name] = JSON.stringify(that.filterdObj);
 				console.log("localStorage now is: ", localStorage[name]);
-				console.log("storekeeperis: ", that);
+				// console.log("storekeeperis: ", that);
 			};
 			this.observeChange(_changedCallback);
 		}

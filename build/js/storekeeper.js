@@ -3,7 +3,7 @@ import observe from './observe.js';
 class Storekeeper {
 	constructor(name) {
 		// temp add
-		localStorage.removeItem("todolistStorekeeper");
+		// localStorage.removeItem("todolistStorekeeper");
 
 		var that = this;
 
@@ -15,12 +15,12 @@ class Storekeeper {
 
 		// observe change and sync data
 		var _changedCallback = () => {
-			console.log("something changed");
+			// console.log("something changed");
 			that.filterdObj.settings = that.settings;
 			that.filterdObj.tasks = that.tasks;
 			localStorage[name] = JSON.stringify(that.filterdObj);
 			console.log("localStorage now is: ", localStorage[name]);
-			console.log("storekeeperis: ", that);
+			// console.log("storekeeperis: ", that);
 		};
 		this.observeChange(_changedCallback);
 	}
