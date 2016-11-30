@@ -104,12 +104,38 @@
 
 	var storekeeper = __webpack_require__(714);
 
-	// setTimeout(() => {storekeeper.settings.push({a: {
-	// 	b: [1,2,3,4,5]
-	// }}); console.log(storekeeper);}, 5000);
+	/* test storekeeper start */
+	console.dir(storekeeper);
+	var interval = 1000;
+
+	// email
+	// add, modify, delete
 	setTimeout(function () {
-		storekeeper.settings[2]['a']['b'][0] = 'newNumber';console.dir(storekeeper);
-	}, 3000);
+		storekeeper.settings.push({ email: 'test1@todolist.com' });console.log("email adding");
+	}, interval + 1000);
+	setTimeout(function () {
+		storekeeper.settings[0].email = 'test2@todolist.com';console.log("email modifiing");
+	}, interval + 1000);
+	setTimeout(function () {
+		storekeeper.settings.splice(0, 1);console.log("email deleting");console.log("Testing email completed!");
+	}, interval + 1000);
+
+	// tasks
+	// add modify delete
+	setTimeout(function () {
+		storekeeper.tasks.push({ name: 'task1', level: 'a' });console.log("task adding");
+	}, interval + 1000);
+	setTimeout(function () {
+		storekeeper.tasks[0].name = 'task2';console.log("task modifiing");
+	}, interval + 1000);
+	setTimeout(function () {
+		storekeeper.tasks[0].level = 'b';console.log("task modifiing");
+	}, interval + 1000);
+	setTimeout(function () {
+		storekeeper.tasks.splice(0, 1);console.log("task deleting");console.log("Testing task completed!");
+	}, interval + 1000);
+
+	/* test storekeeper end */
 
 	// ListContainer
 
@@ -57460,7 +57486,7 @@
 			_classCallCheck(this, Storekeeper);
 
 			// temp add
-			// localStorage.removeItem("todolistStorekeeper");
+			localStorage.removeItem("todolistStorekeeper");
 
 			var that = this;
 
@@ -57471,13 +57497,15 @@
 			this.init(name);
 
 			// observe change and sync data
-			this.observeChange(function () {
-				console.log("something changed");
+			var _changedCallback = function _changedCallback() {
+				// console.log("something changed");
 				that.filterdObj.settings = that.settings;
 				that.filterdObj.tasks = that.tasks;
 				localStorage[name] = JSON.stringify(that.filterdObj);
-				console.log("localStorage now is: ", localStorage[name]);
-			});
+				// console.log("localStorage now is: ", localStorage[name]);
+				// console.log("storekeeperis: ", that);
+			};
+			this.observeChange(_changedCallback);
 		}
 
 		_createClass(Storekeeper, [{
@@ -57513,34 +57541,33 @@
 			}
 		}, {
 			key: "observeChange",
-			value: function observeChange(callback) {
+			value: function observeChange(changedCallback) {
 				var that = this;
-				var iterateArray = function iterateArray(arr, callback) {
+				var iterateArray = function iterateArray(arr, callback2) {
 					arr.forEach(function (item) {
 						var isObj = item.constructor === {}.constructor;
 						var isArr = item.constructor === [].constructor;
 						if (isObj) {
-							iterateObject(item, callback);
+							iterateObject(item, callback2);
 						}
 						if (isArr) {
-							iterateArray(item, callback);
+							iterateArray(item, callback2);
 						}
 						if (isObj || isArr) {
-							callback(item);
+							callback2(item);
 						}
 					});
 				};
-				var iterateObject = function iterateObject(obj, callback) {
+				var iterateObject = function iterateObject(obj, callback2) {
 					var arr = Object.keys(obj).map(function (item) {
 						return obj[item];
 					});
-					iterateArray(arr, callback);
+					iterateArray(arr, callback2);
 				};
 				iterateObject(that, function (item) {
-					// console.log('item is: ');
-					// console.dir(item);
+					var isFilterdObj = Object.is(item, that.filterdObj);
 					var isUniqueSaveLibrary = Object.is(item, that.uniqueSaveLibrary);
-					if (!isUniqueSaveLibrary) {
+					if (!isUniqueSaveLibrary && !isFilterdObj) {
 						var isObserving = that.uniqueSaveLibrary.some(function (libraryItem) {
 							return libraryItem === item;
 						});
@@ -57559,9 +57586,10 @@
 							}
 							if (observeFunc) {
 								observeFunc(item, function (change) {
-									console.log(change);
-									callback();
-									that.observeChange(callback);
+									// sync when anything change
+									changedCallback();
+									// reobserve if someting was added
+									that.observeChange(changedCallback);
 								});
 							}
 						}
@@ -57571,7 +57599,6 @@
 		}, {
 			key: "saveUniqueSaveLibrary",
 			value: function saveUniqueSaveLibrary(obj) {
-				// const id = (this.uniqueSaveLibrary.keys().length + 1).toString();		
 				this.uniqueSaveLibrary.push(obj);
 			}
 		}]);

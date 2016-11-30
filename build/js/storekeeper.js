@@ -1,7 +1,7 @@
 class Storekeeper {
 	constructor(name) {
 		// temp add
-		// localStorage.removeItem("todolistStorekeeper");
+		localStorage.removeItem("todolistStorekeeper");
 
 		var that = this;
 
@@ -12,13 +12,15 @@ class Storekeeper {
 		this.init(name);
 
 		// observe change and sync data
-		this.observeChange(() => {
-			console.log("something changed");
+		var _changedCallback = () => {
+			// console.log("something changed");
 			that.filterdObj.settings = that.settings;
 			that.filterdObj.tasks = that.tasks;
 			localStorage[name] = JSON.stringify(that.filterdObj);
-			console.log("localStorage now is: ", localStorage[name]);
-		});
+			// console.log("localStorage now is: ", localStorage[name]);
+			// console.log("storekeeperis: ", that);
+		};
+		this.observeChange(_changedCallback);
 	}
 
 	init(name) {
@@ -51,32 +53,31 @@ class Storekeeper {
 		}
 	}
 
-	observeChange(callback) {
+	observeChange(changedCallback) {
 		var that = this;
-		var iterateArray = (arr, callback) => {
+		var iterateArray = (arr, callback2) => {
 			arr.forEach((item) => {
 				const isObj = item.constructor === {}.constructor;
 				const isArr = item.constructor === [].constructor;
 				if (isObj) {
-					iterateObject(item, callback);
+					iterateObject(item, callback2);
 				}
 				if (isArr) {
-					iterateArray(item, callback);
+					iterateArray(item, callback2);
 				}
 				if (isObj || isArr) {
-					callback(item);
+					callback2(item);
 				}
 			});
 		};
-		var iterateObject = (obj, callback) => {
+		var iterateObject = (obj, callback2) => {
 			const arr = Object.keys(obj).map((item) => (obj[item]));
-			iterateArray(arr, callback);
+			iterateArray(arr, callback2);
 		};
 		iterateObject(that, (item) => {
-			// console.log('item is: ');
-			// console.dir(item);
+			const isFilterdObj = Object.is(item, that.filterdObj);
 			const isUniqueSaveLibrary = Object.is(item, that.uniqueSaveLibrary);
-			if (!isUniqueSaveLibrary) {
+			if (!isUniqueSaveLibrary && !isFilterdObj) {
 				const isObserving = that.uniqueSaveLibrary.some((libraryItem) => {return libraryItem === item;});
 				if (!isObserving) {
 					that.saveUniqueSaveLibrary(item);
@@ -93,23 +94,20 @@ class Storekeeper {
 					}
 					if (observeFunc) {
 						observeFunc(item, (change) => {
-							console.log(change);
-							callback();					
-							that.observeChange(callback);
+							// sync when anything change
+							changedCallback();		
+							// reobserve if someting was added
+							that.observeChange(changedCallback);			
 						});
 					}
 				}
-			}
-									
+			}							
 		});
 	}
 
 	saveUniqueSaveLibrary(obj) {
-		// const id = (this.uniqueSaveLibrary.keys().length + 1).toString();		
 		this.uniqueSaveLibrary.push(obj);
 	}
-
-
 }
 
 module.exports = new Storekeeper("todolistStorekeeper");
