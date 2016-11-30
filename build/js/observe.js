@@ -161,7 +161,7 @@
         this.length = length;
     }
 
-    if (typeof module != 'undefined' && module.exports && this.module !== module) { module.exports = observe }
+    if (typeof module != 'undefined' && module.exports /*&& this.module !== module*/) { module.exports = observe }
     else if (typeof define === 'function' && define.amd) { define(observe) }
     else { win.observe = observe };
 })(Function('return this')());

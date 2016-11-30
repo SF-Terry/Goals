@@ -66563,7 +66563,7 @@
 /* 1018 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
 
 	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -66735,15 +66735,14 @@
 	        this.length = length;
 	    };
 
-	    if (typeof module != 'undefined' && module.exports && this.module !== module) {
-	        module.exports = observe;
-	    } else if (true) {
+	    if (typeof module != 'undefined' && module.exports /*&& this.module !== module*/) {
+	            module.exports = observe;
+	        } else if (true) {
 	        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (observe), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
 	        win.observe = observe;
 	    };
 	})(Function('return this')());
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(290)(module)))
 
 /***/ }
 /******/ ]);
