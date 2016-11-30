@@ -1,32 +1,50 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown } from 'semantic-ui-react'
-let storekeeper = require('../js/storekeeper.js');
+/*let storekeeper = require('../js/storekeeper.js');
 let settings = storekeeper.settings;
-let tasks = storekeeper.settings;
+let tasks = storekeeper.settings;*/
 
-tasks.push("testBrowser")
-tasks[0] = "testBrowser2"
+/*let observe = function(o, fn) {
+  return new Proxy(o, {
+    set(target, property, value) {
+      fn(property, value);
+      target[property] = value;
+    },
+  })
+};
+*/
+
+import observe from '../js/observe.js';
+console.log(observe);
+
+/*tasks.push("testBrowser")
+tasks[0] = "testBrowser2"*/
 
 // ListContainer
 class ListContainer extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			test: '\nEmpty'
-		}
+		/* test compatibility start */
 		var that = this;
-		setTimeout(() => {
-			that.setState({
-				test: '<br/>' + localStorage['todolistStorekeeper']
-			});
-		}, 3000);
+
+		this.state = {
+			test: 'Empty'
+		}
+
+
+		// setTimeout(() => {
+		// 	that.setState({
+		// 		test: 'changed'
+		// 	});
+		// }, 3000);
+		/* test compatibility end */
 	}
 	render() {
 		return (
 			<div>
 				ListContainer123
-				{tasks[0]}
+				<br/>
 				{this.state.test}
 			</div>
 		);

@@ -83,6 +83,10 @@
 
 	var _semanticUiReact = __webpack_require__(184);
 
+	var _observe = __webpack_require__(1018);
+
+	var _observe2 = _interopRequireDefault(_observe);
+
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -104,13 +108,24 @@
 			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
+	/*let storekeeper = require('../js/storekeeper.js');
+	let settings = storekeeper.settings;
+	let tasks = storekeeper.settings;*/
 
-	var storekeeper = __webpack_require__(714);
-	var settings = storekeeper.settings;
-	var tasks = storekeeper.settings;
+	/*let observe = function(o, fn) {
+	  return new Proxy(o, {
+	    set(target, property, value) {
+	      fn(property, value);
+	      target[property] = value;
+	    },
+	  })
+	};
+	*/
 
-	tasks.push("testBrowser");
-	tasks[0] = "testBrowser2";
+	console.log(_observe2.default);
+
+	/*tasks.push("testBrowser")
+	tasks[0] = "testBrowser2"*/
 
 	// ListContainer
 
@@ -120,24 +135,28 @@
 		function ListContainer(props) {
 			_classCallCheck(this, ListContainer);
 
+			/* test compatibility start */
 			var _this = _possibleConstructorReturn(this, (ListContainer.__proto__ || Object.getPrototypeOf(ListContainer)).call(this, props));
 
-			_this.state = {
-				test: '\nEmpty'
-			};
 			var that = _this;
-			setTimeout(function () {
-				that.setState({
-					test: '<br/>' + localStorage['todolistStorekeeper']
-				});
-			}, 3000);
+
+			_this.state = {
+				test: 'Empty'
+			};
+
+			// setTimeout(() => {
+			// 	that.setState({
+			// 		test: 'changed'
+			// 	});
+			// }, 3000);
+			/* test compatibility end */
 			return _this;
 		}
 
 		_createClass(ListContainer, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement('div', null, 'ListContainer123', tasks[0], this.state.test);
+				return _react2.default.createElement('div', null, 'ListContainer123', _react2.default.createElement('br', null), this.state.test);
 			}
 		}]);
 
@@ -57446,155 +57465,7 @@
 	exports.default = StatisticValue;
 
 /***/ },
-/* 714 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _createClass = function () {
-		function defineProperties(target, props) {
-			for (var i = 0; i < props.length; i++) {
-				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-			}
-		}return function (Constructor, protoProps, staticProps) {
-			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-		};
-	}();
-
-	function _classCallCheck(instance, Constructor) {
-		if (!(instance instanceof Constructor)) {
-			throw new TypeError("Cannot call a class as a function");
-		}
-	}
-
-	var Storekeeper = function () {
-		function Storekeeper(name) {
-			_classCallCheck(this, Storekeeper);
-
-			// temp add
-			localStorage.removeItem("todolistStorekeeper");
-
-			var that = this;
-
-			this.uniqueSaveLibrary = [];
-
-			this.filterdObj = {};
-
-			this.init(name);
-
-			// observe change and sync data
-			var _changedCallback = function _changedCallback() {
-				// console.log("something changed");
-				that.filterdObj.settings = that.settings;
-				that.filterdObj.tasks = that.tasks;
-				localStorage[name] = JSON.stringify(that.filterdObj);
-				// console.log("localStorage now is: ", localStorage[name]);
-				// console.log("storekeeperis: ", that);
-			};
-			this.observeChange(_changedCallback);
-		}
-
-		_createClass(Storekeeper, [{
-			key: "init",
-			value: function init(name) {
-				var value = localStorage[name];
-				var isExsitName = Boolean(value);
-
-				// init data
-				this.settings = [];
-				this.tasks = [];
-
-				// load localStorage's data to 
-				if (isExsitName) {
-					var data = JSON.parse(localStorage[name]);
-					var isDataCorrect = Array.isArray(data.settings) && Array.isArray(data.tasks);
-					if (isDataCorrect) {
-						this.settings = data.settings;
-						this.tasks = data.tasks;
-					}
-					if (!isDataCorrect) {
-						throw "localStorage data error: Name: " + name + "  Localstorage data:" + localStorage[name].toString();
-					}
-				}
-				// active localStorage
-				if (!isExsitName) {
-					var initData = {
-						settings: this.settings,
-						tasks: this.tasks
-					};
-					localStorage[name] = JSON.stringify(initData);
-				}
-			}
-		}, {
-			key: "observeChange",
-			value: function observeChange(changedCallback) {
-				var that = this;
-				var iterateArray = function iterateArray(arr, callback2) {
-					arr.forEach(function (item) {
-						var isObj = item.constructor === {}.constructor;
-						var isArr = item.constructor === [].constructor;
-						if (isObj) {
-							iterateObject(item, callback2);
-						}
-						if (isArr) {
-							iterateArray(item, callback2);
-						}
-						if (isObj || isArr) {
-							callback2(item);
-						}
-					});
-				};
-				var iterateObject = function iterateObject(obj, callback2) {
-					var arr = Object.keys(obj).map(function (item) {
-						return obj[item];
-					});
-					iterateArray(arr, callback2);
-				};
-				iterateObject(that, function (item) {
-					var isFilterdObj = Object.is(item, that.filterdObj);
-					var isUniqueSaveLibrary = Object.is(item, that.uniqueSaveLibrary);
-					if (!isUniqueSaveLibrary && !isFilterdObj) {
-						var isObserving = that.uniqueSaveLibrary.some(function (libraryItem) {
-							return libraryItem === item;
-						});
-						if (!isObserving) {
-							that.saveUniqueSaveLibrary(item);
-
-							// Object.observe or Array.observe
-							var isObj = item.constructor === {}.constructor;
-							var isArr = item.constructor === [].constructor;
-							var observeFunc = null;
-							if (isObj) {
-								observeFunc = Object.observe;
-							}
-							if (isArr) {
-								observeFunc = Array.observe;
-							}
-							if (observeFunc) {
-								observeFunc(item, function (change) {
-									// sync when anything change
-									changedCallback();
-									// reobserve if someting was added
-									that.observeChange(changedCallback);
-								});
-							}
-						}
-					}
-				});
-			}
-		}, {
-			key: "saveUniqueSaveLibrary",
-			value: function saveUniqueSaveLibrary(obj) {
-				this.uniqueSaveLibrary.push(obj);
-			}
-		}]);
-
-		return Storekeeper;
-	}();
-
-	module.exports = new Storekeeper("todolistStorekeeper");
-
-/***/ },
+/* 714 */,
 /* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -66685,6 +66556,194 @@
 	    return String(it).replace(regExp, replacer);
 	  };
 	};
+
+/***/ },
+/* 1016 */,
+/* 1017 */,
+/* 1018 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	/* observejs --- By dnt http://kmdjs.github.io/
+	 * Github: https://github.com/kmdjs/observejs
+	 * MIT Licensed.
+	 */
+	(function (win) {
+	    var observe = function observe(target, arr, callback) {
+	        var _observe = function _observe(target, arr, callback) {
+	            if (!target.$observer) target.$observer = this;
+	            var $observer = target.$observer;
+	            var eventPropArr = [];
+	            if (observe.isArray(target)) {
+	                if (target.length === 0) {
+	                    target.$observeProps = {};
+	                    target.$observeProps.$observerPath = "#";
+	                }
+	                $observer.mock(target);
+	            }
+	            for (var prop in target) {
+	                if (target.hasOwnProperty(prop)) {
+	                    if (callback) {
+	                        if (observe.isArray(arr) && observe.isInArray(arr, prop)) {
+	                            eventPropArr.push(prop);
+	                            $observer.watch(target, prop);
+	                        } else if (observe.isString(arr) && prop == arr) {
+	                            eventPropArr.push(prop);
+	                            $observer.watch(target, prop);
+	                        }
+	                    } else {
+	                        eventPropArr.push(prop);
+	                        $observer.watch(target, prop);
+	                    }
+	                }
+	            }
+	            $observer.target = target;
+	            if (!$observer.propertyChangedHandler) $observer.propertyChangedHandler = [];
+	            var propChanged = callback ? callback : arr;
+	            $observer.propertyChangedHandler.push({ all: !callback, propChanged: propChanged, eventPropArr: eventPropArr });
+	        };
+	        _observe.prototype = {
+	            "onPropertyChanged": function onPropertyChanged(prop, value, oldValue, target, path) {
+	                if (value !== oldValue && this.propertyChangedHandler) {
+	                    var rootName = observe._getRootName(prop, path);
+	                    for (var i = 0, len = this.propertyChangedHandler.length; i < len; i++) {
+	                        var handler = this.propertyChangedHandler[i];
+	                        if (handler.all || observe.isInArray(handler.eventPropArr, rootName) || rootName.indexOf("Array-") === 0) {
+	                            handler.propChanged.call(this.target, prop, value, oldValue, path);
+	                        }
+	                    }
+	                }
+	                if (prop.indexOf("Array-") !== 0 && (typeof value === "undefined" ? "undefined" : _typeof(value)) === "object") {
+	                    this.watch(target, prop, target.$observeProps.$observerPath);
+	                }
+	            },
+	            "mock": function mock(target) {
+	                var self = this;
+	                observe.methods.forEach(function (item) {
+	                    target[item] = function () {
+	                        var old = Array.prototype.slice.call(this, 0);
+	                        var result = Array.prototype[item].apply(this, Array.prototype.slice.call(arguments));
+	                        if (new RegExp("\\b" + item + "\\b").test(observe.triggerStr)) {
+	                            for (var cprop in this) {
+	                                if (this.hasOwnProperty(cprop) && !observe.isFunction(this[cprop])) {
+	                                    self.watch(this, cprop, this.$observeProps.$observerPath);
+	                                }
+	                            }
+	                            //todo
+	                            self.onPropertyChanged("Array-" + item, this, old, this, this.$observeProps.$observerPath);
+	                        }
+	                        return result;
+	                    };
+	                    target['real' + item.substring(0, 1).toUpperCase() + item.substring(1)] = function () {
+	                        return Array.prototype[item].apply(this, Array.prototype.slice.call(arguments));
+	                    };
+	                });
+	            },
+	            "watch": function watch(target, prop, path) {
+	                if (prop === "$observeProps" || prop === "$observer") return;
+	                if (observe.isFunction(target[prop])) return;
+	                if (!target.$observeProps) target.$observeProps = {};
+	                if (path !== undefined) {
+	                    target.$observeProps.$observerPath = path;
+	                } else {
+	                    target.$observeProps.$observerPath = "#";
+	                }
+	                var self = this;
+	                var currentValue = target.$observeProps[prop] = target[prop];
+	                Object.defineProperty(target, prop, {
+	                    get: function get() {
+	                        return this.$observeProps[prop];
+	                    },
+	                    set: function set(value) {
+	                        var old = this.$observeProps[prop];
+	                        this.$observeProps[prop] = value;
+	                        self.onPropertyChanged(prop, value, old, this, target.$observeProps.$observerPath);
+	                    }
+	                });
+	                if ((typeof currentValue === "undefined" ? "undefined" : _typeof(currentValue)) == "object") {
+	                    if (observe.isArray(currentValue)) {
+	                        this.mock(currentValue);
+	                        if (currentValue.length === 0) {
+	                            if (!currentValue.$observeProps) currentValue.$observeProps = {};
+	                            if (path !== undefined) {
+	                                currentValue.$observeProps.$observerPath = path;
+	                            } else {
+	                                currentValue.$observeProps.$observerPath = "#";
+	                            }
+	                        }
+	                    }
+	                    for (var cprop in currentValue) {
+	                        if (currentValue.hasOwnProperty(cprop)) {
+	                            this.watch(currentValue, cprop, target.$observeProps.$observerPath + "-" + prop);
+	                        }
+	                    }
+	                }
+	            }
+	        };
+	        return new _observe(target, arr, callback);
+	    };
+	    observe.methods = ["concat", "copyWithin", "entries", "every", "fill", "filter", "find", "findIndex", "forEach", "includes", "indexOf", "join", "keys", "lastIndexOf", "map", "pop", "push", "reduce", "reduceRight", "reverse", "shift", "slice", "some", "sort", "splice", "toLocaleString", "toString", "unshift", "values", "size"];
+	    observe.triggerStr = ["concat", "copyWithin", "fill", "pop", "push", "reverse", "shift", "sort", "splice", "unshift", "size"].join(",");
+	    observe.isArray = function (obj) {
+	        return Object.prototype.toString.call(obj) === '[object Array]';
+	    };
+	    observe.isString = function (obj) {
+	        return typeof obj === "string";
+	    };
+	    observe.isInArray = function (arr, item) {
+	        for (var i = arr.length; --i > -1;) {
+	            if (item === arr[i]) return true;
+	        }
+	        return false;
+	    };
+	    observe.isFunction = function (obj) {
+	        return Object.prototype.toString.call(obj) == '[object Function]';
+	    };
+	    observe._getRootName = function (prop, path) {
+	        if (path === "#") {
+	            return prop;
+	        }
+	        return path.split("-")[1];
+	    };
+
+	    observe.add = function (obj, prop) {
+	        var $observer = obj.$observer;
+	        $observer.watch(obj, prop);
+	    };
+
+	    observe.set = function (obj, prop, value, exec) {
+	        if (!exec) {
+	            obj[prop] = value;
+	        }
+	        var $observer = obj.$observer;
+	        $observer.watch(obj, prop);
+	        if (exec) {
+	            obj[prop] = value;
+	        }
+	    };
+
+	    Array.prototype.size = function (length) {
+	        this.length = length;
+	    };
+
+	    if (typeof module != 'undefined' && module.exports && this.module !== module) {
+	        module.exports = observe;
+	    } else if (true) {
+	        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (observe), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else {
+	        win.observe = observe;
+	    };
+	})(Function('return this')());
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(290)(module)))
 
 /***/ }
 /******/ ]);
