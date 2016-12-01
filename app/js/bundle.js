@@ -9084,36 +9084,37 @@
 		// settings.push({email: 'test1@testEmail.com'});
 	}, 1000);
 
-	// Datepicker
+	// Timepicker
 
-	var Demo = function (_React$Component) {
-		_inherits(Demo, _React$Component);
+	var Timepicker = function (_React$Component) {
+		_inherits(Timepicker, _React$Component);
 
-		function Demo(props) {
-			_classCallCheck(this, Demo);
+		function Timepicker(props) {
+			_classCallCheck(this, Timepicker);
 
-			var _this = _possibleConstructorReturn(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
 
 			var that = _this;
 			_this.state = {
 				date: null,
 				test: 'empty'
 			};
+			// solve the problem: misleading 'this'
 			_this.onDateChange = function (date) {
 				that.setState({
-					test: 'New'
+					date: date
 				});
 			};
 			return _this;
 		}
 
-		_createClass(Demo, [{
+		_createClass(Timepicker, [{
 			key: 'render',
 			value: function render() {
 				var props = this.props;
 				var date = this.state.date;
 
-				return _react2.default.createElement('div', { style: { margin: '10px 30px' } }, _react2.default.createElement('h2', null, this.state.test), _react2.default.createElement('div', null, _react2.default.createElement('span', null, date && format(date) || format(now)), _react2.default.createElement(_index2.default, {
+				return _react2.default.createElement('div', { style: { margin: '10px 30px' } }, _react2.default.createElement('div', null, _react2.default.createElement('span', null, date && format(date) || format(now)), _react2.default.createElement(_index2.default, {
 					rootNativeProps: { 'data-xx': 'yy' },
 					defaultDate: date || now,
 					mode: 'datetime',
@@ -9125,7 +9126,7 @@
 			}
 		}]);
 
-		return Demo;
+		return Timepicker;
 	}(_react2.default.Component);
 
 	// TaskInfo
@@ -9154,7 +9155,7 @@
 					return { text: item, value: index };
 				});
 				var selectValue = modes.indexOf('add');
-				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement(_semanticUiReact.Grid, null, _react2.default.createElement(_semanticUiReact.Grid.Column, null), _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Form, null, _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: modesOptions })))), _react2.default.createElement(_semanticUiReact.Grid.Column, null)), _react2.default.createElement(Demo, null));
+				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement(_semanticUiReact.Grid, null, _react2.default.createElement(_semanticUiReact.Grid.Column, null), _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Form, null, _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: modesOptions })))), _react2.default.createElement(_semanticUiReact.Grid.Column, null)), _react2.default.createElement(Timepicker, null));
 			}
 		}]);
 

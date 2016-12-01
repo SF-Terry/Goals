@@ -35,8 +35,8 @@ setTimeout(() => {
 }, 1000);
 
 
-// Datepicker
-class Demo extends React.Component {
+// Timepicker
+class Timepicker extends React.Component {
 	constructor(props) {
 		super(props);
 		var that = this;
@@ -44,9 +44,10 @@ class Demo extends React.Component {
 	        date: null,
 	        test: 'empty'
 	    };
+	    // solve the problem: misleading 'this'
 	    this.onDateChange = date => {
 	    	that.setState({
-	    		test: 'New'
+	    		date: date
 	    	});
 	    };
 	}
@@ -56,7 +57,6 @@ class Demo extends React.Component {
 	    const {date} = this.state;
 
 	    return (<div style={{ margin: '10px 30px' }}>
-	      <h2>{this.state.test}</h2>
 	      <div>
 	        <span>{date && format(date) || format(now)}</span>
 	        <DatePicker
@@ -110,7 +110,7 @@ class TaskInfo extends React.Component {
 				    </Grid.Column>
 				    <Grid.Column></Grid.Column>
 				  </Grid>
-				  <Demo />
+				  <Timepicker />
 				
 				
 
