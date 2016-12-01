@@ -9059,16 +9059,6 @@
 	// datepicker
 
 
-	var minDate = (0, _moment2.default)([2015, 8, 15, 0, 0, 0]);
-	var maxDate = (0, _moment2.default)([2018, 1, 1, 22, 0, 0]);
-	var now = (0, _moment2.default)();
-	minDate.locale('zh-cn').utcOffset(8);
-	maxDate.locale('zh-cn').utcOffset(8);
-	now.locale('zh-cn').utcOffset(8);
-	function format(date) {
-		return date.format('YYYY-MM-DD HH:mm');
-	}
-
 	var storekeeper = __webpack_require__(1305);
 
 	var settings = storekeeper.settings;
@@ -9111,6 +9101,15 @@
 		_createClass(Timepicker, [{
 			key: 'render',
 			value: function render() {
+				var minDate = (0, _moment2.default)([2015, 8, 15, 0, 0, 0]);
+				var maxDate = (0, _moment2.default)([2018, 1, 1, 22, 0, 0]);
+				var now = (0, _moment2.default)();
+				minDate.locale('zh-cn').utcOffset(8);
+				maxDate.locale('zh-cn').utcOffset(8);
+				now.locale('zh-cn').utcOffset(8);
+				function format(date) {
+					return date.format('YYYY-MM-DD HH:mm');
+				}
 				var props = this.props;
 				var date = this.state.date;
 

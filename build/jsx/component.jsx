@@ -9,15 +9,6 @@ import DatePicker from 'rmc-date-picker/lib/index.web';
 import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn.js';
-const minDate = moment([2015, 8, 15, 0, 0, 0]);
-const maxDate = moment([2018, 1, 1, 22, 0, 0]);
-const now = moment();
-minDate.locale('zh-cn').utcOffset(8);
-maxDate.locale('zh-cn').utcOffset(8);
-now.locale('zh-cn').utcOffset(8);
-function format(date) {
-  return date.format('YYYY-MM-DD HH:mm');
-}
 
 var storekeeper = require('../js/storekeeper.js');
 
@@ -53,6 +44,15 @@ class Timepicker extends React.Component {
 	}
 
 	render() {
+		const minDate = moment([2015, 8, 15, 0, 0, 0]);
+		const maxDate = moment([2018, 1, 1, 22, 0, 0]);
+		const now = moment();
+		minDate.locale('zh-cn').utcOffset(8);
+		maxDate.locale('zh-cn').utcOffset(8);
+		now.locale('zh-cn').utcOffset(8);
+		function format(date) {
+		  return date.format('YYYY-MM-DD HH:mm');
+		}
 	    const props = this.props;
 	    const {date} = this.state;
 
@@ -71,7 +71,6 @@ class Timepicker extends React.Component {
 	      </div>
 	    </div>);
 	  }
-
 }
 
 
