@@ -2,17 +2,78 @@ import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown, Checkbox, Form, Input, Segment } from 'semantic-ui-react'
 import observe from '../js/observe.js';
-let storekeeper = require('../js/storekeeper.js');
-let settings = storekeeper.settings;
-let tasks = storekeeper.tasks;
+// datepicker
+import 'rmc-picker/assets/index.css';
+import 'rmc-date-picker/assets/index.css';
+import DatePicker from 'rmc-date-picker/lib/index.web';
+import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn.js';
+const minDate = moment([2015, 8, 15, 0, 0, 0]);
+const maxDate = moment([2018, 1, 1, 22, 0, 0]);
+const now = moment();
+minDate.locale('zh-cn').utcOffset(8);
+maxDate.locale('zh-cn').utcOffset(8);
+now.locale('zh-cn').utcOffset(8);
+function format(date) {
+  return date.format('YYYY-MM-DD HH:mm');
+}
+
+var storekeeper = require('../js/storekeeper.js');
+
+var settings = storekeeper.settings;
+var tasks = storekeeper.tasks;
 	
 // test
+console.log(moment().format());
+
 setTimeout(() => {
 	// tasks.push({name: 'task2', level: 'a'});
 	// tasks[0].name = 'task2';
 	// tasks[0].level = 'b';
 	// settings.push({email: 'test1@testEmail.com'});
 }, 1000);
+
+
+// Datepicker
+class Demo extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+	        date: null,
+	        test: 'empty'
+	    };
+	}
+
+	onDateChange(date) {
+	    // console.log('onChange', format(date));
+	    this.setState({
+	    	test: 'New'
+	    });
+	 };
+
+	render() {
+	    const props = this.props;
+	    const {date} = this.state;
+
+	    return (<div style={{ margin: '10px 30px' }}>
+	      <h2>{this.state.test}</h2>
+	      <div>
+	        <span>{date && format(date) || format(now)}</span>
+	        <DatePicker
+	          rootNativeProps={{'data-xx':'yy'}}
+	          defaultDate={date || now}
+	          mode={'datetime'}
+	          locale={zhCn}
+	          maxDate={maxDate}
+	          minDate={minDate}
+	          onDateChange={this.onDateChange}
+	        />
+	      </div>
+	    </div>);
+	  }
+
+}
 
 
 
@@ -50,6 +111,7 @@ class TaskInfo extends React.Component {
 				    </Grid.Column>
 				    <Grid.Column></Grid.Column>
 				  </Grid>
+				  <Demo />
 				
 				
 

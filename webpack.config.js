@@ -17,6 +17,9 @@ var config = {
       {test: /\.css?/, loader: "style!css"},
       {test: /\.scss?/, loader: "style!css!sass"}
     ]
+  },
+  resolve: {
+    extensions: ['', '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json'],
   }
 };
 
