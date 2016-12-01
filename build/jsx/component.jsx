@@ -6,10 +6,15 @@ let storekeeper = require('../js/storekeeper.js');
 let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
 
-
+// test
 setTimeout(() => {
-	tasks[2].name = 'task8';
-}, 3000);
+	// tasks.push({name: 'task2', level: 'a'});
+	// tasks[0].name = 'task2';
+	// tasks[0].level = 'b';
+	// settings.push({email: 'test1@testEmail.com'});
+}, 1000);
+
+
 // TaskList
 class TaskList extends React.Component {
 	constructor(props) {
@@ -17,14 +22,13 @@ class TaskList extends React.Component {
 		this.state = {
 			tasks: tasks
 		}
-
 		this.observeChange();
-
 	}
 
 	observeChange() {
 		var that = this;
 		observe(tasks, () => {
+			// storekeeper.sync();
 			that.setState({
 				tasks: tasks
 			});

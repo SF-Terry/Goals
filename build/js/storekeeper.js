@@ -1,11 +1,14 @@
-import observe from './observe.js';
+// import observe library to Adapt to IE
+import observe from '../js/observe.js';
 
 class Storekeeper {
 	constructor(name) {
-		// temp add
+		// reset localStorage data
 		// localStorage.removeItem("todolistStorekeeper");
 
 		var that = this;
+
+		this.name = name;
 
 		this.uniqueSaveLibrary = [];
 
@@ -13,16 +16,13 @@ class Storekeeper {
 
 		this.init(name);
 
-		// observe change and sync data
-		var _changedCallback = () => {
-			// console.log("something changed");
-			that.filterdObj.settings = that.settings;
-			that.filterdObj.tasks = that.tasks;
-			localStorage[name] = JSON.stringify(that.filterdObj);
-			console.log("localStorage now is: ", localStorage[name]);
-			// console.log("storekeeperis: ", that);
-		};
-		this.observeChange(_changedCallback);
+		// observe and sync localStorage
+		observe(this.tasks, () => {
+			that.sync();
+		});
+		observe(this.settings, () => {
+			that.sync();
+		});
 	}
 
 	init(name) {
@@ -33,7 +33,7 @@ class Storekeeper {
 		this.settings = [];
 		this.tasks = [];
 
-		// load localStorage's data to 
+		// load localStorage data 
 		if (isExsitName) {
 			var data = JSON.parse(localStorage[name]);
 			const isDataCorrect = Array.isArray(data.settings) && Array.isArray(data.tasks);
@@ -55,10 +55,12 @@ class Storekeeper {
 		}
 	}
 
-	observeChange(changedCallback) {
-		observe(this, () => {
-			changedCallback();
-		});
+	sync() {
+		const name = this.name;
+		this.filterdObj.settings = this.settings;
+		this.filterdObj.tasks = this.tasks;
+		localStorage[name] = JSON.stringify(this.filterdObj);
+		console.log("localStorage now is: ", localStorage[name]);
 	}
 
 	saveUniqueSaveLibrary(obj) {
