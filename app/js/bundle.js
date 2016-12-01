@@ -9094,22 +9094,20 @@
 
 			var _this = _possibleConstructorReturn(this, (Demo.__proto__ || Object.getPrototypeOf(Demo)).call(this, props));
 
+			var that = _this;
 			_this.state = {
 				date: null,
 				test: 'empty'
+			};
+			_this.onDateChange = function (date) {
+				that.setState({
+					test: 'New'
+				});
 			};
 			return _this;
 		}
 
 		_createClass(Demo, [{
-			key: 'onDateChange',
-			value: function onDateChange(date) {
-				// console.log('onChange', format(date));
-				this.setState({
-					test: 'New'
-				});
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				var props = this.props;

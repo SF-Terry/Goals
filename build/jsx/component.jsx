@@ -39,18 +39,17 @@ setTimeout(() => {
 class Demo extends React.Component {
 	constructor(props) {
 		super(props);
+		var that = this;
 		this.state = {
 	        date: null,
 	        test: 'empty'
 	    };
+	    this.onDateChange = date => {
+	    	that.setState({
+	    		test: 'New'
+	    	});
+	    };
 	}
-
-	onDateChange(date) {
-	    // console.log('onChange', format(date));
-	    this.setState({
-	    	test: 'New'
-	    });
-	 };
 
 	render() {
 	    const props = this.props;
