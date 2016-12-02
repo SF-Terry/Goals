@@ -6,9 +6,9 @@ import observe from '../js/observe.js';
 import 'rmc-picker/assets/index.css';
 import 'rmc-date-picker/assets/index.css';
 import DatePicker from 'rmc-date-picker/lib/index.web';
-import zhCn from 'rmc-date-picker/lib/locale/en_US';
+import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
 import moment from 'moment';
-import 'moment/locale/en-gb.js';
+import 'moment/locale/zh-cn.js';
 
 var storekeeper = require('../js/storekeeper.js');
 
@@ -71,10 +71,10 @@ class TimeSetter extends React.Component {
 					</Row>
 					<Row>
 						<Column>
-							<div style={{width: isStartTime ? '0px' : '100%', height: isStartTime ? '0px' : 'auto', overflow: 'hidden'}} >
-								<StartTimepicker/>
+							<div style={{width: isStartTime ? '100%' : '0px', height: isStartTime ? 'auto' : '0px', overflow: 'hidden'}} >
+								<StartTimepicker />
 							</div>
-							<div style={{width: isEndTime ? '0px' : '100%', height: isEndTime ? '0px' : 'auto', overflow: 'hidden'}}>
+							<div style={{width: isEndTime ? '100%' : '0px', height: isEndTime ? 'auto' : '0px', overflow: 'hidden'}}>
 								<EndTimepicker />
 							</div>
 						</Column>
@@ -90,18 +90,24 @@ class TimeSetter extends React.Component {
 				</Grid>
 			</div>);
 	}
-
 }
 
 // endTimepicker
 class EndTimepicker extends React.Component{
+	constructor(props) {
+		super(props);
+		this.defaultDate = moment().add(1,'hours').startOf('hour');
+	}
 	render() {
-		return <Timepicker />
+		return <Timepicker defaultDate={this.defaultDate} />
 	}
 }
 
 // startTimepicker
 class StartTimepicker extends React.Component{
+	constructor(props) {
+		super(props);
+	}
 	render() {
 		return <Timepicker />
 	}
@@ -128,22 +134,22 @@ class Timepicker extends React.Component {
 		const props = this.props;
 		const {date} = this.state;
 
-		const minDate = props.minDate || moment([2015, 8, 15, 0, 0, 0]);
-		const maxDate = props.maxDate || moment([2018, 1, 1, 22, 0, 0]);
-		const now = moment();
-		minDate.locale('en-gb').utcOffset(8);
-		maxDate.locale('en-gb').utcOffset(8);
-		now.locale('en-gb').utcOffset(8);
+		const minDate = props.minDate || moment();
+		const maxDate = props.maxDate || moment().add(100, 'year');
+		const defaultDate = props.defaultDate || moment();
+		minDate.locale('zh-cn').utcOffset(8);
+		maxDate.locale('zh-cn').utcOffset(8);
+		defaultDate.locale('zh-cn').utcOffset(8);
 		function format(date) {
 		  return date.format('YYYY-MM-DD HH:mm');
 		}
 	    
 	    return (<div style={{ margin: '10px 30px' }}>
 	      <div>
-	        <span>{date && format(date) || format(now)}</span>
+	        <span>{date && format(date) || format(defaultDate)}</span>
 	        <DatePicker
 	          rootNativeProps={{'data-xx':'yy'}}
-	          defaultDate={date || now}
+	          defaultDate={date || defaultDate}
 	          mode={'datetime'}
 	          locale={zhCn}
 	          maxDate={maxDate}

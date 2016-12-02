@@ -9025,15 +9025,15 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _en_US = __webpack_require__(1215);
+	var _zh_CN = __webpack_require__(1220);
 
-	var _en_US2 = _interopRequireDefault(_en_US);
+	var _zh_CN2 = _interopRequireDefault(_zh_CN);
 
 	var _moment = __webpack_require__(1104);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	__webpack_require__(1132);
+	__webpack_require__(1212);
 
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
@@ -9122,7 +9122,7 @@
 
 				var isStartTime = timeType === 'startTime';
 				var isEndTime = timeType === 'endTime';
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Start Time', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'End Time', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: { width: isStartTime ? '0px' : '100%', height: isStartTime ? '0px' : 'auto', overflow: 'hidden' } }, _react2.default.createElement(StartTimepicker, null)), _react2.default.createElement('div', { style: { width: isEndTime ? '0px' : '100%', height: isEndTime ? '0px' : 'auto', overflow: 'hidden' } }, _react2.default.createElement(EndTimepicker, null)))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'remove' })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'checkmark' })))));
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Start Time', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'End Time', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: { width: isStartTime ? '100%' : '0px', height: isStartTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(StartTimepicker, null)), _react2.default.createElement('div', { style: { width: isEndTime ? '100%' : '0px', height: isEndTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(EndTimepicker, null)))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'remove' })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'checkmark' })))));
 			}
 		}]);
 
@@ -9135,16 +9135,19 @@
 	var EndTimepicker = function (_React$Component2) {
 		_inherits(EndTimepicker, _React$Component2);
 
-		function EndTimepicker() {
+		function EndTimepicker(props) {
 			_classCallCheck(this, EndTimepicker);
 
-			return _possibleConstructorReturn(this, (EndTimepicker.__proto__ || Object.getPrototypeOf(EndTimepicker)).apply(this, arguments));
+			var _this2 = _possibleConstructorReturn(this, (EndTimepicker.__proto__ || Object.getPrototypeOf(EndTimepicker)).call(this, props));
+
+			_this2.defaultDate = (0, _moment2.default)().add(1, 'hours').startOf('hour');
+			return _this2;
 		}
 
 		_createClass(EndTimepicker, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement(Timepicker, null);
+				return _react2.default.createElement(Timepicker, { defaultDate: this.defaultDate });
 			}
 		}]);
 
@@ -9157,10 +9160,10 @@
 	var StartTimepicker = function (_React$Component3) {
 		_inherits(StartTimepicker, _React$Component3);
 
-		function StartTimepicker() {
+		function StartTimepicker(props) {
 			_classCallCheck(this, StartTimepicker);
 
-			return _possibleConstructorReturn(this, (StartTimepicker.__proto__ || Object.getPrototypeOf(StartTimepicker)).apply(this, arguments));
+			return _possibleConstructorReturn(this, (StartTimepicker.__proto__ || Object.getPrototypeOf(StartTimepicker)).call(this, props));
 		}
 
 		_createClass(StartTimepicker, [{
@@ -9204,21 +9207,21 @@
 				var props = this.props;
 				var date = this.state.date;
 
-				var minDate = props.minDate || (0, _moment2.default)([2015, 8, 15, 0, 0, 0]);
-				var maxDate = props.maxDate || (0, _moment2.default)([2018, 1, 1, 22, 0, 0]);
-				var now = (0, _moment2.default)();
-				minDate.locale('en-gb').utcOffset(8);
-				maxDate.locale('en-gb').utcOffset(8);
-				now.locale('en-gb').utcOffset(8);
+				var minDate = props.minDate || (0, _moment2.default)();
+				var maxDate = props.maxDate || (0, _moment2.default)().add(100, 'year');
+				var defaultDate = props.defaultDate || (0, _moment2.default)();
+				minDate.locale('zh-cn').utcOffset(8);
+				maxDate.locale('zh-cn').utcOffset(8);
+				defaultDate.locale('zh-cn').utcOffset(8);
 				function format(date) {
 					return date.format('YYYY-MM-DD HH:mm');
 				}
 
-				return _react2.default.createElement('div', { style: { margin: '10px 30px' } }, _react2.default.createElement('div', null, _react2.default.createElement('span', null, date && format(date) || format(now)), _react2.default.createElement(_index2.default, {
+				return _react2.default.createElement('div', { style: { margin: '10px 30px' } }, _react2.default.createElement('div', null, _react2.default.createElement('span', null, date && format(date) || format(defaultDate)), _react2.default.createElement(_index2.default, {
 					rootNativeProps: { 'data-xx': 'yy' },
-					defaultDate: date || now,
+					defaultDate: date || defaultDate,
 					mode: 'datetime',
-					locale: _en_US2.default,
+					locale: _zh_CN2.default,
 					maxDate: maxDate,
 					minDate: minDate,
 					onDateChange: this.onDateChange
@@ -84557,6 +84560,24 @@
 
 	// exports
 
+
+/***/ },
+/* 1220 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = {
+	    year: '年',
+	    month: '月',
+	    day: '日',
+	    hour: '时',
+	    minute: '分'
+	};
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);
