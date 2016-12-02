@@ -42,17 +42,19 @@ class Timepicker extends React.Component {
 	}
 
 	render() {
-		const minDate = moment([2015, 8, 15, 0, 0, 0]);
-		const maxDate = moment([2018, 1, 1, 22, 0, 0]);
+		const props = this.props;
+		const {date} = this.state;
+
+		const minDate = props.minDate || moment([2015, 8, 15, 0, 0, 0]);
+		const maxDate = props.maxDate || moment([2018, 1, 1, 22, 0, 0]);
 		const now = moment();
-		minDate.locale('zh-cn').utcOffset(8);
-		maxDate.locale('zh-cn').utcOffset(8);
-		now.locale('zh-cn').utcOffset(8);
+		minDate.locale('en-gb').utcOffset(8);
+		maxDate.locale('en-gb').utcOffset(8);
+		now.locale('en-gb').utcOffset(8);
 		function format(date) {
 		  return date.format('YYYY-MM-DD HH:mm');
 		}
-	    const props = this.props;
-	    const {date} = this.state;
+	    
 
 	    return (<div style={{ margin: '10px 30px' }}>
 	      <div>
@@ -91,23 +93,17 @@ class TaskInfo extends React.Component {
 				<div>
 					<Button className='BackBtn' icon='angle left'/>
 				</div>
-				<Grid>
-
-				    <Grid.Column></Grid.Column>
-				    <Grid.Column width={14}>
-				        <Form>
-				            <Form.Field inline>
-				                <Input className='AddTask_TaskNameInput' label='Name' placeholder='Type the task' fluid />
-				            </Form.Field>
-				            <Form.Field inline>
-				            	<Button content='Type' />
-				                <Dropdown className='TaskTypeSelector' defaultValue={selectValue}  selection options={modesOptions}></Dropdown>
-				            </Form.Field>
-				        </Form>
-				    </Grid.Column>
-				    <Grid.Column></Grid.Column>
-				  </Grid>
-				  <Timepicker />
+            	<div>
+                	<Input className='AddTask_TaskNameInput' label='Name' placeholder='Type the task' fluid />
+            	</div>
+            	<div>
+            		<Button content='Type' />
+                	<Dropdown className='TaskTypeSelector' defaultValue={selectValue}  selection options={modesOptions}></Dropdown>
+                </div>
+                <div>
+                	<Button content='StartTime' />
+                	<Timepicker />
+                </div>
 				
 				
 

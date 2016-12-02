@@ -9099,17 +9099,18 @@
 		_createClass(Timepicker, [{
 			key: 'render',
 			value: function render() {
-				var minDate = (0, _moment2.default)([2015, 8, 15, 0, 0, 0]);
-				var maxDate = (0, _moment2.default)([2018, 1, 1, 22, 0, 0]);
+				var props = this.props;
+				var date = this.state.date;
+
+				var minDate = props.minDate || (0, _moment2.default)([2015, 8, 15, 0, 0, 0]);
+				var maxDate = props.maxDate || (0, _moment2.default)([2018, 1, 1, 22, 0, 0]);
 				var now = (0, _moment2.default)();
-				minDate.locale('zh-cn').utcOffset(8);
-				maxDate.locale('zh-cn').utcOffset(8);
-				now.locale('zh-cn').utcOffset(8);
+				minDate.locale('en-gb').utcOffset(8);
+				maxDate.locale('en-gb').utcOffset(8);
+				now.locale('en-gb').utcOffset(8);
 				function format(date) {
 					return date.format('YYYY-MM-DD HH:mm');
 				}
-				var props = this.props;
-				var date = this.state.date;
 
 				return _react2.default.createElement('div', { style: { margin: '10px 30px' } }, _react2.default.createElement('div', null, _react2.default.createElement('span', null, date && format(date) || format(now)), _react2.default.createElement(_index2.default, {
 					rootNativeProps: { 'data-xx': 'yy' },
@@ -9152,7 +9153,7 @@
 					return { text: item, value: index };
 				});
 				var selectValue = modes.indexOf('add');
-				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement(_semanticUiReact.Grid, null, _react2.default.createElement(_semanticUiReact.Grid.Column, null), _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Form, null, _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement(_semanticUiReact.Form.Field, { inline: true }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: modesOptions })))), _react2.default.createElement(_semanticUiReact.Grid.Column, null)), _react2.default.createElement(Timepicker, null));
+				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: modesOptions })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'StartTime' }), _react2.default.createElement(Timepicker, null)));
 			}
 		}]);
 
