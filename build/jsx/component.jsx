@@ -33,26 +33,78 @@ setTimeout(() => {
 class TimeSetter extends React.Component {
 	constructor(props) {
 		super(props);
+		this.timeType_startTime = 'startTime';
+		this.timeType_endTime = 'endTime';
+		this.timeType = this.props.timeType || this.timeType_startTime;
+
+		this.state = {
+			timeType: this.timeType
+		}
+		this.startTimeBtnClick = this.startTimeBtnClick.bind(this);
+		this.endTimeBtnClick = this.endTimeBtnClick.bind(this);
+	}
+	startTimeBtnClick() {
+		this.setState({
+			timeType: this.timeType_startTime
+		});
+	}
+	endTimeBtnClick() {
+		this.setState({
+			timeType: this.timeType_endTime
+		});
 	}
 	render() {
+		const {Column, Row} = Grid;	
+		const {timeType} = this.state;	 
+		const isStartTime = timeType === 'startTime';
+		const isEndTime = timeType === 'endTime';
 		return (
 			<div>
-
-				<h5>Start Time</h5>
-				<Timepicker />
-
-				<hr />
-				
-				<h5>End Time</h5>
-
-				<div>
-					<Button icon='remove' />
-					<Button icon='checkmark' />
-				</div>
+				<Grid style={{marginTop: "20px"}}>
+					<Row>
+						<Column width={8} style={{textAlign: 'right'}}>
+							<Button content='Start Time' basic={isStartTime ? false : true} primary={isStartTime ? true : false} onClick={this.startTimeBtnClick} />
+						</Column>
+						<Column width={8} style={{textAlign: 'left'}}>
+							<Button content='End Time' basic={isEndTime ? false : true} primary={isEndTime ? true : false} onClick={this.endTimeBtnClick} />
+						</Column>
+					</Row>
+					<Row>
+						<Column>
+							<div style={{width: isStartTime ? '0px' : '100%', height: isStartTime ? '0px' : 'auto', overflow: 'hidden'}} >
+								<StartTimepicker/>
+							</div>
+							<div style={{width: isEndTime ? '0px' : '100%', height: isEndTime ? '0px' : 'auto', overflow: 'hidden'}}>
+								<EndTimepicker />
+							</div>
+						</Column>
+					</Row>
+					<Row>
+						<Column width={8} style={{textAlign: 'right'}}>
+							<Button icon='remove' />
+						</Column>
+						<Column width={8} style={{textAlign: 'left'}}>
+							<Button icon='checkmark' />
+						</Column>
+					</Row>
+				</Grid>
 			</div>);
-			
 	}
 
+}
+
+// endTimepicker
+class EndTimepicker extends React.Component{
+	render() {
+		return <Timepicker />
+	}
+}
+
+// startTimepicker
+class StartTimepicker extends React.Component{
+	render() {
+		return <Timepicker />
+	}
 }
 
 // Timepicker

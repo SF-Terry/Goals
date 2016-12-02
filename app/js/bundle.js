@@ -9085,42 +9085,117 @@
 		function TimeSetter(props) {
 			_classCallCheck(this, TimeSetter);
 
-			return _possibleConstructorReturn(this, (TimeSetter.__proto__ || Object.getPrototypeOf(TimeSetter)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (TimeSetter.__proto__ || Object.getPrototypeOf(TimeSetter)).call(this, props));
+
+			_this.timeType_startTime = 'startTime';
+			_this.timeType_endTime = 'endTime';
+			_this.timeType = _this.props.timeType || _this.timeType_startTime;
+
+			_this.state = {
+				timeType: _this.timeType
+			};
+			_this.startTimeBtnClick = _this.startTimeBtnClick.bind(_this);
+			_this.endTimeBtnClick = _this.endTimeBtnClick.bind(_this);
+			return _this;
 		}
 
 		_createClass(TimeSetter, [{
+			key: 'startTimeBtnClick',
+			value: function startTimeBtnClick() {
+				this.setState({
+					timeType: this.timeType_startTime
+				});
+			}
+		}, {
+			key: 'endTimeBtnClick',
+			value: function endTimeBtnClick() {
+				this.setState({
+					timeType: this.timeType_endTime
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement('div', null, _react2.default.createElement('h5', null, 'Start Time'), _react2.default.createElement(Timepicker, null), _react2.default.createElement('hr', null), _react2.default.createElement('h5', null, 'End Time'), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { icon: 'remove' }), _react2.default.createElement(_semanticUiReact.Button, { icon: 'checkmark' })));
+				var Column = _semanticUiReact.Grid.Column,
+				    Row = _semanticUiReact.Grid.Row;
+				var timeType = this.state.timeType;
+
+				var isStartTime = timeType === 'startTime';
+				var isEndTime = timeType === 'endTime';
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Start Time', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'End Time', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: { width: isStartTime ? '0px' : '100%', height: isStartTime ? '0px' : 'auto', overflow: 'hidden' } }, _react2.default.createElement(StartTimepicker, null)), _react2.default.createElement('div', { style: { width: isEndTime ? '0px' : '100%', height: isEndTime ? '0px' : 'auto', overflow: 'hidden' } }, _react2.default.createElement(EndTimepicker, null)))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'remove' })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'checkmark' })))));
 			}
 		}]);
 
 		return TimeSetter;
 	}(_react2.default.Component);
 
+	// endTimepicker
+
+
+	var EndTimepicker = function (_React$Component2) {
+		_inherits(EndTimepicker, _React$Component2);
+
+		function EndTimepicker() {
+			_classCallCheck(this, EndTimepicker);
+
+			return _possibleConstructorReturn(this, (EndTimepicker.__proto__ || Object.getPrototypeOf(EndTimepicker)).apply(this, arguments));
+		}
+
+		_createClass(EndTimepicker, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(Timepicker, null);
+			}
+		}]);
+
+		return EndTimepicker;
+	}(_react2.default.Component);
+
+	// startTimepicker
+
+
+	var StartTimepicker = function (_React$Component3) {
+		_inherits(StartTimepicker, _React$Component3);
+
+		function StartTimepicker() {
+			_classCallCheck(this, StartTimepicker);
+
+			return _possibleConstructorReturn(this, (StartTimepicker.__proto__ || Object.getPrototypeOf(StartTimepicker)).apply(this, arguments));
+		}
+
+		_createClass(StartTimepicker, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(Timepicker, null);
+			}
+		}]);
+
+		return StartTimepicker;
+	}(_react2.default.Component);
+
 	// Timepicker
 
 
-	var Timepicker = function (_React$Component2) {
-		_inherits(Timepicker, _React$Component2);
+	var Timepicker = function (_React$Component4) {
+		_inherits(Timepicker, _React$Component4);
 
 		function Timepicker(props) {
 			_classCallCheck(this, Timepicker);
 
-			var _this2 = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
+			var _this4 = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
 
-			var that = _this2;
-			_this2.state = {
+			var that = _this4;
+			_this4.state = {
 				date: null,
 				test: 'empty'
 			};
 			// solve the problem: misleading 'this'
-			_this2.onDateChange = function (date) {
+			_this4.onDateChange = function (date) {
 				that.setState({
 					date: date
 				});
 			};
-			return _this2;
+			return _this4;
 		}
 
 		_createClass(Timepicker, [{
@@ -9157,40 +9232,40 @@
 	// TaskInfo
 
 
-	var TaskInfo = function (_React$Component3) {
-		_inherits(TaskInfo, _React$Component3);
+	var TaskInfo = function (_React$Component5) {
+		_inherits(TaskInfo, _React$Component5);
 
 		function TaskInfo(props) {
 			_classCallCheck(this, TaskInfo);
 
-			var _this3 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
+			var _this5 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
-			_this3.modes = ['add', 'edit'];
+			_this5.modes = ['add', 'edit'];
 			/* temp types before citing this.props.taskType */
-			_this3.taskType = 'day';
-			_this3.state = {
+			_this5.taskType = 'day';
+			_this5.state = {
 				mode: 'add',
 				taskTypes: globalTaskTypes,
-				taskType: _this3.taskType,
+				taskType: _this5.taskType,
 				/* temp set timeSetterOpening to true*/
 				timeSetterOpening: true
 			};
 			// taskTypeChange
-			_this3.taskTypeChange = function (name, result) {
+			_this5.taskTypeChange = function (name, result) {
 				var value = result.value;
-				_this3.setState({
+				_this5.setState({
 					taskType: globalTaskTypes[value]
 				});
 			};
 			// timeBtnClick
-			_this3.timeBtnClick = function () {
-				_this3.setState(function (prevState) {
+			_this5.timeBtnClick = function () {
+				_this5.setState(function (prevState) {
 					return {
 						timeSetterOpening: !prevState.timeSetterOpening
 					};
 				});
 			};
-			return _this3;
+			return _this5;
 		}
 
 		_createClass(TaskInfo, [{
@@ -9224,18 +9299,18 @@
 	// TaskListItem
 
 
-	var TaskListItem = function (_React$Component4) {
-		_inherits(TaskListItem, _React$Component4);
+	var TaskListItem = function (_React$Component6) {
+		_inherits(TaskListItem, _React$Component6);
 
 		function TaskListItem(props) {
 			_classCallCheck(this, TaskListItem);
 
-			var _this4 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
+			var _this6 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
 
-			_this4.state = {
+			_this6.state = {
 				editMode: false
 			};
-			return _this4;
+			return _this6;
 		}
 
 		_createClass(TaskListItem, [{
@@ -9257,19 +9332,19 @@
 	// TaskList
 
 
-	var TaskList = function (_React$Component5) {
-		_inherits(TaskList, _React$Component5);
+	var TaskList = function (_React$Component7) {
+		_inherits(TaskList, _React$Component7);
 
 		function TaskList(props) {
 			_classCallCheck(this, TaskList);
 
-			var _this5 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+			var _this7 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
 
-			_this5.state = {
+			_this7.state = {
 				tasks: tasks
 			};
-			_this5.observeChange();
-			return _this5;
+			_this7.observeChange();
+			return _this7;
 		}
 
 		_createClass(TaskList, [{
@@ -9301,8 +9376,8 @@
 	// ListContainer
 
 
-	var ListContainer = function (_React$Component6) {
-		_inherits(ListContainer, _React$Component6);
+	var ListContainer = function (_React$Component8) {
+		_inherits(ListContainer, _React$Component8);
 
 		function ListContainer(props) {
 			_classCallCheck(this, ListContainer);
@@ -9325,8 +9400,8 @@
 	// TitleBar
 
 
-	var TitleBar = function (_React$Component7) {
-		_inherits(TitleBar, _React$Component7);
+	var TitleBar = function (_React$Component9) {
+		_inherits(TitleBar, _React$Component9);
 
 		function TitleBar(props) {
 			_classCallCheck(this, TitleBar);
@@ -9356,8 +9431,8 @@
 	// TaskListContainer
 
 
-	var TaskListContainer = function (_React$Component8) {
-		_inherits(TaskListContainer, _React$Component8);
+	var TaskListContainer = function (_React$Component10) {
+		_inherits(TaskListContainer, _React$Component10);
 
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
@@ -9378,8 +9453,8 @@
 	// DayTaskContainer
 
 
-	var DayTaskContainer = function (_React$Component9) {
-		_inherits(DayTaskContainer, _React$Component9);
+	var DayTaskContainer = function (_React$Component11) {
+		_inherits(DayTaskContainer, _React$Component11);
 
 		function DayTaskContainer() {
 			_classCallCheck(this, DayTaskContainer);
@@ -9401,8 +9476,8 @@
 	// LongTaskContainer
 
 
-	var LongTaskContainer = function (_React$Component10) {
-		_inherits(LongTaskContainer, _React$Component10);
+	var LongTaskContainer = function (_React$Component12) {
+		_inherits(LongTaskContainer, _React$Component12);
 
 		function LongTaskContainer() {
 			_classCallCheck(this, LongTaskContainer);
@@ -9424,8 +9499,8 @@
 	// MultiFunctionBtn
 
 
-	var MultiFunctionBtn = function (_React$Component11) {
-		_inherits(MultiFunctionBtn, _React$Component11);
+	var MultiFunctionBtn = function (_React$Component13) {
+		_inherits(MultiFunctionBtn, _React$Component13);
 
 		function MultiFunctionBtn() {
 			_classCallCheck(this, MultiFunctionBtn);
@@ -9446,8 +9521,8 @@
 	// ToDoList
 
 
-	var ToDoList = function (_React$Component12) {
-		_inherits(ToDoList, _React$Component12);
+	var ToDoList = function (_React$Component14) {
+		_inherits(ToDoList, _React$Component14);
 
 		function ToDoList() {
 			_classCallCheck(this, ToDoList);
