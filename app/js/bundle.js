@@ -8993,7 +8993,13 @@
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+		return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+		return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
 
 	var _createClass = function () {
 		function defineProperties(target, props) {
@@ -9048,12 +9054,12 @@
 	function _possibleConstructorReturn(self, call) {
 		if (!self) {
 			throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-		}return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+		}return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 	}
 
 	function _inherits(subClass, superClass) {
 		if (typeof superClass !== "function" && superClass !== null) {
-			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 	// datepicker
@@ -9063,6 +9069,11 @@
 
 	var settings = storekeeper.settings;
 	var tasks = storekeeper.tasks;
+
+	// Top varibles
+	var globalTaskTypes = ['day', 'long', 'week', 'month', 'year'];
+	var globalDayTaskTypes = ['day'];
+	var globalLongTaskTypes = ['long', 'year', 'month', 'week'];
 
 	// test
 	setTimeout(function () {
@@ -9139,21 +9150,48 @@
 			var _this2 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
 			_this2.modes = ['add', 'edit'];
+			/* tep types before citing this.props.taskType */
+			_this2.taskType = 'day';
 			_this2.state = {
-				mode: 'add'
+				mode: 'add',
+				taskTypes: globalTaskTypes,
+				taskType: _this2.taskType
 			};
+			// taskTypeChange
+			_this2.taskTypeChange = function (name, result) {
+				var value = result.value;
+				console.log('value: ' + value, typeof value === 'undefined' ? 'undefined' : _typeof(value));
+				console.log('setState: ' + globalTaskTypes[value]);
+				_this2.setState({
+					taskType: globalTaskTypes[value]
+				});
+			};
+
 			return _this2;
 		}
 
 		_createClass(TaskInfo, [{
 			key: 'render',
 			value: function render() {
-				var modes = this.modes;
-				var modesOptions = modes.map(function (item, index) {
+				var state = this.state;
+				var taskType = state.taskType;
+				var taskTypesOptions = globalTaskTypes.map(function (item, index) {
 					return { text: item, value: index };
 				});
-				var selectValue = modes.indexOf('add');
-				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: modesOptions })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'StartTime' }), _react2.default.createElement(Timepicker, null)));
+				var selectValue = globalTaskTypes.indexOf(taskType);
+
+				// task type's time settings
+				var dayTaskTypeMoments = [(0, _moment2.default)().startOf('day'), (0, _moment2.default)().endOf('day')];
+				var longTaskTypeMoments = [(0, _moment2.default)(), (0, _moment2.default)().endOf('day')];
+				var weekTaskTypeMoments = [(0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week')];
+				var monthTaskTypeMoments = [(0, _moment2.default)().startOf('month'), (0, _moment2.default)().endOf('month')];
+				var yearTaskTypeMoments = [(0, _moment2.default)().startOf('year'), (0, _moment2.default)().endOf('year')];
+				var taskTypeMomentsMap = new Map([['day', dayTaskTypeMoments], ['long', longTaskTypeMoments], ['week', weekTaskTypeMoments], ['month', monthTaskTypeMoments], ['year', yearTaskTypeMoments]]);
+				var currentTaskTypeMoments = taskTypeMomentsMap.get(taskType);
+				console.log('currentTaskTypeMoments: ' + taskTypeMomentsMap.get(taskType));
+				var startTime = currentTaskTypeMoments[0].format();
+				var endTime = currentTaskTypeMoments[1].format();
+				return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', label: 'Name', placeholder: 'Type the task', fluid: true })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'Task Type' }), _react2.default.createElement(_semanticUiReact.Dropdown, { className: 'TaskTypeSelector', defaultValue: selectValue, selection: true, options: taskTypesOptions, onChange: this.taskTypeChange })), _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { content: 'Time' })), _react2.default.createElement('div', null, startTime, '\xA0\xA0to\xA0\xA0', endTime));
 			}
 		}]);
 
@@ -9181,6 +9219,8 @@
 			key: 'render',
 			value: function render() {
 				var task = this.props.task;
+				var taskTypes = this.props.taskTypes;
+				var taskType = this.props.taskType;
 				var content_normal = _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Checkbox, { className: 'CompleteBtn' }), _react2.default.createElement('span', { className: 'TaskNameText' }, task.name), _react2.default.createElement('span', { className: 'Remark' }, 'Remark'));
 				var content_editMode = _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Button, { basic: true, icon: 'remove circle', className: 'DeleteBtn' }), _react2.default.createElement('input', { className: 'Tasklist_TaskNameInput', defaultValue: task.name }), _react2.default.createElement(_semanticUiReact.Button, { basic: true, icon: 'content', className: 'SortBtn' }));
 				var content = this.state.editMode ? content_editMode : content_normal;
@@ -9224,8 +9264,10 @@
 			key: 'render',
 			value: function render() {
 				var tasks = this.state.tasks;
+				var taskTypes = this.props.taskTypes;
+				var taskType = this.props.taskType;
 				return _react2.default.createElement('div', null, tasks.map(function (task, index) {
-					return _react2.default.createElement(TaskListItem, { key: index, task: task });
+					return _react2.default.createElement(TaskListItem, { taskTypes: taskTypes, taskType: taskType, key: index, task: task });
 				}));
 			}
 		}]);
@@ -9325,7 +9367,7 @@
 		_createClass(DayTaskContainer, [{
 			key: 'render',
 			value: function render() {
-				var taskTypes = ['day'];
+				var taskTypes = globalDayTaskTypes;
 				return _react2.default.createElement(TaskListContainer, { taskType: taskTypes[0], taskTypes: taskTypes });
 			}
 		}]);
@@ -9348,7 +9390,7 @@
 		_createClass(LongTaskContainer, [{
 			key: 'render',
 			value: function render() {
-				var taskTypes = ['long', 'year', 'month', 'week'];
+				var taskTypes = globalLongTaskTypes;
 				return _react2.default.createElement(TaskListContainer, { taskType: taskTypes[0], taskTypes: taskTypes });
 			}
 		}]);
@@ -9371,7 +9413,6 @@
 		_createClass(MultiFunctionBtn, [{
 			key: 'render',
 			value: function render() {
-				var taskTypes = ['long', 'year', 'month', 'week'];
 				return _react2.default.createElement('button', null, 'MultiFunctionBtn');
 			}
 		}]);

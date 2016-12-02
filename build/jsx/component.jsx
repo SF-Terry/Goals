@@ -14,7 +14,12 @@ var storekeeper = require('../js/storekeeper.js');
 
 var settings = storekeeper.settings;
 var tasks = storekeeper.tasks;
-	
+
+// Top varibles
+const globalTaskTypes = ['day', 'long', 'week', 'month', 'year'];
+const globalDayTaskTypes = ['day'];
+const globalLongTaskTypes = ['long', 'year', 'month', 'week'];
+
 // test
 setTimeout(() => {
 	// tasks.push({name: 'task2', level: 'a'});
@@ -79,15 +84,49 @@ class Timepicker extends React.Component {
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
-		this.modes = ['add', 'edit'];
+		this.modes = ['add', 'edit'];		
+		/* tep types before citing this.props.taskType */
+		this.taskType='day';
 		this.state = {
-			mode: 'add'
+			mode: 'add',
+			taskTypes: globalTaskTypes,
+			taskType: this.taskType
 		};
+		// taskTypeChange
+		this.taskTypeChange = (name, result) => {
+			const value = result.value;
+			console.log('value: ' + value, typeof value);
+			console.log('setState: ' + globalTaskTypes[value]);
+			this.setState({
+				taskType: globalTaskTypes[value]
+			});
+		}
+		
 	}
+	
 	render() {
-		const modes = this.modes;
-		const modesOptions = modes.map((item, index) => ({text: item, value: index}));
-		const selectValue = modes.indexOf('add');
+		const state = this.state;
+		const taskType = state.taskType;
+		const taskTypesOptions = globalTaskTypes.map((item, index) => ({text: item, value: index}));
+		const selectValue = globalTaskTypes.indexOf(taskType);
+		
+		// task type's time settings
+		const dayTaskTypeMoments = [moment().startOf('day'), moment().endOf('day')];
+		const longTaskTypeMoments = [moment(), moment().endOf('day')];
+		const weekTaskTypeMoments = [moment().startOf('week'), moment().endOf('week')];
+		const monthTaskTypeMoments = [moment().startOf('month'), moment().endOf('month')];
+		const yearTaskTypeMoments = [moment().startOf('year'), moment().endOf('year')];
+		const taskTypeMomentsMap = new Map([
+			['day', dayTaskTypeMoments],
+			['long', longTaskTypeMoments],
+			['week', weekTaskTypeMoments],
+			['month', monthTaskTypeMoments],
+			['year', yearTaskTypeMoments]
+		]);
+		const currentTaskTypeMoments = taskTypeMomentsMap.get(taskType);
+		console.log('currentTaskTypeMoments: ' + taskTypeMomentsMap.get(taskType));
+		const startTime = currentTaskTypeMoments[0].format();
+		const endTime = currentTaskTypeMoments[1].format();
 		return (
 			<div>
 				<div>
@@ -97,16 +136,15 @@ class TaskInfo extends React.Component {
                 	<Input className='AddTask_TaskNameInput' label='Name' placeholder='Type the task' fluid />
             	</div>
             	<div>
-            		<Button content='Type' />
-                	<Dropdown className='TaskTypeSelector' defaultValue={selectValue}  selection options={modesOptions}></Dropdown>
+            		<Button content='Task Type' />
+                	<Dropdown className='TaskTypeSelector' defaultValue={selectValue}  selection options={taskTypesOptions} onChange={this.taskTypeChange} ></Dropdown>
                 </div>
                 <div>
-                	<Button content='StartTime' />
-                	<Timepicker />
+                	<Button content='Time' />
                 </div>
+                <div>{startTime}&nbsp;&nbsp;to&nbsp;&nbsp;{endTime}</div>
+                
 				
-				
-
 			</div>);
 	}
 }
@@ -121,6 +159,8 @@ class TaskListItem extends React.Component {
 	}
 	render() {
 		var task = this.props.task;
+		const taskTypes = this.props.taskTypes;
+		const taskType = this.props.taskType;
 		const content_normal =  <div>
 									<Checkbox className="CompleteBtn" />
 									<span className="TaskNameText">{task.name}</span>
@@ -162,9 +202,11 @@ class TaskList extends React.Component {
 
 	render() {
 		var tasks = this.state.tasks;
+		const taskTypes = this.props.taskTypes;
+		const taskType = this.props.taskType;
 		return (
 			<div>
-				{tasks.map((task, index) => (<TaskListItem key={index} task={task}/>))}
+				{tasks.map((task, index) => (<TaskListItem taskTypes={taskTypes} taskType={taskType} key={index} task={task}/>))}
 			</div>);
 	}
 }
@@ -225,7 +267,7 @@ class TaskListContainer extends React.Component {
 // DayTaskContainer
 class DayTaskContainer extends React.Component {
 	render() {
-		const taskTypes = ['day'];		
+		const taskTypes = globalDayTaskTypes;		
 		return <TaskListContainer taskType={taskTypes[0]} taskTypes={taskTypes} />;
 	}
 }
@@ -233,7 +275,7 @@ class DayTaskContainer extends React.Component {
 // LongTaskContainer
 class LongTaskContainer extends React.Component {
 	render() {
-		const taskTypes = ['long', 'year', 'month', 'week'];
+		const taskTypes = globalLongTaskTypes;
 		return <TaskListContainer taskType={taskTypes[0]} taskTypes={taskTypes}/>;
 	}
 }
@@ -241,7 +283,6 @@ class LongTaskContainer extends React.Component {
 // MultiFunctionBtn
 class MultiFunctionBtn extends React.Component {
 	render() {
-		const taskTypes = ['long', 'year', 'month', 'week'];
 		return <button>MultiFunctionBtn</button>;
 	}
 }
