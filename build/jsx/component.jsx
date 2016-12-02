@@ -6,9 +6,9 @@ import observe from '../js/observe.js';
 import 'rmc-picker/assets/index.css';
 import 'rmc-date-picker/assets/index.css';
 import DatePicker from 'rmc-date-picker/lib/index.web';
-import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
+import zhCn from 'rmc-date-picker/lib/locale/en_US';
 import moment from 'moment';
-import 'moment/locale/zh-cn.js';
+import 'moment/locale/en-gb.js';
 
 var storekeeper = require('../js/storekeeper.js');
 
@@ -16,8 +16,6 @@ var settings = storekeeper.settings;
 var tasks = storekeeper.tasks;
 	
 // test
-console.log(moment().format());
-
 setTimeout(() => {
 	// tasks.push({name: 'task2', level: 'a'});
 	// tasks[0].name = 'task2';
