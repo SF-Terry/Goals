@@ -14,7 +14,7 @@ var storekeeper = require('../js/storekeeper.js');
 
 var settings = storekeeper.settings;
 var tasks = storekeeper.tasks;
-
+ 
 // Top varibles
 const globalTaskTypes = ['day', 'long', 'week', 'month', 'year'];
 const globalDayTaskTypes = ['day'];
@@ -28,6 +28,32 @@ setTimeout(() => {
 	// settings.push({email: 'test1@testEmail.com'});
 }, 1000);
 
+
+// TimeSetter
+class TimeSetter extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return (
+			<div>
+
+				<h5>Start Time</h5>
+				<Timepicker />
+
+				<hr />
+				
+				<h5>End Time</h5>
+
+				<div>
+					<Button icon='remove' />
+					<Button icon='checkmark' />
+				</div>
+			</div>);
+			
+	}
+
+}
 
 // Timepicker
 class Timepicker extends React.Component {
@@ -60,7 +86,6 @@ class Timepicker extends React.Component {
 		  return date.format('YYYY-MM-DD HH:mm');
 		}
 	    
-
 	    return (<div style={{ margin: '10px 30px' }}>
 	      <div>
 	        <span>{date && format(date) || format(now)}</span>
@@ -79,29 +104,33 @@ class Timepicker extends React.Component {
 }
 
 
-
 // TaskInfo
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.modes = ['add', 'edit'];		
-		/* tep types before citing this.props.taskType */
+		/* temp types before citing this.props.taskType */
 		this.taskType='day';
 		this.state = {
 			mode: 'add',
 			taskTypes: globalTaskTypes,
-			taskType: this.taskType
+			taskType: this.taskType,
+			/* temp set timeSetterOpening to true*/
+			timeSetterOpening: true
 		};
 		// taskTypeChange
 		this.taskTypeChange = (name, result) => {
 			const value = result.value;
-			console.log('value: ' + value, typeof value);
-			console.log('setState: ' + globalTaskTypes[value]);
 			this.setState({
 				taskType: globalTaskTypes[value]
 			});
-		}
-		
+		};
+		// timeBtnClick
+		this.timeBtnClick = () => {
+			this.setState((prevState) => ({
+				timeSetterOpening: !prevState.timeSetterOpening
+			}));
+		};	
 	}
 	
 	render() {
@@ -109,6 +138,7 @@ class TaskInfo extends React.Component {
 		const taskType = state.taskType;
 		const taskTypesOptions = globalTaskTypes.map((item, index) => ({text: item, value: index}));
 		const selectValue = globalTaskTypes.indexOf(taskType);
+		const timeSetterOpening = state.timeSetterOpening;
 		
 		// task type's time settings
 		const dayTaskTypeMoments = [moment().startOf('day'), moment().endOf('day')];
@@ -124,12 +154,11 @@ class TaskInfo extends React.Component {
 			['year', yearTaskTypeMoments]
 		]);
 		const currentTaskTypeMoments = taskTypeMomentsMap.get(taskType);
-		console.log('currentTaskTypeMoments: ' + taskTypeMomentsMap.get(taskType));
 		const startTime = currentTaskTypeMoments[0].format();
 		const endTime = currentTaskTypeMoments[1].format();
 		return (
 			<div>
-				<div>
+				{/*<div>
 					<Button className='BackBtn' icon='angle left'/>
 				</div>
             	<div>
@@ -142,8 +171,12 @@ class TaskInfo extends React.Component {
                 <div>
                 	<Button content='Time' />
                 </div>
-                <div>{startTime}&nbsp;&nbsp;to&nbsp;&nbsp;{endTime}</div>
-                
+                <div>
+                	<Button content='Start' onClick={this.timeBtnClick} />{startTime}
+                	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                	<Button content='End' onClick={this.timeBtnClick} />{endTime}
+                </div>*/}
+                {timeSetterOpening ? <TimeSetter  /> : ''}
 				
 			</div>);
 	}
