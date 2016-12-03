@@ -1,6 +1,6 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
-import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment } from 'semantic-ui-react'
+import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment, Icon, Menu } from 'semantic-ui-react'
 import observe from '../js/observe.js';
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -16,9 +16,9 @@ var settings = storekeeper.settings;
 var tasks = storekeeper.tasks;
  
 // Top varibles
-const globalTaskTypes = ['day', 'long', 'week', 'month', 'year'];
-const globalDayTaskTypes = ['day'];
-const globalLongTaskTypes = ['long', 'year', 'month', 'week'];
+const globalTaskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
+const globalDayTaskTypes = ['today', 'tomorrow'];
+const globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 
 // test
 setTimeout(() => {
@@ -136,7 +136,7 @@ class Timepicker extends React.Component {
 		const {date} = this.state;
 
 		const minDate = props.minDate || moment();
-		const maxDate = props.maxDate || moment().add(100, 'year');
+		const maxDate = props.maxDate || moment().add(100, 'years');
 		const defaultDate = props.defaultDate || moment();
 		minDate.locale('zh-cn').utcOffset(8);
 		maxDate.locale('zh-cn').utcOffset(8);
@@ -145,20 +145,21 @@ class Timepicker extends React.Component {
 		  return date.format('YYYY-MM-DD HH:mm');
 		}
 	    
-	    return (<div style={{ margin: '10px 30px' }}>
-	      <div>
-	        <span>{date && format(date) || format(defaultDate)}</span>
-	        <DatePicker
-	          rootNativeProps={{'data-xx':'yy'}}
-	          defaultDate={date || defaultDate}
-	          mode={'datetime'}
-	          locale={zhCn}
-	          maxDate={maxDate}
-	          minDate={minDate}
-	          onDateChange={this.onDateChange}
-	        />
-	      </div>
-	    </div>);
+	    return (
+	    	<div style={{ margin: '10px 30px' }}>
+	      		<div>
+	      		  {/* <span>{date && format(date) || format(defaultDate)}</span> */}
+	      		  <DatePicker
+	      		    rootNativeProps={{'data-xx':'yy'}}
+	      		    defaultDate={date || defaultDate}
+	      		    mode={'datetime'}
+	      		    locale={zhCn}
+	      		    maxDate={maxDate}
+	      		    minDate={minDate}
+	      		    onDateChange={this.onDateChange}
+	      		  />
+	      		</div>
+	    	</div>);
 	  }
 }
 
@@ -167,55 +168,141 @@ class Timepicker extends React.Component {
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
+		// set taskTypeMomentsMap
+		var getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
+		var getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
+		const dayTaskTypeMoments = getCurrentMoments('day');
+		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
+		const weekTaskTypeMoments = getCurrentMoments('week');
+		const monthTaskTypeMoments = getCurrentMoments('month');
+		const yearTaskTypeMoments = getCurrentMoments('year');
+		const tomorrowTaskTypeMoments =  getNextMoments('day');
+		const nextWeekTaskTypeMoments =  getNextMoments('week');
+		const nextMonthTaskTypeMoments = getNextMoments('month');
+		const nextYearTaskTypeMoments =  getNextMoments('year');
+		this.taskTypeMomentsMap = new Map([
+			['today', dayTaskTypeMoments],
+			['long', longTaskTypeMoments],
+			['thisWeek', weekTaskTypeMoments],
+			['thisMonth', monthTaskTypeMoments],
+			['thisYear', yearTaskTypeMoments],
+			['tomorrow', tomorrowTaskTypeMoments],
+			['nextWeek', nextWeekTaskTypeMoments],
+			['nextMonth', nextMonthTaskTypeMoments],
+			['nextYear', nextYearTaskTypeMoments]
+		]);
+		
+
 		this.modes = ['add', 'edit'];		
 		/* temp types before citing this.props.taskType */
-		this.taskType='day';
+		this.defaultTaskType='today';
 		this.state = {
 			mode: 'add',
-			taskType: this.taskType,
+			taskType: this.defaultTaskType,
+			/* temp set isNeedTimer to false*/
+			isNeedTimer: false,
+			isRepeat: false,
 			/* temp set timeSetterOpening to true*/
-			timeSetterOpening: true
+			timeSetterOpening: true,
+			startTimeDate: null,
+			endTimeDate: null
 		};
+
+		this.currentTaskTypeMoments = this.taskTypeMomentsMap.get(this.state.taskType);
+
 		this.taskTypeChange = this.taskTypeChange.bind(this);
 		this.timeBtnClick = this.timeBtnClick.bind(this);
+		this.isNeedTimerCheckboxClick = this.isNeedTimerCheckboxClick.bind(this);
+		this.isRepeatCheckboxClick = this.isRepeatCheckboxClick.bind(this);
+	}
+	componentDidMount() {
+		console.log('1', this.currentTaskTypeMoments);
+		const {currentTaskTypeMoments: c} = this;
+		this.setState({
+			startTimeDate: c[0],
+			endTimeDate: c[1]
+		});
 	}
 	taskTypeChange(e, result) {
+		const {value} = result;
 		this.setState({
-			taskType: result.value
+			taskType: value
 		});
+		// change isNeedTimer
+		this.state.isNeedTimer = value === 'long' ? true : false;
+		// set startTimeDate and endTimeDate
+		const {currentTaskTypeMoments: c} = this;
 	};
 	timeBtnClick() {
 		this.setState((prevState) => ({
 			timeSetterOpening: !prevState.timeSetterOpening
 		}));
 	};
+	isNeedTimerCheckboxClick(e, result) {
+		this.setState((prevState) => ({
+			isNeedTimer: !prevState.isNeedTimer
+		}));
+		
+		// change startTimeDate and endTimeDate
+		const {taskType: t, isNeedTimer} = this.state;
+		const isNeedFromNow = (
+				t === 'today' ||
+				t === 'thisWeek' ||
+				t === 'thisMonth' ||
+				t === 'thisYear'
+			);
+		// isNeedTimer has changed, so use invertible value: !isNeedTimer
+		if (!isNeedTimer && isNeedFromNow) {
+			const m = moment();
+			// set startTimeDate
+			this.setState({
+				startTimeDate: m
+			}, () => {
+				console.log('startTimeDate now: ' + this.state.startTimeDate.format());
+			});
+		}
+		if (!isNeedTimer && !isNeedFromNow) {
+
+		}
+	};
+	isRepeatCheckboxClick(e, result) {
+		this.setState((prevState) => ({
+			isRepeat: !prevState.isRepeat
+		}));
+	};
 	render() {
-		const state = this.state;
-		const taskType = state.taskType;
-		const taskTypesOptions = globalTaskTypes.map((item, index) => ({text: item, value: item}));
+		const {state, taskTypeMomentsMap} = this;
+		const {taskType, isNeedTimer, isRepeat, startTimeDate, endTimeDate} = state;
+		const taskTypesOptions = globalTaskTypes.map((item, index) => {
+			var text = '';
+			switch (item) {
+				case 'today': text = '今日目标';break;
+				case 'long': text = '长期目标';break;
+				case 'thisWeek': text = '本周目标';break;
+				case 'thisMonth': text = '本月目标';break;
+				case 'thisYear': text = '本年目标';break;
+				case 'tomorrow': text = '明日目标';break;
+				case 'nextWeek': text = '下周目标';break;
+				case 'nextMonth': text = '下月目标';break;
+				case 'nextYear': text = '明年目标';break;
+				defaut: break;
+			}
+			return {text: text, value: item};
+		});
 		const timeSetterOpening = state.timeSetterOpening;
 		
-		// task type's time settings
-		const dayTaskTypeMoments = [moment().startOf('day'), moment().endOf('day')];
-		const longTaskTypeMoments = [moment(), moment().endOf('day')];
-		const weekTaskTypeMoments = [moment().startOf('week'), moment().endOf('week')];
-		const monthTaskTypeMoments = [moment().startOf('month'), moment().endOf('month')];
-		const yearTaskTypeMoments = [moment().startOf('year'), moment().endOf('year')];
-		const taskTypeMomentsMap = new Map([
-			['day', dayTaskTypeMoments],
-			['long', longTaskTypeMoments],
-			['week', weekTaskTypeMoments],
-			['month', monthTaskTypeMoments],
-			['year', yearTaskTypeMoments]
-		]);
-		const currentTaskTypeMoments = taskTypeMomentsMap.get(taskType);
 		var timeContentTemplate = (moment) => (
+			moment ? (
 			<div style={{textAlign: 'center'}}>
-				<h3>{moment.format('hh:mm')}</h3>
-				<p>{moment.format('YYYY年M月D日')}</p>
-			</div>);
-		const startTime = timeContentTemplate(currentTaskTypeMoments[0]);
-		const endTime = timeContentTemplate(currentTaskTypeMoments[1]);
+				<h3>{moment.format('HH:mm')}</h3>
+				<p>{moment.format('YYYY/M/D')}</p>
+			</div>) : ''
+		);
+
+		const startTime = timeContentTemplate(startTimeDate);
+		const endTime = timeContentTemplate(endTimeDate);
+
+		console.log('startTimeDate in "Render": ', startTimeDate);
 
 		const {Row, Column} = Grid;
 		return (
@@ -237,29 +324,49 @@ class TaskInfo extends React.Component {
 							<Dropdown fluid selection className='TaskTypeSelector' defaultValue={taskType} options={taskTypesOptions} onChange={this.taskTypeChange} ></Dropdown>
 						</Column>	
 					</Row>
-				</Grid>
-				<Grid>
+					{taskType != 'long' ? (
+						<Row centered>
+							<Column width={5}>
+								<Checkbox label='定时' checked={isNeedTimer} onClick={this.isNeedTimerCheckboxClick} />
+							</Column>
+							<Column width={5}>
+								<Checkbox label='重复' checked={isRepeat} onClick={this.isRepeatCheckboxClick} />
+							</Column>
+							
+						</Row>
+						) : ''}
+					{
+						isNeedTimer ? (
+							<Row centered>
+								<Column width={6}>
+									<Segment onClick={this.timeBtnClick}>
+										{startTime}
+									</Segment>
+								</Column>
+								<Column width={2} textAlign='center' verticalAlign='middle'>
+								{ <Icon name='angle double right' size='large' /> }
+								</Column>
+								<Column width={6}>
+									<Segment onClick={this.timeBtnClick}>
+										{endTime}
+									</Segment>
+								</Column>
+							</Row>
+						) : ''
+					}
 					<Row centered>
-						<Column width={7}>
-							<Button onClick={this.timeBtnClick}>
-								{startTime}
-							</Button>
+						<Column width={6} textAlign='right'>
+							<Button content='完成' />
 						</Column>
-						<Column width={1}>
-							123	
-							<Button icon='angle double right'/>
-						</Column>
-						<Column width={7}>
-							<Button onClick={this.timeBtnClick}>
-								{endTime}
-							</Button>
+						<Column width={6}>
+							<Button content='继续添加' />
 						</Column>
 					</Row>
 				</Grid>
 
                 <div>
                 </div>
-                {/* timeSetterOpening ? <TimeSetter  /> : '' */}
+                { timeSetterOpening ? <TimeSetter  /> : '' }
 				
 			</div>);
 	}
