@@ -246,6 +246,7 @@ class TaskInfo extends React.Component {
 							</Button>
 						</Column>
 						<Column width={1}>
+							123	
 							<Button icon='angle double right'/>
 						</Column>
 						<Column width={7}>
