@@ -1,6 +1,6 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
-import { Button, Grid, Dropdown, Checkbox, Form, Input, Segment } from 'semantic-ui-react'
+import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment } from 'semantic-ui-react'
 import observe from '../js/observe.js';
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -99,6 +99,7 @@ class EndTimepicker extends React.Component{
 		this.defaultDate = moment().add(1,'hours').startOf('hour');
 	}
 	render() {
+		const props = this.props;
 		return <Timepicker defaultDate={this.defaultDate} />
 	}
 }
@@ -171,31 +172,27 @@ class TaskInfo extends React.Component {
 		this.taskType='day';
 		this.state = {
 			mode: 'add',
-			taskTypes: globalTaskTypes,
 			taskType: this.taskType,
 			/* temp set timeSetterOpening to true*/
 			timeSetterOpening: true
 		};
-		// taskTypeChange
-		this.taskTypeChange = (name, result) => {
-			const value = result.value;
-			this.setState({
-				taskType: globalTaskTypes[value]
-			});
-		};
-		// timeBtnClick
-		this.timeBtnClick = () => {
-			this.setState((prevState) => ({
-				timeSetterOpening: !prevState.timeSetterOpening
-			}));
-		};	
+		this.taskTypeChange = this.taskTypeChange.bind(this);
+		this.timeBtnClick = this.timeBtnClick.bind(this);
 	}
-	
+	taskTypeChange(e, result) {
+		this.setState({
+			taskType: result.value
+		});
+	};
+	timeBtnClick() {
+		this.setState((prevState) => ({
+			timeSetterOpening: !prevState.timeSetterOpening
+		}));
+	};
 	render() {
 		const state = this.state;
 		const taskType = state.taskType;
-		const taskTypesOptions = globalTaskTypes.map((item, index) => ({text: item, value: index}));
-		const selectValue = globalTaskTypes.indexOf(taskType);
+		const taskTypesOptions = globalTaskTypes.map((item, index) => ({text: item, value: item}));
 		const timeSetterOpening = state.timeSetterOpening;
 		
 		// task type's time settings
@@ -212,29 +209,56 @@ class TaskInfo extends React.Component {
 			['year', yearTaskTypeMoments]
 		]);
 		const currentTaskTypeMoments = taskTypeMomentsMap.get(taskType);
-		const startTime = currentTaskTypeMoments[0].format();
-		const endTime = currentTaskTypeMoments[1].format();
+		var timeContentTemplate = (moment) => (
+			<div style={{textAlign: 'center'}}>
+				<h3>{moment.format('hh:mm')}</h3>
+				<p>{moment.format('YYYY年M月D日')}</p>
+			</div>);
+		const startTime = timeContentTemplate(currentTaskTypeMoments[0]);
+		const endTime = timeContentTemplate(currentTaskTypeMoments[1]);
+
+		const {Row, Column} = Grid;
 		return (
 			<div>
-				{/*<div>
-					<Button className='BackBtn' icon='angle left'/>
-				</div>
-            	<div>
-                	<Input className='AddTask_TaskNameInput' label='Name' placeholder='Type the task' fluid />
-            	</div>
-            	<div>
-            		<Button content='Task Type' />
-                	<Dropdown className='TaskTypeSelector' defaultValue={selectValue}  selection options={taskTypesOptions} onChange={this.taskTypeChange} ></Dropdown>
-                </div>
+
+				<Grid padded>
+					<Row>
+						<Column>
+							<Button className='BackBtn' icon='angle left'/>
+						</Column>
+					</Row>
+					<Row centered>
+						<Column width={14}>
+							<Input className='AddTask_TaskNameInput' placeholder='Task Content' fluid />
+						</Column>	
+					</Row>
+					<Row centered>
+						<Column width={14}>
+							<Dropdown fluid selection className='TaskTypeSelector' defaultValue={taskType} options={taskTypesOptions} onChange={this.taskTypeChange} ></Dropdown>
+						</Column>	
+					</Row>
+				</Grid>
+				<Grid>
+					<Row centered>
+						<Column width={7}>
+							<Button onClick={this.timeBtnClick}>
+								{startTime}
+							</Button>
+						</Column>
+						<Column width={1}>
+							<Button icon='angle double right'/>
+						</Column>
+						<Column width={7}>
+							<Button onClick={this.timeBtnClick}>
+								{endTime}
+							</Button>
+						</Column>
+					</Row>
+				</Grid>
+
                 <div>
-                	<Button content='Time' />
                 </div>
-                <div>
-                	<Button content='Start' onClick={this.timeBtnClick} />{startTime}
-                	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                	<Button content='End' onClick={this.timeBtnClick} />{endTime}
-                </div>*/}
-                {timeSetterOpening ? <TimeSetter  /> : ''}
+                {/* timeSetterOpening ? <TimeSetter  /> : '' */}
 				
 			</div>);
 	}
@@ -325,7 +349,7 @@ class TitleBar extends React.Component {
 	}
 	render() {
 		const taskTypes = this.props.taskTypes;
-		const taskTypesOptions = taskTypes.map((item, index) => ({text: item, value: index}));
+		const taskTypesOptions = taskTypes.map((item) => ({text: item, value: item}));
 		const taskType = this.props.taskType;
 		const selectValue = taskTypes.indexOf(taskType) || 0;
 		const dropDown = <Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions}></Dropdown>
