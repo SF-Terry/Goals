@@ -164,7 +164,73 @@ class Timepicker extends React.Component {
 }
 
 
-// TaskInfo
+/**
+ * class TaskLevelButtons
+ * @receiveProps {string} taskLevel - current taskLevel
+ * @receiveProps {function} taskLevelCallback - return current taskLevel
+ */
+class TaskLevelButtons extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			level: this.props.taskLevel || 'b'
+		}
+
+		
+
+		this.setLevel = this.setLevel.bind(this);
+	}
+	componentDidMount(){
+
+	}
+	setLevel(level) {
+		this.setState({
+			level: level
+		});
+		// this.props.taskLevelCallback(level);
+	}
+	render() {
+		const {level} = this.state;
+
+		let buttonsInfo = {
+			a: {
+				color: 'red',
+				text: '重要紧急'
+			},
+			b: {
+				color: 'orange',
+				text: '重要'
+			},
+			c: {
+				color: 'yellow',
+				text: '紧急'
+			},
+			d: {
+				color: 'blue',
+				text: '正常'
+			}
+		};
+		let buttons = [];
+		for (let buttonLevel in buttonsInfo) {
+			buttons.push(
+				<Button circular basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} key={buttonLevel} />
+			);
+		}
+
+		console.log(level);
+		return (
+			<div style={{textAlign: 'center'}}>
+				{buttons}
+			</div>
+		);
+	}
+}
+
+
+/**
+ * class TaskInfo
+ * @receiveProps {object} task - task
+ */
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
@@ -194,11 +260,14 @@ class TaskInfo extends React.Component {
 		
 
 		this.modes = ['add', 'edit'];		
-		/* temp types before citing this.props.taskType */
+		/* temp type before citing this.props.task.taskType */
 		this.defaultTaskType='today';
+		/* temp type before citing this.props.task.taskLevel */
+		this.defaultTaskLevel='b';
 		this.state = {
 			mode: 'add',
 			taskType: this.defaultTaskType,
+			taskLevel: this.defaultTaskLevel,
 			/* temp set isNeedTimer to false*/
 			isNeedTimer: false,
 			isRepeat: false,
@@ -221,6 +290,11 @@ class TaskInfo extends React.Component {
 		this.setState({
 			startTimeDate: c[0],
 			endTimeDate: c[1]
+		});
+	}
+	taskLevelChange(newTaskLevel) {
+		this.setState({
+			taskLevel: newTaskLevel
 		});
 	}
 	taskTypeChange(e, result) {
@@ -272,7 +346,7 @@ class TaskInfo extends React.Component {
 	};
 	render() {
 		const {state, taskTypeMomentsMap} = this;
-		const {taskType, isNeedTimer, isRepeat, startTimeDate, endTimeDate} = state;
+		const {taskType, taskLevel, isNeedTimer, isRepeat, startTimeDate, endTimeDate} = state;
 		const taskTypesOptions = globalTaskTypes.map((item, index) => {
 			var text = '';
 			switch (item) {
@@ -302,7 +376,6 @@ class TaskInfo extends React.Component {
 		const startTime = timeContentTemplate(startTimeDate);
 		const endTime = timeContentTemplate(endTimeDate);
 
-		console.log('startTimeDate in "Render": ', startTimeDate);
 
 		const {Row, Column} = Grid;
 		return (
@@ -317,6 +390,11 @@ class TaskInfo extends React.Component {
 					<Row centered>
 						<Column width={14}>
 							<Input className='AddTask_TaskNameInput' placeholder='Task Content' fluid />
+						</Column>	
+					</Row>
+					<Row centered>
+						<Column width={14}>
+							<TaskLevelButtons taskLevel={taskLevel} taskLevelCallback={this.taskLevelChange} />
 						</Column>	
 					</Row>
 					<Row centered>
@@ -372,38 +450,58 @@ class TaskInfo extends React.Component {
 	}
 }
 
-// TaskListItem
+/**
+ * class TaskListItem
+ * @receiveProps {number} key - key
+ * @receiveProps {object} task - one task
+ */
 class TaskListItem extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			editMode: false
+			editMode: false,
+			showTaskInfo: false
 		};
+	}
+	itemClick() {
+		this.setState({
+			showTaskInfo: true
+		});
 	}
 	render() {
 		var task = this.props.task;
-		const taskTypes = this.props.taskTypes;
-		const taskType = this.props.taskType;
-		const content_normal =  <div>
+
+		const {editMode, showTaskInfo} = this.state;
+
+		const {taskType, taskIsCompleted} = task;
+
+		const content_normal =  (
+								<div>
 									<Checkbox className="CompleteBtn" />
-									<span className="TaskNameText">{task.name}</span>
+									<span className="TaskNameText" onClick={this.itemClick}>{task.name}</span>
 									<span className="Remark">Remark</span>
-								</div>;
-		const content_editMode = <div>
+								</div>
+								);
+		const content_editMode = (
+								<div>
 									<Button basic icon='remove circle' className="DeleteBtn" />
 									<input className="Tasklist_TaskNameInput" defaultValue={task.name} />
 									<Button basic icon='content' className="SortBtn" />
-								</div>;
-		const content = this.state.editMode ? content_editMode : content_normal;
+								</div>
+								);
 		return( 
 			<div>
-				{content}
-				{this.props.children}
+				{showTaskInfo ? <TaskInfo task={task} /> : ''}
+				{editMode ? content_editMode : content_normal}
 			</div>);
 	}
 }
 
-// TaskList
+/**
+ * class TaskList
+ * @receiveProps {string} taskType - current taskType
+ * @receiveProps {bool} taskIsCompleted - taskIsCompleted
+ */
 class TaskList extends React.Component {
 	constructor(props) {
 		super(props);
@@ -424,18 +522,27 @@ class TaskList extends React.Component {
 	}
 
 	render() {
+		const {taskType, taskIsCompleted} = this.props;
+
 		var tasks = this.state.tasks;
-		const taskTypes = this.props.taskTypes;
-		const taskType = this.props.taskType;
+		var filterdTasks = tasks.filter(task => {
+			const {taskType: theTaskType, taskIsCompleted: theTaskIsCompleted} = task;
+			return theTaskType === taskType && theTaskIsCompleted === taskIsCompleted;
+		});
 		return (
 			<div>
-				{tasks.map((task, index) => (<TaskListItem taskTypes={taskTypes} taskType={taskType} key={index} task={task}/>))}
+				{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task}/>))}
 			</div>);
 	}
 }
 
-
-// TitleBar
+/**
+ * class TitleBar
+ * @receiveProps {string} taskType - current taskType
+ * @receiveProps {string} taskTypes - current taskTypes
+ * @receiveProps {function} taskTypeCallback - return current taskType
+ * @receiveProps {function} taskIsCompletedCallback - return current taskIsCompleted
+ */
 class TitleBar extends React.Component {
 	constructor(props) {
 		super(props);
@@ -456,23 +563,45 @@ class TitleBar extends React.Component {
 	}
 }
 
-// TaskListContainer
+/**
+ * class TaskListContainer
+ * @receiveProps {string} taskType - current taskType
+ * @receiveProps {string} taskTypes - current taskTypes
+ */
 class TaskListContainer extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			taskType: this.props.taskType,
+			taskIsCompleted: false 
+		}
 		
 	}
-	render() {		
+	taskTypeChanged(changedTaskType) {
+		this.setState({
+			taskType: changedTaskType
+		});
+	}
+	taskIsCompletedChanged(changedTaskIsCompleted) {
+		this.setState({
+			taskIsCompleted: changedTaskIsCompleted
+		});
+	}
+	render() {	
+		const {taskType, taskIsCompleted} = this.state;	
+		const {taskTypes} = this.props;
 		return (
 			<div>
-				<TitleBar taskType={this.props.taskType} taskTypes={this.props.taskTypes} />
-				<TaskList />
+				<TitleBar taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} taskIsCompletedCallback={this.taskIsCompletedChanged}/>
+				<TaskList taskType={taskType} taskIsCompleted={taskIsCompleted} />
 			</div>
 		);
 	}
 }
 
-// DayTaskContainer
+/**
+ * class DayTaskContainer
+ */
 class DayTaskContainer extends React.Component {
 	render() {
 		const taskTypes = globalDayTaskTypes;		
@@ -480,7 +609,9 @@ class DayTaskContainer extends React.Component {
 	}
 }
 
-// LongTaskContainer
+/**
+ * class LongTaskContainer
+ */
 class LongTaskContainer extends React.Component {
 	render() {
 		const taskTypes = globalLongTaskTypes;
@@ -488,7 +619,9 @@ class LongTaskContainer extends React.Component {
 	}
 }
 
-// MultiFunctionBtn
+/**
+ * class MultiFunctionBtn
+ */
 class MultiFunctionBtn extends React.Component {
 	render() {
 		return <button>MultiFunctionBtn</button>;
@@ -496,7 +629,9 @@ class MultiFunctionBtn extends React.Component {
 }
 
 
-// ToDoList
+/**
+ * class ToDoList
+ */
 class ToDoList extends React.Component {
 	render() {
 		return (
