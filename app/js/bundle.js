@@ -9017,6 +9017,8 @@
 
 	var _observe2 = _interopRequireDefault(_observe);
 
+	var _tool = __webpack_require__(1221);
+
 	__webpack_require__(1011);
 
 	__webpack_require__(1015);
@@ -9056,6 +9058,7 @@
 			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
+
 	// datepicker
 
 
@@ -9068,16 +9071,33 @@
 	var globalTaskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 	var globalDayTaskTypes = ['today', 'tomorrow'];
 	var globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
+	var globalInitialTask = {
+		name: '',
+		taskType: 'day',
+		taskLevel: 'b',
+		isTaskNeedTimer: false,
+		isTaskNeedRepeat: false
+	};
 
 	// test
 	setTimeout(function () {
-		// tasks.push({name: 'task2', level: 'a'});
-		// tasks[0].name = 'task2';
-		// tasks[0].level = 'b';
+		// tasks.push({name: 'task1', level: 'a'});
+		// tasks[0].name = 'task3';
+		console.dir(tasks[0]);
+		// tasks[0].level = 'd';
 		// settings.push({email: 'test1@testEmail.com'});
 	}, 1000);
 
-	// TimeSetter
+	/**
+	 * class TimeSetter
+	 * @receiveProps {moment} maxDate - current maxDate
+	 * @receiveProps {moment} minDate - current minDate
+	 * @receiveProps {moment} startDate - current startDate
+	 * @receiveProps {moment} endDate - current endDate
+	 * @receiveProps {function} timeSetterCallback 
+	 	@callback {moment} startDate - current startDate
+	 	@callback {moment} endDate - current endDate
+	 */
 
 	var TimeSetter = function (_React$Component) {
 		_inherits(TimeSetter, _React$Component);
@@ -9092,10 +9112,16 @@
 			_this.timeType = _this.props.timeType || _this.timeType_startTime;
 
 			_this.state = {
-				timeType: _this.timeType
+				timeType: _this.timeType,
+				startDate: _this.props.startDate,
+				endDate: _this.props.endDate
 			};
 			_this.startTimeBtnClick = _this.startTimeBtnClick.bind(_this);
 			_this.endTimeBtnClick = _this.endTimeBtnClick.bind(_this);
+			_this.cancelBtnClick = _this.cancelBtnClick.bind(_this);
+			_this.confirmBtnClick = _this.confirmBtnClick.bind(_this);
+			_this.startTimepickerCallback = _this.startTimepickerCallback.bind(_this);
+			_this.endTimepickerCallback = _this.endTimepickerCallback.bind(_this);
 			return _this;
 		}
 
@@ -9114,95 +9140,131 @@
 				});
 			}
 		}, {
+			key: 'cancelBtnClick',
+			value: function cancelBtnClick() {}
+		}, {
+			key: 'confirmBtnClick',
+			value: function confirmBtnClick() {
+				timeSetterCallback({
+					startDate: this.state.startDate,
+					endDate: this.state.endDate
+				});
+			}
+		}, {
+			key: 'startTimepickerCallback',
+			value: function startTimepickerCallback(o) {
+				this.setState({
+					startDate: o.date
+				});
+			}
+		}, {
+			key: 'endTimepickerCallback',
+			value: function endTimepickerCallback(o) {
+				this.setState({
+					endDate: o.date
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var props = this.props;
 				var Column = _semanticUiReact.Grid.Column,
 				    Row = _semanticUiReact.Grid.Row;
 				var timeType = this.state.timeType;
 
 				var isStartTime = timeType === 'startTime';
 				var isEndTime = timeType === 'endTime';
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Start Time', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'End Time', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: { width: isStartTime ? '100%' : '0px', height: isStartTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(StartTimepicker, null)), _react2.default.createElement('div', { style: { width: isEndTime ? '100%' : '0px', height: isEndTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(EndTimepicker, null)))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'remove' })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { icon: 'checkmark' })))));
+
+				var minDate = props.minDate;
+				var maxDate = props.maxDate;
+				var startDate = props.startDate;
+				var endDate = props.endDate;
+				return _react2.default.createElement('div', { style: {
+						position: 'absolute',
+						left: 0,
+						top: 0,
+						height: window.screen.availHeight,
+						background: 'white',
+						border: '1px solid gray'
+					}, ref: function ref(div) {
+						var t = null;
+						if (div) {
+							t = div.getClientRects()[0].top - div.scrollTop;
+						}
+						if (t) {
+							div.style.top = -1 * t;
+						}
+					} }, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'Start Time', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: 'End Time', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: { width: isStartTime ? '100%' : '0px', height: isStartTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: startDate, timepickerCallback: this.startTimepickerCallback })), _react2.default.createElement('div', { style: { width: isEndTime ? '100%' : '0px', height: isEndTime ? 'auto' : '0px', overflow: 'hidden' } }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: endDate, timepickerCallback: this.endTimepickerCallback })))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u8FD4\u56DE', color: 'grey', onClick: this.cancelBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u786E\u8BA4', color: 'green', onClick: this.confirmBtnClick })))));
 			}
 		}]);
 
 		return TimeSetter;
 	}(_react2.default.Component);
 
-	// endTimepicker
-
-
-	var EndTimepicker = function (_React$Component2) {
-		_inherits(EndTimepicker, _React$Component2);
-
-		function EndTimepicker(props) {
-			_classCallCheck(this, EndTimepicker);
-
-			var _this2 = _possibleConstructorReturn(this, (EndTimepicker.__proto__ || Object.getPrototypeOf(EndTimepicker)).call(this, props));
-
-			_this2.defaultDate = (0, _moment2.default)().add(1, 'hours').startOf('hour');
-			return _this2;
+	/*// endTimepicker
+	class EndTimepicker extends React.Component{
+		constructor(props) {
+			super(props);
+			this.defaultDate = moment().add(1,'hours').startOf('hour');
 		}
-
-		_createClass(EndTimepicker, [{
-			key: 'render',
-			value: function render() {
-				var props = this.props;
-				return _react2.default.createElement(Timepicker, { defaultDate: this.defaultDate });
-			}
-		}]);
-
-		return EndTimepicker;
-	}(_react2.default.Component);
+		render() {
+			const props = this.props;
+			return <Timepicker defaultDate={this.defaultDate} />
+		}
+	}
 
 	// startTimepicker
-
-
-	var StartTimepicker = function (_React$Component3) {
-		_inherits(StartTimepicker, _React$Component3);
-
-		function StartTimepicker(props) {
-			_classCallCheck(this, StartTimepicker);
-
-			return _possibleConstructorReturn(this, (StartTimepicker.__proto__ || Object.getPrototypeOf(StartTimepicker)).call(this, props));
+	class StartTimepicker extends React.Component{
+		constructor(props) {
+			super(props);
 		}
+		render() {
+			return <Timepicker />
+		}
+	}*/
 
-		_createClass(StartTimepicker, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(Timepicker, null);
-			}
-		}]);
+	/**
+	 * class Timepicker
+	 * @receiveProps {moment} defaultDate - current defaultDate
+	 * @receiveProps {moment} maxDate - current maxDate
+	 * @receiveProps {moment} minDate - current minDate
+	 * @receiveProps {function} timepickerCallback 
+	 	@callback {moment} date
+	 */
 
-		return StartTimepicker;
-	}(_react2.default.Component);
-
-	// Timepicker
-
-
-	var Timepicker = function (_React$Component4) {
-		_inherits(Timepicker, _React$Component4);
+	var Timepicker = function (_React$Component2) {
+		_inherits(Timepicker, _React$Component2);
 
 		function Timepicker(props) {
 			_classCallCheck(this, Timepicker);
 
-			var _this4 = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
+			var _this2 = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
 
-			var that = _this4;
-			_this4.state = {
-				date: null,
-				test: 'empty'
+			var that = _this2;
+			_this2.state = {
+				date: null
 			};
-			// solve the problem: misleading 'this'
-			_this4.onDateChange = function (date) {
-				that.setState({
-					date: date
-				});
-			};
-			return _this4;
+
+			_this2.onDateChange = _this2.onDateChange.bind(_this2);
+			return _this2;
 		}
 
 		_createClass(Timepicker, [{
+			key: 'onDateChange',
+			value: function onDateChange(date) {
+				this.setState({
+					date: date
+				});
+
+				var timepickerCallback = this.props.timepickerCallback;
+
+				if (timepickerCallback) {
+					timepickerCallback({
+						date: date
+					});
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var props = this.props;
@@ -9235,108 +9297,20 @@
 
 	/**
 	 * class TaskTypePanel
-	 * @receiveProps {string} taskLevel - current taskLevel
-	 * @receiveProps {function} taskLevelCallback - return current taskLevel
+	 * @receiveProps {object} task - current task
 	 */
 
-	var TaskTypePanel = function (_React$Component5) {
-		_inherits(TaskTypePanel, _React$Component5);
+	var TaskTypePanel = function (_React$Component3) {
+		_inherits(TaskTypePanel, _React$Component3);
 
 		function TaskTypePanel(props) {
 			_classCallCheck(this, TaskTypePanel);
 
-			return _possibleConstructorReturn(this, (TaskTypePanel.__proto__ || Object.getPrototypeOf(TaskTypePanel)).call(this, props));
-		}
+			var _this3 = _possibleConstructorReturn(this, (TaskTypePanel.__proto__ || Object.getPrototypeOf(TaskTypePanel)).call(this, props));
 
-		return TaskTypePanel;
-	}(_react2.default.Component);
-
-	/**
-	 * class TaskLevelButtons
-	 * @receiveProps {string} taskLevel - current taskLevel
-	 * @receiveProps {function} taskLevelCallback - return current taskLevel
-	 */
-
-	var TaskLevelButtons = function (_React$Component6) {
-		_inherits(TaskLevelButtons, _React$Component6);
-
-		function TaskLevelButtons(props) {
-			_classCallCheck(this, TaskLevelButtons);
-
-			var _this6 = _possibleConstructorReturn(this, (TaskLevelButtons.__proto__ || Object.getPrototypeOf(TaskLevelButtons)).call(this, props));
-
-			_this6.state = {
-				level: _this6.props.taskLevel || 'b'
-			};
-			_this6.setLevel = _this6.setLevel.bind(_this6);
-			return _this6;
-		}
-
-		_createClass(TaskLevelButtons, [{
-			key: 'setLevel',
-			value: function setLevel(level) {
-				this.setState({
-					level: level
-				});
-				this.props.taskLevelCallback(level);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this7 = this;
-
-				var level = this.state.level;
-
-				var buttonsInfo = {
-					a: {
-						color: 'red',
-						text: '重要紧急'
-					},
-					b: {
-						color: 'orange',
-						text: '重要'
-					},
-					c: {
-						color: 'yellow',
-						text: '紧急'
-					},
-					d: {
-						color: 'blue',
-						text: '正常'
-					}
-				};
-				var buttons = [];
-
-				var _loop = function _loop(buttonLevel) {
-					buttons.push(_react2.default.createElement(_semanticUiReact.Button, { circular: true, basic: buttonLevel != _this7.state.level, content: buttonsInfo[buttonLevel].text, color: buttonsInfo[buttonLevel].color, onClick: function onClick() {
-							_this7.setLevel(buttonLevel);
-						}, key: buttonLevel }));
-				};
-
-				for (var buttonLevel in buttonsInfo) {
-					_loop(buttonLevel);
-				}
-
-				return _react2.default.createElement('div', { style: { textAlign: 'center' } }, buttons);
-			}
-		}]);
-
-		return TaskLevelButtons;
-	}(_react2.default.Component);
-
-	/**
-	 * class TaskInfo
-	 * @receiveProps {object} task - task
-	 */
-
-	var TaskInfo = function (_React$Component7) {
-		_inherits(TaskInfo, _React$Component7);
-
-		function TaskInfo(props) {
-			_classCallCheck(this, TaskInfo);
+			var task = _this3.props.task;
 
 			// set taskTypeMomentsMap
-			var _this8 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
 			var getCurrentMoments = function getCurrentMoments(dateType) {
 				return [(0, _moment2.default)().startOf(dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType)];
@@ -9353,124 +9327,58 @@
 			var nextWeekTaskTypeMoments = getNextMoments('week');
 			var nextMonthTaskTypeMoments = getNextMoments('month');
 			var nextYearTaskTypeMoments = getNextMoments('year');
-			_this8.taskTypeMomentsMap = new Map([['today', dayTaskTypeMoments], ['long', longTaskTypeMoments], ['thisWeek', weekTaskTypeMoments], ['thisMonth', monthTaskTypeMoments], ['thisYear', yearTaskTypeMoments], ['tomorrow', tomorrowTaskTypeMoments], ['nextWeek', nextWeekTaskTypeMoments], ['nextMonth', nextMonthTaskTypeMoments], ['nextYear', nextYearTaskTypeMoments]]);
+			_this3.taskTypeMomentsMap = new Map([['today', dayTaskTypeMoments], ['long', longTaskTypeMoments], ['thisWeek', weekTaskTypeMoments], ['thisMonth', monthTaskTypeMoments], ['thisYear', yearTaskTypeMoments], ['tomorrow', tomorrowTaskTypeMoments], ['nextWeek', nextWeekTaskTypeMoments], ['nextMonth', nextMonthTaskTypeMoments], ['nextYear', nextYearTaskTypeMoments]]);
 
-			_this8.modes = ['add', 'edit'];
-			/* temp type before citing this.props.task.taskType */
-			_this8.defaultTaskType = 'today';
-			/* temp type before citing this.props.task.taskLevel */
-			_this8.defaultTaskLevel = 'b';
-			_this8.state = {
-				mode: 'add',
-				taskType: _this8.defaultTaskType,
-				taskLevel: _this8.defaultTaskLevel,
-				/* temp set isTaskNeedTimer to false*/
-				isTaskNeedTimer: false,
-				isTaskRepeat: false,
-				/* temp set timeSetterOpening to true*/
-				timeSetterOpening: true,
-				startTimeDate: null,
-				endTimeDate: null
+			_this3.state = {
+				taskType: task.taskType || 'day',
+				taskLevel: task.taskLevel || 'b',
+				isTaskNeedTimer: task.isTaskNeedTimer || false,
+				isTaskNeedRepeat: task.isTaskNeedRepeat || false,
+				isNeedTimeSetter: true
 			};
 
-			_this8.currentTaskTypeMoments = _this8.taskTypeMomentsMap.get(_this8.state.taskType);
+			_this3.currentTaskTypeMoments = _this3.taskTypeMomentsMap.get(_this3.state.taskType);
 
-			_this8.taskLevelChange = _this8.taskLevelChange.bind(_this8);
-			_this8.taskTypeChange = _this8.taskTypeChange.bind(_this8);
-			_this8.timeBtnClick = _this8.timeBtnClick.bind(_this8);
-			_this8.isTaskNeedTimerCheckboxClick = _this8.isTaskNeedTimerCheckboxClick.bind(_this8);
-			_this8.isTaskRepeatCheckboxClick = _this8.isTaskRepeatCheckboxClick.bind(_this8);
-			return _this8;
+			_this3.taskTypeDropdownChange = _this3.taskTypeDropdownChange.bind(_this3);
+			_this3.isTaskNeedTimerCheckboxClick = _this3.isTaskNeedTimerCheckboxClick.bind(_this3);
+			_this3.isTaskNeedRepeatClick = _this3.isTaskNeedRepeatClick.bind(_this3);
+			return _this3;
 		}
 
-		_createClass(TaskInfo, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var c = this.currentTaskTypeMoments;
-
-				this.setState({
-					startTimeDate: c[0],
-					endTimeDate: c[1]
-				});
-			}
-		}, {
-			key: 'taskLevelChange',
-			value: function taskLevelChange(newTaskLevel) {
-				this.setState({
-					taskLevel: newTaskLevel
-				});
-			}
-		}, {
-			key: 'taskTypeChange',
-			value: function taskTypeChange(e, result) {
+		_createClass(TaskTypePanel, [{
+			key: 'taskTypeDropdownChange',
+			value: function taskTypeDropdownChange(e, result) {
 				var value = result.value;
+				var task = this.props.task;
 
-				this.setState({
-					taskType: value
-				});
-				// change isTaskNeedTimer
-				this.state.isTaskNeedTimer = value === 'long' ? true : false;
-				// set startTimeDate and endTimeDate
-				var c = this.currentTaskTypeMoments;
-			}
-		}, {
-			key: 'timeBtnClick',
-			value: function timeBtnClick() {
-				this.setState(function (prevState) {
-					return {
-						timeSetterOpening: !prevState.timeSetterOpening
-					};
-				});
+				task.taskType = value;
 			}
 		}, {
 			key: 'isTaskNeedTimerCheckboxClick',
 			value: function isTaskNeedTimerCheckboxClick(e, result) {
-				var _this9 = this;
+				var checked = result.checked;
+				var task = this.props.task;
 
-				this.setState(function (prevState) {
-					return {
-						isTaskNeedTimer: !prevState.isTaskNeedTimer
-					};
+				this.setState({
+					isTaskNeedTimer: !checked
 				});
-
-				// change startTimeDate and endTimeDate
-				var _state = this.state,
-				    t = _state.taskType,
-				    isTaskNeedTimer = _state.isTaskNeedTimer;
-
-				var isNeedFromNow = t === 'today' || t === 'thisWeek' || t === 'thisMonth' || t === 'thisYear';
-				// isTaskNeedTimer has changed, so use invertible value: !isTaskNeedTimer
-				if (!isTaskNeedTimer && isNeedFromNow) {
-					var m = (0, _moment2.default)();
-					// set startTimeDate
-					this.setState({
-						startTimeDate: m
-					}, function () {
-						console.log('startTimeDate now: ' + _this9.state.startTimeDate.format());
-					});
-				}
-				if (!isTaskNeedTimer && !isNeedFromNow) {}
+				task.isTaskNeedTimer = !checked;
 			}
 		}, {
-			key: 'isTaskRepeatCheckboxClick',
-			value: function isTaskRepeatCheckboxClick(e, result) {
-				this.setState(function (prevState) {
-					return {
-						isTaskRepeat: !prevState.isTaskRepeat
-					};
+			key: 'isTaskNeedRepeatClick',
+			value: function isTaskNeedRepeatClick(e, result) {
+				var checked = result.checked;
+				var task = this.props.task;
+
+				this.setState({
+					isTaskNeedRepeat: !checked
 				});
+				task.isTaskNeedRepeat = !checked;
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var state = this.state,
-				    taskTypeMomentsMap = this.taskTypeMomentsMap;
-				var taskType = state.taskType,
-				    taskLevel = state.taskLevel,
-				    isTaskNeedTimer = state.isTaskNeedTimer,
-				    isTaskRepeat = state.isTaskRepeat,
-				    startTimeDate = state.startTimeDate,
-				    endTimeDate = state.endTimeDate;
+				var task = this.props.task;
 
 				var taskTypesOptions = globalTaskTypes.map(function (item, index) {
 					var text = '';
@@ -9497,19 +9405,189 @@
 					}
 					return { text: text, value: item };
 				});
-				var timeSetterOpening = state.timeSetterOpening;
+				var _state = this.state,
+				    taskType = _state.taskType,
+				    isTaskNeedTimer = _state.isTaskNeedTimer,
+				    isTaskNeedRepeat = _state.isTaskNeedRepeat,
+				    isNeedTimeSetter = _state.isNeedTimeSetter;
+				var Row = _semanticUiReact.Grid.Row,
+				    Column = _semanticUiReact.Grid.Column;
 
-				var timeContentTemplate = function timeContentTemplate(moment) {
-					return moment ? _react2.default.createElement('div', { style: { textAlign: 'center' } }, _react2.default.createElement('h3', null, moment.format('HH:mm')), _react2.default.createElement('p', null, moment.format('YYYY/M/D'))) : '';
+				console.log(isNeedTimeSetter);
+				return _react2.default.createElement('div', null, isNeedTimeSetter ? _react2.default.createElement(TimeSetter, null) : '', _react2.default.createElement(_semanticUiReact.Grid, { style: { border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', defaultValue: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', defaultChecked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, null, 'startTimeJsx...')), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, null, 'endTimeJsx...')))));
+			}
+		}]);
+
+		return TaskTypePanel;
+	}(_react2.default.Component);
+
+	/**
+	 * class TaskLevelButtons
+	 * @receiveProps {object} task - current task
+	 */
+
+	var TaskLevelButtons = function (_React$Component4) {
+		_inherits(TaskLevelButtons, _React$Component4);
+
+		function TaskLevelButtons(props) {
+			_classCallCheck(this, TaskLevelButtons);
+
+			var _this4 = _possibleConstructorReturn(this, (TaskLevelButtons.__proto__ || Object.getPrototypeOf(TaskLevelButtons)).call(this, props));
+
+			var task = _this4.props.task;
+
+			_this4.state = {
+				level: task.taskLevel || 'b'
+			};
+			_this4.setLevel = _this4.setLevel.bind(_this4);
+			return _this4;
+		}
+
+		_createClass(TaskLevelButtons, [{
+			key: 'setLevel',
+			value: function setLevel(level) {
+				var task = this.props.task;
+
+				this.setState({
+					level: level
+				});
+				task.taskLevel = level;
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this5 = this;
+
+				var level = this.state.level;
+
+				var buttonsInfo = {
+					a: {
+						color: 'red',
+						text: '重要紧急'
+					},
+					b: {
+						color: 'orange',
+						text: '重要'
+					},
+					c: {
+						color: 'yellow',
+						text: '紧急'
+					},
+					d: {
+						color: 'blue',
+						text: '正常'
+					}
+				};
+				var buttons = [];
+
+				var _loop = function _loop(buttonLevel) {
+					buttons.push(_react2.default.createElement(_semanticUiReact.Button, { circular: true, basic: buttonLevel != _this5.state.level, content: buttonsInfo[buttonLevel].text, color: buttonsInfo[buttonLevel].color, onClick: function onClick() {
+							_this5.setLevel(buttonLevel);
+						}, key: buttonLevel }));
 				};
 
-				var startTime = timeContentTemplate(startTimeDate);
-				var endTime = timeContentTemplate(endTimeDate);
+				for (var buttonLevel in buttonsInfo) {
+					_loop(buttonLevel);
+				}
+				return _react2.default.createElement('div', { style: { textAlign: 'center', border: '1px solid red' } }, buttons);
+			}
+		}]);
+
+		return TaskLevelButtons;
+	}(_react2.default.Component);
+
+	/**
+	 * class TaskInfo
+	 * @receiveProps {object} task - task
+	 */
+
+	var TaskInfo = function (_React$Component5) {
+		_inherits(TaskInfo, _React$Component5);
+
+		function TaskInfo(props) {
+			_classCallCheck(this, TaskInfo);
+
+			var _this6 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
+
+			_this6.modes = ['add', 'edit'];
+			/* temp type before citing this.props.task.taskType */
+			_this6.defaultTaskType = 'today';
+			/* temp type before citing this.props.task.taskLevel */
+			_this6.defaultTaskLevel = 'b';
+			_this6.state = {
+				mode: 'add',
+				taskType: _this6.defaultTaskType,
+				taskLevel: _this6.defaultTaskLevel,
+				/* temp set isTaskNeedTimer to false*/
+				isTaskNeedTimer: false,
+				isTaskNeedRepeat: false,
+				/* temp set isNeedTimeSetter to true*/
+				isNeedTimeSetter: true,
+				startTimeDate: null,
+				endTimeDate: null
+			};
+
+			/* temp set task equals tasks[0] */
+			// ====== init the first object of tasks ======
+			// if there's no task, add one
+			_this6.tempTask = tasks[0] || function () {
+				tasks.push(globalInitialTask);return tasks[0];
+			}();
+
+			return _this6;
+		}
+
+		_createClass(TaskInfo, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				/*const {currentTaskTypeMoments: c} = this;
+	   this.setState({
+	   	startTimeDate: c[0],
+	   	endTimeDate: c[1]
+	   });*/
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _tempTask = this.tempTask,
+				    taskType = _tempTask.taskType,
+				    taskLevel = _tempTask.taskLevel,
+				    isTaskNeedTimer = _tempTask.isTaskNeedTimer,
+				    isTaskNeedRepeat = _tempTask.isTaskNeedRepeat;
+				// console.log(1, this.tempTask);
+
+				/*const taskTypesOptions = globalTaskTypes.map((item, index) => {
+	   	var text = '';
+	   	switch (item) {
+	   		case 'today': text = '今日目标';break;
+	   		case 'long': text = '长期目标';break;
+	   		case 'thisWeek': text = '本周目标';break;
+	   		case 'thisMonth': text = '本月目标';break;
+	   		case 'thisYear': text = '本年目标';break;
+	   		case 'tomorrow': text = '明日目标';break;
+	   		case 'nextWeek': text = '下周目标';break;
+	   		case 'nextMonth': text = '下月目标';break;
+	   		case 'nextYear': text = '明年目标';break;
+	   		defaut: break;
+	   	}
+	   	return {text: text, value: item};
+	   });
+	   const isNeedTimeSetter = state.isNeedTimeSetter;
+	   
+	   var timeContentTemplate = (moment) => (
+	   	moment ? (
+	   	<div style={{textAlign: 'center'}}>
+	   		<h3>{moment.format('HH:mm')}</h3>
+	   		<p>{moment.format('YYYY/M/D')}</p>
+	   	</div>) : ''
+	   );
+	   		const startTime = timeContentTemplate(startTimeDate);
+	   const endTime = timeContentTemplate(endTimeDate);*/
 
 				var Row = _semanticUiReact.Grid.Row,
 				    Column = _semanticUiReact.Grid.Column;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { taskLevel: taskLevel, taskLevelCallback: this.taskLevelChange }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', defaultValue: taskType, options: taskTypesOptions, onChange: this.taskTypeChange }))), taskType != 'long' ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', checked: isTaskRepeat, onClick: this.isTaskRepeatCheckboxClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, startTime)), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'angle double right', size: 'large' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, endTime))) : '', _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0' })))), _react2.default.createElement('div', null));
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { task: this.tempTask }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskTypePanel, { task: this.tempTask })))));
 			}
 		}]);
 
@@ -9522,19 +9600,19 @@
 	 * @receiveProps {object} task - one task
 	 */
 
-	var TaskListItem = function (_React$Component8) {
-		_inherits(TaskListItem, _React$Component8);
+	var TaskListItem = function (_React$Component6) {
+		_inherits(TaskListItem, _React$Component6);
 
 		function TaskListItem(props) {
 			_classCallCheck(this, TaskListItem);
 
-			var _this10 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
+			var _this7 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
 
-			_this10.state = {
+			_this7.state = {
 				editMode: false,
 				showTaskInfo: false
 			};
-			return _this10;
+			return _this7;
 		}
 
 		_createClass(TaskListItem, [{
@@ -9570,19 +9648,19 @@
 	 * @receiveProps {bool} taskIsCompleted - taskIsCompleted
 	 */
 
-	var TaskList = function (_React$Component9) {
-		_inherits(TaskList, _React$Component9);
+	var TaskList = function (_React$Component7) {
+		_inherits(TaskList, _React$Component7);
 
 		function TaskList(props) {
 			_classCallCheck(this, TaskList);
 
-			var _this11 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+			var _this8 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
 
-			_this11.state = {
+			_this8.state = {
 				tasks: tasks
 			};
-			_this11.observeChange();
-			return _this11;
+			_this8.observeChange();
+			return _this8;
 		}
 
 		_createClass(TaskList, [{
@@ -9627,8 +9705,8 @@
 	 * @receiveProps {function} taskIsCompletedCallback - return current taskIsCompleted
 	 */
 
-	var TitleBar = function (_React$Component10) {
-		_inherits(TitleBar, _React$Component10);
+	var TitleBar = function (_React$Component8) {
+		_inherits(TitleBar, _React$Component8);
 
 		function TitleBar(props) {
 			_classCallCheck(this, TitleBar);
@@ -9661,20 +9739,20 @@
 	 * @receiveProps {string} taskTypes - current taskTypes
 	 */
 
-	var TaskListContainer = function (_React$Component11) {
-		_inherits(TaskListContainer, _React$Component11);
+	var TaskListContainer = function (_React$Component9) {
+		_inherits(TaskListContainer, _React$Component9);
 
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
 
-			var _this13 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
+			var _this10 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
 
-			_this13.state = {
-				taskType: _this13.props.taskType,
+			_this10.state = {
+				taskType: _this10.props.taskType,
 				taskIsCompleted: false
 			};
 
-			return _this13;
+			return _this10;
 		}
 
 		_createClass(TaskListContainer, [{
@@ -9710,8 +9788,8 @@
 	 * class DayTaskContainer
 	 */
 
-	var DayTaskContainer = function (_React$Component12) {
-		_inherits(DayTaskContainer, _React$Component12);
+	var DayTaskContainer = function (_React$Component10) {
+		_inherits(DayTaskContainer, _React$Component10);
 
 		function DayTaskContainer() {
 			_classCallCheck(this, DayTaskContainer);
@@ -9734,8 +9812,8 @@
 	 * class LongTaskContainer
 	 */
 
-	var LongTaskContainer = function (_React$Component13) {
-		_inherits(LongTaskContainer, _React$Component13);
+	var LongTaskContainer = function (_React$Component11) {
+		_inherits(LongTaskContainer, _React$Component11);
 
 		function LongTaskContainer() {
 			_classCallCheck(this, LongTaskContainer);
@@ -9758,8 +9836,8 @@
 	 * class MultiFunctionBtn
 	 */
 
-	var MultiFunctionBtn = function (_React$Component14) {
-		_inherits(MultiFunctionBtn, _React$Component14);
+	var MultiFunctionBtn = function (_React$Component12) {
+		_inherits(MultiFunctionBtn, _React$Component12);
 
 		function MultiFunctionBtn() {
 			_classCallCheck(this, MultiFunctionBtn);
@@ -9781,8 +9859,8 @@
 	 * class ToDoList
 	 */
 
-	var ToDoList = function (_React$Component15) {
-		_inherits(ToDoList, _React$Component15);
+	var ToDoList = function (_React$Component13) {
+		_inherits(ToDoList, _React$Component13);
 
 		function ToDoList() {
 			_classCallCheck(this, ToDoList);
@@ -9793,7 +9871,10 @@
 		_createClass(ToDoList, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement('div', null, _react2.default.createElement(TaskInfo, null));
+				return _react2.default.createElement('div', { style: {
+						width: '100%',
+						height: '100%'
+					} }, _react2.default.createElement(TaskInfo, null));
 			}
 		}]);
 
@@ -84671,7 +84752,7 @@
 /* 1217 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () {
 		function defineProperties(target, props) {
@@ -84716,7 +84797,9 @@
 			this.init(name);
 
 			// observe and sync localStorage
-			(0, _observe2.default)(this.tasks, function () {
+			(0, _observe2.default)(this.tasks, function (a, b, c, d, e) {
+				console.log('observed: tasks changed: ', a, b, c, d, e);
+
 				that.sync();
 			});
 			(0, _observe2.default)(this.settings, function () {
@@ -84725,7 +84808,7 @@
 		}
 
 		_createClass(Storekeeper, [{
-			key: "init",
+			key: 'init',
 			value: function init(name) {
 				var value = localStorage[name];
 				var isExsitName = Boolean(value);
@@ -84756,16 +84839,16 @@
 				}
 			}
 		}, {
-			key: "sync",
+			key: 'sync',
 			value: function sync() {
 				var name = this.name;
 				this.filterdObj.settings = this.settings;
 				this.filterdObj.tasks = this.tasks;
 				localStorage[name] = JSON.stringify(this.filterdObj);
-				console.log("localStorage now is: ", localStorage[name]);
+				// console.log("localStorage now is: ", localStorage[name]);
 			}
 		}, {
-			key: "saveUniqueSaveLibrary",
+			key: 'saveUniqueSaveLibrary',
 			value: function saveUniqueSaveLibrary(obj) {
 				this.uniqueSaveLibrary.push(obj);
 			}
@@ -84835,6 +84918,25 @@
 
 	// exports
 
+
+/***/ },
+/* 1221 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _arguments = arguments;
+	var tool = {
+		// singleton design mode
+		getSingle: function getSingle(fn) {
+			var result = null;
+			return function () {
+				return result || (result = fn.apply(undefined, _arguments));
+			};
+		}
+	};
+
+	module.exports = tool;
 
 /***/ }
 /******/ ]);

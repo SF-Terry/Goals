@@ -22,11 +22,14 @@
     </coordinates>
     <panel_attributes>Task
 --
-Name: String
-isComplete: Boolean
-createTime: Date
-startTime: Date
-endTime: Date
+name: string
+taskType: string
+isTaskComplete: bool
+isTaskNeedTimer: bool
+isTaskNeedRepeat: bool
+createTime: date
+startTime: date
+endTime: date
 
 --</panel_attributes>
     <additional_attributes/>

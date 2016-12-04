@@ -17,7 +17,9 @@ class Storekeeper {
 		this.init(name);
 
 		// observe and sync localStorage
-		observe(this.tasks, () => {
+		observe(this.tasks, (a, b, c, d, e) => {
+			console.log('observed: tasks changed: ', a, b, c, d, e);
+
 			that.sync();
 		});
 		observe(this.settings, () => {
@@ -60,7 +62,7 @@ class Storekeeper {
 		this.filterdObj.settings = this.settings;
 		this.filterdObj.tasks = this.tasks;
 		localStorage[name] = JSON.stringify(this.filterdObj);
-		console.log("localStorage now is: ", localStorage[name]);
+		// console.log("localStorage now is: ", localStorage[name]);
 	}
 
 	saveUniqueSaveLibrary(obj) {
