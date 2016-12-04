@@ -9234,42 +9234,56 @@
 	}(_react2.default.Component);
 
 	/**
+	 * class TaskTypePanel
+	 * @receiveProps {string} taskLevel - current taskLevel
+	 * @receiveProps {function} taskLevelCallback - return current taskLevel
+	 */
+
+	var TaskTypePanel = function (_React$Component5) {
+		_inherits(TaskTypePanel, _React$Component5);
+
+		function TaskTypePanel(props) {
+			_classCallCheck(this, TaskTypePanel);
+
+			return _possibleConstructorReturn(this, (TaskTypePanel.__proto__ || Object.getPrototypeOf(TaskTypePanel)).call(this, props));
+		}
+
+		return TaskTypePanel;
+	}(_react2.default.Component);
+
+	/**
 	 * class TaskLevelButtons
 	 * @receiveProps {string} taskLevel - current taskLevel
 	 * @receiveProps {function} taskLevelCallback - return current taskLevel
 	 */
 
-	var TaskLevelButtons = function (_React$Component5) {
-		_inherits(TaskLevelButtons, _React$Component5);
+	var TaskLevelButtons = function (_React$Component6) {
+		_inherits(TaskLevelButtons, _React$Component6);
 
 		function TaskLevelButtons(props) {
 			_classCallCheck(this, TaskLevelButtons);
 
-			var _this5 = _possibleConstructorReturn(this, (TaskLevelButtons.__proto__ || Object.getPrototypeOf(TaskLevelButtons)).call(this, props));
+			var _this6 = _possibleConstructorReturn(this, (TaskLevelButtons.__proto__ || Object.getPrototypeOf(TaskLevelButtons)).call(this, props));
 
-			_this5.state = {
-				level: _this5.props.taskLevel || 'b'
+			_this6.state = {
+				level: _this6.props.taskLevel || 'b'
 			};
-
-			_this5.setLevel = _this5.setLevel.bind(_this5);
-			return _this5;
+			_this6.setLevel = _this6.setLevel.bind(_this6);
+			return _this6;
 		}
 
 		_createClass(TaskLevelButtons, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {}
-		}, {
 			key: 'setLevel',
 			value: function setLevel(level) {
 				this.setState({
 					level: level
 				});
-				// this.props.taskLevelCallback(level);
+				this.props.taskLevelCallback(level);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this6 = this;
+				var _this7 = this;
 
 				var level = this.state.level;
 
@@ -9294,8 +9308,8 @@
 				var buttons = [];
 
 				var _loop = function _loop(buttonLevel) {
-					buttons.push(_react2.default.createElement(_semanticUiReact.Button, { circular: true, basic: buttonLevel != _this6.state.level, content: buttonsInfo[buttonLevel].text, color: buttonsInfo[buttonLevel].color, onClick: function onClick() {
-							_this6.setLevel(buttonLevel);
+					buttons.push(_react2.default.createElement(_semanticUiReact.Button, { circular: true, basic: buttonLevel != _this7.state.level, content: buttonsInfo[buttonLevel].text, color: buttonsInfo[buttonLevel].color, onClick: function onClick() {
+							_this7.setLevel(buttonLevel);
 						}, key: buttonLevel }));
 				};
 
@@ -9303,7 +9317,6 @@
 					_loop(buttonLevel);
 				}
 
-				console.log(level);
 				return _react2.default.createElement('div', { style: { textAlign: 'center' } }, buttons);
 			}
 		}]);
@@ -9316,14 +9329,14 @@
 	 * @receiveProps {object} task - task
 	 */
 
-	var TaskInfo = function (_React$Component6) {
-		_inherits(TaskInfo, _React$Component6);
+	var TaskInfo = function (_React$Component7) {
+		_inherits(TaskInfo, _React$Component7);
 
 		function TaskInfo(props) {
 			_classCallCheck(this, TaskInfo);
 
 			// set taskTypeMomentsMap
-			var _this7 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
+			var _this8 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
 			var getCurrentMoments = function getCurrentMoments(dateType) {
 				return [(0, _moment2.default)().startOf(dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType)];
@@ -9340,39 +9353,39 @@
 			var nextWeekTaskTypeMoments = getNextMoments('week');
 			var nextMonthTaskTypeMoments = getNextMoments('month');
 			var nextYearTaskTypeMoments = getNextMoments('year');
-			_this7.taskTypeMomentsMap = new Map([['today', dayTaskTypeMoments], ['long', longTaskTypeMoments], ['thisWeek', weekTaskTypeMoments], ['thisMonth', monthTaskTypeMoments], ['thisYear', yearTaskTypeMoments], ['tomorrow', tomorrowTaskTypeMoments], ['nextWeek', nextWeekTaskTypeMoments], ['nextMonth', nextMonthTaskTypeMoments], ['nextYear', nextYearTaskTypeMoments]]);
+			_this8.taskTypeMomentsMap = new Map([['today', dayTaskTypeMoments], ['long', longTaskTypeMoments], ['thisWeek', weekTaskTypeMoments], ['thisMonth', monthTaskTypeMoments], ['thisYear', yearTaskTypeMoments], ['tomorrow', tomorrowTaskTypeMoments], ['nextWeek', nextWeekTaskTypeMoments], ['nextMonth', nextMonthTaskTypeMoments], ['nextYear', nextYearTaskTypeMoments]]);
 
-			_this7.modes = ['add', 'edit'];
+			_this8.modes = ['add', 'edit'];
 			/* temp type before citing this.props.task.taskType */
-			_this7.defaultTaskType = 'today';
+			_this8.defaultTaskType = 'today';
 			/* temp type before citing this.props.task.taskLevel */
-			_this7.defaultTaskLevel = 'b';
-			_this7.state = {
+			_this8.defaultTaskLevel = 'b';
+			_this8.state = {
 				mode: 'add',
-				taskType: _this7.defaultTaskType,
-				taskLevel: _this7.defaultTaskLevel,
-				/* temp set isNeedTimer to false*/
-				isNeedTimer: false,
-				isRepeat: false,
+				taskType: _this8.defaultTaskType,
+				taskLevel: _this8.defaultTaskLevel,
+				/* temp set isTaskNeedTimer to false*/
+				isTaskNeedTimer: false,
+				isTaskRepeat: false,
 				/* temp set timeSetterOpening to true*/
 				timeSetterOpening: true,
 				startTimeDate: null,
 				endTimeDate: null
 			};
 
-			_this7.currentTaskTypeMoments = _this7.taskTypeMomentsMap.get(_this7.state.taskType);
+			_this8.currentTaskTypeMoments = _this8.taskTypeMomentsMap.get(_this8.state.taskType);
 
-			_this7.taskTypeChange = _this7.taskTypeChange.bind(_this7);
-			_this7.timeBtnClick = _this7.timeBtnClick.bind(_this7);
-			_this7.isNeedTimerCheckboxClick = _this7.isNeedTimerCheckboxClick.bind(_this7);
-			_this7.isRepeatCheckboxClick = _this7.isRepeatCheckboxClick.bind(_this7);
-			return _this7;
+			_this8.taskLevelChange = _this8.taskLevelChange.bind(_this8);
+			_this8.taskTypeChange = _this8.taskTypeChange.bind(_this8);
+			_this8.timeBtnClick = _this8.timeBtnClick.bind(_this8);
+			_this8.isTaskNeedTimerCheckboxClick = _this8.isTaskNeedTimerCheckboxClick.bind(_this8);
+			_this8.isTaskRepeatCheckboxClick = _this8.isTaskRepeatCheckboxClick.bind(_this8);
+			return _this8;
 		}
 
 		_createClass(TaskInfo, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				console.log('1', this.currentTaskTypeMoments);
 				var c = this.currentTaskTypeMoments;
 
 				this.setState({
@@ -9395,8 +9408,8 @@
 				this.setState({
 					taskType: value
 				});
-				// change isNeedTimer
-				this.state.isNeedTimer = value === 'long' ? true : false;
+				// change isTaskNeedTimer
+				this.state.isTaskNeedTimer = value === 'long' ? true : false;
 				// set startTimeDate and endTimeDate
 				var c = this.currentTaskTypeMoments;
 			}
@@ -9410,40 +9423,40 @@
 				});
 			}
 		}, {
-			key: 'isNeedTimerCheckboxClick',
-			value: function isNeedTimerCheckboxClick(e, result) {
-				var _this8 = this;
+			key: 'isTaskNeedTimerCheckboxClick',
+			value: function isTaskNeedTimerCheckboxClick(e, result) {
+				var _this9 = this;
 
 				this.setState(function (prevState) {
 					return {
-						isNeedTimer: !prevState.isNeedTimer
+						isTaskNeedTimer: !prevState.isTaskNeedTimer
 					};
 				});
 
 				// change startTimeDate and endTimeDate
 				var _state = this.state,
 				    t = _state.taskType,
-				    isNeedTimer = _state.isNeedTimer;
+				    isTaskNeedTimer = _state.isTaskNeedTimer;
 
 				var isNeedFromNow = t === 'today' || t === 'thisWeek' || t === 'thisMonth' || t === 'thisYear';
-				// isNeedTimer has changed, so use invertible value: !isNeedTimer
-				if (!isNeedTimer && isNeedFromNow) {
+				// isTaskNeedTimer has changed, so use invertible value: !isTaskNeedTimer
+				if (!isTaskNeedTimer && isNeedFromNow) {
 					var m = (0, _moment2.default)();
 					// set startTimeDate
 					this.setState({
 						startTimeDate: m
 					}, function () {
-						console.log('startTimeDate now: ' + _this8.state.startTimeDate.format());
+						console.log('startTimeDate now: ' + _this9.state.startTimeDate.format());
 					});
 				}
-				if (!isNeedTimer && !isNeedFromNow) {}
+				if (!isTaskNeedTimer && !isNeedFromNow) {}
 			}
 		}, {
-			key: 'isRepeatCheckboxClick',
-			value: function isRepeatCheckboxClick(e, result) {
+			key: 'isTaskRepeatCheckboxClick',
+			value: function isTaskRepeatCheckboxClick(e, result) {
 				this.setState(function (prevState) {
 					return {
-						isRepeat: !prevState.isRepeat
+						isTaskRepeat: !prevState.isTaskRepeat
 					};
 				});
 			}
@@ -9454,8 +9467,8 @@
 				    taskTypeMomentsMap = this.taskTypeMomentsMap;
 				var taskType = state.taskType,
 				    taskLevel = state.taskLevel,
-				    isNeedTimer = state.isNeedTimer,
-				    isRepeat = state.isRepeat,
+				    isTaskNeedTimer = state.isTaskNeedTimer,
+				    isTaskRepeat = state.isTaskRepeat,
 				    startTimeDate = state.startTimeDate,
 				    endTimeDate = state.endTimeDate;
 
@@ -9496,7 +9509,7 @@
 				var Row = _semanticUiReact.Grid.Row,
 				    Column = _semanticUiReact.Grid.Column;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { taskLevel: taskLevel, taskLevelCallback: this.taskLevelChange }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', defaultValue: taskType, options: taskTypesOptions, onChange: this.taskTypeChange }))), taskType != 'long' ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isNeedTimer, onClick: this.isNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', checked: isRepeat, onClick: this.isRepeatCheckboxClick }))) : '', isNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, startTime)), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'angle double right', size: 'large' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, endTime))) : '', _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0' })))), _react2.default.createElement('div', null), timeSetterOpening ? _react2.default.createElement(TimeSetter, null) : '');
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { taskLevel: taskLevel, taskLevelCallback: this.taskLevelChange }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', defaultValue: taskType, options: taskTypesOptions, onChange: this.taskTypeChange }))), taskType != 'long' ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 5 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', checked: isTaskRepeat, onClick: this.isTaskRepeatCheckboxClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, startTime)), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'angle double right', size: 'large' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { onClick: this.timeBtnClick }, endTime))) : '', _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210' })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0' })))), _react2.default.createElement('div', null));
 			}
 		}]);
 
@@ -9509,19 +9522,19 @@
 	 * @receiveProps {object} task - one task
 	 */
 
-	var TaskListItem = function (_React$Component7) {
-		_inherits(TaskListItem, _React$Component7);
+	var TaskListItem = function (_React$Component8) {
+		_inherits(TaskListItem, _React$Component8);
 
 		function TaskListItem(props) {
 			_classCallCheck(this, TaskListItem);
 
-			var _this9 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
+			var _this10 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
 
-			_this9.state = {
+			_this10.state = {
 				editMode: false,
 				showTaskInfo: false
 			};
-			return _this9;
+			return _this10;
 		}
 
 		_createClass(TaskListItem, [{
@@ -9557,19 +9570,19 @@
 	 * @receiveProps {bool} taskIsCompleted - taskIsCompleted
 	 */
 
-	var TaskList = function (_React$Component8) {
-		_inherits(TaskList, _React$Component8);
+	var TaskList = function (_React$Component9) {
+		_inherits(TaskList, _React$Component9);
 
 		function TaskList(props) {
 			_classCallCheck(this, TaskList);
 
-			var _this10 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+			var _this11 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
 
-			_this10.state = {
+			_this11.state = {
 				tasks: tasks
 			};
-			_this10.observeChange();
-			return _this10;
+			_this11.observeChange();
+			return _this11;
 		}
 
 		_createClass(TaskList, [{
@@ -9614,8 +9627,8 @@
 	 * @receiveProps {function} taskIsCompletedCallback - return current taskIsCompleted
 	 */
 
-	var TitleBar = function (_React$Component9) {
-		_inherits(TitleBar, _React$Component9);
+	var TitleBar = function (_React$Component10) {
+		_inherits(TitleBar, _React$Component10);
 
 		function TitleBar(props) {
 			_classCallCheck(this, TitleBar);
@@ -9648,20 +9661,20 @@
 	 * @receiveProps {string} taskTypes - current taskTypes
 	 */
 
-	var TaskListContainer = function (_React$Component10) {
-		_inherits(TaskListContainer, _React$Component10);
+	var TaskListContainer = function (_React$Component11) {
+		_inherits(TaskListContainer, _React$Component11);
 
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
 
-			var _this12 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
+			var _this13 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
 
-			_this12.state = {
-				taskType: _this12.props.taskType,
+			_this13.state = {
+				taskType: _this13.props.taskType,
 				taskIsCompleted: false
 			};
 
-			return _this12;
+			return _this13;
 		}
 
 		_createClass(TaskListContainer, [{
@@ -9697,8 +9710,8 @@
 	 * class DayTaskContainer
 	 */
 
-	var DayTaskContainer = function (_React$Component11) {
-		_inherits(DayTaskContainer, _React$Component11);
+	var DayTaskContainer = function (_React$Component12) {
+		_inherits(DayTaskContainer, _React$Component12);
 
 		function DayTaskContainer() {
 			_classCallCheck(this, DayTaskContainer);
@@ -9721,8 +9734,8 @@
 	 * class LongTaskContainer
 	 */
 
-	var LongTaskContainer = function (_React$Component12) {
-		_inherits(LongTaskContainer, _React$Component12);
+	var LongTaskContainer = function (_React$Component13) {
+		_inherits(LongTaskContainer, _React$Component13);
 
 		function LongTaskContainer() {
 			_classCallCheck(this, LongTaskContainer);
@@ -9745,8 +9758,8 @@
 	 * class MultiFunctionBtn
 	 */
 
-	var MultiFunctionBtn = function (_React$Component13) {
-		_inherits(MultiFunctionBtn, _React$Component13);
+	var MultiFunctionBtn = function (_React$Component14) {
+		_inherits(MultiFunctionBtn, _React$Component14);
 
 		function MultiFunctionBtn() {
 			_classCallCheck(this, MultiFunctionBtn);
@@ -9768,8 +9781,8 @@
 	 * class ToDoList
 	 */
 
-	var ToDoList = function (_React$Component14) {
-		_inherits(ToDoList, _React$Component14);
+	var ToDoList = function (_React$Component15) {
+		_inherits(ToDoList, _React$Component15);
 
 		function ToDoList() {
 			_classCallCheck(this, ToDoList);
