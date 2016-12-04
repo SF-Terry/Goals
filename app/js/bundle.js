@@ -9491,35 +9491,11 @@
 		return TaskList;
 	}(_react2.default.Component);
 
-	// ListContainer
-
-
-	var ListContainer = function (_React$Component8) {
-		_inherits(ListContainer, _React$Component8);
-
-		function ListContainer(props) {
-			_classCallCheck(this, ListContainer);
-
-			return _possibleConstructorReturn(this, (ListContainer.__proto__ || Object.getPrototypeOf(ListContainer)).call(this, props));
-		}
-
-		_createClass(ListContainer, [{
-			key: 'render',
-			value: function render() {
-				var taskTypes = this.props.taskTypes;
-				var taskType = this.props.taskType;
-				return _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskTypes: taskTypes, taskType: taskType }));
-			}
-		}]);
-
-		return ListContainer;
-	}(_react2.default.Component);
-
 	// TitleBar
 
 
-	var TitleBar = function (_React$Component9) {
-		_inherits(TitleBar, _React$Component9);
+	var TitleBar = function (_React$Component8) {
+		_inherits(TitleBar, _React$Component8);
 
 		function TitleBar(props) {
 			_classCallCheck(this, TitleBar);
@@ -9549,8 +9525,8 @@
 	// TaskListContainer
 
 
-	var TaskListContainer = function (_React$Component10) {
-		_inherits(TaskListContainer, _React$Component10);
+	var TaskListContainer = function (_React$Component9) {
+		_inherits(TaskListContainer, _React$Component9);
 
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
@@ -9561,7 +9537,7 @@
 		_createClass(TaskListContainer, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement('div', null, _react2.default.createElement(TitleBar, { taskType: this.props.taskType, taskTypes: this.props.taskTypes }), _react2.default.createElement(ListContainer, null));
+				return _react2.default.createElement('div', null, _react2.default.createElement(TitleBar, { taskType: this.props.taskType, taskTypes: this.props.taskTypes }), _react2.default.createElement(TaskList, null));
 			}
 		}]);
 
@@ -9571,8 +9547,8 @@
 	// DayTaskContainer
 
 
-	var DayTaskContainer = function (_React$Component11) {
-		_inherits(DayTaskContainer, _React$Component11);
+	var DayTaskContainer = function (_React$Component10) {
+		_inherits(DayTaskContainer, _React$Component10);
 
 		function DayTaskContainer() {
 			_classCallCheck(this, DayTaskContainer);
@@ -9594,8 +9570,8 @@
 	// LongTaskContainer
 
 
-	var LongTaskContainer = function (_React$Component12) {
-		_inherits(LongTaskContainer, _React$Component12);
+	var LongTaskContainer = function (_React$Component11) {
+		_inherits(LongTaskContainer, _React$Component11);
 
 		function LongTaskContainer() {
 			_classCallCheck(this, LongTaskContainer);
@@ -9617,8 +9593,8 @@
 	// MultiFunctionBtn
 
 
-	var MultiFunctionBtn = function (_React$Component13) {
-		_inherits(MultiFunctionBtn, _React$Component13);
+	var MultiFunctionBtn = function (_React$Component12) {
+		_inherits(MultiFunctionBtn, _React$Component12);
 
 		function MultiFunctionBtn() {
 			_classCallCheck(this, MultiFunctionBtn);
@@ -9639,8 +9615,8 @@
 	// ToDoList
 
 
-	var ToDoList = function (_React$Component14) {
-		_inherits(ToDoList, _React$Component14);
+	var ToDoList = function (_React$Component13) {
+		_inherits(ToDoList, _React$Component13);
 
 		function ToDoList() {
 			_classCallCheck(this, ToDoList);

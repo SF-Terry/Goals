@@ -434,21 +434,6 @@ class TaskList extends React.Component {
 	}
 }
 
-// ListContainer
-class ListContainer extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		const taskTypes = this.props.taskTypes;
-		const taskType = this.props.taskType;
-		return (
-			<div>
-				<TaskList taskTypes={taskTypes} taskType={taskType}  />
-			</div>
-		);
-	}
-}
 
 // TitleBar
 class TitleBar extends React.Component {
@@ -481,7 +466,7 @@ class TaskListContainer extends React.Component {
 		return (
 			<div>
 				<TitleBar taskType={this.props.taskType} taskTypes={this.props.taskTypes} />
-				<ListContainer />
+				<TaskList />
 			</div>
 		);
 	}
