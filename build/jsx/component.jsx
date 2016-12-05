@@ -304,7 +304,7 @@ class TaskTypePanel extends React.Component {
  			timeSetterTimeType: globalTimeSetterTimeType.start,
  			/* parse task's string startdate and end date */
  			startDate: task.startDate ? moment(task.startDate) : defaultTaskTypeMoments[0],
- 			endDate: task.endDate ? moment(task.endDate) : defaultTaskTypeMoments[0],
+ 			endDate: task.endDate ? moment(task.endDate) : defaultTaskTypeMoments[1],
  		};
 
 		this.taskTypeDropdownChange = this.taskTypeDropdownChange.bind(this);
@@ -431,7 +431,7 @@ class TaskTypePanel extends React.Component {
 		}
 		if (isCancelSetting) {
 			const {isTaskNeedTimer} = this.state;
-			
+
 			this.setState({
 				isNeedTimeSetter: false
 			});
@@ -492,12 +492,13 @@ class TaskTypePanel extends React.Component {
 			return {text: text, value: item};
 		});
 		const isNeedShowCheckboxGroup = taskType != 'long';
-		const minDate = moment();
+		const minDate = startDate;
 		// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
-		const maxDate = moment().add(20, 'years');
+		const maxDate = endDate;
 		// const maxDate = null;
 
-		// console.log('maxDate: ', maxDate.format());
+		console.log('------------- minDate: ', maxDate.format());
+		console.log('------------- maxDate: ', minDate.format());
 
 		task.taskType = taskType;
 		task.isTaskNeedTimer = isTaskNeedTimer;

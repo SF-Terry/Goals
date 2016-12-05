@@ -9372,7 +9372,7 @@
 				timeSetterTimeType: globalTimeSetterTimeType.start,
 				/* parse task's string startdate and end date */
 				startDate: task.startDate ? (0, _moment2.default)(task.startDate) : defaultTaskTypeMoments[0],
-				endDate: task.endDate ? (0, _moment2.default)(task.endDate) : defaultTaskTypeMoments[0]
+				endDate: task.endDate ? (0, _moment2.default)(task.endDate) : defaultTaskTypeMoments[1]
 			};
 
 			_this3.taskTypeDropdownChange = _this3.taskTypeDropdownChange.bind(_this3);
@@ -9600,12 +9600,13 @@
 					return { text: text, value: item };
 				});
 				var isNeedShowCheckboxGroup = taskType != 'long';
-				var minDate = (0, _moment2.default)();
+				var minDate = startDate;
 				// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
-				var maxDate = (0, _moment2.default)().add(20, 'years');
+				var maxDate = endDate;
 				// const maxDate = null;
 
-				// console.log('maxDate: ', maxDate.format());
+				console.log('------------- minDate: ', maxDate.format());
+				console.log('------------- maxDate: ', minDate.format());
 
 				task.taskType = taskType;
 				task.isTaskNeedTimer = isTaskNeedTimer;
