@@ -19,16 +19,24 @@ var tasks = storekeeper.tasks;
  
 // Top varibles
 const globalTaskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
+const globalFutureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 const globalDayTaskTypes = ['today', 'tomorrow'];
 const globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
+const globalDefaultTaskType = 'today';
+
+const globalDefaultLevel = 'b';
+
 const globalInitialTask = {
 	name: '',
-	taskType: 'day',
+	taskType: globalDefaultTaskType,
 	taskLevel: 'b',
 	isTaskNeedTimer: false,
 	isTaskNeedRepeat: false
 };
-
+const globalTimeSetterTimeType = {
+	start: 'start',
+	end: 'end'
+}
 // test
 setTimeout(() => {
 	// tasks.push({name: 'task1', level: 'a'});
@@ -45,21 +53,24 @@ setTimeout(() => {
  * @receiveProps {moment} minDate - current minDate
  * @receiveProps {moment} startDate - current startDate
  * @receiveProps {moment} endDate - current endDate
+ * @receiveProps {string} timeType - globalTimeSetterTimeType.start or globalTimeSetterTimeType.end
+ * @receiveProps {bool} isNeedShow - show or hide
  * @receiveProps {function} timeSetterCallback 
  	@callback {moment} startDate - current startDate
  	@callback {moment} endDate - current endDate
+ 	@callback {bool} isConfirmSetting - isConfirmSetting
+ 	@callback {bool} isCancelSetting - isCancelSetting
  */
 class TimeSetter extends React.Component {
 	constructor(props) {
 		super(props);
-		this.timeType_startTime = 'startTime';
-		this.timeType_endTime = 'endTime';
-		this.timeType = this.props.timeType || this.timeType_startTime;
+		this.timeType = this.props.timeType || globalTimeSetterTimeType.start;
 
 		this.state = {
 			timeType: this.timeType,
 			startDate: this.props.startDate,
-			endDate: this.props.endDate
+			endDate: this.props.endDate,
+			isNeedShow: this.props.isNeedShow || true
 		}
 		this.startTimeBtnClick = this.startTimeBtnClick.bind(this);
 		this.endTimeBtnClick = this.endTimeBtnClick.bind(this);
@@ -70,21 +81,41 @@ class TimeSetter extends React.Component {
 	}
 	startTimeBtnClick() {
 		this.setState({
-			timeType: this.timeType_startTime
+			timeType: globalTimeSetterTimeType.start
 		});
 	}
 	endTimeBtnClick() {
 		this.setState({
-			timeType: this.timeType_endTime
+			timeType: globalTimeSetterTimeType.end
 		});
 	}
 	cancelBtnClick() {
-		
-	}
+		const {timeSetterCallback} = this.props;
+
+		// hide TimeSetter
+		this.setState({
+			isNeedShow: false
+		});
+
+		if (timeSetterCallback) {
+			timeSetterCallback({
+				isCancelSetting: true
+			});
+		}
+	}	
 	confirmBtnClick() {
-		timeSetterCallback({
-			startDate: this.state.startDate,
-			endDate: this.state.endDate
+		const {timeSetterCallback} = this.props;
+		if (timeSetterCallback) {
+			timeSetterCallback({
+				startDate: this.state.startDate,
+				endDate: this.state.endDate,
+				isConfirmSetting: true
+			});
+		}
+
+		// hide TimeSetter
+		this.setState({
+			isNeedShow: false
 		});
 	}
 	startTimepickerCallback(o) {
@@ -99,10 +130,10 @@ class TimeSetter extends React.Component {
 	}
 	render() {
 		const {props} = this;
+		const {timeType, isNeedShow} = this.state;	 
 		const {Column, Row} = Grid;	
-		const {timeType} = this.state;	 
-		const isStartTime = timeType === 'startTime';
-		const isEndTime = timeType === 'endTime';
+		const isStartTime = timeType == globalTimeSetterTimeType.start;
+		const isEndTime = timeType == globalTimeSetterTimeType.end;
 
 		const minDate = props.minDate;
 		const maxDate = props.maxDate;
@@ -116,11 +147,15 @@ class TimeSetter extends React.Component {
 				width: document.body.clientWidth,	
 				height: document.body.clientHeight,
 				background: 'white',
-				border: '1px solid gray'
+				border: '1px solid gray',
+				display: isNeedShow ? 'block' : 'none'
 			}} ref={(div) => {
 				let t = null; 
 				if (div) { 
-					t = div.getClientRects()[0].top;
+					const rects = div.getClientRects();
+					const rect = rects ? rects[0] : null;
+					const top = rect ? rect.top : null;
+					t = top;
 				} 
 				if (t) {
 					div.style.top = -1 * t;
@@ -157,28 +192,6 @@ class TimeSetter extends React.Component {
 			</div>);
 	}
 }
-
-/*// endTimepicker
-class EndTimepicker extends React.Component{
-	constructor(props) {
-		super(props);
-		this.defaultDate = moment().add(1,'hours').startOf('hour');
-	}
-	render() {
-		const props = this.props;
-		return <Timepicker defaultDate={this.defaultDate} />
-	}
-}
-
-// startTimepicker
-class StartTimepicker extends React.Component{
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		return <Timepicker />
-	}
-}*/
 
 /**
  * class Timepicker
@@ -257,6 +270,7 @@ class TaskTypePanel extends React.Component {
  		var getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
  		var getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
  		const dayTaskTypeMoments = getCurrentMoments('day');
+ 		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
  		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
  		const weekTaskTypeMoments = getCurrentMoments('week');
  		const monthTaskTypeMoments = getCurrentMoments('month');
@@ -265,126 +279,255 @@ class TaskTypePanel extends React.Component {
  		const nextWeekTaskTypeMoments =  getNextMoments('week');
  		const nextMonthTaskTypeMoments = getNextMoments('month');
  		const nextYearTaskTypeMoments =  getNextMoments('year');
- 		this.taskTypeMomentsMap = new Map([
- 			['today', dayTaskTypeMoments],
- 			['long', longTaskTypeMoments],
- 			['thisWeek', weekTaskTypeMoments],
- 			['thisMonth', monthTaskTypeMoments],
- 			['thisYear', yearTaskTypeMoments],
- 			['tomorrow', tomorrowTaskTypeMoments],
- 			['nextWeek', nextWeekTaskTypeMoments],
- 			['nextMonth', nextMonthTaskTypeMoments],
- 			['nextYear', nextYearTaskTypeMoments]
- 		]);
+ 		this.taskTypeMomentsObj = {
+ 			'today': dayTaskTypeMoments,
+ 			'long': longTaskTypeMoments,
+ 			'thisWeek': weekTaskTypeMoments,
+ 			'thisMonth': monthTaskTypeMoments,
+ 			'thisYear': yearTaskTypeMoments,
+ 			'tomorrow': tomorrowTaskTypeMoments,
+ 			'nextWeek': nextWeekTaskTypeMoments,
+ 			'nextMonth': nextMonthTaskTypeMoments,
+ 			'nextYear': nextYearTaskTypeMoments
+ 		};
+ 		const defaultTaskTypeMoments = this.taskTypeMomentsObj['today'];
 
  		this.state = {
- 			taskType: task.taskType || 'day',
- 			taskLevel: task.taskLevel || 'b',
+ 			taskType: task.taskType || globalDefaultTaskType,
+ 			taskLevel: task.taskLevel || globalDefaultLevel,
  			isTaskNeedTimer: task.isTaskNeedTimer || false,
  			isTaskNeedRepeat: task.isTaskNeedRepeat || false,
- 			isNeedTimeSetter: true
+ 			isNeedTimeSetter: false,
+ 			timeSetterTimeType: globalTimeSetterTimeType.start,
+ 			startDate: task.startDate || defaultTaskTypeMoments[0],
+ 			endDate: task.endDate || defaultTaskTypeMoments[1]
  		};
-
-		this.currentTaskTypeMoments = this.taskTypeMomentsMap.get(this.state.taskType);
 
 		this.taskTypeDropdownChange = this.taskTypeDropdownChange.bind(this);
 		this.isTaskNeedTimerCheckboxClick = this.isTaskNeedTimerCheckboxClick.bind(this);
 		this.isTaskNeedRepeatClick = this.isTaskNeedRepeatClick.bind(this);
+		this.timeSetterCallback = this.timeSetterCallback.bind(this);
 	}	
+	componentDidMount() {
+		const {taskType} = this.state;
+
+		/*if (currentTaskTypeMoments) {
+			this.setState({
+				startDate:  this.taskTypeMomentsObj[taskType][0],
+				endDate:  this.taskTypeMomentsObj[taskType][1]
+			});
+		}*/
+	}
 	taskTypeDropdownChange(e, result) {
+		const {taskTypeMomentsObj} = this;
 		const value = result.value;
 		let {task} = this.props;
+		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer} = this.state;
+		const isLongTask = value == 'long';
+		const isValueDifferent = value != taskType;
 
-		task.taskType = value;
+		// save task
+		// task.taskType = value;
+
+		// reset isTaskNeedTimer if new result is different with old result
+		if (isValueDifferent) {
+			this.setState(() => ({
+				taskType: value
+			}), () => {
+				this.setState({
+					startDate:  taskTypeMomentsObj[this.state.taskType][0],
+					endDate:  taskTypeMomentsObj[this.state.taskType][1]
+				});
+
+				if (!isLongTask) {
+					this.setState({
+						isTaskNeedTimer: false
+					});
+				}
+
+				if (isLongTask) {
+					this.setState({
+						isTaskNeedRepeat: false,
+						isNeedTimeSetter: true
+					});
+				}
+			});
+			
+			
+		}
 	}
 	isTaskNeedTimerCheckboxClick(e, result) {
+		const {taskTypeMomentsObj} = this;
 		const checked = result.checked;
 		let {task} = this.props;
+		const {isNeedTimeSetter, taskType} = this.state;
+		const isFutureTaskType = globalFutureTaskTypes.includes(taskType);
 
-		this.setState({
-		isTaskNeedTimer: !checked
-		});
-		task.isTaskNeedTimer = !checked;
+		/* @Tansporting checked value: Only when past checked is true that change checked to false, if past checked is false, needing isConfirmSetting to change it */
+		// if past checked is true 
+		if (checked) {
+			this.setState({
+				isTaskNeedTimer: !checked
+			});
+
+			// hide  timeSetter and TimerPanel
+			this.setState({
+				isNeedTimeSetter: false,
+				startDate: taskTypeMomentsObj[taskType][0],
+				endDate: taskTypeMomentsObj[taskType][1]
+			});
+		}
+		
+		/* @Tansporting checked value:  tansport default parameter */
+		if (!checked) {
+			this.setState({
+				isTaskNeedTimer: false,
+				isNeedTimeSetter: true,
+				timeSetterTimeType: globalTimeSetterTimeType.start,
+			});
+
+			if (!isFutureTaskType) {
+				this.setState({
+					startDate: moment()
+				});
+			}
+		}
 	}
 	isTaskNeedRepeatClick(e, result) {
 		const checked = result.checked;
 		let {task} = this.props;
 
 		this.setState({
-		isTaskNeedRepeat: !checked
+			isTaskNeedRepeat: !checked
 		});
-		task.isTaskNeedRepeat = !checked;
+		// save task
+		// task.isTaskNeedRepeat = !checked;
+	}
+	timeSetterCallback(o) {
+		const {taskTypeMomentsObj} = this;
+		const {startDate, endDate, isConfirmSetting, isCancelSetting} = o;
+		const {taskType} = this.state;
+		let {task} = this.props;
+
+		if (startDate) {
+			this.setState({
+				startDate: startDate
+			});
+		}
+		if (endDate) {
+			this.setState({
+				endDate: endDate
+			});
+		}
+
+		if (isConfirmSetting) {
+			this.setState({
+				isNeedTimeSetter: false
+			});
+
+			/* @Tansporting checked value: To activate checked(form false to true) */
+			this.setState({
+				isTaskNeedTimer: true
+			});
+			// save task
+			// task.isTaskNeedTimer = true;
+		}
+		if (isCancelSetting) {
+			this.setState({
+				isNeedTimeSetter: false,
+				startDate: taskTypeMomentsObj[taskType][0],
+				endDate: taskTypeMomentsObj[taskType][1]
+			});
+
+			if (taskType === 'long') {
+				this.setState({
+					taskType: globalDefaultTaskType
+				});
+			}
+		}
 	}
 	render() {
+		let {currentTaskTypeMoments} = this;
 		let {task} = this.props;
-		const taskTypesOptions = globalTaskTypes.map((item, index) => {
-					let text = '';
-					switch (item) {
-						case 'today': 
-							text = '今日目标';break;
-						case 'long': 
-							text = '长期目标';break;
-						case 'thisWeek': 
-							text = '本周目标';break;
-						case 'thisMonth': 
-							text = '本月目标';break;
-						case 'thisYear': 
-							text = '本年目标';break;
-						case 'tomorrow': 
-							text = '明日目标';break;
-						case 'nextWeek': 
-							text = '下周目标';break;
-						case 'nextMonth': 
-							text = '下月目标';break;
-						case 'nextYear': 
-							text = '明年目标';break;
-						defaut: break;
-					}
-					return {text: text, value: item};
-				});
-		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter} = this.state;
+		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
 		const {Row, Column} = Grid;
+		const taskTypesOptions = globalTaskTypes.map((item, index) => {
+			let text = '';
+			switch (item) {
+				case 'today': 
+					text = '今日目标';break;
+				case 'long': 
+					text = '长期目标';break;
+				case 'thisWeek': 
+					text = '本周目标';break;
+				case 'thisMonth': 
+					text = '本月目标';break;
+				case 'thisYear': 
+					text = '本年目标';break;
+				case 'tomorrow': 
+					text = '明日目标';break;
+				case 'nextWeek': 
+					text = '下周目标';break;
+				case 'nextMonth': 
+					text = '下月目标';break;
+				case 'nextYear': 
+					text = '明年目标';break;
+				defaut: break;
+			}
+			return {text: text, value: item};
+		});
+		const isNeedShowCheckboxGroup = taskType != 'long';
+		const minDate = currentTaskTypeMoments ?　currentTaskTypeMoments[0] : null;
+		const maxDate = moment().add(20, 'years');
 
-		console.log(isNeedTimeSetter);
+		task.taskType = taskType;
+		task.isNeedTimeSetter = isNeedTimeSetter;
+		task.isTaskNeedRepeat = isTaskNeedRepeat;
+		task.isNeedTimeSetter = isNeedTimeSetter;
+		task.timeSetterTimeType = timeSetterTimeType;
+		task.startDate = startDate;
+		task.endDate = endDate;
 		return (
 			<div>
-				{  isNeedTimeSetter ? <TimeSetter  /> : ''  }
+				{  isNeedTimeSetter ? <TimeSetter timeSetterTimeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
 				<Grid style={{border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block'}}>
-	               
-
 					<Row centered>
 						<Column width={14}>
-							<Dropdown fluid selection className='TaskTypeSelector' defaultValue={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
+							<Dropdown fluid selection className='TaskTypeSelector' value={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
 						</Column>
 					</Row>
-					<Row centered>
-						<Column width={8} textAlign='right'>
-							<Checkbox label='定时' defaultChecked={isTaskNeedTimer} onClick={this.isTaskNeedTimerCheckboxClick} />
-						</Column>
-						<Column width={8}>
-							<Checkbox label='重复' defaultChecked={isTaskNeedRepeat} onClick={this.isTaskNeedRepeatClick} />
-						</Column>
-					</Row>
-					<Row centered>
-						<Column width={6}>
-							<Segment>
-								startTimeJsx...
-							</Segment>
-						</Column>
-						<Column width={2} textAlign='center' verticalAlign='middle'>
-						
-						</Column>
-						<Column width={6}>
-							<Segment>
-								endTimeJsx...
-							</Segment>
-						</Column>
-					</Row>
+					{isNeedShowCheckboxGroup ? (
+						<Row centered>
+							<Column width={8} textAlign='right'>
+								<Checkbox label='定时' checked={isTaskNeedTimer} onClick={this.isTaskNeedTimerCheckboxClick} />
+							</Column>
+							<Column width={8}>
+								<Checkbox label='重复' defaultChecked={isTaskNeedRepeat} onClick={this.isTaskNeedRepeatClick} />
+							</Column>
+						</Row>
+					) : ''}
+					
+					{isTaskNeedTimer ? (
+						<Row centered>
+							<Column width={6}>
+								<Segment>
+									startTimeJsx...
+								</Segment>
+							</Column>
+							<Column width={2} textAlign='center' verticalAlign='middle'>
+							
+							</Column>
+							<Column width={6}>
+								<Segment>
+									endTimeJsx...
+								</Segment>
+							</Column>
+						</Row>
+					) : ''}
 				</Grid>
 			</div>
 		);
 	}
-
 }
 
 
