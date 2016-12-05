@@ -349,6 +349,10 @@ class TaskTypePanel extends React.Component {
 						isTaskNeedRepeat: false,
 						isNeedTimeSetter: true
 					});
+					/* taskTypePanelCallback to hide dom */
+					this.props.taskTypePanelCallback({
+						isHidingTimeSetter: false
+					});
 				}
 			});
 			
@@ -380,9 +384,12 @@ class TaskTypePanel extends React.Component {
 		/* @Tansporting checked value:  tansport default parameter */
 		if (!checked) {
 			this.setState({
-				// isTaskNeedTimer: false,
 				isNeedTimeSetter: true,
 				timeSetterTimeType: globalTimeSetterTimeType.start,
+			});
+			/* taskTypePanelCallback to hide dom */
+			this.props.taskTypePanelCallback({
+				isHidingTimeSetter: false
 			});
 
 			if (!isFutureTaskType) {
@@ -408,20 +415,24 @@ class TaskTypePanel extends React.Component {
 		const {taskType} = this.state;
 		let {task} = this.props;
 
-		if (startDate) {
+		if (startDate != undefined) {
 			this.setState({
 				startDate: startDate
 			});
 		}
-		if (endDate) {
+		if (endDate != undefined) {
 			this.setState({
 				endDate: endDate
 			});
 		}
 
-		if (isConfirmSetting) {
+		if (isConfirmSetting != undefined) {
 			this.setState({
 				isNeedTimeSetter: false
+			});
+			/* taskTypePanelCallback to hide dom */
+			this.props.taskTypePanelCallback({
+				isHidingTimeSetter: true
 			});
 
 			/* @Tansporting checked value: To activate checked(form false to true) */
@@ -429,11 +440,15 @@ class TaskTypePanel extends React.Component {
 				isTaskNeedTimer: true
 			});
 		}
-		if (isCancelSetting) {
+		if (isCancelSetting != undefined) {
 			const {isTaskNeedTimer} = this.state;
 
 			this.setState({
 				isNeedTimeSetter: false
+			});
+			/* taskTypePanelCallback to hide dom */
+			this.props.taskTypePanelCallback({
+				isHidingTimeSetter: true
 			});
 
 			if (!isTaskNeedTimer) {
@@ -493,12 +508,7 @@ class TaskTypePanel extends React.Component {
 		});
 		const isNeedShowCheckboxGroup = taskType != 'long';
 		const minDate = startDate;
-		// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
 		const maxDate = endDate;
-		// const maxDate = null;
-
-		console.log('------------- minDate: ', maxDate.format());
-		console.log('------------- maxDate: ', minDate.format());
 
 		task.taskType = taskType;
 		task.isTaskNeedTimer = isTaskNeedTimer;
@@ -558,26 +568,30 @@ class TaskTypePanel extends React.Component {
 /**
  * class TaskLevelButtons
  * @receiveProps {object} task - current task
+ * @receiveProps {string} mode - current mode
  */
 class TaskLevelButtons extends React.Component {
 	constructor(props) {
 		super(props);
 
 		let {task} = this.props;
+
 		this.state = {
 			level: task.taskLevel || 'b'
 		}
+
 		this.setLevel = this.setLevel.bind(this);
 	}
 	setLevel(level) {
-		let {task} = this.props;
 		this.setState({
 			level: level
 		});
-		task.taskLevel = level;
 	}
 	render() {
 		const {level} = this.state;
+		let {task} = this.props;
+
+		task.taskLevel = level;
 
 		let buttonsInfo = {
 			a: {
@@ -615,84 +629,81 @@ class TaskLevelButtons extends React.Component {
 /**
  * class TaskInfo
  * @receiveProps {object} task - task
+ * @receiveProps {bool} isShow	
+ * @receiveProps {function} taskInfoCallback	
+ 	{bool} isContinueToAddTask
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.modes = ['add', 'edit'];		
-		/* temp type before citing this.props.task.taskType */
-		this.defaultTaskType='today';
-		/* temp type before citing this.props.task.taskLevel */
-		this.defaultTaskLevel='b';
+		this.modes = {
+			add: 'add',
+			edit: 'edit'
+		};		
+		this.task = this.props.task || ( ( () => {tasks.push(globalInitialTask);return tasks[ 	tasks.length - 1 ];} )() );
+
 		this.state = {
-			mode: 'add',
-			taskType: this.defaultTaskType,
-			taskLevel: this.defaultTaskLevel,
-			/* temp set isTaskNeedTimer to false*/
-			isTaskNeedTimer: false,
-			isTaskNeedRepeat: false,
-			/* temp set isNeedTimeSetter to true*/
-			isNeedTimeSetter: true,
-			startTimeDate: null,
-			endTimeDate: null
+			mode: this.props.mode || this.modes.add,
+			isHidingTimeSetter: true,
+			isShow: this.props.isShow || false
 		};
 
-		/* temp set task equals tasks[0] */
-		// ====== init the first object of tasks ======
-		// if there's no task, add one
-		this.tempTask = tasks[0] || ( ( () => {tasks.push(globalInitialTask);return tasks[0];} )() );
+		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
 
+		// this.backBtnClick = this.backBtnClick.bind(this);
+		this.completeBtnClick = this.completeBtnClick.bind(this);
+		// add mode
+		this.continueToAddBtn = this.continueToAddBtn.bind(this);
 	}
 	componentDidMount() {
-		/*const {currentTaskTypeMoments: c} = this;
+
+	}
+	taskTypePanelCallback(o) {
+		const {isHidingTimeSetter} = o;
+		if (isHidingTimeSetter != undefined) {
+			this.setState({
+				isHidingTimeSetter: isHidingTimeSetter
+			});
+		}
+	}
+	/*backBtnClick() {
 		this.setState({
-			startTimeDate: c[0],
-			endTimeDate: c[1]
-		});*/
+			isShow: false
+		});
+	}*/
+	completeBtnClick() {
+		this.setState({
+			isShow: false
+		});
+	}
+	// add mode
+	continueToAddBtn() {
+		const {taskInfoCallback} = this.props;
+
+		this.setState({
+			isShow: false
+		});
+
+		if (taskInfoCallback != undefined) {
+			taskInfoCallback({
+				isContinueToAddTask: true
+			});
+		}
 	}
 	render() {
-		
-		let {taskType, taskLevel, isTaskNeedTimer, isTaskNeedRepeat} = this.tempTask;
-
-		/*const taskTypesOptions = globalTaskTypes.map((item, index) => {
-			var text = '';
-			switch (item) {
-				case 'today': text = '今日目标';break;
-				case 'long': text = '长期目标';break;
-				case 'thisWeek': text = '本周目标';break;
-				case 'thisMonth': text = '本月目标';break;
-				case 'thisYear': text = '本年目标';break;
-				case 'tomorrow': text = '明日目标';break;
-				case 'nextWeek': text = '下周目标';break;
-				case 'nextMonth': text = '下月目标';break;
-				case 'nextYear': text = '明年目标';break;
-				defaut: break;
-			}
-			return {text: text, value: item};
-		});
-		const isNeedTimeSetter = state.isNeedTimeSetter;
-		
-		var timeContentTemplate = (moment) => (
-			moment ? (
-			<div style={{textAlign: 'center'}}>
-				<h3>{moment.format('HH:mm')}</h3>
-				<p>{moment.format('YYYY/M/D')}</p>
-			</div>) : ''
-		);
-
-		const startTime = timeContentTemplate(startTimeDate);
-		const endTime = timeContentTemplate(endTimeDate);*/
-
+		const {isHidingTimeSetter, mode, isShow} = this.state;
+		let {taskType, taskLevel, isTaskNeedTimer, isTaskNeedRepeat} = this.task;
 		const {Row, Column} = Grid;
+
 		return (
-			<div>
+			<div hidden={!isShow}>
 				<Grid padded>
-					<Row>
+					{/*<Row>
 						<Column>
-							<Button className='BackBtn' icon='angle left'/>
+							<Button className='BackBtn' icon='angle left' onClick={this.backBtnClick} />
 						</Column>
-					</Row>
+					</Row>*/}
 					<Row centered>
 						<Column width={14}>
 							<Input className='AddTask_TaskNameInput' placeholder='Task Content' fluid />
@@ -700,27 +711,37 @@ class TaskInfo extends React.Component {
 					</Row>
 					<Row centered>
 						<Column width={14}>
-							<TaskLevelButtons task={this.tempTask} />
+							<TaskLevelButtons task={this.task} />
 						</Column>	
 					</Row>
-					{/*<Row centered>
-						<Column width={14}>
-							
-						</Column>	
-					</Row>*/}
 					<Row centered>
 						<Column width={16}>
-							<TaskTypePanel task={this.tempTask} />
+							<TaskTypePanel task={this.task} taskTypePanelCallback={this.taskTypePanelCallback}/>
 						</Column>
 					</Row>
-					{/*<Row centered>
-						<Column width={6} textAlign='right'>
-							<Button content='完成' />
-						</Column>
-						<Column width={6}>
-							<Button content='继续添加' />
-						</Column>
-					</Row>*/}
+					<Row></Row>
+					{isHidingTimeSetter ? (
+						<Row>
+							<Column width={16}>
+								
+								<Grid padded>
+									<Row centered>
+										<Column width={12} textAlign='right'>
+											<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
+										</Column>
+									</Row>
+									{/* addmode */}
+									{mode === 'add' ? (
+										<Row centered>
+											<Column width={12} textAlign='right'>
+												<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
+											</Column>
+										</Row>
+									) : ''}
+								</Grid>
+							</Column>
+						</Row>
+					) : ''}
 				</Grid>
 				
 			</div>);
@@ -917,7 +938,7 @@ class ToDoList extends React.Component {
 				height: '100%'
 			}}>
 			    <TaskInfo />
-				{/*<Grid>
+				<Grid>
 				    <Grid.Row>
 				      <Grid.Column width={8}>
 				        <LongTaskContainer />
@@ -927,7 +948,7 @@ class ToDoList extends React.Component {
 				      </Grid.Column>
 				    </Grid.Row>
 				</Grid>
-				<MultiFunctionBtn />*/}
+				<MultiFunctionBtn />
 			</div>
 			);
 	}

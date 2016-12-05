@@ -9431,6 +9431,10 @@
 								isTaskNeedRepeat: false,
 								isNeedTimeSetter: true
 							});
+							/* taskTypePanelCallback to hide dom */
+							_this4.props.taskTypePanelCallback({
+								isHidingTimeSetter: false
+							});
 						}
 					});
 				}
@@ -9466,9 +9470,12 @@
 				/* @Tansporting checked value:  tansport default parameter */
 				if (!checked) {
 					this.setState({
-						// isTaskNeedTimer: false,
 						isNeedTimeSetter: true,
 						timeSetterTimeType: globalTimeSetterTimeType.start
+					});
+					/* taskTypePanelCallback to hide dom */
+					this.props.taskTypePanelCallback({
+						isHidingTimeSetter: false
 					});
 
 					if (!isFutureTaskType) {
@@ -9501,20 +9508,24 @@
 				var taskType = this.state.taskType;
 				var task = this.props.task;
 
-				if (startDate) {
+				if (startDate != undefined) {
 					this.setState({
 						startDate: startDate
 					});
 				}
-				if (endDate) {
+				if (endDate != undefined) {
 					this.setState({
 						endDate: endDate
 					});
 				}
 
-				if (isConfirmSetting) {
+				if (isConfirmSetting != undefined) {
 					this.setState({
 						isNeedTimeSetter: false
+					});
+					/* taskTypePanelCallback to hide dom */
+					this.props.taskTypePanelCallback({
+						isHidingTimeSetter: true
 					});
 
 					/* @Tansporting checked value: To activate checked(form false to true) */
@@ -9522,11 +9533,15 @@
 						isTaskNeedTimer: true
 					});
 				}
-				if (isCancelSetting) {
+				if (isCancelSetting != undefined) {
 					var isTaskNeedTimer = this.state.isTaskNeedTimer;
 
 					this.setState({
 						isNeedTimeSetter: false
+					});
+					/* taskTypePanelCallback to hide dom */
+					this.props.taskTypePanelCallback({
+						isHidingTimeSetter: true
 					});
 
 					if (!isTaskNeedTimer) {
@@ -9601,12 +9616,7 @@
 				});
 				var isNeedShowCheckboxGroup = taskType != 'long';
 				var minDate = startDate;
-				// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
 				var maxDate = endDate;
-				// const maxDate = null;
-
-				console.log('------------- minDate: ', maxDate.format());
-				console.log('------------- maxDate: ', minDate.format());
 
 				task.taskType = taskType;
 				task.isTaskNeedTimer = isTaskNeedTimer;
@@ -9626,6 +9636,7 @@
 	/**
 	 * class TaskLevelButtons
 	 * @receiveProps {object} task - current task
+	 * @receiveProps {string} mode - current mode
 	 */
 
 	var TaskLevelButtons = function (_React$Component4) {
@@ -9641,6 +9652,7 @@
 			_this5.state = {
 				level: task.taskLevel || 'b'
 			};
+
 			_this5.setLevel = _this5.setLevel.bind(_this5);
 			return _this5;
 		}
@@ -9648,12 +9660,9 @@
 		_createClass(TaskLevelButtons, [{
 			key: 'setLevel',
 			value: function setLevel(level) {
-				var task = this.props.task;
-
 				this.setState({
 					level: level
 				});
-				task.taskLevel = level;
 			}
 		}, {
 			key: 'render',
@@ -9661,6 +9670,9 @@
 				var _this6 = this;
 
 				var level = this.state.level;
+				var task = this.props.task;
+
+				task.taskLevel = level;
 
 				var buttonsInfo = {
 					a: {
@@ -9701,6 +9713,9 @@
 	/**
 	 * class TaskInfo
 	 * @receiveProps {object} task - task
+	 * @receiveProps {bool} isShow	
+	 * @receiveProps {function} taskInfoCallback	
+	 	{bool} isContinueToAddTask
 	 */
 
 	var TaskInfo = function (_React$Component5) {
@@ -9711,84 +9726,89 @@
 
 			var _this7 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
-			_this7.modes = ['add', 'edit'];
-			/* temp type before citing this.props.task.taskType */
-			_this7.defaultTaskType = 'today';
-			/* temp type before citing this.props.task.taskLevel */
-			_this7.defaultTaskLevel = 'b';
-			_this7.state = {
-				mode: 'add',
-				taskType: _this7.defaultTaskType,
-				taskLevel: _this7.defaultTaskLevel,
-				/* temp set isTaskNeedTimer to false*/
-				isTaskNeedTimer: false,
-				isTaskNeedRepeat: false,
-				/* temp set isNeedTimeSetter to true*/
-				isNeedTimeSetter: true,
-				startTimeDate: null,
-				endTimeDate: null
+			_this7.modes = {
+				add: 'add',
+				edit: 'edit'
 			};
-
-			/* temp set task equals tasks[0] */
-			// ====== init the first object of tasks ======
-			// if there's no task, add one
-			_this7.tempTask = tasks[0] || function () {
-				tasks.push(globalInitialTask);return tasks[0];
+			_this7.task = _this7.props.task || function () {
+				tasks.push(globalInitialTask);return tasks[tasks.length - 1];
 			}();
 
+			_this7.state = {
+				mode: _this7.props.mode || _this7.modes.add,
+				isHidingTimeSetter: true,
+				isShow: _this7.props.isShow || false
+			};
+
+			_this7.taskTypePanelCallback = _this7.taskTypePanelCallback.bind(_this7);
+
+			// this.backBtnClick = this.backBtnClick.bind(this);
+			_this7.completeBtnClick = _this7.completeBtnClick.bind(_this7);
+			// add mode
+			_this7.continueToAddBtn = _this7.continueToAddBtn.bind(_this7);
 			return _this7;
 		}
 
 		_createClass(TaskInfo, [{
 			key: 'componentDidMount',
-			value: function componentDidMount() {
-				/*const {currentTaskTypeMoments: c} = this;
-	   this.setState({
-	   	startTimeDate: c[0],
-	   	endTimeDate: c[1]
-	   });*/
+			value: function componentDidMount() {}
+		}, {
+			key: 'taskTypePanelCallback',
+			value: function taskTypePanelCallback(o) {
+				var isHidingTimeSetter = o.isHidingTimeSetter;
+
+				if (isHidingTimeSetter != undefined) {
+					this.setState({
+						isHidingTimeSetter: isHidingTimeSetter
+					});
+				}
+			}
+			/*backBtnClick() {
+	  	this.setState({
+	  		isShow: false
+	  	});
+	  }*/
+
+		}, {
+			key: 'completeBtnClick',
+			value: function completeBtnClick() {
+				this.setState({
+					isShow: false
+				});
+			}
+			// add mode
+
+		}, {
+			key: 'continueToAddBtn',
+			value: function continueToAddBtn() {
+				var taskInfoCallback = this.props.taskInfoCallback;
+
+				this.setState({
+					isShow: false
+				});
+
+				if (taskInfoCallback != undefined) {
+					taskInfoCallback({
+						isContinueToAddTask: true
+					});
+				}
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _tempTask = this.tempTask,
-				    taskType = _tempTask.taskType,
-				    taskLevel = _tempTask.taskLevel,
-				    isTaskNeedTimer = _tempTask.isTaskNeedTimer,
-				    isTaskNeedRepeat = _tempTask.isTaskNeedRepeat;
-
-				/*const taskTypesOptions = globalTaskTypes.map((item, index) => {
-	   	var text = '';
-	   	switch (item) {
-	   		case 'today': text = '今日目标';break;
-	   		case 'long': text = '长期目标';break;
-	   		case 'thisWeek': text = '本周目标';break;
-	   		case 'thisMonth': text = '本月目标';break;
-	   		case 'thisYear': text = '本年目标';break;
-	   		case 'tomorrow': text = '明日目标';break;
-	   		case 'nextWeek': text = '下周目标';break;
-	   		case 'nextMonth': text = '下月目标';break;
-	   		case 'nextYear': text = '明年目标';break;
-	   		defaut: break;
-	   	}
-	   	return {text: text, value: item};
-	   });
-	   const isNeedTimeSetter = state.isNeedTimeSetter;
-	   
-	   var timeContentTemplate = (moment) => (
-	   	moment ? (
-	   	<div style={{textAlign: 'center'}}>
-	   		<h3>{moment.format('HH:mm')}</h3>
-	   		<p>{moment.format('YYYY/M/D')}</p>
-	   	</div>) : ''
-	   );
-	   		const startTime = timeContentTemplate(startTimeDate);
-	   const endTime = timeContentTemplate(endTimeDate);*/
-
+				var _state5 = this.state,
+				    isHidingTimeSetter = _state5.isHidingTimeSetter,
+				    mode = _state5.mode,
+				    isShow = _state5.isShow;
+				var _task = this.task,
+				    taskType = _task.taskType,
+				    taskLevel = _task.taskLevel,
+				    isTaskNeedTimer = _task.isTaskNeedTimer,
+				    isTaskNeedRepeat = _task.isTaskNeedRepeat;
 				var Row = _semanticUiReact.Grid.Row,
 				    Column = _semanticUiReact.Grid.Column;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement(_semanticUiReact.Button, { className: 'BackBtn', icon: 'angle left' }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { task: this.tempTask }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskTypePanel, { task: this.tempTask })))));
+				return _react2.default.createElement('div', { hidden: !isShow }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { className: 'AddTask_TaskNameInput', placeholder: 'Task Content', fluid: true }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(TaskLevelButtons, { task: this.task }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskTypePanel, { task: this.task, taskTypePanelCallback: this.taskTypePanelCallback }))), _react2.default.createElement(Row, null), isHidingTimeSetter ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210', fluid: true, color: 'blue', onClick: this.completeBtnClick }))), mode === 'add' ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0', fluid: true, color: 'teal', onClick: this.continueToAddBtn }))) : ''))) : ''));
 			}
 		}]);
 
@@ -9828,9 +9848,9 @@
 			value: function render() {
 				var task = this.props.task;
 
-				var _state5 = this.state,
-				    editMode = _state5.editMode,
-				    showTaskInfo = _state5.showTaskInfo;
+				var _state6 = this.state,
+				    editMode = _state6.editMode,
+				    showTaskInfo = _state6.showTaskInfo;
 				var taskType = task.taskType,
 				    taskIsCompleted = task.taskIsCompleted;
 
@@ -9973,9 +9993,9 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state6 = this.state,
-				    taskType = _state6.taskType,
-				    taskIsCompleted = _state6.taskIsCompleted;
+				var _state7 = this.state,
+				    taskType = _state7.taskType,
+				    taskIsCompleted = _state7.taskIsCompleted;
 				var taskTypes = this.props.taskTypes;
 
 				return _react2.default.createElement('div', null, _react2.default.createElement(TitleBar, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, taskIsCompletedCallback: this.taskIsCompletedChanged }), _react2.default.createElement(TaskList, { taskType: taskType, taskIsCompleted: taskIsCompleted }));
@@ -10075,7 +10095,7 @@
 				return _react2.default.createElement('div', { style: {
 						width: '100%',
 						height: '100%'
-					} }, _react2.default.createElement(TaskInfo, null));
+					} }, _react2.default.createElement(TaskInfo, null), _react2.default.createElement(_semanticUiReact.Grid, null, _react2.default.createElement(_semanticUiReact.Grid.Row, null, _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 8 }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_semanticUiReact.Grid.Column, { width: 8 }, _react2.default.createElement(DayTaskContainer, null)))), _react2.default.createElement(MultiFunctionBtn, null));
 			}
 		}]);
 
