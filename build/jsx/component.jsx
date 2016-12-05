@@ -32,8 +32,9 @@ const globalInitialTask = {
 	taskLevel: 'b',
 	isTaskNeedTimer: false,
 	isTaskNeedRepeat: false,
+	createDate: null,	// use moment(...) to initial string to moment object
 	startDate: null,	// use moment(...) to initial string to moment object
-	endDate: null	// use moment(...) to initial string to moment object
+	endDate: null,	// use moment(...) to initial string to moment object
 };
 const globalTimeSetterTimeType = {
 	start: 'start',
@@ -134,8 +135,8 @@ class TimeSetter extends React.Component {
 		const {props} = this;
 		const {timeType, isNeedShow} = this.state;	 
 		const {Column, Row} = Grid;	
-		const isStartTime = timeType == globalTimeSetterTimeType.start;
-		const isEndTime = timeType == globalTimeSetterTimeType.end;
+		const isStartTime = timeType === globalTimeSetterTimeType.start;
+		const isEndTime = timeType === globalTimeSetterTimeType.end;
 
 		const minDate = props.minDate;
 		const maxDate = props.maxDate;
@@ -304,24 +305,17 @@ class TaskTypePanel extends React.Component {
  			/* parse task's string startdate and end date */
  			startDate: task.startDate ? moment(task.startDate) : defaultTaskTypeMoments[0],
  			endDate: task.endDate ? moment(task.endDate) : defaultTaskTypeMoments[0],
- 			minDate: null, 
- 			maxDate: null
  		};
 
 		this.taskTypeDropdownChange = this.taskTypeDropdownChange.bind(this);
 		this.isTaskNeedTimerCheckboxClick = this.isTaskNeedTimerCheckboxClick.bind(this);
 		this.isTaskNeedRepeatClick = this.isTaskNeedRepeatClick.bind(this);
 		this.timeSetterCallback = this.timeSetterCallback.bind(this);
+		this.startDatePanelClick = this.startDatePanelClick.bind(this);
+		this.endDatePanelClick = this.endDatePanelClick.bind(this);
 	}	
 	componentDidMount() {
-		const {startDate, endDate, minDate, maxDate} = this.state;
 
-		/*if (currentTaskTypeMoments) {
-			this.setState({
-				startDate:  this.taskTypeMomentsObj[taskType][0],
-				endDate:  this.taskTypeMomentsObj[taskType][1]
-			});
-		}*/
 	}
 	taskTypeDropdownChange(e, result) {
 		const {taskTypeMomentsObj} = this;
@@ -341,7 +335,7 @@ class TaskTypePanel extends React.Component {
 			}), () => {
 				this.setState({
 					startDate:  taskTypeMomentsObj[this.state.taskType][0],
-					endDate:  taskTypeMomentsObj[this.state.taskType][1]
+					endDate:  taskTypeMomentsObj[this.state.taskType][1],
 				});
 
 				if (!isLongTask) {
@@ -427,18 +421,27 @@ class TaskTypePanel extends React.Component {
 
 		if (isConfirmSetting) {
 			this.setState({
-				isNeedTimeSetter: false,
-				/* @Tansporting checked value: To activate checked(form false to true) */
+				isNeedTimeSetter: false
+			});
+
+			/* @Tansporting checked value: To activate checked(form false to true) */
+			this.setState({
 				isTaskNeedTimer: true
 			});
 		}
 		if (isCancelSetting) {
+			const {isTaskNeedTimer} = this.state;
+			
 			this.setState({
-				isNeedTimeSetter: false,
-				startDate: taskTypeMomentsObj[taskType][0],
-				endDate: taskTypeMomentsObj[taskType][1]
+				isNeedTimeSetter: false
 			});
 
+			if (!isTaskNeedTimer) {
+				this.setState({
+					startDate: taskTypeMomentsObj[taskType][0],
+					endDate: taskTypeMomentsObj[taskType][1]
+				});
+			}
 			if (taskType === 'long') {
 				this.setState({
 					taskType: globalDefaultTaskType
@@ -446,8 +449,20 @@ class TaskTypePanel extends React.Component {
 			}
 		}
 	}
+	startDatePanelClick() {
+		this.setState({
+			isNeedTimeSetter: true,
+			timeSetterTimeType: globalTimeSetterTimeType.start
+		});
+	}
+	endDatePanelClick() {
+		this.setState({
+			isNeedTimeSetter: true,
+			timeSetterTimeType: globalTimeSetterTimeType.end
+		});
+	}
 	render() {
-		let {currentTaskTypeMoments} = this;
+		let {taskTypeMomentsObj} = this;
 		let {task} = this.props;
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
 		const {Row, Column} = Grid;
@@ -477,11 +492,12 @@ class TaskTypePanel extends React.Component {
 			return {text: text, value: item};
 		});
 		const isNeedShowCheckboxGroup = taskType != 'long';
-		const minDate = currentTaskTypeMoments ?　currentTaskTypeMoments[0] : null;
+		const minDate = moment();
+		// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
 		const maxDate = moment().add(20, 'years');
+		// const maxDate = null;
 
-		// console.log((startDate ? startDate.format() : startDate), (endDate ? endDate.format() : endDate));
-		// console.log('task dates: ',task.startDate, task.endDate);
+		// console.log('maxDate: ', maxDate.format());
 
 		task.taskType = taskType;
 		task.isTaskNeedTimer = isTaskNeedTimer;
@@ -493,7 +509,7 @@ class TaskTypePanel extends React.Component {
 
 		return (
 			<div>
-				{  isNeedTimeSetter ? <TimeSetter timeSetterTimeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
+				{  isNeedTimeSetter ? <TimeSetter timeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
 				<Grid style={{border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block'}}>
 					<Row centered>
 						<Column width={14}>
@@ -514,7 +530,7 @@ class TaskTypePanel extends React.Component {
 					{isTaskNeedTimer ? (
 						<Row centered>
 							<Column width={6}>
-								<Segment textAlign='center'>
+								<Segment textAlign='center' onClick={this.startDatePanelClick}>
 									<h3>{startDate.format('HH:mm')}</h3>
 									<h5>{startDate.format('YYYY/M/D')}</h5>
 								</Segment>
@@ -523,7 +539,7 @@ class TaskTypePanel extends React.Component {
 							
 							</Column>
 							<Column width={6}>
-								<Segment textAlign='center'>
+								<Segment textAlign='center' onClick={this.endDatePanelClick}>
 									<h3>{endDate.format('HH:mm')}</h3>
 									<h5>{endDate.format('YYYY/M/D')}</h5>
 								</Segment>
@@ -637,7 +653,6 @@ class TaskInfo extends React.Component {
 	render() {
 		
 		let {taskType, taskLevel, isTaskNeedTimer, isTaskNeedRepeat} = this.tempTask;
-		// console.log(1, this.tempTask);
 
 		/*const taskTypesOptions = globalTaskTypes.map((item, index) => {
 			var text = '';

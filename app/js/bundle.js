@@ -9082,9 +9082,9 @@
 		taskLevel: 'b',
 		isTaskNeedTimer: false,
 		isTaskNeedRepeat: false,
+		createDate: null, // use moment(...) to initial string to moment object
 		startDate: null, // use moment(...) to initial string to moment object
-		endDate: null // use moment(...) to initial string to moment object
-	};
+		endDate: null };
 	var globalTimeSetterTimeType = {
 		start: 'start',
 		end: 'end'
@@ -9211,8 +9211,8 @@
 				var Column = _semanticUiReact.Grid.Column,
 				    Row = _semanticUiReact.Grid.Row;
 
-				var isStartTime = timeType == globalTimeSetterTimeType.start;
-				var isEndTime = timeType == globalTimeSetterTimeType.end;
+				var isStartTime = timeType === globalTimeSetterTimeType.start;
+				var isEndTime = timeType === globalTimeSetterTimeType.end;
 
 				var minDate = props.minDate;
 				var maxDate = props.maxDate;
@@ -9372,34 +9372,21 @@
 				timeSetterTimeType: globalTimeSetterTimeType.start,
 				/* parse task's string startdate and end date */
 				startDate: task.startDate ? (0, _moment2.default)(task.startDate) : defaultTaskTypeMoments[0],
-				endDate: task.endDate ? (0, _moment2.default)(task.endDate) : defaultTaskTypeMoments[0],
-				minDate: null,
-				maxDate: null
+				endDate: task.endDate ? (0, _moment2.default)(task.endDate) : defaultTaskTypeMoments[0]
 			};
 
 			_this3.taskTypeDropdownChange = _this3.taskTypeDropdownChange.bind(_this3);
 			_this3.isTaskNeedTimerCheckboxClick = _this3.isTaskNeedTimerCheckboxClick.bind(_this3);
 			_this3.isTaskNeedRepeatClick = _this3.isTaskNeedRepeatClick.bind(_this3);
 			_this3.timeSetterCallback = _this3.timeSetterCallback.bind(_this3);
+			_this3.startDatePanelClick = _this3.startDatePanelClick.bind(_this3);
+			_this3.endDatePanelClick = _this3.endDatePanelClick.bind(_this3);
 			return _this3;
 		}
 
 		_createClass(TaskTypePanel, [{
 			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var _state2 = this.state,
-				    startDate = _state2.startDate,
-				    endDate = _state2.endDate,
-				    minDate = _state2.minDate,
-				    maxDate = _state2.maxDate;
-
-				/*if (currentTaskTypeMoments) {
-	   	this.setState({
-	   		startDate:  this.taskTypeMomentsObj[taskType][0],
-	   		endDate:  this.taskTypeMomentsObj[taskType][1]
-	   	});
-	   }*/
-			}
+			value: function componentDidMount() {}
 		}, {
 			key: 'taskTypeDropdownChange',
 			value: function taskTypeDropdownChange(e, result) {
@@ -9409,11 +9396,11 @@
 
 				var value = result.value;
 				var task = this.props.task;
-				var _state3 = this.state,
-				    taskType = _state3.taskType,
-				    timeSetterTimeType = _state3.timeSetterTimeType,
-				    isNeedTimeSetter = _state3.isNeedTimeSetter,
-				    isTaskNeedTimer = _state3.isTaskNeedTimer;
+				var _state2 = this.state,
+				    taskType = _state2.taskType,
+				    timeSetterTimeType = _state2.timeSetterTimeType,
+				    isNeedTimeSetter = _state2.isNeedTimeSetter,
+				    isTaskNeedTimer = _state2.isTaskNeedTimer;
 
 				var isLongTask = value == 'long';
 				var isValueDifferent = value != taskType;
@@ -9455,9 +9442,9 @@
 
 				var checked = result.checked;
 				var task = this.props.task;
-				var _state4 = this.state,
-				    isNeedTimeSetter = _state4.isNeedTimeSetter,
-				    taskType = _state4.taskType;
+				var _state3 = this.state,
+				    isNeedTimeSetter = _state3.isNeedTimeSetter,
+				    taskType = _state3.taskType;
 
 				var isFutureTaskType = globalFutureTaskTypes.includes(taskType);
 
@@ -9527,18 +9514,27 @@
 
 				if (isConfirmSetting) {
 					this.setState({
-						isNeedTimeSetter: false,
-						/* @Tansporting checked value: To activate checked(form false to true) */
+						isNeedTimeSetter: false
+					});
+
+					/* @Tansporting checked value: To activate checked(form false to true) */
+					this.setState({
 						isTaskNeedTimer: true
 					});
 				}
 				if (isCancelSetting) {
+					var isTaskNeedTimer = this.state.isTaskNeedTimer;
+
 					this.setState({
-						isNeedTimeSetter: false,
-						startDate: taskTypeMomentsObj[taskType][0],
-						endDate: taskTypeMomentsObj[taskType][1]
+						isNeedTimeSetter: false
 					});
 
+					if (!isTaskNeedTimer) {
+						this.setState({
+							startDate: taskTypeMomentsObj[taskType][0],
+							endDate: taskTypeMomentsObj[taskType][1]
+						});
+					}
 					if (taskType === 'long') {
 						this.setState({
 							taskType: globalDefaultTaskType
@@ -9547,18 +9543,34 @@
 				}
 			}
 		}, {
+			key: 'startDatePanelClick',
+			value: function startDatePanelClick() {
+				this.setState({
+					isNeedTimeSetter: true,
+					timeSetterTimeType: globalTimeSetterTimeType.start
+				});
+			}
+		}, {
+			key: 'endDatePanelClick',
+			value: function endDatePanelClick() {
+				this.setState({
+					isNeedTimeSetter: true,
+					timeSetterTimeType: globalTimeSetterTimeType.end
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var currentTaskTypeMoments = this.currentTaskTypeMoments;
+				var taskTypeMomentsObj = this.taskTypeMomentsObj;
 				var task = this.props.task;
-				var _state5 = this.state,
-				    taskType = _state5.taskType,
-				    isTaskNeedTimer = _state5.isTaskNeedTimer,
-				    isTaskNeedRepeat = _state5.isTaskNeedRepeat,
-				    isNeedTimeSetter = _state5.isNeedTimeSetter,
-				    timeSetterTimeType = _state5.timeSetterTimeType,
-				    startDate = _state5.startDate,
-				    endDate = _state5.endDate;
+				var _state4 = this.state,
+				    taskType = _state4.taskType,
+				    isTaskNeedTimer = _state4.isTaskNeedTimer,
+				    isTaskNeedRepeat = _state4.isTaskNeedRepeat,
+				    isNeedTimeSetter = _state4.isNeedTimeSetter,
+				    timeSetterTimeType = _state4.timeSetterTimeType,
+				    startDate = _state4.startDate,
+				    endDate = _state4.endDate;
 				var Row = _semanticUiReact.Grid.Row,
 				    Column = _semanticUiReact.Grid.Column;
 
@@ -9588,11 +9600,12 @@
 					return { text: text, value: item };
 				});
 				var isNeedShowCheckboxGroup = taskType != 'long';
-				var minDate = currentTaskTypeMoments ? currentTaskTypeMoments[0] : null;
+				var minDate = (0, _moment2.default)();
+				// const maxDate = taskType === 'long' ? moment().add(20, 'years') : endDate;
 				var maxDate = (0, _moment2.default)().add(20, 'years');
+				// const maxDate = null;
 
-				// console.log((startDate ? startDate.format() : startDate), (endDate ? endDate.format() : endDate));
-				// console.log('task dates: ',task.startDate, task.endDate);
+				// console.log('maxDate: ', maxDate.format());
 
 				task.taskType = taskType;
 				task.isTaskNeedTimer = isTaskNeedTimer;
@@ -9602,7 +9615,7 @@
 				task.startDate = startDate;
 				task.endDate = endDate;
 
-				return _react2.default.createElement('div', null, isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeSetterTimeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '', _react2.default.createElement(_semanticUiReact.Grid, { style: { border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center' }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center' }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''));
+				return _react2.default.createElement('div', null, isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '', _react2.default.createElement(_semanticUiReact.Grid, { style: { border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''));
 			}
 		}]);
 
@@ -9742,7 +9755,6 @@
 				    taskLevel = _tempTask.taskLevel,
 				    isTaskNeedTimer = _tempTask.isTaskNeedTimer,
 				    isTaskNeedRepeat = _tempTask.isTaskNeedRepeat;
-				// console.log(1, this.tempTask);
 
 				/*const taskTypesOptions = globalTaskTypes.map((item, index) => {
 	   	var text = '';
@@ -9815,9 +9827,9 @@
 			value: function render() {
 				var task = this.props.task;
 
-				var _state6 = this.state,
-				    editMode = _state6.editMode,
-				    showTaskInfo = _state6.showTaskInfo;
+				var _state5 = this.state,
+				    editMode = _state5.editMode,
+				    showTaskInfo = _state5.showTaskInfo;
 				var taskType = task.taskType,
 				    taskIsCompleted = task.taskIsCompleted;
 
@@ -9960,9 +9972,9 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state7 = this.state,
-				    taskType = _state7.taskType,
-				    taskIsCompleted = _state7.taskIsCompleted;
+				var _state6 = this.state,
+				    taskType = _state6.taskType,
+				    taskIsCompleted = _state6.taskIsCompleted;
 				var taskTypes = this.props.taskTypes;
 
 				return _react2.default.createElement('div', null, _react2.default.createElement(TitleBar, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, taskIsCompletedCallback: this.taskIsCompletedChanged }), _react2.default.createElement(TaskList, { taskType: taskType, taskIsCompleted: taskIsCompleted }));
