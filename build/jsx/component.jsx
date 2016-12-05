@@ -113,13 +113,14 @@ class TimeSetter extends React.Component {
 				position: 'absolute',
 				left: 0,
 				top: 0,
-				height: window.screen.availHeight,
+				width: document.body.clientWidth,	
+				height: document.body.clientHeight,
 				background: 'white',
 				border: '1px solid gray'
 			}} ref={(div) => {
 				let t = null; 
 				if (div) { 
-					t = div.getClientRects()[0].top - div.scrollTop;
+					t = div.getClientRects()[0].top;
 				} 
 				if (t) {
 					div.style.top = -1 * t;
