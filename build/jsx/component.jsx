@@ -31,7 +31,9 @@ const globalInitialTask = {
 	taskType: globalDefaultTaskType,
 	taskLevel: 'b',
 	isTaskNeedTimer: false,
-	isTaskNeedRepeat: false
+	isTaskNeedRepeat: false,
+	startDate: null,	// use moment(...) to initial string to moment object
+	endDate: null	// use moment(...) to initial string to moment object
 };
 const globalTimeSetterTimeType = {
 	start: 'start',
@@ -299,8 +301,11 @@ class TaskTypePanel extends React.Component {
  			isTaskNeedRepeat: task.isTaskNeedRepeat || false,
  			isNeedTimeSetter: false,
  			timeSetterTimeType: globalTimeSetterTimeType.start,
- 			startDate: task.startDate || defaultTaskTypeMoments[0],
- 			endDate: task.endDate || defaultTaskTypeMoments[1]
+ 			/* parse task's string startdate and end date */
+ 			startDate: task.startDate ? moment(task.startDate) : defaultTaskTypeMoments[0],
+ 			endDate: task.endDate ? moment(task.endDate) : defaultTaskTypeMoments[0],
+ 			minDate: null, 
+ 			maxDate: null
  		};
 
 		this.taskTypeDropdownChange = this.taskTypeDropdownChange.bind(this);
@@ -309,7 +314,7 @@ class TaskTypePanel extends React.Component {
 		this.timeSetterCallback = this.timeSetterCallback.bind(this);
 	}	
 	componentDidMount() {
-		const {taskType} = this.state;
+		const {startDate, endDate, minDate, maxDate} = this.state;
 
 		/*if (currentTaskTypeMoments) {
 			this.setState({
@@ -381,7 +386,7 @@ class TaskTypePanel extends React.Component {
 		/* @Tansporting checked value:  tansport default parameter */
 		if (!checked) {
 			this.setState({
-				isTaskNeedTimer: false,
+				// isTaskNeedTimer: false,
 				isNeedTimeSetter: true,
 				timeSetterTimeType: globalTimeSetterTimeType.start,
 			});
@@ -422,15 +427,10 @@ class TaskTypePanel extends React.Component {
 
 		if (isConfirmSetting) {
 			this.setState({
-				isNeedTimeSetter: false
-			});
-
-			/* @Tansporting checked value: To activate checked(form false to true) */
-			this.setState({
+				isNeedTimeSetter: false,
+				/* @Tansporting checked value: To activate checked(form false to true) */
 				isTaskNeedTimer: true
 			});
-			// save task
-			// task.isTaskNeedTimer = true;
 		}
 		if (isCancelSetting) {
 			this.setState({
@@ -480,13 +480,17 @@ class TaskTypePanel extends React.Component {
 		const minDate = currentTaskTypeMoments ?　currentTaskTypeMoments[0] : null;
 		const maxDate = moment().add(20, 'years');
 
+		// console.log((startDate ? startDate.format() : startDate), (endDate ? endDate.format() : endDate));
+		// console.log('task dates: ',task.startDate, task.endDate);
+
 		task.taskType = taskType;
-		task.isNeedTimeSetter = isNeedTimeSetter;
+		task.isTaskNeedTimer = isTaskNeedTimer;
 		task.isTaskNeedRepeat = isTaskNeedRepeat;
 		task.isNeedTimeSetter = isNeedTimeSetter;
 		task.timeSetterTimeType = timeSetterTimeType;
 		task.startDate = startDate;
 		task.endDate = endDate;
+
 		return (
 			<div>
 				{  isNeedTimeSetter ? <TimeSetter timeSetterTimeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
@@ -510,16 +514,18 @@ class TaskTypePanel extends React.Component {
 					{isTaskNeedTimer ? (
 						<Row centered>
 							<Column width={6}>
-								<Segment>
-									startTimeJsx...
+								<Segment textAlign='center'>
+									<h3>{startDate.format('HH:mm')}</h3>
+									<h5>{startDate.format('YYYY/M/D')}</h5>
 								</Segment>
 							</Column>
 							<Column width={2} textAlign='center' verticalAlign='middle'>
 							
 							</Column>
 							<Column width={6}>
-								<Segment>
-									endTimeJsx...
+								<Segment textAlign='center'>
+									<h3>{endDate.format('HH:mm')}</h3>
+									<h5>{endDate.format('YYYY/M/D')}</h5>
 								</Segment>
 							</Column>
 						</Row>
@@ -615,14 +621,12 @@ class TaskInfo extends React.Component {
 			endTimeDate: null
 		};
 
-
-
 		/* temp set task equals tasks[0] */
 		// ====== init the first object of tasks ======
 		// if there's no task, add one
 		this.tempTask = tasks[0] || ( ( () => {tasks.push(globalInitialTask);return tasks[0];} )() );
 
-		}
+	}
 	componentDidMount() {
 		/*const {currentTaskTypeMoments: c} = this;
 		this.setState({
