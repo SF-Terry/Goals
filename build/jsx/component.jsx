@@ -1,8 +1,9 @@
 import React,  { Component } from 'react';
 import {render} from 'react-dom';
 import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment, Icon, Menu } from 'semantic-ui-react'
+import Draggable, {DraggableCore} from 'react-draggable'; 
 import observe from '../js/observe.js';
-import {getSingle} from '../js/tool.js';
+import {getSingle, getShowOrHideDomStyle} from '../js/tool.js';
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -26,6 +27,11 @@ const globalDefaultTaskType = 'today';
 
 const globalDefaultLevel = 'b';
 
+const globalTaskInfoMode = {
+	add: 'add',
+	edit: 'edit'
+}
+
 const globalInitialTask = {
 	name: '',
 	taskType: globalDefaultTaskType,
@@ -44,7 +50,7 @@ const globalTimeSetterTimeType = {
 setTimeout(() => {
 	// tasks.push({name: 'task1', level: 'a'});
 	// tasks[0].name = 'task3';
-	console.dir(tasks[0]);
+	// console.dir(tasks[0]);
 	// tasks[0].level = 'd';
 	// settings.push({email: 'test1@testEmail.com'});
 }, 1000);
@@ -143,26 +149,13 @@ class TimeSetter extends React.Component {
 		const startDate = props.startDate;
 		const endDate = props.endDate;
 		return (
-			<div style={{
-				position: 'absolute',
+			<div className='TimeSetter' style={{
+				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: document.body.clientWidth,	
-				height: document.body.clientHeight,
-				background: 'white',
-				border: '1px solid gray',
+				width: window.screen.availWidth,
+				height: window.screen.availHeight,
 				display: isNeedShow ? 'block' : 'none'
-			}} ref={(div) => {
-				let t = null; 
-				if (div) { 
-					const rects = div.getClientRects();
-					const rect = rects ? rects[0] : null;
-					const top = rect ? rect.top : null;
-					t = top;
-				} 
-				if (t) {
-					div.style.top = -1 * t;
-				}  
 			}}>
 				<Grid style={{marginTop: "20px"}}>
 					<Row>
@@ -175,10 +168,10 @@ class TimeSetter extends React.Component {
 					</Row>
 					<Row>
 						<Column>
-							<div style={{width: isStartTime ? '100%' : '0px', height: isStartTime ? 'auto' : '0px', overflow: 'hidden'}} >
+							<div style={getShowOrHideDomStyle(isStartTime)} >
 								<Timepicker minDate={minDate} maxDate={maxDate} defaultDate={startDate} timepickerCallback={this.startTimepickerCallback}/>
 							</div>
-							<div style={{width: isEndTime ? '100%' : '0px', height: isEndTime ? 'auto' : '0px', overflow: 'hidden'}}>
+							<div style={getShowOrHideDomStyle(isEndTime)}>
 								<Timepicker minDate={minDate} maxDate={maxDate} defaultDate={endDate} timepickerCallback={this.endTimepickerCallback}/>
 							</div>
 						</Column>
@@ -349,10 +342,6 @@ class TaskTypePanel extends React.Component {
 						isTaskNeedRepeat: false,
 						isNeedTimeSetter: true
 					});
-					/* taskTypePanelCallback to hide dom */
-					this.props.taskTypePanelCallback({
-						isHidingTimeSetter: false
-					});
 				}
 			});
 			
@@ -386,10 +375,6 @@ class TaskTypePanel extends React.Component {
 			this.setState({
 				isNeedTimeSetter: true,
 				timeSetterTimeType: globalTimeSetterTimeType.start,
-			});
-			/* taskTypePanelCallback to hide dom */
-			this.props.taskTypePanelCallback({
-				isHidingTimeSetter: false
 			});
 
 			if (!isFutureTaskType) {
@@ -430,10 +415,6 @@ class TaskTypePanel extends React.Component {
 			this.setState({
 				isNeedTimeSetter: false
 			});
-			/* taskTypePanelCallback to hide dom */
-			this.props.taskTypePanelCallback({
-				isHidingTimeSetter: true
-			});
 
 			/* @Tansporting checked value: To activate checked(form false to true) */
 			this.setState({
@@ -445,10 +426,6 @@ class TaskTypePanel extends React.Component {
 
 			this.setState({
 				isNeedTimeSetter: false
-			});
-			/* taskTypePanelCallback to hide dom */
-			this.props.taskTypePanelCallback({
-				isHidingTimeSetter: true
 			});
 
 			if (!isTaskNeedTimer) {
@@ -632,40 +609,22 @@ class TaskLevelButtons extends React.Component {
  * @receiveProps {bool} isShow	
  * @receiveProps {function} taskInfoCallback	
  	{bool} isContinueToAddTask
+ 	{bool} isShowTaskInfo
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.modes = {
-			add: 'add',
-			edit: 'edit'
-		};		
 		this.task = this.props.task || ( ( () => {tasks.push(globalInitialTask);return tasks[ 	tasks.length - 1 ];} )() );
 
 		this.state = {
-			mode: this.props.mode || this.modes.add,
-			isHidingTimeSetter: true,
-			isShow: this.props.isShow || false
+			mode: globalTaskInfoMode.add
 		};
-
-		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
-	}
-	componentDidMount() {
-
-	}
-	taskTypePanelCallback(o) {
-		const {isHidingTimeSetter} = o;
-		if (isHidingTimeSetter != undefined) {
-			this.setState({
-				isHidingTimeSetter: isHidingTimeSetter
-			});
-		}
 	}
 	/*backBtnClick() {
 		this.setState({
@@ -673,17 +632,17 @@ class TaskInfo extends React.Component {
 		});
 	}*/
 	completeBtnClick() {
-		this.setState({
-			isShow: false
-		});
+		const {taskInfoCallback} = this.props;
+
+		if (taskInfoCallback != undefined) {
+			taskInfoCallback({
+				isShowTaskInfo: false
+			});
+		}
 	}
 	// add mode
 	continueToAddBtn() {
 		const {taskInfoCallback} = this.props;
-
-		this.setState({
-			isShow: false
-		});
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
@@ -692,12 +651,18 @@ class TaskInfo extends React.Component {
 		}
 	}
 	render() {
-		const {isHidingTimeSetter, mode, isShow} = this.state;
+		const {isHidingTimeSetter, mode} = this.state;
 		let {taskType, taskLevel, isTaskNeedTimer, isTaskNeedRepeat} = this.task;
 		const {Row, Column} = Grid;
 
 		return (
-			<div hidden={!isShow}>
+			<div className="TaskInfo" style={{
+				position: 'fixed',
+				left: 0,
+				top: 0,
+				width: window.screen.availWidth,
+				height: window.screen.availHeight
+			}}>
 				<Grid padded>
 					{/*<Row>
 						<Column>
@@ -716,34 +681,30 @@ class TaskInfo extends React.Component {
 					</Row>
 					<Row centered>
 						<Column width={16}>
-							<TaskTypePanel task={this.task} taskTypePanelCallback={this.taskTypePanelCallback}/>
+							<TaskTypePanel task={this.task} />
 						</Column>
 					</Row>
 					<Row></Row>
-					{isHidingTimeSetter ? (
-						<Row>
-							<Column width={16}>
-								
-								<Grid padded>
+					<Row>
+						<Column width={16}>
+							<Grid padded>
+								<Row centered>
+									<Column width={12} textAlign='right'>
+										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
+									</Column>
+								</Row>
+								{/* addmode */}
+								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
 										<Column width={12} textAlign='right'>
-											<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
+											<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
 										</Column>
 									</Row>
-									{/* addmode */}
-									{mode === 'add' ? (
-										<Row centered>
-											<Column width={12} textAlign='right'>
-												<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
-											</Column>
-										</Row>
-									) : ''}
-								</Grid>
-							</Column>
-						</Row>
-					) : ''}
+								) : ''}
+							</Grid>
+						</Column>
+					</Row>
 				</Grid>
-				
 			</div>);
 	}
 }
@@ -919,10 +880,71 @@ class LongTaskContainer extends React.Component {
 
 /**
  * class MultiFunctionBtn
+ * @receiveProps {function} multiFunctionBtnCallback
+ 	{bool} isClicked
  */
 class MultiFunctionBtn extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			isShowMenu: false
+		}
+
+		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
+		this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
+		this.handleClickExportBtn = this.handleClickExportBtn.bind(this);
+		this.handleClickSettingBtn = this.handleClickSettingBtn.bind(this);
+	}
+	handleClickFunctionBtn() {
+		this.setState((prevState) => ({
+			isShowMenu: !prevState.isShowMenu
+		}));
+	}
+	handleClickAddBtn() {
+		this.props.multiFunctionBtnCallback({
+			isAddBtnClicked: true
+		});
+		this.state = {
+			isShowMenu: false
+		}
+	}
+	handleClickExportBtn() {
+		this.state = {
+			isShowMenu: false
+		}
+	}
+	handleClickSettingBtn() {
+		this.state = {
+			isShowMenu: false
+		}
+	}
 	render() {
-		return <button>MultiFunctionBtn</button>;
+		const {isShowMenu} = this.state;
+		return (
+			<div className='MultiFunctionBtn'>
+				<Draggable>
+					<div>
+						
+						<div style={getShowOrHideDomStyle(isShowMenu)}>
+							<p>
+								<Button className='ovalButton' size='huge' icon='setting' circular color='brown' onClick={this.handleClickSettingBtn} />
+							</p>
+							<p>
+								<Button className='ovalButton' size='huge' icon='sign out' circular color='violet' onClick={this.handleClickExportBtn} />
+							</p>
+							<p>
+								<Button className='ovalButton' size='huge' icon='plus' circular color='blue' onClick={this.handleClickAddBtn} />
+							</p>
+							<p>
+							</p>
+						</div>
+						<p>
+							<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />
+						</p>
+					</div>
+				</Draggable>
+			</div>
+		);
 	}
 }
 
@@ -931,13 +953,52 @@ class MultiFunctionBtn extends React.Component {
  * class ToDoList
  */
 class ToDoList extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			taskInfoMode: globalTaskInfoMode.add,
+			isShowTaskInfo: false
+		};
+
+		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
+		this.taskInfoCallback = this.taskInfoCallback.bind(this);
+	}
+	multiFunctionBtnCallback(o) {
+		const {isAddBtnClicked} = o;
+
+		if (isAddBtnClicked != undefined) {
+			if (isAddBtnClicked) {
+				this.setState({
+					taskInfoMode:  globalTaskInfoMode.add,
+					isShowTaskInfo: true
+				});
+			}
+		}
+	}
+	taskInfoCallback(o) {
+		const {isShowTaskInfo} = o;
+
+		if (isShowTaskInfo != undefined) {
+			if (!isShowTaskInfo) {
+				this.setState({
+					isShowTaskInfo: false
+				});
+			}
+		}
+	}
 	render() {
+		const {taskInfoMode, isShowTaskInfo} = this.state;
+		console.log(isShowTaskInfo);
 		return (
-			<div style={{
+			<div className='ToDoList' style={{
 				width: '100%',
 				height: '100%'
 			}}>
-			    <TaskInfo />
+				{isShowTaskInfo ? (
+					<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>
+				) : ''}
+
 				<Grid>
 				    <Grid.Row>
 				      <Grid.Column width={8}>
@@ -948,7 +1009,7 @@ class ToDoList extends React.Component {
 				      </Grid.Column>
 				    </Grid.Row>
 				</Grid>
-				<MultiFunctionBtn />
+				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 			</div>
 			);
 	}
