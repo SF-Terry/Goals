@@ -2,6 +2,8 @@ import React,  { Component } from 'react';
 import {render, findDOMNode} from 'react-dom';
 import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown } from 'semantic-ui-react';
 import Draggable from 'react-draggable'; 
+import Tabs from 'muicss/lib/react/tabs';
+import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle} from '../js/tool.js';
 
@@ -513,7 +515,7 @@ class TaskTypePanel extends React.Component {
 
 		return (
 			<div>
-				<Grid style={{border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block'}}>
+				<Grid style={{display: isNeedTimeSetter ? 'none' : 'block'}}>
 					<Row centered>
 						<Column width={14}>
 							<Dropdown fluid selection className='TaskTypeSelector' value={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
@@ -617,7 +619,7 @@ class TaskLevelButtons extends React.Component {
 			);
 		}
 		return (
-			<div style={{textAlign: 'center', border: '1px solid red'}}>
+			<div style={{textAlign: 'center'}}>
 				{buttons}
 			</div>
 		);
@@ -637,8 +639,6 @@ class TaskLevelButtons extends React.Component {
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
-
-		console.log(this.props);
 
 		const {mode} = this.props;
 
@@ -893,13 +893,13 @@ class TaskList extends React.Component {
 }
 
 /**
- * class TitleBar
+ * class TaskTypeSelector
  * @receiveProps {string} taskType - current taskType
  * @receiveProps {string} taskTypes - current taskTypes
  * @receiveProps {function} taskTypeCallback - return current taskType
  * @receiveProps {function} isTaskCompletedCallback - return current isTaskCompleted
  */
-class TitleBar extends React.Component {
+class TaskTypeSelector extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -912,9 +912,7 @@ class TitleBar extends React.Component {
 		let singleText = <p>{taskTypes[0]}</p>
 		const showContent = taskTypes.length > 1 ? dropDown : singleText;
 		return (
-			<div style={{
-				border: '1px solid red'
-			}}>
+			<div>
 				{showContent}
 			</div>
 		);
@@ -949,7 +947,17 @@ class TaskListContainer extends React.Component {
 		const {taskTypes} = this.props;
 		return (
 			<div>
-				<TitleBar taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} isTaskCompletedCallback={this.isTaskCompletedChanged}/>
+				<Grid padded>
+					<Row>
+						<Column width={12}>
+							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} isTaskCompletedCallback={this.isTaskCompletedChanged}/>
+						</Column>
+						<Column width={4}>
+
+						</Column>
+					</Row>
+
+				</Grid>
 				<TaskList taskType={taskType} isTaskCompleted={isTaskCompleted} />
 			</div>
 		);
@@ -1085,7 +1093,6 @@ class ToDoList extends React.Component {
 			});
 		}
 		if (isContinueToAddTask != undefined && isContinueToAddTask) {
-			console.log('isContinueToAddTask', isContinueToAddTask);
 			this.setState({
 				isShowTaskInfo: false,
 				task: null,
@@ -1122,7 +1129,6 @@ class ToDoList extends React.Component {
 	render() {
 		const {taskInfoMode, isShowTaskInfo, task} = this.state;
 
-		console.log('taskInfoMode state changed', taskInfoMode);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
@@ -1132,16 +1138,24 @@ class ToDoList extends React.Component {
 					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}
 
-				<Grid>
+				{/*<Grid>
 				    <Row>
 				      <Column width={8}>
-				        <LongTaskContainer />
+				        
 				      </Column>
 				      <Column width={8}>
-				        <DayTaskContainer />
+				        
 				      </Column>
 				    </Row>
-				</Grid>
+				</Grid>*/}
+				<Tabs justified={true}>
+		            <Tab label="长期目标">
+		            	<LongTaskContainer />
+		            </Tab>
+		            <Tab label="今日目标">
+		            	<DayTaskContainer />
+		            </Tab>
+		        </Tabs>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 			</div>
 			);

@@ -9018,6 +9018,14 @@
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
+	var _tabs = __webpack_require__(1224);
+
+	var _tabs2 = _interopRequireDefault(_tabs);
+
+	var _tab = __webpack_require__(1226);
+
+	var _tab2 = _interopRequireDefault(_tab);
+
 	var _observe = __webpack_require__(1017);
 
 	var _observe2 = _interopRequireDefault(_observe);
@@ -9628,7 +9636,7 @@
 					});
 				}
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
 			}
 		}]);
 
@@ -9711,7 +9719,7 @@
 				for (var buttonLevel in buttonsInfo) {
 					_loop(buttonLevel);
 				}
-				return _react2.default.createElement('div', { style: { textAlign: 'center', border: '1px solid red' } }, buttons);
+				return _react2.default.createElement('div', { style: { textAlign: 'center' } }, buttons);
 			}
 		}]);
 
@@ -9735,8 +9743,6 @@
 			_classCallCheck(this, TaskInfo);
 
 			var _this7 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
-
-			console.log(_this7.props);
 
 			var mode = _this7.props.mode;
 
@@ -9977,23 +9983,23 @@
 	}(_react2.default.Component);
 
 	/**
-	 * class TitleBar
+	 * class TaskTypeSelector
 	 * @receiveProps {string} taskType - current taskType
 	 * @receiveProps {string} taskTypes - current taskTypes
 	 * @receiveProps {function} taskTypeCallback - return current taskType
 	 * @receiveProps {function} isTaskCompletedCallback - return current isTaskCompleted
 	 */
 
-	var TitleBar = function (_React$Component8) {
-		_inherits(TitleBar, _React$Component8);
+	var TaskTypeSelector = function (_React$Component8) {
+		_inherits(TaskTypeSelector, _React$Component8);
 
-		function TitleBar(props) {
-			_classCallCheck(this, TitleBar);
+		function TaskTypeSelector(props) {
+			_classCallCheck(this, TaskTypeSelector);
 
-			return _possibleConstructorReturn(this, (TitleBar.__proto__ || Object.getPrototypeOf(TitleBar)).call(this, props));
+			return _possibleConstructorReturn(this, (TaskTypeSelector.__proto__ || Object.getPrototypeOf(TaskTypeSelector)).call(this, props));
 		}
 
-		_createClass(TitleBar, [{
+		_createClass(TaskTypeSelector, [{
 			key: 'render',
 			value: function render() {
 				var taskTypes = this.props.taskTypes;
@@ -10005,13 +10011,11 @@
 				var dropDown = _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: selectValue, options: taskTypesOptions });
 				var singleText = _react2.default.createElement('p', null, taskTypes[0]);
 				var showContent = taskTypes.length > 1 ? dropDown : singleText;
-				return _react2.default.createElement('div', { style: {
-						border: '1px solid red'
-					} }, showContent);
+				return _react2.default.createElement('div', null, showContent);
 			}
 		}]);
 
-		return TitleBar;
+		return TaskTypeSelector;
 	}(_react2.default.Component);
 
 	/**
@@ -10057,7 +10061,7 @@
 				    isTaskCompleted = _state6.isTaskCompleted;
 				var taskTypes = this.props.taskTypes;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(TitleBar, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, isTaskCompletedCallback: this.isTaskCompletedChanged }), _react2.default.createElement(TaskList, { taskType: taskType, isTaskCompleted: isTaskCompleted }));
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, isTaskCompletedCallback: this.isTaskCompletedChanged })), _react2.default.createElement(Column, { width: 4 }))), _react2.default.createElement(TaskList, { taskType: taskType, isTaskCompleted: isTaskCompleted }));
 			}
 		}]);
 
@@ -10235,7 +10239,6 @@
 					});
 				}
 				if (isContinueToAddTask != undefined && isContinueToAddTask) {
-					console.log('isContinueToAddTask', isContinueToAddTask);
 					this.setState({
 						isShowTaskInfo: false,
 						task: null,
@@ -10283,11 +10286,10 @@
 				    isShowTaskInfo = _state7.isShowTaskInfo,
 				    task = _state7.task;
 
-				console.log('taskInfoMode state changed', taskInfoMode);
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',
 						height: '100%'
-					} }, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_semanticUiReact.Grid, null, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(DayTaskContainer, null)))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
+					} }, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
 			}
 		}]);
 
@@ -87140,6 +87142,981 @@
 	}();
 
 	module.exports = new Storekeeper("todolistStorekeeper");
+
+/***/ },
+/* 1224 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var babelHelpers = __webpack_require__(1225);
+	/**
+	 * MUI React tabs module
+	 * @module react/tabs
+	 */
+	/* jshint quotmark:false */
+	// jscs:disable validateQuoteMarks
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(301);
+
+	var _react2 = babelHelpers.interopRequireDefault(_react);
+
+	var _tab = __webpack_require__(1226);
+
+	var _tab2 = babelHelpers.interopRequireDefault(_tab);
+
+	var _util = __webpack_require__(1227);
+
+	var util = babelHelpers.interopRequireWildcard(_util);
+
+	var PropTypes = _react2.default.PropTypes,
+	    tabsBarClass = 'mui-tabs__bar',
+	    tabsBarJustifiedClass = 'mui-tabs__bar--justified',
+	    tabsPaneClass = 'mui-tabs__pane',
+	    isActiveClass = 'mui--is-active';
+
+	/**
+	 * Tabs constructor
+	 * @class
+	 */
+
+	var Tabs = function (_React$Component) {
+	  babelHelpers.inherits(Tabs, _React$Component);
+
+	  function Tabs(props) {
+	    babelHelpers.classCallCheck(this, Tabs);
+
+	    var _this = babelHelpers.possibleConstructorReturn(this, (Tabs.__proto__ || Object.getPrototypeOf(Tabs)).call(this, props));
+
+	    _this.state = { currentSelectedIndex: props.initialSelectedIndex };
+	    return _this;
+	  }
+
+	  babelHelpers.createClass(Tabs, [{
+	    key: 'onClick',
+	    value: function onClick(i, tab, ev) {
+	      if (i !== this.state.currentSelectedIndex) {
+	        this.setState({ currentSelectedIndex: i });
+
+	        // onActive callback
+	        if (tab.props.onActive) tab.props.onActive(tab);
+
+	        // onChange callback
+	        if (this.props.onChange) {
+	          this.props.onChange(i, tab.props.value, tab, ev);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          children = _props.children,
+	          initialSelectedIndex = _props.initialSelectedIndex,
+	          justified = _props.justified,
+	          reactProps = babelHelpers.objectWithoutProperties(_props, ['children', 'initialSelectedIndex', 'justified']);
+
+	      var tabs = Array.isArray(children) ? children : [children];
+	      var tabEls = [],
+	          paneEls = [],
+	          m = tabs.length,
+	          selectedIndex = this.state.currentSelectedIndex % m,
+	          isActive = void 0,
+	          item = void 0,
+	          cls = void 0,
+	          i = void 0;
+
+	      for (i = 0; i < m; i++) {
+	        item = tabs[i];
+
+	        // only accept MUITab elements
+	        if (item.type !== _tab2.default) util.raiseError('Expecting MUITab React Element');
+
+	        isActive = i === selectedIndex ? true : false;
+
+	        // tab element
+	        tabEls.push(_react2.default.createElement('li', { key: i, className: isActive ? isActiveClass : '' }, _react2.default.createElement('a', { onClick: this.onClick.bind(this, i, item) }, item.props.label)));
+
+	        // pane element
+	        cls = tabsPaneClass + ' ';
+	        if (isActive) cls += isActiveClass;
+
+	        paneEls.push(_react2.default.createElement('div', { key: i, className: cls }, item.props.children));
+	      }
+
+	      cls = tabsBarClass;
+	      if (justified) cls += ' ' + tabsBarJustifiedClass;
+
+	      return _react2.default.createElement('div', reactProps, _react2.default.createElement('ul', { className: cls }, tabEls), paneEls);
+	    }
+	  }]);
+	  return Tabs;
+	}(_react2.default.Component);
+
+	/** Define module API */
+
+	Tabs.propTypes = {
+	  initialSelectedIndex: PropTypes.number,
+	  justified: PropTypes.bool,
+	  onChange: PropTypes.func
+	};
+	Tabs.defaultProps = {
+	  className: '',
+	  initialSelectedIndex: 0,
+	  justified: false,
+	  onChange: null
+	};
+	exports.default = Tabs;
+	module.exports = exports['default'];
+
+/***/ },
+/* 1225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	(function (root, factory) {
+	  if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ((typeof exports === "undefined" ? "undefined" : _typeof(exports)) === "object") {
+	    factory(exports);
+	  } else {
+	    factory(root.babelHelpers = {});
+	  }
+	})(undefined, function (global) {
+	  var babelHelpers = global;
+
+	  babelHelpers.classCallCheck = function (instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	      throw new TypeError("Cannot call a class as a function");
+	    }
+	  };
+
+	  babelHelpers.createClass = function () {
+	    function defineProperties(target, props) {
+	      for (var i = 0; i < props.length; i++) {
+	        var descriptor = props[i];
+	        descriptor.enumerable = descriptor.enumerable || false;
+	        descriptor.configurable = true;
+	        if ("value" in descriptor) descriptor.writable = true;
+	        Object.defineProperty(target, descriptor.key, descriptor);
+	      }
+	    }
+
+	    return function (Constructor, protoProps, staticProps) {
+	      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	      if (staticProps) defineProperties(Constructor, staticProps);
+	      return Constructor;
+	    };
+	  }();
+
+	  babelHelpers.extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	      var source = arguments[i];
+
+	      for (var key in source) {
+	        if (Object.prototype.hasOwnProperty.call(source, key)) {
+	          target[key] = source[key];
+	        }
+	      }
+	    }
+
+	    return target;
+	  };
+
+	  babelHelpers.inherits = function (subClass, superClass) {
+	    if (typeof superClass !== "function" && superClass !== null) {
+	      throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	    }
+
+	    subClass.prototype = Object.create(superClass && superClass.prototype, {
+	      constructor: {
+	        value: subClass,
+	        enumerable: false,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	  };
+
+	  babelHelpers.interopRequireDefault = function (obj) {
+	    return obj && obj.__esModule ? obj : {
+	      default: obj
+	    };
+	  };
+
+	  babelHelpers.interopRequireWildcard = function (obj) {
+	    if (obj && obj.__esModule) {
+	      return obj;
+	    } else {
+	      var newObj = {};
+
+	      if (obj != null) {
+	        for (var key in obj) {
+	          if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	        }
+	      }
+
+	      newObj.default = obj;
+	      return newObj;
+	    }
+	  };
+
+	  babelHelpers.objectWithoutProperties = function (obj, keys) {
+	    var target = {};
+
+	    for (var i in obj) {
+	      if (keys.indexOf(i) >= 0) continue;
+	      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+	      target[i] = obj[i];
+	    }
+
+	    return target;
+	  };
+
+	  babelHelpers.possibleConstructorReturn = function (self, call) {
+	    if (!self) {
+	      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	    }
+
+	    return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	  };
+	});
+
+/***/ },
+/* 1226 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var babelHelpers = __webpack_require__(1225);
+	/**
+	 * MUI React tabs module
+	 * @module react/tabs
+	 */
+	/* jshint quotmark:false */
+	// jscs:disable validateQuoteMarks
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(301);
+
+	var _react2 = babelHelpers.interopRequireDefault(_react);
+
+	var PropTypes = _react2.default.PropTypes;
+
+	/**
+	 * Tab constructor
+	 * @class
+	 */
+
+	var Tab = function (_React$Component) {
+	  babelHelpers.inherits(Tab, _React$Component);
+
+	  function Tab() {
+	    babelHelpers.classCallCheck(this, Tab);
+	    return babelHelpers.possibleConstructorReturn(this, (Tab.__proto__ || Object.getPrototypeOf(Tab)).apply(this, arguments));
+	  }
+
+	  babelHelpers.createClass(Tab, [{
+	    key: 'render',
+	    value: function render() {
+	      return null;
+	    }
+	  }]);
+	  return Tab;
+	}(_react2.default.Component);
+
+	/** Define module API */
+
+	Tab.propTypes = {
+	  value: PropTypes.any,
+	  label: PropTypes.string,
+	  onActive: PropTypes.func
+	};
+	Tab.defaultProps = {
+	  value: null,
+	  label: '',
+	  onActive: null
+	};
+	exports.default = Tab;
+	module.exports = exports['default'];
+
+/***/ },
+/* 1227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * MUI CSS/JS utilities module
+	 * @module lib/util
+	 */
+
+	'use strict';
+
+	var config = __webpack_require__(1228),
+	    jqLite = __webpack_require__(1229),
+	    scrollLock = 0,
+	    scrollLockCls = 'mui-scroll-lock',
+	    scrollStyleEl,
+	    scrollEventHandler,
+	    _supportsPointerEvents;
+
+	scrollEventHandler = function scrollEventHandler(ev) {
+	  // stop propagation on window scroll events
+	  if (!ev.target.tagName) ev.stopImmediatePropagation();
+	};
+
+	/**
+	 * Logging function
+	 */
+	function logFn() {
+	  var win = window;
+
+	  if (config.debug && typeof win.console !== "undefined") {
+	    try {
+	      win.console.log.apply(win.console, arguments);
+	    } catch (a) {
+	      var e = Array.prototype.slice.call(arguments);
+	      win.console.log(e.join("\n"));
+	    }
+	  }
+	}
+
+	/**
+	 * Load CSS text in new stylesheet
+	 * @param {string} cssText - The css text.
+	 */
+	function loadStyleFn(cssText) {
+	  var doc = document,
+	      head;
+
+	  // copied from jQuery 
+	  head = doc.head || doc.getElementsByTagName('head')[0] || doc.documentElement;
+
+	  var e = doc.createElement('style');
+	  e.type = 'text/css';
+
+	  if (e.styleSheet) e.styleSheet.cssText = cssText;else e.appendChild(doc.createTextNode(cssText));
+
+	  // add to document
+	  head.insertBefore(e, head.firstChild);
+
+	  return e;
+	}
+
+	/**
+	 * Raise an error
+	 * @param {string} msg - The error message.
+	 */
+	function raiseErrorFn(msg, useConsole) {
+	  if (useConsole) {
+	    if (typeof console !== 'undefined') console.error('MUI Warning: ' + msg);
+	  } else {
+	    throw new Error('MUI: ' + msg);
+	  }
+	}
+
+	/**
+	 * Convert Classname object, with class as key and true/false as value, to an
+	 * class string.
+	 * @param  {Object} classes The classes
+	 * @return {String}         class string
+	 */
+	function classNamesFn(classes) {
+	  var cs = '';
+	  for (var i in classes) {
+	    cs += classes[i] ? i + ' ' : '';
+	  }
+	  return cs.trim();
+	}
+
+	/**
+	 * Check if client supports pointer events.
+	 */
+	function supportsPointerEventsFn() {
+	  // check cache
+	  if (_supportsPointerEvents !== undefined) return _supportsPointerEvents;
+
+	  var element = document.createElement('x');
+	  element.style.cssText = 'pointer-events:auto';
+	  _supportsPointerEvents = element.style.pointerEvents === 'auto';
+	  return _supportsPointerEvents;
+	}
+
+	/**
+	 * Create callback closure.
+	 * @param {Object} instance - The object instance.
+	 * @param {String} funcName - The name of the callback function.
+	 */
+	function callbackFn(instance, funcName) {
+	  return function () {
+	    instance[funcName].apply(instance, arguments);
+	  };
+	}
+
+	/**
+	 * Dispatch event.
+	 * @param {Element} element - The DOM element.
+	 * @param {String} eventType - The event type.
+	 * @param {Boolean} bubbles=true - If true, event bubbles.
+	 * @param {Boolean} cancelable=true = If true, event is cancelable
+	 * @param {Object} [data] - Data to add to event object
+	 */
+	function dispatchEventFn(element, eventType, bubbles, cancelable, data) {
+	  var ev = document.createEvent('HTMLEvents'),
+	      bubbles = bubbles !== undefined ? bubbles : true,
+	      cancelable = cancelable !== undefined ? cancelable : true,
+	      k;
+
+	  ev.initEvent(eventType, bubbles, cancelable);
+
+	  // add data to event object
+	  if (data) for (k in data) {
+	    ev[k] = data[k];
+	  } // dispatch
+	  if (element) element.dispatchEvent(ev);
+
+	  return ev;
+	}
+
+	/**
+	 * Turn on window scroll lock.
+	 */
+	function enableScrollLockFn() {
+	  // increment counter
+	  scrollLock += 1;
+
+	  // add lock
+	  if (scrollLock === 1) {
+	    var htmlEl = document.documentElement,
+	        top = jqLite.scrollTop(window),
+	        left = jqLite.scrollLeft(window),
+	        cssProps,
+	        cssStr;
+
+	    // define scroll lock class dynamically
+	    cssProps = ['position:fixed', 'top:' + -top + 'px', 'right:0', 'bottom:0', 'left:' + -left + 'px'];
+
+	    // scrollbar-y
+	    if (htmlEl.scrollHeight > htmlEl.clientHeight) {
+	      cssProps.push('overflow-y:scroll');
+	    }
+
+	    // scrollbar-x
+	    if (htmlEl.scrollWidth > htmlEl.clientWidth) {
+	      cssProps.push('overflow-x:scroll');
+	    }
+
+	    // define css class dynamically
+	    cssStr = '.' + scrollLockCls + '{';
+	    cssStr += cssProps.join(' !important;') + ' !important;}';
+	    scrollStyleEl = loadStyleFn(cssStr);
+
+	    // cancel 'scroll' event listener callbacks
+	    jqLite.on(window, 'scroll', scrollEventHandler, true);
+
+	    // add scroll lock
+	    jqLite.addClass(htmlEl, scrollLockCls);
+	  }
+	}
+
+	/**
+	 * Turn off window scroll lock.
+	 * @param {Boolean} resetPos - Reset scroll position to original value.
+	 */
+	function disableScrollLockFn(resetPos) {
+	  // ignore
+	  if (scrollLock === 0) return;
+
+	  // decrement counter
+	  scrollLock -= 1;
+
+	  // remove lock 
+	  if (scrollLock === 0) {
+	    var htmlEl = document.documentElement,
+	        top = parseInt(jqLite.css(htmlEl, 'top')),
+	        left = parseInt(jqLite.css(htmlEl, 'left'));
+
+	    // remove scroll lock and delete style element
+	    jqLite.removeClass(htmlEl, scrollLockCls);
+	    scrollStyleEl.parentNode.removeChild(scrollStyleEl);
+
+	    // restore scroll position
+	    window.scrollTo(-left, -top);
+
+	    // restore scroll event listeners
+	    jqLite.off(window, 'scroll', scrollEventHandler, true);
+	  }
+	}
+
+	/**
+	 * requestAnimationFrame polyfilled
+	 * @param {Function} callback - The callback function
+	 */
+	function requestAnimationFrameFn(callback) {
+	  var fn = window.requestAnimationFrame;
+	  if (fn) fn(callback);else setTimeout(callback, 0);
+	}
+
+	/**
+	 * Define the module API
+	 */
+	module.exports = {
+	  /** Create callback closures */
+	  callback: callbackFn,
+
+	  /** Classnames object to string */
+	  classNames: classNamesFn,
+
+	  /** Disable scroll lock */
+	  disableScrollLock: disableScrollLockFn,
+
+	  /** Dispatch event */
+	  dispatchEvent: dispatchEventFn,
+
+	  /** Enable scroll lock */
+	  enableScrollLock: enableScrollLockFn,
+
+	  /** Log messages to the console when debug is turned on */
+	  log: logFn,
+
+	  /** Load CSS text as new stylesheet */
+	  loadStyle: loadStyleFn,
+
+	  /** Raise MUI error */
+	  raiseError: raiseErrorFn,
+
+	  /** Request animation frame */
+	  requestAnimationFrame: requestAnimationFrameFn,
+
+	  /** Support Pointer Events check */
+	  supportsPointerEvents: supportsPointerEventsFn
+	};
+
+/***/ },
+/* 1228 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * MUI config module
+	 * @module config
+	 */
+
+	/** Define module API */
+
+	module.exports = {
+	  /** Use debug mode */
+	  debug: true
+	};
+
+/***/ },
+/* 1229 */
+/***/ function(module, exports) {
+
+	/**
+	 * MUI CSS/JS jqLite module
+	 * @module lib/jqLite
+	 */
+
+	'use strict';
+
+	/**
+	 * Add a class to an element.
+	 * @param {Element} element - The DOM element.
+	 * @param {string} cssClasses - Space separated list of class names.
+	 */
+
+	function jqLiteAddClass(element, cssClasses) {
+	  if (!cssClasses || !element.setAttribute) return;
+
+	  var existingClasses = _getExistingClasses(element),
+	      splitClasses = cssClasses.split(' '),
+	      cssClass;
+
+	  for (var i = 0; i < splitClasses.length; i++) {
+	    cssClass = splitClasses[i].trim();
+	    if (existingClasses.indexOf(' ' + cssClass + ' ') === -1) {
+	      existingClasses += cssClass + ' ';
+	    }
+	  }
+
+	  element.setAttribute('class', existingClasses.trim());
+	}
+
+	/**
+	 * Get or set CSS properties.
+	 * @param {Element} element - The DOM element.
+	 * @param {string} [name] - The property name.
+	 * @param {string} [value] - The property value.
+	 */
+	function jqLiteCss(element, name, value) {
+	  // Return full style object
+	  if (name === undefined) {
+	    return getComputedStyle(element);
+	  }
+
+	  var nameType = jqLiteType(name);
+
+	  // Set multiple values
+	  if (nameType === 'object') {
+	    for (var key in name) {
+	      element.style[_camelCase(key)] = name[key];
+	    }return;
+	  }
+
+	  // Set a single value
+	  if (nameType === 'string' && value !== undefined) {
+	    element.style[_camelCase(name)] = value;
+	  }
+
+	  var styleObj = getComputedStyle(element),
+	      isArray = jqLiteType(name) === 'array';
+
+	  // Read single value
+	  if (!isArray) return _getCurrCssProp(element, name, styleObj);
+
+	  // Read multiple values
+	  var outObj = {},
+	      key;
+
+	  for (var i = 0; i < name.length; i++) {
+	    key = name[i];
+	    outObj[key] = _getCurrCssProp(element, key, styleObj);
+	  }
+
+	  return outObj;
+	}
+
+	/**
+	 * Check if element has class.
+	 * @param {Element} element - The DOM element.
+	 * @param {string} cls - The class name string.
+	 */
+	function jqLiteHasClass(element, cls) {
+	  if (!cls || !element.getAttribute) return false;
+	  return _getExistingClasses(element).indexOf(' ' + cls + ' ') > -1;
+	}
+
+	/**
+	 * Return the type of a variable.
+	 * @param {} somevar - The JavaScript variable.
+	 */
+	function jqLiteType(somevar) {
+	  // handle undefined
+	  if (somevar === undefined) return 'undefined';
+
+	  // handle others (of type [object <Type>])
+	  var typeStr = Object.prototype.toString.call(somevar);
+	  if (typeStr.indexOf('[object ') === 0) {
+	    return typeStr.slice(8, -1).toLowerCase();
+	  } else {
+	    throw new Error("MUI: Could not understand type: " + typeStr);
+	  }
+	}
+
+	/**
+	 * Attach an event handler to a DOM element
+	 * @param {Element} element - The DOM element.
+	 * @param {string} events - Space separated event names.
+	 * @param {Function} callback - The callback function.
+	 * @param {Boolean} useCapture - Use capture flag.
+	 */
+	function jqLiteOn(element, events, callback, useCapture) {
+	  useCapture = useCapture === undefined ? false : useCapture;
+
+	  var cache = element._muiEventCache = element._muiEventCache || {};
+
+	  events.split(' ').map(function (event) {
+	    // add to DOM
+	    element.addEventListener(event, callback, useCapture);
+
+	    // add to cache
+	    cache[event] = cache[event] || [];
+	    cache[event].push([callback, useCapture]);
+	  });
+	}
+
+	/**
+	 * Remove an event handler from a DOM element
+	 * @param {Element} element - The DOM element.
+	 * @param {string} events - Space separated event names.
+	 * @param {Function} callback - The callback function.
+	 * @param {Boolean} useCapture - Use capture flag.
+	 */
+	function jqLiteOff(element, events, callback, useCapture) {
+	  useCapture = useCapture === undefined ? false : useCapture;
+
+	  // remove from cache
+	  var cache = element._muiEventCache = element._muiEventCache || {},
+	      argsList,
+	      args,
+	      i;
+
+	  events.split(' ').map(function (event) {
+	    argsList = cache[event] || [];
+
+	    i = argsList.length;
+	    while (i--) {
+	      args = argsList[i];
+
+	      // remove all events if callback is undefined
+	      if (callback === undefined || args[0] === callback && args[1] === useCapture) {
+
+	        // remove from cache
+	        argsList.splice(i, 1);
+
+	        // remove from DOM
+	        element.removeEventListener(event, args[0], args[1]);
+	      }
+	    }
+	  });
+	}
+
+	/**
+	 * Attach an event hander which will only execute once per element per event
+	 * @param {Element} element - The DOM element.
+	 * @param {string} events - Space separated event names.
+	 * @param {Function} callback - The callback function.
+	 * @param {Boolean} useCapture - Use capture flag.
+	 */
+	function jqLiteOne(element, events, callback, useCapture) {
+	  events.split(' ').map(function (event) {
+	    jqLiteOn(element, event, function onFn(ev) {
+	      // execute callback
+	      if (callback) callback.apply(this, arguments);
+
+	      // remove wrapper
+	      jqLiteOff(element, event, onFn, useCapture);
+	    }, useCapture);
+	  });
+	}
+
+	/**
+	 * Get or set horizontal scroll position
+	 * @param {Element} element - The DOM element
+	 * @param {number} [value] - The scroll position
+	 */
+	function jqLiteScrollLeft(element, value) {
+	  var win = window;
+
+	  // get
+	  if (value === undefined) {
+	    if (element === win) {
+	      var docEl = document.documentElement;
+	      return (win.pageXOffset || docEl.scrollLeft) - (docEl.clientLeft || 0);
+	    } else {
+	      return element.scrollLeft;
+	    }
+	  }
+
+	  // set
+	  if (element === win) win.scrollTo(value, jqLiteScrollTop(win));else element.scrollLeft = value;
+	}
+
+	/**
+	 * Get or set vertical scroll position
+	 * @param {Element} element - The DOM element
+	 * @param {number} value - The scroll position
+	 */
+	function jqLiteScrollTop(element, value) {
+	  var win = window;
+
+	  // get
+	  if (value === undefined) {
+	    if (element === win) {
+	      var docEl = document.documentElement;
+	      return (win.pageYOffset || docEl.scrollTop) - (docEl.clientTop || 0);
+	    } else {
+	      return element.scrollTop;
+	    }
+	  }
+
+	  // set
+	  if (element === win) win.scrollTo(jqLiteScrollLeft(win), value);else element.scrollTop = value;
+	}
+
+	/**
+	 * Return object representing top/left offset and element height/width.
+	 * @param {Element} element - The DOM element.
+	 */
+	function jqLiteOffset(element) {
+	  var win = window,
+	      rect = element.getBoundingClientRect(),
+	      scrollTop = jqLiteScrollTop(win),
+	      scrollLeft = jqLiteScrollLeft(win);
+
+	  return {
+	    top: rect.top + scrollTop,
+	    left: rect.left + scrollLeft,
+	    height: rect.height,
+	    width: rect.width
+	  };
+	}
+
+	/**
+	 * Attach a callback to the DOM ready event listener
+	 * @param {Function} fn - The callback function.
+	 */
+	function jqLiteReady(fn) {
+	  var done = false,
+	      top = true,
+	      doc = document,
+	      win = doc.defaultView,
+	      root = doc.documentElement,
+	      add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
+	      rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
+	      pre = doc.addEventListener ? '' : 'on';
+
+	  var init = function init(e) {
+	    if (e.type == 'readystatechange' && doc.readyState != 'complete') {
+	      return;
+	    }
+
+	    (e.type == 'load' ? win : doc)[rem](pre + e.type, init, false);
+	    if (!done && (done = true)) fn.call(win, e.type || e);
+	  };
+
+	  var poll = function poll() {
+	    try {
+	      root.doScroll('left');
+	    } catch (e) {
+	      setTimeout(poll, 50);return;
+	    }
+	    init('poll');
+	  };
+
+	  if (doc.readyState == 'complete') {
+	    fn.call(win, 'lazy');
+	  } else {
+	    if (doc.createEventObject && root.doScroll) {
+	      try {
+	        top = !win.frameElement;
+	      } catch (e) {}
+	      if (top) poll();
+	    }
+	    doc[add](pre + 'DOMContentLoaded', init, false);
+	    doc[add](pre + 'readystatechange', init, false);
+	    win[add](pre + 'load', init, false);
+	  }
+	}
+
+	/**
+	 * Remove classes from a DOM element
+	 * @param {Element} element - The DOM element.
+	 * @param {string} cssClasses - Space separated list of class names.
+	 */
+	function jqLiteRemoveClass(element, cssClasses) {
+	  if (!cssClasses || !element.setAttribute) return;
+
+	  var existingClasses = _getExistingClasses(element),
+	      splitClasses = cssClasses.split(' '),
+	      cssClass;
+
+	  for (var i = 0; i < splitClasses.length; i++) {
+	    cssClass = splitClasses[i].trim();
+	    while (existingClasses.indexOf(' ' + cssClass + ' ') >= 0) {
+	      existingClasses = existingClasses.replace(' ' + cssClass + ' ', ' ');
+	    }
+	  }
+
+	  element.setAttribute('class', existingClasses.trim());
+	}
+
+	// ------------------------------
+	// Utilities
+	// ------------------------------
+	var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g,
+	    MOZ_HACK_REGEXP = /^moz([A-Z])/,
+	    ESCAPE_REGEXP = /([.*+?^=!:${}()|\[\]\/\\])/g;
+
+	function _getExistingClasses(element) {
+	  var classes = (element.getAttribute('class') || '').replace(/[\n\t]/g, '');
+	  return ' ' + classes + ' ';
+	}
+
+	function _camelCase(name) {
+	  return name.replace(SPECIAL_CHARS_REGEXP, function (_, separator, letter, offset) {
+	    return offset ? letter.toUpperCase() : letter;
+	  }).replace(MOZ_HACK_REGEXP, 'Moz$1');
+	}
+
+	function _escapeRegExp(string) {
+	  return string.replace(ESCAPE_REGEXP, "\\$1");
+	}
+
+	function _getCurrCssProp(elem, name, computed) {
+	  var ret;
+
+	  // try computed style
+	  ret = computed.getPropertyValue(name);
+
+	  // try style attribute (if element is not attached to document)
+	  if (ret === '' && !elem.ownerDocument) ret = elem.style[_camelCase(name)];
+
+	  return ret;
+	}
+
+	/**
+	 * Module API
+	 */
+	module.exports = {
+	  /** Add classes */
+	  addClass: jqLiteAddClass,
+
+	  /** Get or set CSS properties */
+	  css: jqLiteCss,
+
+	  /** Check for class */
+	  hasClass: jqLiteHasClass,
+
+	  /** Remove event handlers */
+	  off: jqLiteOff,
+
+	  /** Return offset values */
+	  offset: jqLiteOffset,
+
+	  /** Add event handlers */
+	  on: jqLiteOn,
+
+	  /** Add an execute-once event handler */
+	  one: jqLiteOne,
+
+	  /** DOM ready event handler */
+	  ready: jqLiteReady,
+
+	  /** Remove classes */
+	  removeClass: jqLiteRemoveClass,
+
+	  /** Check JavaScript variable instance type */
+	  type: jqLiteType,
+
+	  /** Get or set horizontal scroll position */
+	  scrollLeft: jqLiteScrollLeft,
+
+	  /** Get or set vertical scroll position */
+	  scrollTop: jqLiteScrollTop
+	};
 
 /***/ }
 /******/ ]);
