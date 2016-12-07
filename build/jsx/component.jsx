@@ -339,7 +339,7 @@ class TaskTypePanel extends React.Component {
 		const value = result.value;
 		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer} = this.state;
 		const isLongTask = value == 'long';
-		const isValueDifferent = value != taskType;
+		const isValueDifferent = value != taskType;		
 
 		// reset isTaskNeedTimer if new result is different with old result
 		if (isValueDifferent) {
@@ -510,6 +510,7 @@ class TaskTypePanel extends React.Component {
 				endDate: endDate
 			});
 		}
+
 		return (
 			<div>
 				<Grid style={{border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block'}}>
@@ -638,13 +639,16 @@ class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.tempTask = Object.assign({}, this.props.task) || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
+		const {mode} = this.props;
+
+		this.tempTask = mode === globalTaskInfoMode.add ? Object.assign({}, globalInitialTask) : Object.assign({}, this.props.task);
 
 		/*this.state = {
 			mode: this.props.mode || globalTaskInfoMode.add,
 			taskName: this.tempTask.name || '',
 			level: this.tempTask.level || globalDefaultLevel
 		};*/
+ 		console.log(this.tempTask);
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
 		this.taskNameInputChange = this.taskNameInputChange.bind(this);

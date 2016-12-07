@@ -13,9 +13,9 @@ const circleOvalButton = () => {
 
 // forbid the default dragging event of safari 
 const forbidSafariDefaultDragEvent = () => {
-	/*document.addEventListener('touchmove', (ev) => {
-		ev.preventDefault()
-	}, false)*/
+	document.addEventListener('touchmove', (ev) => {
+		// ev.preventDefault()
+	}, false)
 };
 
 

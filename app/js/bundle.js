@@ -9627,6 +9627,7 @@
 						endDate: endDate
 					});
 				}
+
 				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
 			}
 		}]);
@@ -9736,15 +9737,16 @@
 
 			var _this7 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
-			_this7.tempTask = Object.assign({}, _this7.props.task) || function () {
-				tasks.push(Object.assign({}, globalInitialTask));return tasks[tasks.length - 1];
-			}();
+			var mode = _this7.props.mode;
+
+			_this7.tempTask = mode === globalTaskInfoMode.add ? Object.assign({}, globalInitialTask) : Object.assign({}, _this7.props.task);
 
 			/*this.state = {
 	  	mode: this.props.mode || globalTaskInfoMode.add,
 	  	taskName: this.tempTask.name || '',
 	  	level: this.tempTask.level || globalDefaultLevel
 	  };*/
+			console.log(_this7.tempTask);
 
 			// this.backBtnClick = this.backBtnClick.bind(this);
 			_this7.taskNameInputChange = _this7.taskNameInputChange.bind(_this7);
@@ -32394,9 +32396,9 @@
 
 	// forbid the default dragging event of safari 
 	var forbidSafariDefaultDragEvent = function forbidSafariDefaultDragEvent() {
-		/*document.addEventListener('touchmove', (ev) => {
-	 	ev.preventDefault()
-	 }, false)*/
+		document.addEventListener('touchmove', function (ev) {
+			// ev.preventDefault()
+		}, false);
 	};
 
 	// reactify dom
