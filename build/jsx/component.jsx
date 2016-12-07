@@ -32,13 +32,13 @@ const globalDayTaskTypes = ['today', 'tomorrow'];
 const globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 const globalDefaultTaskType = 'today';
 
-const globalLevels = {
+const globalTaskLevels = {
 	a: 'a',
 	b: 'b',
 	c: 'c',
 	d: 'd'
 }
-const globalDefaultLevel = globalLevels.b;
+const globalDefaultLevel = globalTaskLevels.b;
 
 const globalTaskInfoMode = {
 	add: 'add',
@@ -52,7 +52,6 @@ const globalInitialTask = {
 	isTaskCompleted: false,
 	isTaskNeedTimer: false,
 	isTaskNeedRepeat: false,
-	isNeedTimeSetter: false,
 	startDate: null,	// use moment(...) to initial string to moment object
 	endDate: null,	// use moment(...) to initial string to moment object
 };
@@ -75,6 +74,30 @@ let observe_isNeedShowTaskInfo = {
 setTimeout(() => {
 	
 }, 3000);
+
+// init data
+if (tasks.length === 0) {
+	tasks.push({
+		name: '第一个今日目标',
+		taskType: globalDefaultTaskType,
+		taskLevel: globalTaskLevels.a,
+		isTaskCompleted: false,
+		isTaskNeedTimer: true,
+		isTaskNeedRepeat: false,
+		startDate: moment(),	
+		endDate: moment().add(2, 'hours')
+	});
+	tasks.push({
+		name: '第一个长期目标',
+		taskType: globalTaskTypes.long,
+		taskLevel: globalTaskLevels.b,
+		isTaskCompleted: false,
+		isTaskNeedTimer: true,
+		isTaskNeedRepeat: false,
+		startDate: moment(),	
+		endDate: moment().add(2, 'months')
+	});
+}
 
 
 /**
@@ -518,7 +541,7 @@ class TaskTypePanel extends React.Component {
 				<Grid style={{display: isNeedTimeSetter ? 'none' : 'block'}}>
 					<Row centered>
 						<Column width={14}>
-							<Dropdown fluid selection className='TaskTypeSelector' value={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
+							<Dropdown fluid selection value={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
 						</Column>
 					</Row>
 					{isNeedShowCheckboxGroup ? (
@@ -919,6 +942,8 @@ class TaskTypeSelector extends React.Component {
 	}
 }
 
+
+
 /**
  * class TaskListContainer
  * @receiveProps {string} taskType - current taskType
@@ -949,11 +974,19 @@ class TaskListContainer extends React.Component {
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={12}>
+						<Column width={6}>
 							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} isTaskCompletedCallback={this.isTaskCompletedChanged}/>
 						</Column>
-						<Column width={4}>
-
+						<Column width={6}>
+							<Dropdown />
+						</Column>
+						<Column width={4} textAlign='center' verticalAlign='middle'>
+							{/*<a style={{
+								textDecoration: 'none'
+							}}>编辑</a>*/}
+							<Label color='blue'>
+								编辑
+							</Label>
 						</Column>
 					</Row>
 
@@ -1148,7 +1181,7 @@ class ToDoList extends React.Component {
 				      </Column>
 				    </Row>
 				</Grid>*/}
-				<Tabs justified={true}>
+				<Tabs justified={true} initialSelectedIndex={1}>
 		            <Tab label="长期目标">
 		            	<LongTaskContainer />
 		            </Tab>

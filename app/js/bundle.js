@@ -9095,13 +9095,13 @@
 	var globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 	var globalDefaultTaskType = 'today';
 
-	var globalLevels = {
+	var globalTaskLevels = {
 		a: 'a',
 		b: 'b',
 		c: 'c',
 		d: 'd'
 	};
-	var globalDefaultLevel = globalLevels.b;
+	var globalDefaultLevel = globalTaskLevels.b;
 
 	var globalTaskInfoMode = {
 		add: 'add',
@@ -9115,7 +9115,6 @@
 		isTaskCompleted: false,
 		isTaskNeedTimer: false,
 		isTaskNeedRepeat: false,
-		isNeedTimeSetter: false,
 		startDate: null, // use moment(...) to initial string to moment object
 		endDate: null };
 	var globalTimeSetterTimeType = {
@@ -9135,6 +9134,30 @@
 
 	// test
 	setTimeout(function () {}, 3000);
+
+	// init data
+	if (tasks.length === 0) {
+		tasks.push({
+			name: '第一个今日目标',
+			taskType: globalDefaultTaskType,
+			taskLevel: globalTaskLevels.a,
+			isTaskCompleted: false,
+			isTaskNeedTimer: true,
+			isTaskNeedRepeat: false,
+			startDate: (0, _moment2.default)(),
+			endDate: (0, _moment2.default)().add(2, 'hours')
+		});
+		tasks.push({
+			name: '第一个长期目标',
+			taskType: globalTaskTypes.long,
+			taskLevel: globalTaskLevels.b,
+			isTaskCompleted: false,
+			isTaskNeedTimer: true,
+			isTaskNeedRepeat: false,
+			startDate: (0, _moment2.default)(),
+			endDate: (0, _moment2.default)().add(2, 'months')
+		});
+	}
 
 	/**
 	 * class TimeSetter
@@ -9636,7 +9659,7 @@
 					});
 				}
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, className: 'TaskTypeSelector', value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'right' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', defaultChecked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick }))) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
 			}
 		}]);
 
@@ -10061,7 +10084,7 @@
 				    isTaskCompleted = _state6.isTaskCompleted;
 				var taskTypes = this.props.taskTypes;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, isTaskCompletedCallback: this.isTaskCompletedChanged })), _react2.default.createElement(Column, { width: 4 }))), _react2.default.createElement(TaskList, { taskType: taskType, isTaskCompleted: isTaskCompleted }));
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, isTaskCompletedCallback: this.isTaskCompletedChanged })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Dropdown, null)), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { color: 'blue' }, '\u7F16\u8F91')))), _react2.default.createElement(TaskList, { taskType: taskType, isTaskCompleted: isTaskCompleted }));
 			}
 		}]);
 
@@ -10289,7 +10312,7 @@
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',
 						height: '100%'
-					} }, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
+					} }, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: 1 }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
 			}
 		}]);
 
