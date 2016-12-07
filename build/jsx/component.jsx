@@ -79,7 +79,7 @@ setTimeout(() => {
 if (tasks.length === 0) {
 	tasks.push({
 		name: '第一个今日目标',
-		taskType: globalDefaultTaskType,
+		taskType: 'today',
 		taskLevel: globalTaskLevels.a,
 		isTaskCompleted: false,
 		isTaskNeedTimer: true,
@@ -89,7 +89,7 @@ if (tasks.length === 0) {
 	});
 	tasks.push({
 		name: '第一个长期目标',
-		taskType: globalTaskTypes.long,
+		taskType: 'long',
 		taskLevel: globalTaskLevels.b,
 		isTaskCompleted: false,
 		isTaskNeedTimer: true,
@@ -822,16 +822,21 @@ class TaskInfo extends React.Component {
  * class TaskListItem
  * @receiveProps {number} key - key
  * @receiveProps {object} task - one task
+ * @receiveProps {function} taskListItemCallback
+ 	{bool} isDeleteTask
  */
 class TaskListItem extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			editMode: false,
+			// editMode: this.props.editMode,
 			showTaskInfo: false
 		};
 
 		this.textClick = this.textClick.bind(this);
+		this.inputChange = this.inputChange.bind(this);
+		this.deleteBtnClick = this.deleteBtnClick.bind(this);
 	}
 	textClick() {
 		let {task} = this.props;
@@ -843,12 +848,35 @@ class TaskListItem extends React.Component {
 			isTransporting: true
 		}
 	}
-	render() {
+	inputChange(ev, result) {
+		const {value} = result;
 		let {task} = this.props;
 
-		const {editMode, showTaskInfo} = this.state;
+		/* modify name */
+		task.name = value;
+	}
+	deleteBtnClick() {
+		let {task} = this.props;
+		const index = tasks.indexOf(task);
+		const {taskListItemCallback} = this.props;
+
+		/* delete item */
+		tasks.splice(index, 1);
+		if (taskListItemCallback) {
+			taskListItemCallback({
+				isDeleteTask: true
+			});
+		}
+		
+	}
+	render() {
+		let {task, editMode} = this.props;
+
+		const {showTaskInfo} = this.state;
 
 		const {name: taskName, taskType, isTaskCompleted} = task;
+
+		console.log('tasklistItem editmode', editMode);
 
 		return( 
 			<Item>
@@ -861,12 +889,12 @@ class TaskListItem extends React.Component {
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
-							<Column width={8}>
-								<span onClick={this.textClick}>
+							<Column width={10}>
+								<div onClick={this.textClick}>
 									{taskName}
-								</span>
+								</div>
 							</Column>
-							<Column width={5}>
+							<Column width={3}>
 								...
 							</Column>
 						</Row>
@@ -874,10 +902,10 @@ class TaskListItem extends React.Component {
 						// edit mode
 						<Row>
 							<Column width={3} textAlign='center' verticalAlign='middle'>
-								<Icon size='large' color='grey' name='remove' />
+								<Icon size='large' color='grey' name='remove' onClick={this.deleteBtnClick}/>
 							</Column>							
 							<Column width={13}>
-								<Input fluid className="Tasklist_TaskNameInput" defaultValue={taskName} />
+								<Input fluid className="Tasklist_TaskNameInput" defaultValue={taskName} onChange={this.inputChange}/>
 							</Column>
 							{/* <Button basic icon='content' className="SortBtn" /> */}
 						</Row>
@@ -891,26 +919,52 @@ class TaskListItem extends React.Component {
  * class TaskList
  * @receiveProps {string} taskType - current taskType
  * @receiveProps {bool} isTaskCompleted - isTaskCompleted
+ * @receiveProps {bool} editMode - editMode
  */
 class TaskList extends React.Component {
 	constructor(props) {
 		super(props);
-	}
 
+		this.state = {
+			isShowTaskLists: true
+		}
+
+		this.taskListItemCallback = this.taskListItemCallback.bind(this);
+	}
+	taskListItemCallback(o) {
+		const {isDeleteTask} = o;
+
+		if (isDeleteTask != undefined && isDeleteTask) {
+			this.setState({
+				isShowTaskLists: false
+			}, () => {
+				this.setState({
+					isShowTaskLists: true
+				});
+			});
+		}
+	};
 	render() {
-		const {taskType, isTaskCompleted} = this.props;
+		const {taskType, isTaskCompleted, editMode} = this.props;
+		const {isShowTaskLists} = this.state;
 
 		const filterdTasks = tasks.filter(task => {
 			const {taskType: t, isTaskCompleted: c} = task;
 			return t === taskType && c === isTaskCompleted;
 		});
 		const isfilterdTasksNotEmpty = filterdTasks.length > 0;
+
+		console.log('TaskList', editMode);
+
+
 		return (
-				isfilterdTasksNotEmpty ? (
-					<Menu fluid vertical>
-						{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task}/>))}
-					</Menu>
-				) : null
+				<div>
+					{isShowTaskLists && isfilterdTasksNotEmpty ? (
+						<Menu fluid vertical>
+							{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task} editMode={editMode} taskListItemCallback={this.taskListItemCallback}/>))}
+						</Menu>
+					) : null}
+				</div>
 			);
 	}
 }
@@ -919,24 +973,32 @@ class TaskList extends React.Component {
  * class TaskTypeSelector
  * @receiveProps {string} taskType - current taskType
  * @receiveProps {string} taskTypes - current taskTypes
- * @receiveProps {function} taskTypeCallback - return current taskType
- * @receiveProps {function} isTaskCompletedCallback - return current isTaskCompleted
+ * @receiveProps {function} taskTypeSelectorCallback
+ 	{string} value
  */
 class TaskTypeSelector extends React.Component {
 	constructor(props) {
 		super(props);
+
+		this.dropdownChange = this.dropdownChange.bind(this);
+	}
+	dropdownChange(ev, result) {
+		const {value} = result;
+		const {taskTypeSelectorCallback} = this.props;
+
+		if (taskTypeSelectorCallback) {
+			taskTypeSelectorCallback({
+				value: value
+			});
+		}
 	}
 	render() {
 		const taskTypes = this.props.taskTypes;
 		const taskTypesOptions = taskTypes.map((item) => ({text: item, value: item}));
-		const taskType = this.props.taskType;
-		const selectValue = taskType || 0;
-		const dropDown = <Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions}></Dropdown>
-		let singleText = <p>{taskTypes[0]}</p>
-		const showContent = taskTypes.length > 1 ? dropDown : singleText;
+		const selectValue = this.props.taskType || taskTypes[0];
 		return (
 			<div>
-				{showContent}
+				<Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions} onChange={this.dropdownChange}></Dropdown>
 			</div>
 		);
 	}
@@ -954,44 +1016,52 @@ class TaskListContainer extends React.Component {
 		super(props);
 		this.state = {
 			taskType: this.props.taskType,
-			isTaskCompleted: false 
+			isTaskCompleted: false,
+			editMode: false
 		}	
+
+		this.taskTypeSelectorCallback = this.taskTypeSelectorCallback.bind(this);
+		this.editBtnClick = this.editBtnClick.bind(this);
 	}
-	taskTypeChanged(changedTaskType) {
-		this.setState({
-			taskType: changedTaskType
-		});
+	taskTypeSelectorCallback(o) {
+		const {value} = o;
+
+		if (value != undefined) {
+			this.setState({
+				taskType: value
+			});
+		}
 	}
-	isTaskCompletedChanged(changedTaskIsCompleted) {
-		this.setState({
-			isTaskCompleted: changedTaskIsCompleted
-		});
+	editBtnClick() {
+		this.setState((prevState) => ({
+			editMode: !prevState.editMode
+		}));
 	}
 	render() {	
-		const {taskType, isTaskCompleted} = this.state;	
+		const {taskType, isTaskCompleted, editMode, isShowTaskList} = this.state;	
 		const {taskTypes} = this.props;
+
+		console.log('TaskListContainer', editMode);
+
 		return (
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={6}>
-							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} isTaskCompletedCallback={this.isTaskCompletedChanged}/>
-						</Column>
-						<Column width={6}>
-							<Dropdown />
+						<Column width={12}>
+							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
 						<Column width={4} textAlign='center' verticalAlign='middle'>
 							{/*<a style={{
 								textDecoration: 'none'
 							}}>编辑</a>*/}
-							<Label color='blue'>
-								编辑
-							</Label>
+							<Button color={!editMode ? 'blue' : 'google plus'} onClick={this.editBtnClick}>
+								{!editMode ? '编辑' : '完成'}
+							</Button>
 						</Column>
 					</Row>
 
 				</Grid>
-				<TaskList taskType={taskType} isTaskCompleted={isTaskCompleted} />
+				<TaskList taskType={taskType} editMode={editMode} isTaskCompleted={isTaskCompleted} />
 			</div>
 		);
 	}

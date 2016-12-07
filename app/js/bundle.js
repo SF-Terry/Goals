@@ -9139,7 +9139,7 @@
 	if (tasks.length === 0) {
 		tasks.push({
 			name: '第一个今日目标',
-			taskType: globalDefaultTaskType,
+			taskType: 'today',
 			taskLevel: globalTaskLevels.a,
 			isTaskCompleted: false,
 			isTaskNeedTimer: true,
@@ -9149,7 +9149,7 @@
 		});
 		tasks.push({
 			name: '第一个长期目标',
-			taskType: globalTaskTypes.long,
+			taskType: 'long',
 			taskLevel: globalTaskLevels.b,
 			isTaskCompleted: false,
 			isTaskNeedTimer: true,
@@ -9918,6 +9918,8 @@
 	 * class TaskListItem
 	 * @receiveProps {number} key - key
 	 * @receiveProps {object} task - one task
+	 * @receiveProps {function} taskListItemCallback
+	 	{bool} isDeleteTask
 	 */
 
 	var TaskListItem = function (_React$Component6) {
@@ -9929,11 +9931,13 @@
 			var _this8 = _possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).call(this, props));
 
 			_this8.state = {
-				editMode: false,
+				// editMode: this.props.editMode,
 				showTaskInfo: false
 			};
 
 			_this8.textClick = _this8.textClick.bind(_this8);
+			_this8.inputChange = _this8.inputChange.bind(_this8);
+			_this8.deleteBtnClick = _this8.deleteBtnClick.bind(_this8);
 			return _this8;
 		}
 
@@ -9950,17 +9954,46 @@
 				};
 			}
 		}, {
+			key: 'inputChange',
+			value: function inputChange(ev, result) {
+				var value = result.value;
+				var task = this.props.task;
+
+				/* modify name */
+
+				task.name = value;
+			}
+		}, {
+			key: 'deleteBtnClick',
+			value: function deleteBtnClick() {
+				var task = this.props.task;
+
+				var index = tasks.indexOf(task);
+				var taskListItemCallback = this.props.taskListItemCallback;
+
+				/* delete item */
+
+				tasks.splice(index, 1);
+				if (taskListItemCallback) {
+					taskListItemCallback({
+						isDeleteTask: true
+					});
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var task = this.props.task;
-				var _state5 = this.state,
-				    editMode = _state5.editMode,
-				    showTaskInfo = _state5.showTaskInfo;
+				var _props2 = this.props,
+				    task = _props2.task,
+				    editMode = _props2.editMode;
+				var showTaskInfo = this.state.showTaskInfo;
 				var taskName = task.name,
 				    taskType = task.taskType,
 				    isTaskCompleted = task.isTaskCompleted;
 
-				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3 }, _react2.default.createElement(_semanticUiReact.Checkbox, { className: 'CompleteBtn' })), _react2.default.createElement(Column, { width: 8 }, _react2.default.createElement('span', { onClick: this.textClick }, taskName)), _react2.default.createElement(Column, { width: 5 }, '...')) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'grey', name: 'remove' })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName })))));
+				console.log('tasklistItem editmode', editMode);
+
+				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3 }, _react2.default.createElement(_semanticUiReact.Checkbox, { className: 'CompleteBtn' })), _react2.default.createElement(Column, { width: 10 }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), _react2.default.createElement(Column, { width: 3 }, '...')) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'grey', name: 'remove', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
 		}]);
 
@@ -9971,6 +10004,7 @@
 	 * class TaskList
 	 * @receiveProps {string} taskType - current taskType
 	 * @receiveProps {bool} isTaskCompleted - isTaskCompleted
+	 * @receiveProps {bool} editMode - editMode
 	 */
 
 	var TaskList = function (_React$Component7) {
@@ -9979,15 +10013,43 @@
 		function TaskList(props) {
 			_classCallCheck(this, TaskList);
 
-			return _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+			var _this9 = _possibleConstructorReturn(this, (TaskList.__proto__ || Object.getPrototypeOf(TaskList)).call(this, props));
+
+			_this9.state = {
+				isShowTaskLists: true
+			};
+
+			_this9.taskListItemCallback = _this9.taskListItemCallback.bind(_this9);
+			return _this9;
 		}
 
 		_createClass(TaskList, [{
+			key: 'taskListItemCallback',
+			value: function taskListItemCallback(o) {
+				var _this10 = this;
+
+				var isDeleteTask = o.isDeleteTask;
+
+				if (isDeleteTask != undefined && isDeleteTask) {
+					this.setState({
+						isShowTaskLists: false
+					}, function () {
+						_this10.setState({
+							isShowTaskLists: true
+						});
+					});
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var _props2 = this.props,
-				    taskType = _props2.taskType,
-				    isTaskCompleted = _props2.isTaskCompleted;
+				var _this11 = this;
+
+				var _props3 = this.props,
+				    taskType = _props3.taskType,
+				    isTaskCompleted = _props3.isTaskCompleted,
+				    editMode = _props3.editMode;
+				var isShowTaskLists = this.state.isShowTaskLists;
 
 				var filterdTasks = tasks.filter(function (task) {
 					var t = task.taskType,
@@ -9996,9 +10058,12 @@
 					return t === taskType && c === isTaskCompleted;
 				});
 				var isfilterdTasksNotEmpty = filterdTasks.length > 0;
-				return isfilterdTasksNotEmpty ? _react2.default.createElement(_semanticUiReact.Menu, { fluid: true, vertical: true }, filterdTasks.map(function (task, index) {
-					return _react2.default.createElement(TaskListItem, { key: index, task: task });
-				})) : null;
+
+				console.log('TaskList', editMode);
+
+				return _react2.default.createElement('div', null, isShowTaskLists && isfilterdTasksNotEmpty ? _react2.default.createElement(_semanticUiReact.Menu, { fluid: true, vertical: true }, filterdTasks.map(function (task, index) {
+					return _react2.default.createElement(TaskListItem, { key: index, task: task, editMode: editMode, taskListItemCallback: _this11.taskListItemCallback });
+				})) : null);
 			}
 		}]);
 
@@ -10009,8 +10074,8 @@
 	 * class TaskTypeSelector
 	 * @receiveProps {string} taskType - current taskType
 	 * @receiveProps {string} taskTypes - current taskTypes
-	 * @receiveProps {function} taskTypeCallback - return current taskType
-	 * @receiveProps {function} isTaskCompletedCallback - return current isTaskCompleted
+	 * @receiveProps {function} taskTypeSelectorCallback
+	 	{string} value
 	 */
 
 	var TaskTypeSelector = function (_React$Component8) {
@@ -10019,22 +10084,33 @@
 		function TaskTypeSelector(props) {
 			_classCallCheck(this, TaskTypeSelector);
 
-			return _possibleConstructorReturn(this, (TaskTypeSelector.__proto__ || Object.getPrototypeOf(TaskTypeSelector)).call(this, props));
+			var _this12 = _possibleConstructorReturn(this, (TaskTypeSelector.__proto__ || Object.getPrototypeOf(TaskTypeSelector)).call(this, props));
+
+			_this12.dropdownChange = _this12.dropdownChange.bind(_this12);
+			return _this12;
 		}
 
 		_createClass(TaskTypeSelector, [{
+			key: 'dropdownChange',
+			value: function dropdownChange(ev, result) {
+				var value = result.value;
+				var taskTypeSelectorCallback = this.props.taskTypeSelectorCallback;
+
+				if (taskTypeSelectorCallback) {
+					taskTypeSelectorCallback({
+						value: value
+					});
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var taskTypes = this.props.taskTypes;
 				var taskTypesOptions = taskTypes.map(function (item) {
 					return { text: item, value: item };
 				});
-				var taskType = this.props.taskType;
-				var selectValue = taskType || 0;
-				var dropDown = _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: selectValue, options: taskTypesOptions });
-				var singleText = _react2.default.createElement('p', null, taskTypes[0]);
-				var showContent = taskTypes.length > 1 ? dropDown : singleText;
-				return _react2.default.createElement('div', null, showContent);
+				var selectValue = this.props.taskType || taskTypes[0];
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: selectValue, options: taskTypesOptions, onChange: this.dropdownChange }));
 			}
 		}]);
 
@@ -10053,38 +10129,52 @@
 		function TaskListContainer(props) {
 			_classCallCheck(this, TaskListContainer);
 
-			var _this11 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
+			var _this13 = _possibleConstructorReturn(this, (TaskListContainer.__proto__ || Object.getPrototypeOf(TaskListContainer)).call(this, props));
 
-			_this11.state = {
-				taskType: _this11.props.taskType,
-				isTaskCompleted: false
+			_this13.state = {
+				taskType: _this13.props.taskType,
+				isTaskCompleted: false,
+				editMode: false
 			};
-			return _this11;
+
+			_this13.taskTypeSelectorCallback = _this13.taskTypeSelectorCallback.bind(_this13);
+			_this13.editBtnClick = _this13.editBtnClick.bind(_this13);
+			return _this13;
 		}
 
 		_createClass(TaskListContainer, [{
-			key: 'taskTypeChanged',
-			value: function taskTypeChanged(changedTaskType) {
-				this.setState({
-					taskType: changedTaskType
-				});
+			key: 'taskTypeSelectorCallback',
+			value: function taskTypeSelectorCallback(o) {
+				var value = o.value;
+
+				if (value != undefined) {
+					this.setState({
+						taskType: value
+					});
+				}
 			}
 		}, {
-			key: 'isTaskCompletedChanged',
-			value: function isTaskCompletedChanged(changedTaskIsCompleted) {
-				this.setState({
-					isTaskCompleted: changedTaskIsCompleted
+			key: 'editBtnClick',
+			value: function editBtnClick() {
+				this.setState(function (prevState) {
+					return {
+						editMode: !prevState.editMode
+					};
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state6 = this.state,
-				    taskType = _state6.taskType,
-				    isTaskCompleted = _state6.isTaskCompleted;
+				var _state5 = this.state,
+				    taskType = _state5.taskType,
+				    isTaskCompleted = _state5.isTaskCompleted,
+				    editMode = _state5.editMode,
+				    isShowTaskList = _state5.isShowTaskList;
 				var taskTypes = this.props.taskTypes;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeCallback: this.taskTypeChanged, isTaskCompletedCallback: this.isTaskCompletedChanged })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Dropdown, null)), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { color: 'blue' }, '\u7F16\u8F91')))), _react2.default.createElement(TaskList, { taskType: taskType, isTaskCompleted: isTaskCompleted }));
+				console.log('TaskListContainer', editMode);
+
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'google plus', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted }));
 			}
 		}]);
 
@@ -10151,17 +10241,17 @@
 		function MultiFunctionBtn(props) {
 			_classCallCheck(this, MultiFunctionBtn);
 
-			var _this14 = _possibleConstructorReturn(this, (MultiFunctionBtn.__proto__ || Object.getPrototypeOf(MultiFunctionBtn)).call(this, props));
+			var _this16 = _possibleConstructorReturn(this, (MultiFunctionBtn.__proto__ || Object.getPrototypeOf(MultiFunctionBtn)).call(this, props));
 
-			_this14.state = {
+			_this16.state = {
 				isShowMenu: false
 			};
 
-			_this14.handleClickFunctionBtn = _this14.handleClickFunctionBtn.bind(_this14);
-			_this14.handleClickAddBtn = _this14.handleClickAddBtn.bind(_this14);
-			_this14.handleClickExportBtn = _this14.handleClickExportBtn.bind(_this14);
-			_this14.handleClickSettingBtn = _this14.handleClickSettingBtn.bind(_this14);
-			return _this14;
+			_this16.handleClickFunctionBtn = _this16.handleClickFunctionBtn.bind(_this16);
+			_this16.handleClickAddBtn = _this16.handleClickAddBtn.bind(_this16);
+			_this16.handleClickExportBtn = _this16.handleClickExportBtn.bind(_this16);
+			_this16.handleClickSettingBtn = _this16.handleClickSettingBtn.bind(_this16);
+			return _this16;
 		}
 
 		_createClass(MultiFunctionBtn, [{
@@ -10219,19 +10309,19 @@
 		function ToDoList(props) {
 			_classCallCheck(this, ToDoList);
 
-			var _this15 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+			var _this17 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-			_this15.state = {
+			_this17.state = {
 				taskInfoMode: globalTaskInfoMode.add,
 				isShowTaskInfo: false,
 				task: null
 			};
 
-			_this15.observeIsNeedShowTaskInfo();
+			_this17.observeIsNeedShowTaskInfo();
 
-			_this15.multiFunctionBtnCallback = _this15.multiFunctionBtnCallback.bind(_this15);
-			_this15.taskInfoCallback = _this15.taskInfoCallback.bind(_this15);
-			return _this15;
+			_this17.multiFunctionBtnCallback = _this17.multiFunctionBtnCallback.bind(_this17);
+			_this17.taskInfoCallback = _this17.taskInfoCallback.bind(_this17);
+			return _this17;
 		}
 
 		_createClass(ToDoList, [{
@@ -10250,7 +10340,7 @@
 		}, {
 			key: 'taskInfoCallback',
 			value: function taskInfoCallback(o) {
-				var _this16 = this;
+				var _this18 = this;
 
 				var isShowTaskInfo = o.isShowTaskInfo,
 				    isContinueToAddTask = o.isContinueToAddTask,
@@ -10267,7 +10357,7 @@
 						task: null,
 						taskInfoMode: globalTaskInfoMode.add
 					}, function () {
-						_this16.setState({
+						_this18.setState({
 							isShowTaskInfo: true
 						});
 					});
@@ -10282,7 +10372,7 @@
 		}, {
 			key: 'observeIsNeedShowTaskInfo',
 			value: function observeIsNeedShowTaskInfo() {
-				var _this17 = this;
+				var _this19 = this;
 
 				(0, _observe2.default)(observe_isNeedShowTaskInfo, function (key, setting) {
 					var task = setting.task,
@@ -10292,7 +10382,7 @@
 
 					if (isTransporting) {
 						observe_isNeedShowTaskInfo.setting.isTransporting = false;
-						_this17.setState({
+						_this19.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
@@ -10304,10 +10394,10 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state7 = this.state,
-				    taskInfoMode = _state7.taskInfoMode,
-				    isShowTaskInfo = _state7.isShowTaskInfo,
-				    task = _state7.task;
+				var _state6 = this.state,
+				    taskInfoMode = _state6.taskInfoMode,
+				    isShowTaskInfo = _state6.isShowTaskInfo,
+				    task = _state6.task;
 
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',
