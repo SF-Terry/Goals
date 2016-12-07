@@ -1,5 +1,5 @@
 import React,  { Component } from 'react';
-import {render} from 'react-dom';
+import {render, findDOMNode} from 'react-dom';
 import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment, Icon, Menu } from 'semantic-ui-react'
 import Draggable, {DraggableCore} from 'react-draggable'; 
 import observe from '../js/observe.js';
@@ -13,10 +13,12 @@ import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 
-var storekeeper = require('../js/storekeeper.js');
+let storekeeper = require('../js/storekeeper.js');
 
-var settings = storekeeper.settings;
-var tasks = storekeeper.tasks;
+let settings = storekeeper.settings;
+let tasks = storekeeper.tasks;
+
+let rootDom = document.getElementById('app');
  
 // Top varibles
 const globalTaskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -200,7 +202,7 @@ class TimeSetter extends React.Component {
 class Timepicker extends React.Component {
 	constructor(props) {
 		super(props);
-		var that = this;
+		let that = this;
 		this.state = {
 	        date: null
 	    };
@@ -263,8 +265,8 @@ class TaskTypePanel extends React.Component {
  		let {task} = this.props;
 
  		// set taskTypeMomentsMap
- 		var getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
- 		var getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
+ 		let getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
+ 		let getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
  		const dayTaskTypeMoments = getCurrentMoments('day');
  		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
  		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
@@ -553,6 +555,8 @@ class TaskLevelButtons extends React.Component {
 
 		let {task} = this.props;
 
+		console.log('TaskLevelButtons\'s level', task.taskLevel);
+
 		this.state = {
 			level: task.taskLevel || 'b'
 		}
@@ -610,15 +614,17 @@ class TaskLevelButtons extends React.Component {
  * @receiveProps {function} taskInfoCallback	
  	{bool} isContinueToAddTask
  	{bool} isShowTaskInfo
+ 	{object} task
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.task = this.props.task || ( ( () => {tasks.push(globalInitialTask);return tasks[ 	tasks.length - 1 ];} )() );
+		this.task = this.props.task || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
 
 		this.state = {
-			mode: globalTaskInfoMode.add
+			mode: this.props.mode || globalTaskInfoMode.add,
+			task: this.task
 		};
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
@@ -636,7 +642,8 @@ class TaskInfo extends React.Component {
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
-				isShowTaskInfo: false
+				isShowTaskInfo: false,
+				task: this.task
 			});
 		}
 	}
@@ -646,13 +653,15 @@ class TaskInfo extends React.Component {
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
-				isContinueToAddTask: true
+				isContinueToAddTask: true,
+				task: this.task
 			});
 		}
 	}
 	render() {
-		const {isHidingTimeSetter, mode} = this.state;
-		let {taskType, taskLevel, isTaskNeedTimer, isTaskNeedRepeat} = this.task;
+		const {mode, task} = this.state;
+		// let {task} = this;
+
 		const {Row, Column} = Grid;
 
 		return (
@@ -676,12 +685,12 @@ class TaskInfo extends React.Component {
 					</Row>
 					<Row centered>
 						<Column width={14}>
-							<TaskLevelButtons task={this.task} />
+							<TaskLevelButtons task={task} />
 						</Column>	
 					</Row>
 					<Row centered>
 						<Column width={16}>
-							<TaskTypePanel task={this.task} />
+							<TaskTypePanel task={task} />
 						</Column>
 					</Row>
 					<Row></Row>
@@ -728,7 +737,7 @@ class TaskListItem extends React.Component {
 		});
 	}
 	render() {
-		var task = this.props.task;
+		let task = this.props.task;
 
 		const {editMode, showTaskInfo} = this.state;
 
@@ -771,7 +780,7 @@ class TaskList extends React.Component {
 	}
 
 	observeChange() {
-		var that = this;
+		let that = this;
 		observe(tasks, () => {
 			// storekeeper.sync();
 			that.setState({
@@ -783,8 +792,8 @@ class TaskList extends React.Component {
 	render() {
 		const {taskType, taskIsCompleted} = this.props;
 
-		var tasks = this.state.tasks;
-		var filterdTasks = tasks.filter(task => {
+		let tasks = this.state.tasks;
+		let filterdTasks = tasks.filter(task => {
 			const {taskType: theTaskType, taskIsCompleted: theTaskIsCompleted} = task;
 			return theTaskType === taskType && theTaskIsCompleted === taskIsCompleted;
 		});
@@ -812,7 +821,7 @@ class TitleBar extends React.Component {
 		const taskType = this.props.taskType;
 		const selectValue = taskTypes.indexOf(taskType) || 0;
 		const dropDown = <Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions}></Dropdown>
-		var singleText = <p>{taskTypes[0]}</p>
+		let singleText = <p>{taskTypes[0]}</p>
 		const showContent = taskTypes.length > 1 ? dropDown : singleText;
 		return (
 			<div>
@@ -958,7 +967,8 @@ class ToDoList extends React.Component {
 
 		this.state = {
 			taskInfoMode: globalTaskInfoMode.add,
-			isShowTaskInfo: false
+			isShowTaskInfo: false,
+			task: null
 		};
 
 		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
@@ -967,47 +977,52 @@ class ToDoList extends React.Component {
 	multiFunctionBtnCallback(o) {
 		const {isAddBtnClicked} = o;
 
-		if (isAddBtnClicked != undefined) {
-			if (isAddBtnClicked) {
-				this.setState({
-					taskInfoMode:  globalTaskInfoMode.add,
-					isShowTaskInfo: true
-				});
-			}
+		if (isAddBtnClicked != undefined && isAddBtnClicked) {
+			this.setState({
+				taskInfoMode:  globalTaskInfoMode.add,
+				isShowTaskInfo: true,
+				task: null
+			});
 		}
 	}
 	taskInfoCallback(o) {
-		const {isShowTaskInfo} = o;
+		const {isShowTaskInfo, isContinueToAddTask, task} = o;
 
-		if (isShowTaskInfo != undefined) {
-			if (!isShowTaskInfo) {
-				this.setState({
-					isShowTaskInfo: false
-				});
-			}
+		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
+			this.setState({
+				isShowTaskInfo: false,
+				task: task
+			});
+		}
+		if (isContinueToAddTask != undefined && isContinueToAddTask) {
+			this.setState({
+				isShowTaskInfo: true,
+				task: null
+			});
 		}
 	}
 	render() {
-		const {taskInfoMode, isShowTaskInfo} = this.state;
-		console.log(isShowTaskInfo);
+		const {taskInfoMode, isShowTaskInfo, task} = this.state;
+		console.log('task: ', task);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
 				height: '100%'
 			}}>
 				{isShowTaskInfo ? (
-					<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>
+					<TaskInfo mode={taskInfoMode} task={task}   taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}
+				{/*<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>*/}
 
 				<Grid>
-				    <Grid.Row>
+				    {/*<Grid.Row>
 				      <Grid.Column width={8}>
 				        <LongTaskContainer />
 				      </Grid.Column>
 				      <Grid.Column width={8}>
 				        <DayTaskContainer />
 				      </Grid.Column>
-				    </Grid.Row>
+				    </Grid.Row>*/}
 				</Grid>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 			</div>
