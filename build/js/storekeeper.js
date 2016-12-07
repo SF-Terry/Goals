@@ -18,7 +18,7 @@ class Storekeeper {
 
 		// observe and sync localStorage
 		observe(this.tasks, (a, b, c, d, e) => {
-			// console.log('observed: tasks changed: ', a, b, c, d);
+			console.log('observed: tasks changed: ', a, b, c, d);
 
 			that.sync();
 		});

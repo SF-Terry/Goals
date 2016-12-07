@@ -50,7 +50,7 @@ const globalInitialTask = {
 	isTaskCompleted: false,
 	isTaskNeedTimer: false,
 	isTaskNeedRepeat: false,
-	createDate: null,	// use moment(...) to initial string to moment object
+	isNeedTimeSetter: false,
 	startDate: null,	// use moment(...) to initial string to moment object
 	endDate: null,	// use moment(...) to initial string to moment object
 };
@@ -272,17 +272,25 @@ class Timepicker extends React.Component {
 
 /**
  * class TaskTypePanel
- * @receiveProps {object} task - current task
+ * @receiveProps {string} taskType - current taskType
+ * @receiveProps {bool} isTaskNeedTimer - current isTaskNeedTimer
+ * @receiveProps {bool} isTaskNeedRepeat - current isTaskNeedRepeat
+ * @receiveProps {moment} startDate - current startDate
+ * @receiveProps {moment} endDate - current endDate
+ * @receiveProps {function} taskTypePanelCallback
+ 	{string} taskType
+ 	{bool} isTaskNeedTimer
+	{bool} isTaskNeedRepeat
+	{moment} startDate
+	{moment} endDate
  */
 class TaskTypePanel extends React.Component {
  	constructor(props) {
  		super(props);
 
- 		let {task} = this.props;
-
  		// set taskTypeMomentsMap
- 		let getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
- 		let getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
+ 		const getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
+ 		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
  		const dayTaskTypeMoments = getCurrentMoments('day');
  		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
  		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
@@ -306,16 +314,17 @@ class TaskTypePanel extends React.Component {
  		};
  		const defaultTaskTypeMoments = this.taskTypeMomentsObj['today'];
 
+ 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props;
+
  		this.state = {
- 			taskType: task.taskType || globalDefaultTaskType,
- 			taskLevel: task.taskLevel || globalDefaultLevel,
- 			isTaskNeedTimer: task.isTaskNeedTimer || false,
- 			isTaskNeedRepeat: task.isTaskNeedRepeat || false,
+ 			taskType: taskType,
+ 			isTaskNeedTimer: isTaskNeedTimer,
+ 			isTaskNeedRepeat: isTaskNeedRepeat,
  			isNeedTimeSetter: false,
  			timeSetterTimeType: globalTimeSetterTimeType.start,
  			/* parse task's string startdate and end date */
- 			startDate: task.startDate ? moment(task.startDate) : defaultTaskTypeMoments[0],
- 			endDate: task.endDate ? moment(task.endDate) : defaultTaskTypeMoments[1],
+ 			startDate: startDate ? moment(startDate) : defaultTaskTypeMoments[0],
+ 			endDate: endDate ? moment(endDate) : defaultTaskTypeMoments[1]
  		};
 
 		this.taskTypeDropdownChange = this.taskTypeDropdownChange.bind(this);
@@ -325,19 +334,12 @@ class TaskTypePanel extends React.Component {
 		this.startDatePanelClick = this.startDatePanelClick.bind(this);
 		this.endDatePanelClick = this.endDatePanelClick.bind(this);
 	}	
-	componentDidMount() {
-
-	}
 	taskTypeDropdownChange(e, result) {
 		const {taskTypeMomentsObj} = this;
 		const value = result.value;
-		let {task} = this.props;
 		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer} = this.state;
 		const isLongTask = value == 'long';
 		const isValueDifferent = value != taskType;
-
-		// save task
-		// task.taskType = value;
 
 		// reset isTaskNeedTimer if new result is different with old result
 		if (isValueDifferent) {
@@ -362,8 +364,6 @@ class TaskTypePanel extends React.Component {
 					});
 				}
 			});
-			
-			
 		}
 	}
 	isTaskNeedTimerCheckboxClick(e, result) {
@@ -404,13 +404,10 @@ class TaskTypePanel extends React.Component {
 	}
 	isTaskNeedRepeatClick(e, result) {
 		const checked = result.checked;
-		let {task} = this.props;
 
 		this.setState({
 			isTaskNeedRepeat: !checked
 		});
-		// save task
-		// task.isTaskNeedRepeat = !checked;
 	}
 	timeSetterCallback(o) {
 		const {taskTypeMomentsObj} = this;
@@ -473,7 +470,6 @@ class TaskTypePanel extends React.Component {
 	}
 	render() {
 		let {taskTypeMomentsObj} = this;
-		let {task} = this.props;
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
 		const taskTypesOptions = globalTaskTypes.map((item, index) => {
 			let text = '';
@@ -503,18 +499,19 @@ class TaskTypePanel extends React.Component {
 		const isNeedShowCheckboxGroup = taskType != 'long';
 		const minDate = startDate;
 		const maxDate = endDate;
+		const {taskTypePanelCallback} = this.props;
 
-		task.taskType = taskType;
-		task.isTaskNeedTimer = isTaskNeedTimer;
-		task.isTaskNeedRepeat = isTaskNeedRepeat;
-		task.isNeedTimeSetter = isNeedTimeSetter;
-		task.timeSetterTimeType = timeSetterTimeType;
-		task.startDate = startDate;
-		task.endDate = endDate;
-
+		if (taskTypePanelCallback) {
+			taskTypePanelCallback({
+				taskType: taskType,
+				isTaskNeedTimer: isTaskNeedTimer,
+				isTaskNeedRepeat: isTaskNeedRepeat,
+				startDate: startDate,
+				endDate: endDate
+			});
+		}
 		return (
 			<div>
-				{  isNeedTimeSetter ? <TimeSetter timeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
 				<Grid style={{border: '1px solid orange', display: isNeedTimeSetter ? 'none' : 'block'}}>
 					<Row centered>
 						<Column width={14}>
@@ -552,41 +549,47 @@ class TaskTypePanel extends React.Component {
 						</Row>
 					) : ''}
 				</Grid>
+				{  isNeedTimeSetter ? <TimeSetter timeType={timeSetterTimeType} minDate={minDate} maxDate={maxDate} startDate={startDate} endDate={endDate} timeSetterCallback={this.timeSetterCallback} isNeedShow={isNeedTimeSetter}   /> : ''  }
 			</div>
 		);
 	}
 }
 
 
-
 /**
  * class TaskLevelButtons
- * @receiveProps {object} task - current task
- * @receiveProps {string} mode - current mode
+ * @receiveProps {object} level - current level
+ * @receiveProps {function} taskLevelButtonsCallback
+ 	{string} level
  */
 class TaskLevelButtons extends React.Component {
 	constructor(props) {
 		super(props);
 
-		let {task} = this.props;
+		let {level} = this.props;
 
 
 		this.state = {
-			level: task.taskLevel || 'b'
+			level: level || 'b'
 		}
 
 		this.setLevel = this.setLevel.bind(this);
 	}
 	setLevel(level) {
+		const {taskLevelButtonsCallback} = this.props;
+		
 		this.setState({
 			level: level
 		});
+
+		if (taskLevelButtonsCallback) {
+			taskLevelButtonsCallback({
+				level: level
+			});
+		}
 	}
 	render() {
 		const {level} = this.state;
-		let {task} = this.props;
-
-		task.taskLevel = level;
 
 		let buttonsInfo = {
 			a: {
@@ -637,15 +640,17 @@ class TaskInfo extends React.Component {
 
 		this.tempTask = Object.assign({}, this.props.task) || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
 
-		this.state = {
+		/*this.state = {
 			mode: this.props.mode || globalTaskInfoMode.add,
 			taskName: this.tempTask.name || '',
-			level: this.tempTask || globalLevels
-		};
+			level: this.tempTask.level || globalDefaultLevel
+		};*/
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
 		this.taskNameInputChange = this.taskNameInputChange.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
+		this.taskLevelButtonsCallback = this.taskLevelButtonsCallback.bind(this);
+		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
 		this.cancelAddingBtnClick = this.cancelAddingBtnClick.bind(this);
@@ -659,12 +664,24 @@ class TaskInfo extends React.Component {
 	}*/
 	taskNameInputChange(ev, result) {
 		const {value} = result;
-		this.setState({
-			taskName: value
-		});
+
+		this.tempTask.name = value;
 	}
 	completeBtnClick() {
 		const {taskInfoCallback} = this.props;
+		const {mode} = this.props;
+		const isAddMode = mode === globalTaskInfoMode.add;
+		const isEditMode = mode === globalTaskInfoMode.edit;
+		let task = this.props.task;
+
+		// save
+		if (isAddMode) {
+			tasks.push(this.tempTask);
+		}
+		if (isEditMode) {
+			Object.assign(task, this.tempTask);
+		}
+
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
@@ -672,9 +689,40 @@ class TaskInfo extends React.Component {
 			});
 		}
 	}
+	taskLevelButtonsCallback(o) {
+		const {level} = o;
+		if (level) {
+			this.tempTask.taskLevel = level;
+		}
+	}
+	taskTypePanelCallback(o) {
+		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = o;
+		if (taskType) {
+			this.tempTask.taskType = taskType;
+		}
+		if (isTaskNeedTimer != undefined) {
+			this.tempTask.isTaskNeedTimer = isTaskNeedTimer;
+		}
+		if (isTaskNeedRepeat != undefined) {
+			this.tempTask.isTaskNeedRepeat = isTaskNeedRepeat;
+		}
+		if (startDate != undefined) {
+			this.tempTask.startDate = startDate;
+		}
+		if (endDate != undefined) {
+			this.tempTask.endDate = endDate;
+		}
+	}
 	// add mode
 	continueToAddBtn() {
 		const {taskInfoCallback} = this.props;
+		const isAddMode = mode === globalTaskInfoMode.add;
+
+		// save
+		// add mode
+		if (isAddMode) {
+			tasks.push(this.tempTask);
+		}
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
@@ -706,11 +754,8 @@ class TaskInfo extends React.Component {
 		}
 	}
 	render() {
-		const {mode, taskName} = this.state;
-		let {tempTask} = this;
-
-		tempTask.name = taskName;
-
+		const {mode} = this.props || globalTaskInfoMode.add;
+		const {name, taskLevel, taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = this.tempTask;
 
 		return (
 			<div className="TaskInfo" style={{
@@ -728,17 +773,17 @@ class TaskInfo extends React.Component {
 					</Row>*/}
 					<Row centered>
 						<Column width={14}>
-							<Input className='AddTask_TaskNameInput' value={taskName} placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
+							<Input className='AddTask_TaskNameInput' defaultValue={name} placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
 						</Column>	
 					</Row>
 					<Row centered>
 						<Column width={14}>
-							<TaskLevelButtons task={task} />
+							<TaskLevelButtons level={taskLevel} taskLevelButtonsCallback={this.taskLevelButtonsCallback} />
 						</Column>	
 					</Row>
 					<Row centered>
 						<Column width={16}>
-							<TaskTypePanel task={task} />
+							<TaskTypePanel taskType={taskType} isTaskNeedTimer={isTaskNeedTimer} isTaskNeedRepeat={isTaskNeedRepeat} isNeedTimeSetter={isNeedTimeSetter} startDate={startDate} endDate={endDate} taskTypePanelCallback={this.taskTypePanelCallback}/>
 						</Column>
 					</Row>
 					<Row></Row>
@@ -1108,7 +1153,6 @@ class ToDoList extends React.Component {
 	}
 	render() {
 		const {taskInfoMode, isShowTaskInfo, task} = this.state;
-		console.log(taskInfoMode, isShowTaskInfo, task);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
