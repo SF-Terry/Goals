@@ -12,13 +12,16 @@ import DatePicker from 'rmc-date-picker/lib/index.web';
 import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn.js';
+import storekeeper from '../js/storekeeper.js';
 
-let storekeeper = require('../js/storekeeper.js');
+const {Item} = Menu;
+const {Row, Column} = Grid;
+
+
+let rootDom = document.getElementById('app');
 
 let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
-
-let rootDom = document.getElementById('app');
  
 // Top varibles
 const globalTaskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -35,9 +38,10 @@ const globalTaskInfoMode = {
 }
 
 const globalInitialTask = {
-	name: '',
+	name: null,
 	taskType: globalDefaultTaskType,
 	taskLevel: 'b',
+	isTaskCompleted: false,
 	isTaskNeedTimer: false,
 	isTaskNeedRepeat: false,
 	createDate: null,	// use moment(...) to initial string to moment object
@@ -48,14 +52,21 @@ const globalTimeSetterTimeType = {
 	start: 'start',
 	end: 'end'
 }
+
+// observe
+let observe_isNeedShowTaskInfo = {
+	setting: {
+		isShowTaskInfo: false,
+		taskInfoMode: globalTaskInfoMode.add,
+		tepTask: null,
+		task: null
+	}
+};
+
 // test
 setTimeout(() => {
-	// tasks.push({name: 'task1', level: 'a'});
-	// tasks[0].name = 'task3';
-	// console.dir(tasks[0]);
-	// tasks[0].level = 'd';
-	// settings.push({email: 'test1@testEmail.com'});
-}, 1000);
+	
+}, 3000);
 
 
 /**
@@ -142,7 +153,6 @@ class TimeSetter extends React.Component {
 	render() {
 		const {props} = this;
 		const {timeType, isNeedShow} = this.state;	 
-		const {Column, Row} = Grid;	
 		const isStartTime = timeType === globalTimeSetterTimeType.start;
 		const isEndTime = timeType === globalTimeSetterTimeType.end;
 
@@ -459,7 +469,6 @@ class TaskTypePanel extends React.Component {
 		let {taskTypeMomentsObj} = this;
 		let {task} = this.props;
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
-		const {Row, Column} = Grid;
 		const taskTypesOptions = globalTaskTypes.map((item, index) => {
 			let text = '';
 			switch (item) {
@@ -555,7 +564,6 @@ class TaskLevelButtons extends React.Component {
 
 		let {task} = this.props;
 
-		console.log('TaskLevelButtons\'s level', task.taskLevel);
 
 		this.state = {
 			level: task.taskLevel || 'b'
@@ -623,10 +631,12 @@ class TaskInfo extends React.Component {
 		this.task = this.props.task || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
 
 		this.state = {
-			mode: this.props.mode || globalTaskInfoMode.add
+			mode: this.props.mode || globalTaskInfoMode.add,
+			taskName: ''
 		};
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
+		this.taskNameInputChange = this.taskNameInputChange.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
@@ -671,11 +681,18 @@ class TaskInfo extends React.Component {
 			});
 		}
 	}
+	taskNameInputChange(ev, result) {
+			const {value} = result;
+			this.setState({
+				taskName: value
+			});
+	}
 	render() {
-		const {mode} = this.state;
+		const {mode, taskName} = this.state;
 		let {task} = this;
 
-		const {Row, Column} = Grid;
+		task.name = taskName;
+
 
 		return (
 			<div className="TaskInfo" style={{
@@ -693,7 +710,7 @@ class TaskInfo extends React.Component {
 					</Row>*/}
 					<Row centered>
 						<Column width={14}>
-							<Input className='AddTask_TaskNameInput' placeholder='Task Content' fluid />
+							<Input className='AddTask_TaskNameInput' placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
 						</Column>	
 					</Row>
 					<Row centered>
@@ -750,76 +767,88 @@ class TaskListItem extends React.Component {
 			editMode: false,
 			showTaskInfo: false
 		};
+
+		this.textClick = this.textClick.bind(this);
 	}
-	itemClick() {
-		this.setState({
-			showTaskInfo: true
-		});
+	textClick() {
+		let {task} = this.props;
+
+		observe_isNeedShowTaskInfo.setting = {
+			isShowTaskInfo: true,
+			taskInfoMode: globalTaskInfoMode.edit,
+			tepTask: null
+			task: task
+		}
 	}
 	render() {
-		let task = this.props.task;
+		let {task} = this.props;
 
 		const {editMode, showTaskInfo} = this.state;
 
-		const {taskType, taskIsCompleted} = task;
+		const {name: taskName, taskType, isTaskCompleted} = task;
 
-		const content_normal =  (
-								<div>
-									<Checkbox className="CompleteBtn" />
-									<span className="TaskNameText" onClick={this.itemClick}>{task.name}</span>
-									<span className="Remark">Remark</span>
-								</div>
-								);
-		const content_editMode = (
-								<div>
-									<Button basic icon='remove circle' className="DeleteBtn" />
-									<input className="Tasklist_TaskNameInput" defaultValue={task.name} />
-									<Button basic icon='content' className="SortBtn" />
-								</div>
-								);
 		return( 
-			<div>
-				{showTaskInfo ? <TaskInfo task={task} /> : ''}
-				{editMode ? content_editMode : content_normal}
-			</div>);
+			<Item>
+				<Grid>
+					{!editMode ? (
+						// normal mode
+						<Row >
+							<Column width={3}>
+								<Checkbox className="CompleteBtn" />
+							</Column>
+							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
+							
+							<Column width={8}>
+								<span onClick={this.textClick}>
+									{taskName}
+								</span>
+							</Column>
+							<Column width={5}>
+								...
+							</Column>
+						</Row>
+					) : (
+						// edit mode
+						<Row>
+							<Column width={3} textAlign='center' verticalAlign='middle'>
+								<Icon size='large' color='grey' name='remove' />
+							</Column>							
+							<Column width={13}>
+								<Input fluid className="Tasklist_TaskNameInput" defaultValue={taskName} />
+							</Column>
+							{/* <Button basic icon='content' className="SortBtn" /> */}
+						</Row>
+					)}
+				</Grid>
+			</Item>);
 	}
 }
 
 /**
  * class TaskList
  * @receiveProps {string} taskType - current taskType
- * @receiveProps {bool} taskIsCompleted - taskIsCompleted
+ * @receiveProps {bool} isTaskCompleted - isTaskCompleted
  */
 class TaskList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			tasks: tasks
-		}
 	}
 
-	/*observeChange() {
-		let that = this;
-		observe(tasks, () => {
-			// storekeeper.sync();
-			that.setState({
-				tasks: tasks
-			});
-		});	
-	}*/
-
 	render() {
-		const {taskType, taskIsCompleted} = this.props;
+		const {taskType, isTaskCompleted} = this.props;
 
-		let tasks = this.state.tasks;
-		let filterdTasks = tasks.filter(task => {
-			const {taskType: theTaskType, taskIsCompleted: theTaskIsCompleted} = task;
-			return theTaskType === taskType && theTaskIsCompleted === taskIsCompleted;
+		const filterdTasks = tasks.filter(task => {
+			const {taskType: t, isTaskCompleted: c} = task;
+			return t === taskType && c === isTaskCompleted;
 		});
+		const isfilterdTasksNotEmpty = filterdTasks.length > 0;
 		return (
-			<div>
-				{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task}/>))}
-			</div>);
+				isfilterdTasksNotEmpty ? (
+					<Menu fluid vertical>
+						{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task}/>))}
+					</Menu>
+				) : null
+			);
 	}
 }
 
@@ -828,7 +857,7 @@ class TaskList extends React.Component {
  * @receiveProps {string} taskType - current taskType
  * @receiveProps {string} taskTypes - current taskTypes
  * @receiveProps {function} taskTypeCallback - return current taskType
- * @receiveProps {function} taskIsCompletedCallback - return current taskIsCompleted
+ * @receiveProps {function} isTaskCompletedCallback - return current isTaskCompleted
  */
 class TitleBar extends React.Component {
 	constructor(props) {
@@ -843,7 +872,9 @@ class TitleBar extends React.Component {
 		let singleText = <p>{taskTypes[0]}</p>
 		const showContent = taskTypes.length > 1 ? dropDown : singleText;
 		return (
-			<div>
+			<div style={{
+				border: '1px solid red'
+			}}>
 				{showContent}
 			</div>
 		);
@@ -860,7 +891,7 @@ class TaskListContainer extends React.Component {
 		super(props);
 		this.state = {
 			taskType: this.props.taskType,
-			taskIsCompleted: false 
+			isTaskCompleted: false 
 		}	
 	}
 	taskTypeChanged(changedTaskType) {
@@ -868,18 +899,18 @@ class TaskListContainer extends React.Component {
 			taskType: changedTaskType
 		});
 	}
-	taskIsCompletedChanged(changedTaskIsCompleted) {
+	isTaskCompletedChanged(changedTaskIsCompleted) {
 		this.setState({
-			taskIsCompleted: changedTaskIsCompleted
+			isTaskCompleted: changedTaskIsCompleted
 		});
 	}
 	render() {	
-		const {taskType, taskIsCompleted} = this.state;	
+		const {taskType, isTaskCompleted} = this.state;	
 		const {taskTypes} = this.props;
 		return (
 			<div>
-				<TitleBar taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} taskIsCompletedCallback={this.taskIsCompletedChanged}/>
-				<TaskList taskType={taskType} taskIsCompleted={taskIsCompleted} />
+				<TitleBar taskType={taskType} taskTypes={taskTypes} taskTypeCallback={this.taskTypeChanged} isTaskCompletedCallback={this.isTaskCompletedChanged}/>
+				<TaskList taskType={taskType} isTaskCompleted={isTaskCompleted} />
 			</div>
 		);
 	}
@@ -989,6 +1020,8 @@ class ToDoList extends React.Component {
 			task: null
 		};
 
+		this.observeIsNeedShowTaskInfo();
+
 		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
 		this.taskInfoCallback = this.taskInfoCallback.bind(this);
 	}
@@ -1024,9 +1057,22 @@ class ToDoList extends React.Component {
 			});
 		}
 	}
+	observeIsNeedShowTaskInfo() {
+		observe(observe_isNeedShowTaskInfo, (key, setting) => {
+			let {task, tepTask} = setting;
+			
+			setTimeout(() => {
+				this.setState({
+					isShowTaskInfo: setting.isShowTaskInfo,
+					taskInfoMode: setting.mode
+					task: setting.task
+				});	
+			}, 50);
+		});
+	}
 	render() {
 		const {taskInfoMode, isShowTaskInfo, task} = this.state;
-		console.log('task updated: ', task);
+		console.log(taskInfoMode, isShowTaskInfo, task);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
@@ -1038,14 +1084,14 @@ class ToDoList extends React.Component {
 				{/*<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>*/}
 
 				<Grid>
-				    <Grid.Row>
-				      <Grid.Column width={8}>
+				    <Row>
+				      <Column width={8}>
 				        <LongTaskContainer />
-				      </Grid.Column>
-				      <Grid.Column width={8}>
+				      </Column>
+				      <Column width={8}>
 				        <DayTaskContainer />
-				      </Grid.Column>
-				    </Grid.Row>
+				      </Column>
+				    </Row>
 				</Grid>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 			</div>
