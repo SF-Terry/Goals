@@ -14,8 +14,8 @@ const tool = {
 		overflow: 'hidden'
 	}),
 
-	// getLanguageWordByTaskType 
-	getLanguageWordByTaskType(taskType) {
+	// getLanguageTextByTaskType 
+	getLanguageTextByTaskType(taskType) {
 		switch (taskType) {
 			case 'today': 
 				return '今日目标'; break;

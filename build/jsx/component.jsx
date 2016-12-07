@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
-import {getSingle, getShowOrHideDomStyle, getLanguageWordByTaskType} from '../js/tool.js';
+import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType} from '../js/tool.js';
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -497,33 +497,13 @@ class TaskTypePanel extends React.Component {
 		let {taskTypeMomentsObj} = this;
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
 		const taskTypesOptions = globalTaskTypes.map((item, index) => {
-			let text = '';
-			switch (item) {
-				case 'today': 
-					text = '今日目标';break;
-				case 'long': 
-					text = '长期目标';break;
-				case 'thisWeek': 
-					text = '本周目标';break;
-				case 'thisMonth': 
-					text = '本月目标';break;
-				case 'thisYear': 
-					text = '本年目标';break;
-				case 'tomorrow': 
-					text = '明日目标';break;
-				case 'nextWeek': 
-					text = '下周目标';break;
-				case 'nextMonth': 
-					text = '下月目标';break;
-				case 'nextYear': 
-					text = '明年目标';break;
-				defaut: break;
-			}
+			let text = getLanguageTextByTaskType(item);			
 			return {text: text, value: item};
 		});
-		const isNeedShowCheckboxGroup = taskType != 'long';
+		const isNotTaskType_Long = taskType != 'long';
+		const isNeedShowCheckboxGroup = isNotTaskType_Long;
 		const minDate = startDate;
-		const maxDate = endDate;
+		const maxDate = isNotTaskType_Long ? taskTypeMomentsObj[taskType][1] : moment().add(20, 'years');
 		const {taskTypePanelCallback} = this.props;
 
 		if (taskTypePanelCallback) {
@@ -791,6 +771,12 @@ class TaskInfo extends React.Component {
 					<Row>
 						<Column width={16}>
 							<Grid padded>
+								<Row centered>
+									<Column width={12} >
+										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
+									</Column>
+								</Row>
+
 								{/* add mode */}
 								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
@@ -800,11 +786,6 @@ class TaskInfo extends React.Component {
 									</Row>
 								) : ''}
 
-								<Row centered>
-									<Column width={12} >
-										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
-									</Column>
-								</Row>
 								<Row centered>
 									<Column width={12} >
 										<Button content='返回' fluid color='grey' onClick={this.backBtnClick} />
@@ -990,7 +971,7 @@ class TaskTypeSelector extends React.Component {
 	render() {
 		const taskTypes = this.props.taskTypes;
 		const taskTypesOptions = taskTypes.map((item) => {
-			let text = getLanguageWordByTaskType(item);
+			let text = getLanguageTextByTaskType(item);
 			
 			return ({text: text, value: item});
 		});
