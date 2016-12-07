@@ -58,8 +58,8 @@ let observe_isNeedShowTaskInfo = {
 	setting: {
 		isShowTaskInfo: false,
 		taskInfoMode: globalTaskInfoMode.add,
-		tepTask: null,
-		task: null
+		task: null,
+		isTransporting: false
 	}
 };
 
@@ -623,6 +623,7 @@ class TaskLevelButtons extends React.Component {
  	{bool} isContinueToAddTask
  	{bool} isShowTaskInfo
  	{bool} isCancelAddingTask
+ 	{bool} isBackWhenEditingTask
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
@@ -632,7 +633,7 @@ class TaskInfo extends React.Component {
 
 		this.state = {
 			mode: this.props.mode || globalTaskInfoMode.add,
-			taskName: ''
+			taskName: this.task.name || ''
 		};
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
@@ -640,14 +641,21 @@ class TaskInfo extends React.Component {
 		this.completeBtnClick = this.completeBtnClick.bind(this);
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
-		// add mode
 		this.cancelAddingBtnClick = this.cancelAddingBtnClick.bind(this);
+		// edit mode
+		this.backWhenEditingBtnClick = this.backWhenEditingBtnClick.bind(this);
 	}
 	/*backBtnClick() {
 		this.setState({
 			isShow: false
 		});
 	}*/
+	taskNameInputChange(ev, result) {
+		const {value} = result;
+		this.setState({
+			taskName: value
+		});
+	}
 	completeBtnClick() {
 		const {taskInfoCallback} = this.props;
 
@@ -681,11 +689,14 @@ class TaskInfo extends React.Component {
 			});
 		}
 	}
-	taskNameInputChange(ev, result) {
-			const {value} = result;
-			this.setState({
-				taskName: value
+	// edit mode
+	backWhenEditingBtnClick() {
+		const {taskInfoCallback} = this.props;
+		if (taskInfoCallback != undefined) {
+			taskInfoCallback({
+				isBackWhenEditingTask: true
 			});
+		}
 	}
 	render() {
 		const {mode, taskName} = this.state;
@@ -710,7 +721,7 @@ class TaskInfo extends React.Component {
 					</Row>*/}
 					<Row centered>
 						<Column width={14}>
-							<Input className='AddTask_TaskNameInput' placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
+							<Input className='AddTask_TaskNameInput' value={taskName} placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
 						</Column>	
 					</Row>
 					<Row centered>
@@ -727,6 +738,7 @@ class TaskInfo extends React.Component {
 					<Row>
 						<Column width={16}>
 							<Grid padded>
+								{/* add mode */}
 								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
 										<Column width={12} >
@@ -739,7 +751,15 @@ class TaskInfo extends React.Component {
 										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
 									</Column>
 								</Row>
-								{/* addmode */}
+								{/* edit mode */}
+								{mode === globalTaskInfoMode.edit ? (
+									<Row centered>
+										<Column width={12} >
+											<Button content='返回' fluid color='grey' onClick={this.backWhenEditingBtnClick} />
+										</Column>
+									</Row>
+								) : ''}
+								{/* add mode */}
 								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
 										<Column width={12} >
@@ -776,8 +796,8 @@ class TaskListItem extends React.Component {
 		observe_isNeedShowTaskInfo.setting = {
 			isShowTaskInfo: true,
 			taskInfoMode: globalTaskInfoMode.edit,
-			tepTask: null
-			task: task
+			task: task,
+			isTransporting: true
 		}
 	}
 	render() {
@@ -1037,7 +1057,7 @@ class ToDoList extends React.Component {
 		}
 	}
 	taskInfoCallback(o) {
-		const {isShowTaskInfo, isContinueToAddTask, isCancelAddingTask} = o;
+		const {isShowTaskInfo, isContinueToAddTask, isCancelAddingTask, isBackWhenEditingTask} = o;
 
 		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
 			this.setState({
@@ -1056,18 +1076,27 @@ class ToDoList extends React.Component {
 				task: null
 			});
 		}
+		if (isBackWhenEditingTask != undefined && isBackWhenEditingTask) {
+			this.setState({
+				isShowTaskInfo: false,
+				task: null
+			});
+		}
 	}
 	observeIsNeedShowTaskInfo() {
 		observe(observe_isNeedShowTaskInfo, (key, setting) => {
-			let {task, tepTask} = setting;
-			
-			setTimeout(() => {
+			let {task, taskInfoMode, isShowTaskInfo, isTransporting} = setting;
+
+			if (isTransporting) {
+				observe_isNeedShowTaskInfo.setting.isTransporting = false;
 				this.setState({
-					isShowTaskInfo: setting.isShowTaskInfo,
-					taskInfoMode: setting.mode
-					task: setting.task
+					isShowTaskInfo: isShowTaskInfo,
+					taskInfoMode: taskInfoMode,
+					task: task
 				});	
-			}, 50);
+				observe_isNeedShowTaskInfo.setting.task = null;
+			}
+			
 		});
 	}
 	render() {
