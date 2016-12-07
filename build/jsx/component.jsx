@@ -632,40 +632,28 @@ class TaskLevelButtons extends React.Component {
  * @receiveProps {function} taskInfoCallback	
  	{bool} isContinueToAddTask
  	{bool} isShowTaskInfo
- 	{bool} isCancelAddingTask
- 	{bool} isBackWhenEditingTask
+ 	{bool} isBackTask
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
+		console.log(this.props);
+
 		const {mode} = this.props;
 
 		this.tempTask = mode === globalTaskInfoMode.add ? Object.assign({}, globalInitialTask) : Object.assign({}, this.props.task);
 
-		/*this.state = {
-			mode: this.props.mode || globalTaskInfoMode.add,
-			taskName: this.tempTask.name || '',
-			level: this.tempTask.level || globalDefaultLevel
-		};*/
- 		console.log(this.tempTask);
-
-		// this.backBtnClick = this.backBtnClick.bind(this);
 		this.taskNameInputChange = this.taskNameInputChange.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
-		this.taskLevelButtonsCallback = this.taskLevelButtonsCallback.bind(this);
-		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
+		this.backBtnClick = this.backBtnClick.bind(this);
+
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
-		this.cancelAddingBtnClick = this.cancelAddingBtnClick.bind(this);
-		// edit mode
-		this.backWhenEditingBtnClick = this.backWhenEditingBtnClick.bind(this);
+
+		this.taskLevelButtonsCallback = this.taskLevelButtonsCallback.bind(this);
+		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
 	}
-	/*backBtnClick() {
-		this.setState({
-			isShow: false
-		});
-	}*/
 	taskNameInputChange(ev, result) {
 		const {value} = result;
 
@@ -719,7 +707,7 @@ class TaskInfo extends React.Component {
 	}
 	// add mode
 	continueToAddBtn() {
-		const {taskInfoCallback} = this.props;
+		const {taskInfoCallback, mode} = this.props;
 		const isAddMode = mode === globalTaskInfoMode.add;
 
 		// save
@@ -734,26 +722,12 @@ class TaskInfo extends React.Component {
 			});
 		}
 	}
-	// add mode
-	cancelAddingBtnClick() {
-		const {taskInfoCallback} = this.props;
-		const index = tasks.lastIndexOf(this.task);
-
-		// remove the newest added task
-		tasks.splice(index, 1);
-
-		if (taskInfoCallback != undefined) {
-			taskInfoCallback({
-				isCancelAddingTask: true
-			});
-		}
-	}
 	// edit mode
-	backWhenEditingBtnClick() {
+	backBtnClick() {
 		const {taskInfoCallback} = this.props;
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
-				isBackWhenEditingTask: true
+				isBackTask: true
 			});
 		}
 	}
@@ -798,31 +772,21 @@ class TaskInfo extends React.Component {
 								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
 										<Column width={12} >
-											<Button content='取消' fluid color='grey' onClick={this.cancelAddingBtnClick} />
+											<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
 										</Column>
 									</Row>
 								) : ''}
+
 								<Row centered>
 									<Column width={12} >
 										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
 									</Column>
 								</Row>
-								{/* edit mode */}
-								{mode === globalTaskInfoMode.edit ? (
-									<Row centered>
-										<Column width={12} >
-											<Button content='返回' fluid color='grey' onClick={this.backWhenEditingBtnClick} />
-										</Column>
-									</Row>
-								) : ''}
-								{/* add mode */}
-								{mode === globalTaskInfoMode.add ? (
-									<Row centered>
-										<Column width={12} >
-											<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
-										</Column>
-									</Row>
-								) : ''}
+								<Row centered>
+									<Column width={12} >
+										<Button content='返回' fluid color='grey' onClick={this.backBtnClick} />
+									</Column>
+								</Row>
 							</Grid>
 						</Column>
 					</Row>
@@ -1113,7 +1077,7 @@ class ToDoList extends React.Component {
 		}
 	}
 	taskInfoCallback(o) {
-		const {isShowTaskInfo, isContinueToAddTask, isCancelAddingTask, isBackWhenEditingTask} = o;
+		const {isShowTaskInfo, isContinueToAddTask, isBackTask} = o;
 
 		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
 			this.setState({
@@ -1121,18 +1085,18 @@ class ToDoList extends React.Component {
 			});
 		}
 		if (isContinueToAddTask != undefined && isContinueToAddTask) {
-			this.setState({
-				isShowTaskInfo: true,
-				task: null
-			});
-		}
-		if (isCancelAddingTask != undefined && isCancelAddingTask) {
+			console.log('isContinueToAddTask', isContinueToAddTask);
 			this.setState({
 				isShowTaskInfo: false,
-				task: null
-			});
+				task: null,
+				taskInfoMode: globalTaskInfoMode.add
+			},  () => {
+					this.setState({
+						isShowTaskInfo: true
+					});
+				});
 		}
-		if (isBackWhenEditingTask != undefined && isBackWhenEditingTask) {
+		if (isBackTask != undefined && isBackTask) {
 			this.setState({
 				isShowTaskInfo: false,
 				task: null
@@ -1157,15 +1121,16 @@ class ToDoList extends React.Component {
 	}
 	render() {
 		const {taskInfoMode, isShowTaskInfo, task} = this.state;
+
+		console.log('taskInfoMode state changed', taskInfoMode);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
 				height: '100%'
 			}}>
 				{isShowTaskInfo ? (
-					<TaskInfo mode={taskInfoMode} task={task}   taskInfoCallback={this.taskInfoCallback}/> 
+					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}
-				{/*<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>*/}
 
 				<Grid>
 				    <Row>
