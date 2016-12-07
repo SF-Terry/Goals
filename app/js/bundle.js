@@ -9991,8 +9991,6 @@
 				    taskType = task.taskType,
 				    isTaskCompleted = task.isTaskCompleted;
 
-				console.log('tasklistItem editmode', editMode);
-
 				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3 }, _react2.default.createElement(_semanticUiReact.Checkbox, { className: 'CompleteBtn' })), _react2.default.createElement(Column, { width: 10 }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), _react2.default.createElement(Column, { width: 3 }, '...')) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'grey', name: 'remove', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
 		}]);
@@ -10059,8 +10057,6 @@
 				});
 				var isfilterdTasksNotEmpty = filterdTasks.length > 0;
 
-				console.log('TaskList', editMode);
-
 				return _react2.default.createElement('div', null, isShowTaskLists && isfilterdTasksNotEmpty ? _react2.default.createElement(_semanticUiReact.Menu, { fluid: true, vertical: true }, filterdTasks.map(function (task, index) {
 					return _react2.default.createElement(TaskListItem, { key: index, task: task, editMode: editMode, taskListItemCallback: _this11.taskListItemCallback });
 				})) : null);
@@ -10107,7 +10103,9 @@
 			value: function render() {
 				var taskTypes = this.props.taskTypes;
 				var taskTypesOptions = taskTypes.map(function (item) {
-					return { text: item, value: item };
+					var text = (0, _tool.getLanguageWordByTaskType)(item);
+
+					return { text: text, value: item };
 				});
 				var selectValue = this.props.taskType || taskTypes[0];
 				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: selectValue, options: taskTypesOptions, onChange: this.dropdownChange }));
@@ -10171,8 +10169,6 @@
 				    editMode = _state5.editMode,
 				    isShowTaskList = _state5.isShowTaskList;
 				var taskTypes = this.props.taskTypes;
-
-				console.log('TaskListContainer', editMode);
 
 				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'google plus', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted }));
 			}
@@ -10244,7 +10240,8 @@
 			var _this16 = _possibleConstructorReturn(this, (MultiFunctionBtn.__proto__ || Object.getPrototypeOf(MultiFunctionBtn)).call(this, props));
 
 			_this16.state = {
-				isShowMenu: false
+				isShowMenu: false,
+				isOpenSetting: false
 			};
 
 			_this16.handleClickFunctionBtn = _this16.handleClickFunctionBtn.bind(_this16);
@@ -10269,30 +10266,33 @@
 				this.props.multiFunctionBtnCallback({
 					isAddBtnClicked: true
 				});
-				this.state = {
+				this.setState({
 					isShowMenu: false
-				};
+				});
 			}
 		}, {
 			key: 'handleClickExportBtn',
 			value: function handleClickExportBtn() {
-				this.state = {
+				this.setState({
 					isShowMenu: false
-				};
+				});
 			}
 		}, {
 			key: 'handleClickSettingBtn',
 			value: function handleClickSettingBtn() {
-				this.state = {
-					isShowMenu: false
-				};
+				this.setState({
+					isShowMenu: false,
+					isOpenSetting: true
+				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var isShowMenu = this.state.isShowMenu;
+				var _state6 = this.state,
+				    isShowMenu = _state6.isShowMenu,
+				    isOpenSetting = _state6.isOpenSetting;
 
-				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, null, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'setting', circular: true, color: 'brown', onClick: this.handleClickSettingBtn })), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'sign out', circular: true, color: 'violet', onClick: this.handleClickExportBtn })), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'blue', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'ellipsis horizontal', circular: true, color: 'twitter', onClick: this.handleClickFunctionBtn })))));
+				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, null, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'blue', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'twitter', onClick: this.handleClickAddBtn })))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
 			}
 		}]);
 
@@ -10394,10 +10394,10 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state6 = this.state,
-				    taskInfoMode = _state6.taskInfoMode,
-				    isShowTaskInfo = _state6.isShowTaskInfo,
-				    task = _state6.task;
+				var _state7 = this.state,
+				    taskInfoMode = _state7.taskInfoMode,
+				    isShowTaskInfo = _state7.isShowTaskInfo,
+				    task = _state7.task;
 
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',
@@ -69735,15 +69735,39 @@
 			};
 		},
 
-		// 
+		// getShowOrHideDomStyle
 		getShowOrHideDomStyle: function getShowOrHideDomStyle(b) {
 			return {
 				width: b ? '100%' : '0px',
 				height: b ? 'auto' : '0px',
 				overflow: 'hidden'
 			};
-		}
+		},
 
+		// getLanguageWordByTaskType 
+		getLanguageWordByTaskType: function getLanguageWordByTaskType(taskType) {
+			switch (taskType) {
+				case 'today':
+					return '今日目标';break;
+				case 'long':
+					return '长期目标';break;
+				case 'thisWeek':
+					return '本周目标';break;
+				case 'thisMonth':
+					return '本月目标';break;
+				case 'thisYear':
+					return '本年目标';break;
+				case 'tomorrow':
+					return '明日目标';break;
+				case 'nextWeek':
+					return '下周目标';break;
+				case 'nextMonth':
+					return '下月目标';break;
+				case 'nextYear':
+					return '明年目标';break;
+					defaut: return '';break;
+			}
+		}
 	};
 
 	module.exports = tool;

@@ -1,11 +1,11 @@
 import React,  { Component } from 'react';
 import {render, findDOMNode} from 'react-dom';
-import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown } from 'semantic-ui-react';
+import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown, Modal } from 'semantic-ui-react';
 import Draggable from 'react-draggable'; 
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
-import {getSingle, getShowOrHideDomStyle} from '../js/tool.js';
+import {getSingle, getShowOrHideDomStyle, getLanguageWordByTaskType} from '../js/tool.js';
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -876,8 +876,6 @@ class TaskListItem extends React.Component {
 
 		const {name: taskName, taskType, isTaskCompleted} = task;
 
-		console.log('tasklistItem editmode', editMode);
-
 		return( 
 			<Item>
 				<Grid>
@@ -954,9 +952,6 @@ class TaskList extends React.Component {
 		});
 		const isfilterdTasksNotEmpty = filterdTasks.length > 0;
 
-		console.log('TaskList', editMode);
-
-
 		return (
 				<div>
 					{isShowTaskLists && isfilterdTasksNotEmpty ? (
@@ -994,7 +989,11 @@ class TaskTypeSelector extends React.Component {
 	}
 	render() {
 		const taskTypes = this.props.taskTypes;
-		const taskTypesOptions = taskTypes.map((item) => ({text: item, value: item}));
+		const taskTypesOptions = taskTypes.map((item) => {
+			let text = getLanguageWordByTaskType(item);
+			
+			return ({text: text, value: item});
+		});
 		const selectValue = this.props.taskType || taskTypes[0];
 		return (
 			<div>
@@ -1040,8 +1039,6 @@ class TaskListContainer extends React.Component {
 	render() {	
 		const {taskType, isTaskCompleted, editMode, isShowTaskList} = this.state;	
 		const {taskTypes} = this.props;
-
-		console.log('TaskListContainer', editMode);
 
 		return (
 			<div>
@@ -1096,7 +1093,8 @@ class MultiFunctionBtn extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isShowMenu: false
+			isShowMenu: false,
+			isOpenSetting: false
 		}
 
 		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
@@ -1113,22 +1111,24 @@ class MultiFunctionBtn extends React.Component {
 		this.props.multiFunctionBtnCallback({
 			isAddBtnClicked: true
 		});
-		this.state = {
+		this.setState({
 			isShowMenu: false
-		}
+		});
 	}
 	handleClickExportBtn() {
-		this.state = {
+		this.setState({
 			isShowMenu: false
-		}
+		});
 	}
 	handleClickSettingBtn() {
-		this.state = {
-			isShowMenu: false
-		}
+		this.setState({
+			isShowMenu: false,
+			isOpenSetting: true
+		});
+
 	}
 	render() {
-		const {isShowMenu} = this.state;
+		const {isShowMenu, isOpenSetting} = this.state;
 		return (
 			<div className='MultiFunctionBtn'>
 				<Draggable>
@@ -1136,10 +1136,10 @@ class MultiFunctionBtn extends React.Component {
 						
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
-								<Button className='ovalButton' size='huge' icon='setting' circular color='brown' onClick={this.handleClickSettingBtn} />
+								{/*<Button className='ovalButton' size='huge' icon='setting' circular color='brown' onClick={this.handleClickSettingBtn} />*/}
 							</p>
 							<p>
-								<Button className='ovalButton' size='huge' icon='sign out' circular color='violet' onClick={this.handleClickExportBtn} />
+								{/*<Button className='ovalButton' size='huge' icon='sign out' circular color='violet' onClick={this.handleClickExportBtn} />*/}
 							</p>
 							<p>
 								<Button className='ovalButton' size='huge' icon='plus' circular color='blue' onClick={this.handleClickAddBtn} />
@@ -1148,10 +1148,28 @@ class MultiFunctionBtn extends React.Component {
 							</p>
 						</div>
 						<p>
-							<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />
+							{/* place add button here temporarily */}
+							<Button className='ovalButton' size='huge' icon='plus' circular color='twitter' onClick={this.handleClickAddBtn} />
+
+							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
 						</p>
 					</div>
 				</Draggable>
+				<Modal size='large' open={isOpenSetting} onClose={this.close}>
+	        	  	<Modal.Header>
+	        	  	    设置
+	        	  	</Modal.Header>
+	        	  	<Modal.Content>
+	        	  	    <h5>邮箱</h5>
+	        	  	    <Input fluid placeholder='此处输入邮箱地址' />
+	        	  	</Modal.Content>
+	        	  	<Modal.Actions>
+	        	  	  <Button negative>
+	        	  	      返回
+	        	  	  </Button>
+	        	  	  <Button positive icon='checkmark' labelPosition='right' content='确认' />
+	        	  	</Modal.Actions>
+	        	</Modal>
 			</div>
 		);
 	}
@@ -1240,17 +1258,6 @@ class ToDoList extends React.Component {
 				{isShowTaskInfo ? (
 					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}
-
-				{/*<Grid>
-				    <Row>
-				      <Column width={8}>
-				        
-				      </Column>
-				      <Column width={8}>
-				        
-				      </Column>
-				    </Row>
-				</Grid>*/}
 				<Tabs justified={true} initialSelectedIndex={1}>
 		            <Tab label="长期目标">
 		            	<LongTaskContainer />
