@@ -1,7 +1,7 @@
 import React,  { Component } from 'react';
 import {render, findDOMNode} from 'react-dom';
-import { Button, Grid, Dropdown, Checkbox, Form, Input, Label, Segment, Icon, Menu } from 'semantic-ui-react'
-import Draggable, {DraggableCore} from 'react-draggable'; 
+import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown } from 'semantic-ui-react';
+import Draggable from 'react-draggable'; 
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle} from '../js/tool.js';
 
@@ -614,7 +614,7 @@ class TaskLevelButtons extends React.Component {
  * @receiveProps {function} taskInfoCallback	
  	{bool} isContinueToAddTask
  	{bool} isShowTaskInfo
- 	{object} task
+ 	{bool} isCancelAddingTask
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
@@ -623,14 +623,15 @@ class TaskInfo extends React.Component {
 		this.task = this.props.task || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
 
 		this.state = {
-			mode: this.props.mode || globalTaskInfoMode.add,
-			task: this.task
+			mode: this.props.mode || globalTaskInfoMode.add
 		};
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
 		// add mode
 		this.continueToAddBtn = this.continueToAddBtn.bind(this);
+		// add mode
+		this.cancelAddingBtnClick = this.cancelAddingBtnClick.bind(this);
 	}
 	/*backBtnClick() {
 		this.setState({
@@ -642,8 +643,7 @@ class TaskInfo extends React.Component {
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
-				isShowTaskInfo: false,
-				task: this.task
+				isShowTaskInfo: false
 			});
 		}
 	}
@@ -653,14 +653,27 @@ class TaskInfo extends React.Component {
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
-				isContinueToAddTask: true,
-				task: this.task
+				isContinueToAddTask: true
+			});
+		}
+	}
+	// add mode
+	cancelAddingBtnClick() {
+		const {taskInfoCallback} = this.props;
+		const index = tasks.lastIndexOf(this.task);
+
+		// remove the newest added task
+		tasks.splice(index, 1);
+
+		if (taskInfoCallback != undefined) {
+			taskInfoCallback({
+				isCancelAddingTask: true
 			});
 		}
 	}
 	render() {
-		const {mode, task} = this.state;
-		// let {task} = this;
+		const {mode} = this.state;
+		let {task} = this;
 
 		const {Row, Column} = Grid;
 
@@ -697,15 +710,22 @@ class TaskInfo extends React.Component {
 					<Row>
 						<Column width={16}>
 							<Grid padded>
+								{mode === globalTaskInfoMode.add ? (
+									<Row centered>
+										<Column width={12} >
+											<Button content='取消' fluid color='grey' onClick={this.cancelAddingBtnClick} />
+										</Column>
+									</Row>
+								) : ''}
 								<Row centered>
-									<Column width={12} textAlign='right'>
+									<Column width={12} >
 										<Button content='完成' fluid color='blue' onClick={this.completeBtnClick}/>
 									</Column>
 								</Row>
 								{/* addmode */}
 								{mode === globalTaskInfoMode.add ? (
 									<Row centered>
-										<Column width={12} textAlign='right'>
+										<Column width={12} >
 											<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />
 										</Column>
 									</Row>
@@ -776,10 +796,9 @@ class TaskList extends React.Component {
 		this.state = {
 			tasks: tasks
 		}
-		this.observeChange();
 	}
 
-	observeChange() {
+	/*observeChange() {
 		let that = this;
 		observe(tasks, () => {
 			// storekeeper.sync();
@@ -787,7 +806,7 @@ class TaskList extends React.Component {
 				tasks: tasks
 			});
 		});	
-	}
+	}*/
 
 	render() {
 		const {taskType, taskIsCompleted} = this.props;
@@ -819,7 +838,7 @@ class TitleBar extends React.Component {
 		const taskTypes = this.props.taskTypes;
 		const taskTypesOptions = taskTypes.map((item) => ({text: item, value: item}));
 		const taskType = this.props.taskType;
-		const selectValue = taskTypes.indexOf(taskType) || 0;
+		const selectValue = taskType || 0;
 		const dropDown = <Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions}></Dropdown>
 		let singleText = <p>{taskTypes[0]}</p>
 		const showContent = taskTypes.length > 1 ? dropDown : singleText;
@@ -842,8 +861,7 @@ class TaskListContainer extends React.Component {
 		this.state = {
 			taskType: this.props.taskType,
 			taskIsCompleted: false 
-		}
-		
+		}	
 	}
 	taskTypeChanged(changedTaskType) {
 		this.setState({
@@ -986,12 +1004,11 @@ class ToDoList extends React.Component {
 		}
 	}
 	taskInfoCallback(o) {
-		const {isShowTaskInfo, isContinueToAddTask, task} = o;
+		const {isShowTaskInfo, isContinueToAddTask, isCancelAddingTask} = o;
 
 		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
 			this.setState({
-				isShowTaskInfo: false,
-				task: task
+				isShowTaskInfo: false
 			});
 		}
 		if (isContinueToAddTask != undefined && isContinueToAddTask) {
@@ -1000,10 +1017,16 @@ class ToDoList extends React.Component {
 				task: null
 			});
 		}
+		if (isCancelAddingTask != undefined && isCancelAddingTask) {
+			this.setState({
+				isShowTaskInfo: false,
+				task: null
+			});
+		}
 	}
 	render() {
 		const {taskInfoMode, isShowTaskInfo, task} = this.state;
-		console.log('task: ', task);
+		console.log('task updated: ', task);
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
@@ -1015,14 +1038,14 @@ class ToDoList extends React.Component {
 				{/*<TaskInfo mode={taskInfoMode} taskInfoCallback={this.taskInfoCallback}/>*/}
 
 				<Grid>
-				    {/*<Grid.Row>
+				    <Grid.Row>
 				      <Grid.Column width={8}>
 				        <LongTaskContainer />
 				      </Grid.Column>
 				      <Grid.Column width={8}>
 				        <DayTaskContainer />
 				      </Grid.Column>
-				    </Grid.Row>*/}
+				    </Grid.Row>
 				</Grid>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 			</div>
