@@ -810,14 +810,14 @@ class TaskListItem extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			// editMode: this.props.editMode,
-			showTaskInfo: false
-		};
+		/*this.state = {
+
+		};*/
 
 		this.textClick = this.textClick.bind(this);
 		this.inputChange = this.inputChange.bind(this);
 		this.deleteBtnClick = this.deleteBtnClick.bind(this);
+		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
 	}
 	textClick() {
 		let {task} = this.props;
@@ -843,6 +843,7 @@ class TaskListItem extends React.Component {
 
 		/* delete item */
 		tasks.splice(index, 1);
+
 		if (taskListItemCallback) {
 			taskListItemCallback({
 				isDeleteTask: true
@@ -850,12 +851,27 @@ class TaskListItem extends React.Component {
 		}
 		
 	}
+	completeCheckboxClick() {
+		let {task} = this.props;
+		const {isTaskCompleted} = task;
+		const {taskListItemCallback} = this.props;
+
+		/* modify task is completed or not */
+		task.isTaskCompleted = !isTaskCompleted;
+
+		if (taskListItemCallback) {
+			taskListItemCallback({
+				isCompleteTask: true
+			});
+		}
+
+	}
 	render() {
 		let {task, editMode} = this.props;
 
-		const {showTaskInfo} = this.state;
-
 		const {name: taskName, taskType, isTaskCompleted} = task;
+
+		console.log('task isTaskCompleted', task.name, isTaskCompleted);
 
 		return( 
 			<Item>
@@ -864,7 +880,7 @@ class TaskListItem extends React.Component {
 						// normal mode
 						<Row >
 							<Column width={3}>
-								<Checkbox className="CompleteBtn" />
+								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
@@ -911,9 +927,20 @@ class TaskList extends React.Component {
 		this.taskListItemCallback = this.taskListItemCallback.bind(this);
 	}
 	taskListItemCallback(o) {
-		const {isDeleteTask} = o;
+		const {isDeleteTask, isCompleteTask} = o;
 
 		if (isDeleteTask != undefined && isDeleteTask) {
+			this.setState({
+				isShowTaskLists: false
+			}, () => {
+				this.setState({
+					isShowTaskLists: true
+				});
+			});
+		}
+
+		if (isCompleteTask != undefined && isCompleteTask) {
+
 			this.setState({
 				isShowTaskLists: false
 			}, () => {
@@ -932,6 +959,7 @@ class TaskList extends React.Component {
 			return t === taskType && c === isTaskCompleted;
 		});
 		const isfilterdTasksNotEmpty = filterdTasks.length > 0;
+
 
 		return (
 				<div>
@@ -978,7 +1006,7 @@ class TaskTypeSelector extends React.Component {
 		const selectValue = this.props.taskType || taskTypes[0];
 		return (
 			<div>
-				<Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions} onChange={this.dropdownChange}></Dropdown>
+				<Dropdown fluid selection defaultValue={selectValue} options={taskTypesOptions} onChange={this.dropdownChange} />
 			</div>
 		);
 	}
@@ -997,10 +1025,12 @@ class TaskListContainer extends React.Component {
 		this.state = {
 			taskType: this.props.taskType,
 			isTaskCompleted: false,
-			editMode: false
+			editMode: false,
+			isShowTaskList: true
 		}	
 
 		this.taskTypeSelectorCallback = this.taskTypeSelectorCallback.bind(this);
+		this.isCompleteDropdownChange = this.isCompleteDropdownChange.bind(this);
 		this.editBtnClick = this.editBtnClick.bind(this);
 	}
 	taskTypeSelectorCallback(o) {
@@ -1012,6 +1042,22 @@ class TaskListContainer extends React.Component {
 			});
 		}
 	}
+	isCompleteDropdownChange(ev, result) {
+		const {value} = result;
+
+		this.setState({
+			isTaskCompleted: Boolean(value)
+		});
+
+		this.setState({
+			isShowTaskList: false
+		}, () => {
+			this.setState({
+				isShowTaskList: true
+			});
+		});
+
+	}
 	editBtnClick() {
 		this.setState((prevState) => ({
 			editMode: !prevState.editMode
@@ -1021,17 +1067,23 @@ class TaskListContainer extends React.Component {
 		const {taskType, isTaskCompleted, editMode, isShowTaskList} = this.state;	
 		const {taskTypes} = this.props;
 
+		const isCompletesOptions = [
+			{value: 1, text: '已完成'},
+			{value: 0, text: '未完成'}
+		];
+		const defalutIsComplete = 0;
+
 		return (
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={12}>
-							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
+						<Column width={7}>
+							<TaskTypeSelector taskType={0} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
+						</Column>
+						<Column width={5}>
+							<Dropdown fluid selection defaultValue={defalutIsComplete} options={isCompletesOptions} onChange={this.isCompleteDropdownChange}></Dropdown>
 						</Column>
 						<Column width={4} textAlign='center' verticalAlign='middle'>
-							{/*<a style={{
-								textDecoration: 'none'
-							}}>编辑</a>*/}
 							<Button color={!editMode ? 'blue' : 'google plus'} onClick={this.editBtnClick}>
 								{!editMode ? '编辑' : '完成'}
 							</Button>
@@ -1039,7 +1091,9 @@ class TaskListContainer extends React.Component {
 					</Row>
 
 				</Grid>
-				<TaskList taskType={taskType} editMode={editMode} isTaskCompleted={isTaskCompleted} />
+				{isShowTaskList ? (
+					<TaskList taskType={taskType} editMode={editMode} isTaskCompleted={isTaskCompleted} />
+				) : null}
 			</div>
 		);
 	}
