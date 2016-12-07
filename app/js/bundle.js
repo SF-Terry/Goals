@@ -9087,7 +9087,13 @@
 	var globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 	var globalDefaultTaskType = 'today';
 
-	var globalDefaultLevel = 'b';
+	var globalLevels = {
+		a: 'a',
+		b: 'b',
+		c: 'c',
+		d: 'd'
+	};
+	var globalDefaultLevel = globalLevels.b;
 
 	var globalTaskInfoMode = {
 		add: 'add',
@@ -9720,13 +9726,14 @@
 
 			var _this7 = _possibleConstructorReturn(this, (TaskInfo.__proto__ || Object.getPrototypeOf(TaskInfo)).call(this, props));
 
-			_this7.task = _this7.props.task || function () {
+			_this7.tempTask = Object.assign({}, _this7.props.task) || function () {
 				tasks.push(Object.assign({}, globalInitialTask));return tasks[tasks.length - 1];
 			}();
 
 			_this7.state = {
 				mode: _this7.props.mode || globalTaskInfoMode.add,
-				taskName: _this7.task.name || ''
+				taskName: _this7.tempTask.name || '',
+				level: _this7.tempTask || globalLevels
 			};
 
 			// this.backBtnClick = this.backBtnClick.bind(this);
@@ -9815,9 +9822,9 @@
 				var _state5 = this.state,
 				    mode = _state5.mode,
 				    taskName = _state5.taskName;
-				var task = this.task;
+				var tempTask = this.tempTask;
 
-				task.name = taskName;
+				tempTask.name = taskName;
 
 				return _react2.default.createElement('div', { className: 'TaskInfo', style: {
 						position: 'fixed',

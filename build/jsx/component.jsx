@@ -30,7 +30,13 @@ const globalDayTaskTypes = ['today', 'tomorrow'];
 const globalLongTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 const globalDefaultTaskType = 'today';
 
-const globalDefaultLevel = 'b';
+const globalLevels = {
+	a: 'a',
+	b: 'b',
+	c: 'c',
+	d: 'd'
+}
+const globalDefaultLevel = globalLevels.b;
 
 const globalTaskInfoMode = {
 	add: 'add',
@@ -629,11 +635,12 @@ class TaskInfo extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.task = this.props.task || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
+		this.tempTask = Object.assign({}, this.props.task) || ( ( () => {tasks.push(Object.assign({}, globalInitialTask));return tasks[ 	tasks.length - 1 ];} )() );
 
 		this.state = {
 			mode: this.props.mode || globalTaskInfoMode.add,
-			taskName: this.task.name || ''
+			taskName: this.tempTask.name || '',
+			level: this.tempTask || globalLevels
 		};
 
 		// this.backBtnClick = this.backBtnClick.bind(this);
@@ -700,9 +707,9 @@ class TaskInfo extends React.Component {
 	}
 	render() {
 		const {mode, taskName} = this.state;
-		let {task} = this;
+		let {tempTask} = this;
 
-		task.name = taskName;
+		tempTask.name = taskName;
 
 
 		return (
