@@ -9032,6 +9032,10 @@
 
 	var _tool = __webpack_require__(1018);
 
+	var _reactTapEventPlugin = __webpack_require__(1230);
+
+	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
+
 	__webpack_require__(1019);
 
 	__webpack_require__(1023);
@@ -9076,9 +9080,9 @@
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 
+	(0, _reactTapEventPlugin2.default)();
+
 	// datepicker
-
-
 	var Item = _semanticUiReact.Menu.Item;
 	var Row = _semanticUiReact.Grid.Row,
 	    Column = _semanticUiReact.Grid.Column;
@@ -10297,36 +10301,16 @@
 				isOpenSetting: false
 			};
 
-			_this17.dragging = false;
+			_this17.handleClickAddButton = _this17.handleClickAddButton.bind(_this17);
 
-			_this17.handleStartDrag = _this17.handleStartDrag.bind(_this17);
-			_this17.handleDraging = _this17.handleDraging.bind(_this17);
-			_this17.handleStopDrag = _this17.handleStopDrag.bind(_this17);
 			_this17.handleClickFunctionBtn = _this17.handleClickFunctionBtn.bind(_this17);
-			_this17.handleClickAddBtn = _this17.handleClickAddBtn.bind(_this17);
+			// this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
 			_this17.handleClickExportBtn = _this17.handleClickExportBtn.bind(_this17);
 			_this17.handleClickSettingBtn = _this17.handleClickSettingBtn.bind(_this17);
 			return _this17;
 		}
 
 		_createClass(MultiFunctionBtn, [{
-			key: 'handleStartDrag',
-			value: function handleStartDrag() {
-				/*this.dragging = true;
-	   console.log(this.dragging);*/
-			}
-		}, {
-			key: 'handleDraging',
-			value: function handleDraging() {
-				this.dragging = true;
-			}
-		}, {
-			key: 'handleStopDrag',
-			value: function handleStopDrag() {
-				/*this.dragging = false;
-	   console.log('handleStopDrag', this.dragging);*/
-			}
-		}, {
 			key: 'handleClickFunctionBtn',
 			value: function handleClickFunctionBtn() {
 				this.setState(function (prevState) {
@@ -10336,20 +10320,14 @@
 				});
 			}
 		}, {
-			key: 'handleClickAddBtn',
-			value: function handleClickAddBtn() {
-				var dragging = this.dragging;
-
-				if (!dragging) {
-					this.props.multiFunctionBtnCallback({
-						isAddBtnClicked: true
-					});
-					this.setState({
-						isShowMenu: false
-					});
-				}
-
-				this.dragging = false;
+			key: 'handleClickAddButton',
+			value: function handleClickAddButton() {
+				this.props.multiFunctionBtnCallback({
+					isAddBtnClicked: true
+				});
+				this.setState({
+					isShowMenu: false
+				});
 			}
 		}, {
 			key: 'handleClickExportBtn',
@@ -10373,7 +10351,7 @@
 				    isShowMenu = _state6.isShowMenu,
 				    isOpenSetting = _state6.isOpenSetting;
 
-				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, { onStart: this.handleStartDrag, onDrag: this.handleDraging, onStop: this.handleStopDrag }, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'blue', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter', onClick: this.handleClickAddBtn })))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
+				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, { onStart: this.handleStartDrag, onDrag: this.handleDraging, onStop: this.handleStopDrag }, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement('a', { href: '#', onClick: this.handleClickAddButton }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter' }))))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
 			}
 		}]);
 
@@ -88335,6 +88313,435 @@
 	// reactify dom
 	circleOvalButton();
 	forbidSafariDefaultDragEvent();
+
+/***/ },
+/* 1230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	var invariant = __webpack_require__(1231);
+	var defaultClickRejectionStrategy = __webpack_require__(1232);
+
+	var alreadyInjected = false;
+
+	module.exports = function injectTapEventPlugin(strategyOverrides) {
+	  strategyOverrides = strategyOverrides || {};
+	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
+
+	  if (process.env.NODE_ENV !== 'production') {
+	    invariant(!alreadyInjected, 'injectTapEventPlugin(): Can only be called once per application lifecycle.\n\n\
+	It is recommended to call injectTapEventPlugin() just before you call \
+	ReactDOM.render(). If you are using an external library which calls injectTapEventPlugin() \
+	itself, please contact the maintainer as it shouldn\'t be called in library code and \
+	should be injected by the application.');
+	  }
+
+	  alreadyInjected = true;
+
+	  __webpack_require__(341).injection.injectEventPluginsByName({
+	    'TapEventPlugin': __webpack_require__(1233)(shouldRejectClick)
+	  });
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
+
+/***/ },
+/* 1231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
+
+/***/ },
+/* 1232 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = function (lastTouchEvent, clickTimestamp) {
+	  if (lastTouchEvent && clickTimestamp - lastTouchEvent < 750) {
+	    return true;
+	  }
+	};
+
+/***/ },
+/* 1233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014 Facebook, Inc.
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 * @providesModule TapEventPlugin
+	 * @typechecks static-only
+	 */
+
+	"use strict";
+
+	var EventConstants = __webpack_require__(1234);
+	var EventPluginUtils = __webpack_require__(343);
+	var EventPropagators = __webpack_require__(340);
+	var SyntheticUIEvent = __webpack_require__(377);
+	var TouchEventUtils = __webpack_require__(1235);
+	var ViewportMetrics = __webpack_require__(378);
+
+	var keyOf = __webpack_require__(1236);
+	var topLevelTypes = EventConstants.topLevelTypes;
+
+	var isStartish = EventPluginUtils.isStartish;
+	var isEndish = EventPluginUtils.isEndish;
+
+	var isTouch = function isTouch(topLevelType) {
+	  var touchTypes = ['topTouchCancel', 'topTouchEnd', 'topTouchStart', 'topTouchMove'];
+	  return touchTypes.indexOf(topLevelType) >= 0;
+	};
+
+	/**
+	 * Number of pixels that are tolerated in between a `touchStart` and `touchEnd`
+	 * in order to still be considered a 'tap' event.
+	 */
+	var tapMoveThreshold = 10;
+	var ignoreMouseThreshold = 750;
+	var startCoords = { x: null, y: null };
+	var lastTouchEvent = null;
+
+	var Axis = {
+	  x: { page: 'pageX', client: 'clientX', envScroll: 'currentPageScrollLeft' },
+	  y: { page: 'pageY', client: 'clientY', envScroll: 'currentPageScrollTop' }
+	};
+
+	function getAxisCoordOfEvent(axis, nativeEvent) {
+	  var singleTouch = TouchEventUtils.extractSingleTouch(nativeEvent);
+	  if (singleTouch) {
+	    return singleTouch[axis.page];
+	  }
+	  return axis.page in nativeEvent ? nativeEvent[axis.page] : nativeEvent[axis.client] + ViewportMetrics[axis.envScroll];
+	}
+
+	function getDistance(coords, nativeEvent) {
+	  var pageX = getAxisCoordOfEvent(Axis.x, nativeEvent);
+	  var pageY = getAxisCoordOfEvent(Axis.y, nativeEvent);
+	  return Math.pow(Math.pow(pageX - coords.x, 2) + Math.pow(pageY - coords.y, 2), 0.5);
+	}
+
+	var touchEvents = ['topTouchStart', 'topTouchCancel', 'topTouchEnd', 'topTouchMove'];
+
+	var dependencies = ['topMouseDown', 'topMouseMove', 'topMouseUp'].concat(touchEvents);
+
+	var eventTypes = {
+	  touchTap: {
+	    phasedRegistrationNames: {
+	      bubbled: keyOf({ onTouchTap: null }),
+	      captured: keyOf({ onTouchTapCapture: null })
+	    },
+	    dependencies: dependencies
+	  }
+	};
+
+	var now = function () {
+	  if (Date.now) {
+	    return Date.now;
+	  } else {
+	    // IE8 support: http://stackoverflow.com/questions/9430357/please-explain-why-and-how-new-date-works-as-workaround-for-date-now-in
+	    return function () {
+	      return +new Date();
+	    };
+	  }
+	}();
+
+	function createTapEventPlugin(shouldRejectClick) {
+	  return {
+
+	    tapMoveThreshold: tapMoveThreshold,
+
+	    ignoreMouseThreshold: ignoreMouseThreshold,
+
+	    eventTypes: eventTypes,
+
+	    /**
+	     * @param {string} topLevelType Record from `EventConstants`.
+	     * @param {DOMEventTarget} targetInst The listening component root node.
+	     * @param {object} nativeEvent Native browser event.
+	     * @return {*} An accumulation of synthetic events.
+	     * @see {EventPluginHub.extractEvents}
+	     */
+	    extractEvents: function extractEvents(topLevelType, targetInst, nativeEvent, nativeEventTarget) {
+
+	      if (!isStartish(topLevelType) && !isEndish(topLevelType)) {
+	        return null;
+	      }
+
+	      if (isTouch(topLevelType)) {
+	        lastTouchEvent = now();
+	      } else {
+	        if (shouldRejectClick(lastTouchEvent, now())) {
+	          return null;
+	        }
+	      }
+
+	      var event = null;
+	      var distance = getDistance(startCoords, nativeEvent);
+	      if (isEndish(topLevelType) && distance < tapMoveThreshold) {
+	        event = SyntheticUIEvent.getPooled(eventTypes.touchTap, targetInst, nativeEvent, nativeEventTarget);
+	      }
+	      if (isStartish(topLevelType)) {
+	        startCoords.x = getAxisCoordOfEvent(Axis.x, nativeEvent);
+	        startCoords.y = getAxisCoordOfEvent(Axis.y, nativeEvent);
+	      } else if (isEndish(topLevelType)) {
+	        startCoords.x = 0;
+	        startCoords.y = 0;
+	      }
+	      EventPropagators.accumulateTwoPhaseDispatches(event);
+	      return event;
+	    }
+
+	  };
+	}
+
+	module.exports = createTapEventPlugin;
+
+/***/ },
+/* 1234 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	'use strict';
+
+	/**
+	 * Types of raw signals from the browser caught at the top level.
+	 */
+
+	var topLevelTypes = {
+	  topAbort: null,
+	  topAnimationEnd: null,
+	  topAnimationIteration: null,
+	  topAnimationStart: null,
+	  topBlur: null,
+	  topCanPlay: null,
+	  topCanPlayThrough: null,
+	  topChange: null,
+	  topClick: null,
+	  topCompositionEnd: null,
+	  topCompositionStart: null,
+	  topCompositionUpdate: null,
+	  topContextMenu: null,
+	  topCopy: null,
+	  topCut: null,
+	  topDoubleClick: null,
+	  topDrag: null,
+	  topDragEnd: null,
+	  topDragEnter: null,
+	  topDragExit: null,
+	  topDragLeave: null,
+	  topDragOver: null,
+	  topDragStart: null,
+	  topDrop: null,
+	  topDurationChange: null,
+	  topEmptied: null,
+	  topEncrypted: null,
+	  topEnded: null,
+	  topError: null,
+	  topFocus: null,
+	  topInput: null,
+	  topInvalid: null,
+	  topKeyDown: null,
+	  topKeyPress: null,
+	  topKeyUp: null,
+	  topLoad: null,
+	  topLoadedData: null,
+	  topLoadedMetadata: null,
+	  topLoadStart: null,
+	  topMouseDown: null,
+	  topMouseMove: null,
+	  topMouseOut: null,
+	  topMouseOver: null,
+	  topMouseUp: null,
+	  topPaste: null,
+	  topPause: null,
+	  topPlay: null,
+	  topPlaying: null,
+	  topProgress: null,
+	  topRateChange: null,
+	  topReset: null,
+	  topScroll: null,
+	  topSeeked: null,
+	  topSeeking: null,
+	  topSelectionChange: null,
+	  topStalled: null,
+	  topSubmit: null,
+	  topSuspend: null,
+	  topTextInput: null,
+	  topTimeUpdate: null,
+	  topTouchCancel: null,
+	  topTouchEnd: null,
+	  topTouchMove: null,
+	  topTouchStart: null,
+	  topTransitionEnd: null,
+	  topVolumeChange: null,
+	  topWaiting: null,
+	  topWheel: null
+	};
+
+	var EventConstants = {
+	  topLevelTypes: topLevelTypes
+	};
+
+	module.exports = EventConstants;
+
+/***/ },
+/* 1235 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright 2013-2014 Facebook, Inc.
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 * @providesModule TouchEventUtils
+	 */
+
+	var TouchEventUtils = {
+	  /**
+	   * Utility function for common case of extracting out the primary touch from a
+	   * touch event.
+	   * - `touchEnd` events usually do not have the `touches` property.
+	   *   http://stackoverflow.com/questions/3666929/
+	   *   mobile-sarai-touchend-event-not-firing-when-last-touch-is-removed
+	   *
+	   * @param {Event} nativeEvent Native event that may or may not be a touch.
+	   * @return {TouchesObject?} an object with pageX and pageY or null.
+	   */
+	  extractSingleTouch: function extractSingleTouch(nativeEvent) {
+	    var touches = nativeEvent.touches;
+	    var changedTouches = nativeEvent.changedTouches;
+	    var hasTouches = touches && touches.length > 0;
+	    var hasChangedTouches = changedTouches && changedTouches.length > 0;
+
+	    return !hasTouches && hasChangedTouches ? changedTouches[0] : hasTouches ? touches[0] : nativeEvent;
+	  }
+	};
+
+	module.exports = TouchEventUtils;
+
+/***/ },
+/* 1236 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+
+	/**
+	 * Allows extraction of a minified key. Let's the build system minify keys
+	 * without losing the ability to dynamically use key strings as values
+	 * themselves. Pass in an object with a single key/val pair and it will return
+	 * you the string key of that single record. Suppose you want to grab the
+	 * value for a key 'className' inside of an object. Key/val minification may
+	 * have aliased that key to be 'xa12'. keyOf({className: null}) will return
+	 * 'xa12' in that case. Resolve keys you want to use once at startup time, then
+	 * reuse those resolutions.
+	 */
+
+	var keyOf = function keyOf(oneKeyObj) {
+	  var key;
+	  for (key in oneKeyObj) {
+	    if (!oneKeyObj.hasOwnProperty(key)) {
+	      continue;
+	    }
+	    return key;
+	  }
+	  return null;
+	};
+
+	module.exports = keyOf;
 
 /***/ }
 /******/ ]);

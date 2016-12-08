@@ -6,6 +6,8 @@ import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus} from '../js/tool.js';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -1155,45 +1157,25 @@ class MultiFunctionBtn extends React.Component {
 			isOpenSetting: false
 		}
 
-		this.dragging = false;
+		this.handleClickAddButton = this.handleClickAddButton.bind(this);
 
-		this.handleStartDrag = this.handleStartDrag.bind(this);
-		this.handleDraging = this.handleDraging.bind(this);
-		this.handleStopDrag = this.handleStopDrag.bind(this);
 		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
-		this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
+		// this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
 		this.handleClickExportBtn = this.handleClickExportBtn.bind(this);
 		this.handleClickSettingBtn = this.handleClickSettingBtn.bind(this);
-	}
-	handleStartDrag() {
-		/*this.dragging = true;
-		console.log(this.dragging);*/
-	}
-	handleDraging() {
-		this.dragging = true;
-	}
-	handleStopDrag() {
-		/*this.dragging = false;
-		console.log('handleStopDrag', this.dragging);*/
 	}
 	handleClickFunctionBtn() {
 		this.setState((prevState) => ({
 			isShowMenu: !prevState.isShowMenu
 		}));
 	}
-	handleClickAddBtn() {
-		const {dragging} = this;
-
-		if (!dragging) {
-			this.props.multiFunctionBtnCallback({
-				isAddBtnClicked: true
-			});
-			this.setState({
-				isShowMenu: false
-			});
-		}
-
-		this.dragging = false;
+	handleClickAddButton() {
+		this.props.multiFunctionBtnCallback({
+			isAddBtnClicked: true
+		});
+		this.setState({
+			isShowMenu: false
+		});
 	}
 	handleClickExportBtn() {
 		this.setState({
@@ -1221,14 +1203,16 @@ class MultiFunctionBtn extends React.Component {
 								{/*<Button className='ovalButton' size='huge' icon='sign out' circular color='violet' onClick={this.handleClickExportBtn} />*/}
 							</p>
 							<p>
-								<Button className='ovalButton' size='huge' icon='plus' circular color='blue' onClick={this.handleClickAddBtn} />
+								{/* <Button className='ovalButton' size='huge' icon='plus' circular color='blue' onClick={this.handleClickAddBtn} /> */}
 							</p>
 							<p>
 							</p>
 						</div>
 						<p>
 							{/* place add button here temporarily */}
-							<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' onClick={this.handleClickAddBtn} />
+							<a href='#' onClick={this.handleClickAddButton}>
+								<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
+							</a>
 
 							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
 						</p>

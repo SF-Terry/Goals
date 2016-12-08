@@ -19,6 +19,7 @@
     "muicss": "^0.9.5",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-tap-event-plugin": "^2.0.1",
     "semantic-ui-css": "^2.2.4",
     "semantic-ui-react": "^0.61.6"
   },
