@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 class globalVarible {
 	constructor() {
 		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -44,8 +46,35 @@ class globalVarible {
 			start: 'start',
 			end: 'end'
 		}
+
+
+		// set taskTypeMomentsObj
+		const getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
+		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
+		const dayTaskTypeMoments = getCurrentMoments('day');
+		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
+		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
+		const weekTaskTypeMoments = getCurrentMoments('week');
+		const monthTaskTypeMoments = getCurrentMoments('month');
+		const yearTaskTypeMoments = getCurrentMoments('year');
+		const tomorrowTaskTypeMoments =  getNextMoments('day');
+		const nextWeekTaskTypeMoments =  getNextMoments('week');
+		const nextMonthTaskTypeMoments = getNextMoments('month');
+		const nextYearTaskTypeMoments =  getNextMoments('year');
+		this.taskTypeMomentsObj = {
+			'today': dayTaskTypeMoments,
+			'long': longTaskTypeMoments,
+			'thisWeek': weekTaskTypeMoments,
+			'thisMonth': monthTaskTypeMoments,
+			'thisYear': yearTaskTypeMoments,
+			'tomorrow': tomorrowTaskTypeMoments,
+			'nextWeek': nextWeekTaskTypeMoments,
+			'nextMonth': nextMonthTaskTypeMoments,
+			'nextYear': nextYearTaskTypeMoments
+		};
 	}
 }
+
 
 let G = new globalVarible();
 module.exports = G;

@@ -18,7 +18,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 import storekeeper from '../js/storekeeper.js';
 
-import G from '../js/globalVarible.js';
+import G, {taskTypeMomentsObj} from '../js/globalVarible.js';
 
 const {Item} = Menu;
 const {Row, Column} = Grid;
@@ -281,32 +281,8 @@ class Timepicker extends React.Component {
 class TaskTypePanel extends React.Component {
  	constructor(props) {
  		super(props);
-
- 		// set taskTypeMomentsMap
- 		const getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
- 		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
- 		const dayTaskTypeMoments = getCurrentMoments('day');
- 		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
- 		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
- 		const weekTaskTypeMoments = getCurrentMoments('week');
- 		const monthTaskTypeMoments = getCurrentMoments('month');
- 		const yearTaskTypeMoments = getCurrentMoments('year');
- 		const tomorrowTaskTypeMoments =  getNextMoments('day');
- 		const nextWeekTaskTypeMoments =  getNextMoments('week');
- 		const nextMonthTaskTypeMoments = getNextMoments('month');
- 		const nextYearTaskTypeMoments =  getNextMoments('year');
- 		this.taskTypeMomentsObj = {
- 			'today': dayTaskTypeMoments,
- 			'long': longTaskTypeMoments,
- 			'thisWeek': weekTaskTypeMoments,
- 			'thisMonth': monthTaskTypeMoments,
- 			'thisYear': yearTaskTypeMoments,
- 			'tomorrow': tomorrowTaskTypeMoments,
- 			'nextWeek': nextWeekTaskTypeMoments,
- 			'nextMonth': nextMonthTaskTypeMoments,
- 			'nextYear': nextYearTaskTypeMoments
- 		};
- 		const defaultTaskTypeMoments = this.taskTypeMomentsObj['today'];
+		
+ 		const defaultTaskTypeMoments = taskTypeMomentsObj['today'];
 
  		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props;
 
@@ -329,7 +305,6 @@ class TaskTypePanel extends React.Component {
 		this.endDatePanelClick = this.endDatePanelClick.bind(this);
 	}	
 	taskTypeDropdownChange(e, result) {
-		const {taskTypeMomentsObj} = this;
 		const value = result.value;
 		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer} = this.state;
 		const isLongTask = value == 'long';
@@ -361,7 +336,6 @@ class TaskTypePanel extends React.Component {
 		}
 	}
 	isTaskNeedTimerCheckboxClick(e, result) {
-		const {taskTypeMomentsObj} = this;
 		const checked = result.checked;
 		let {task} = this.props;
 		const {isNeedTimeSetter, taskType} = this.state;
@@ -404,7 +378,6 @@ class TaskTypePanel extends React.Component {
 		});
 	}
 	timeSetterCallback(o) {
-		const {taskTypeMomentsObj} = this;
 		const {startDate, endDate, isConfirmSetting, isCancelSetting} = o;
 		const {taskType} = this.state;
 		let {task} = this.props;
@@ -463,7 +436,6 @@ class TaskTypePanel extends React.Component {
 		});
 	}
 	render() {
-		let {taskTypeMomentsObj} = this;
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
 		const taskTypesOptions = G.taskTypes.map((item, index) => {
 			let text = getLanguageTextByTaskType(item);			
@@ -793,10 +765,23 @@ class TaskListItem extends React.Component {
 
 		};*/
 
+
 		this.textClick = this.textClick.bind(this);
 		this.inputChange = this.inputChange.bind(this);
 		this.deleteBtnClick = this.deleteBtnClick.bind(this);
 		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
+	}
+	componentDidMount() {
+		let {task} = this.props;
+		const {taskType, isTaskNeedRepeat} = task;
+		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+
+		// initial items' prop
+		// update future taskType
+		if (isFutureTaskType) {
+			taskTypeMomentsObj
+		}
+
 	}
 	textClick() {
 		let {task} = this.props;
@@ -882,7 +867,7 @@ class TaskListItem extends React.Component {
 								</div>
 							</Column>
 							{!isTaskCompleted ? (
-								<Column width={5} verticalAlign='middle'>
+								<Column width={5} textAlign='center' verticalAlign='middle'>
 									<Label>
 										{getLabelTextByMoments(task)}
 									</Label>
