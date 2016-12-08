@@ -1,6 +1,6 @@
 /* Environment */
 html, body {
-  overflow:hidden;
+  /* overflow:hidden; */
 }
 
 
@@ -16,10 +16,19 @@ html, body {
 		z-index:1;
 		background: white;
 		overflow-y: scroll;
+		
 		.TimeSetter{
 			z-index:2;
 			overflow-y: scroll;
 			background: white;
 		}
 	}
+
+	// Dropdown: cover semantic.css
+	.ui.selection.dropdown{
+		.menu{
+			max-height: (2.5 * 8.01428571) + rem!important; // default: 8.01428571rem
+		}
+	}
+
 }

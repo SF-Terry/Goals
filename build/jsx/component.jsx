@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
-import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType} from '../js/tool.js';
+import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus} from '../js/tool.js';
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -19,8 +19,6 @@ import storekeeper from '../js/storekeeper.js';
 const {Item} = Menu;
 const {Row, Column} = Grid;
 
-
-let rootDom = document.getElementById('app');
 
 let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
@@ -203,10 +201,10 @@ class TimeSetter extends React.Component {
 				<Grid style={{marginTop: "20px"}}>
 					<Row>
 						<Column width={8} style={{textAlign: 'right'}}>
-							<Button content='Start Time' basic={isStartTime ? false : true} primary={isStartTime ? true : false} onClick={this.startTimeBtnClick} />
+							<Button content='开始时间' basic={isStartTime ? false : true} primary={isStartTime ? true : false} onClick={this.startTimeBtnClick} />
 						</Column>
 						<Column width={8} style={{textAlign: 'left'}}>
-							<Button content='End Time' basic={isEndTime ? false : true} primary={isEndTime ? true : false} onClick={this.endTimeBtnClick} />
+							<Button content='结束时间' basic={isEndTime ? false : true} primary={isEndTime ? true : false} onClick={this.endTimeBtnClick} />
 						</Column>
 					</Row>
 					<Row>
@@ -618,18 +616,17 @@ class TaskLevelButtons extends React.Component {
 		let buttons = [];
 		for (let buttonLevel in buttonsInfo) {
 			buttons.push(
-				<Column width={4} key={buttonLevel}>
-					<Button circular basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} />
-				</Column>
+				<span key={buttonLevel}>
+					&nbsp;&nbsp;
+					<Button className='taskLevelButton' basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} />
+				</span>
 			);
 		}
 		return (
-			<div style={{textAlign: 'center'}}>
-				<Grid>
-					<Row>
-						{buttons}
-					</Row>
-				</Grid>
+			<div style={{
+				textAlign: 'center'
+			}}>
+				{buttons}
 			</div>
 		);
 	}
@@ -760,11 +757,16 @@ class TaskInfo extends React.Component {
 					</Row>*/}
 					<Row centered>
 						<Column width={14}>
-							<Input className='AddTask_TaskNameInput' defaultValue={name} placeholder='Task Content' onChange={this.taskNameInputChange} fluid />
+							<Input id='taskInfo_taskNameInput' defaultValue={name} placeholder='Task Content' onChange={this.taskNameInputChange} fluid ref={(o) => {
+								if (o && o.props && o.props.id && mode == globalTaskInfoMode.add) {
+									let inputDom = document.getElementById(o.props.id).children[0];
+									inputDom.focus();
+								}
+							}} />
 						</Column>	
 					</Row>
 					<Row centered>
-						<Column width={14}>
+						<Column width={16}>
 							<TaskLevelButtons level={taskLevel} taskLevelButtonsCallback={this.taskLevelButtonsCallback} />
 						</Column>	
 					</Row>
@@ -916,7 +918,7 @@ class TaskListItem extends React.Component {
 						// edit mode
 						<Row>
 							<Column width={3} textAlign='center' verticalAlign='middle'>
-								<Icon size='large' color='grey' name='remove' onClick={this.deleteBtnClick}/>
+								<Icon size='large' color='red' name='minus circle' onClick={this.deleteBtnClick}/>
 							</Column>							
 							<Column width={13}>
 								<Input fluid className="Tasklist_TaskNameInput" defaultValue={taskName} onChange={this.inputChange}/>
@@ -1096,14 +1098,14 @@ class TaskListContainer extends React.Component {
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={7}>
+						<Column width={6}>
 							<TaskTypeSelector taskType={0} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
-						<Column width={5}>
+						<Column width={6}>
 							<Dropdown fluid selection defaultValue={defalutIsComplete} options={isCompletesOptions} onChange={this.isCompleteDropdownChange}></Dropdown>
 						</Column>
 						<Column width={4} textAlign='center' verticalAlign='middle'>
-							<Button color={!editMode ? 'blue' : 'google plus'} onClick={this.editBtnClick}>
+							<Button color={!editMode ? 'blue' : 'green'} size='mini' onClick={this.editBtnClick}>
 								{!editMode ? '编辑' : '完成'}
 							</Button>
 						</Column>
@@ -1323,6 +1325,9 @@ class ToDoList extends React.Component {
 		            </Tab>
 		        </Tabs>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
+
+				{/* <Input id='testInput' defaultValue='默认值' ref ={setSemanticInputInitialledFocus} /> */}
+
 			</div>
 			);
 	}

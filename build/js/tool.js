@@ -37,8 +37,7 @@ const tool = {
 				return '明年目标'; break;
 			defaut: return ''; break;
 		}
-	}
-					
+	}					
 };
 
 module.exports = tool;
