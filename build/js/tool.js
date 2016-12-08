@@ -1,4 +1,6 @@
 import G from '../js/globalVarible.js';
+import moment from 'moment';
+
 const tool = {
 	// singleton design mode
 	getSingle:  fn => {
@@ -42,21 +44,33 @@ const tool = {
 
 	// getLabelTextByMoments	
 	getLabelTextByMoments(task) {
-		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = task;
+		const {taskType, isTaskNeedTimer, startDate, endDate} = task;
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 
-		// isn't future TaskType
-		if (!isFutureTaskType) {
-			if (!isTaskNeedTimer) {
-				return '';
-			}
-			if (isTaskNeedTimer) {
+		if (!isTaskNeedTimer) {
+			return G.taskTypesText[taskType];
+		}
+		if (isTaskNeedTimer) {
+			// timeMode
+			const isBefore = moment().isSameOrBefore(startDate);
+			const isDoing = moment().isAfter(startDate) && moment().isSameOrBefore(endDate);
+			const isAfter = moment().isAfter(endDate);
 
+			if (isBefore) {
+				const s = moment().to(startDate);
+				const n = '后开始';
+				return s.trim().replace('内', n).replace('前', n);
+			}
+			if (isDoing) {
+				const s = moment().to(endDate);
+				const n = '后结束';
+				return s.trim().replace('内', n).replace('前', n);
+			}
+			if (isAfter) {
+				const s = moment().to(endDate);
+				return '已超时' + s.trim().replace('内', '').replace('前', '');
 			}
 		}
-
-
-		// is Future TaskType
 
 	}
 };

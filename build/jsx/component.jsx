@@ -5,7 +5,7 @@ import Draggable from 'react-draggable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
-import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus} from '../js/tool.js';
+import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus, getLabelTextByMoments} from '../js/tool.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
@@ -20,11 +20,11 @@ import storekeeper from '../js/storekeeper.js';
 
 import G from '../js/globalVarible.js';
 
-console.log(G);
-
 const {Item} = Menu;
 const {Row, Column} = Grid;
 
+// inital moment.locale
+moment.locale('zh-cn');
 
 let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
@@ -64,7 +64,7 @@ if (tasks.length === 0) {
 		isTaskNeedTimer: true,
 		isTaskNeedRepeat: false,
 		startDate: moment(),	
-		endDate: moment().add(2, 'months')
+		endDate: moment().add(6, 'months')
 	});
 }
 
@@ -876,10 +876,15 @@ class TaskListItem extends React.Component {
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
-							<Column width={12} verticalAlign='middle'>
+							<Column width={8} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
 								</div>
+							</Column>
+							<Column width={4} verticalAlign='middle'>
+								<Label>
+									{getLabelTextByMoments(task)}
+								</Label>
 							</Column>
 							<Column width={2} textAlign='center' verticalAlign='middle'>
 								<Icon name='circle' color={color} />

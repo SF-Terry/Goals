@@ -9087,13 +9087,13 @@
 	(0, _reactTapEventPlugin2.default)();
 
 	// datepicker
-
-
-	console.log(_globalVarible2.default);
-
 	var Item = _semanticUiReact.Menu.Item;
 	var Row = _semanticUiReact.Grid.Row,
 	    Column = _semanticUiReact.Grid.Column;
+
+	// inital moment.locale
+
+	_moment2.default.locale('zh-cn');
 
 	var settings = _storekeeper2.default.settings;
 	var tasks = _storekeeper2.default.tasks;
@@ -9131,7 +9131,7 @@
 			isTaskNeedTimer: true,
 			isTaskNeedRepeat: false,
 			startDate: (0, _moment2.default)(),
-			endDate: (0, _moment2.default)().add(2, 'months')
+			endDate: (0, _moment2.default)().add(6, 'months')
 		});
 	}
 
@@ -9986,7 +9986,7 @@
 					}
 				}();
 
-				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2 }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: 12, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'circle', color: color }))) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
+				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2 }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: 8, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), _react2.default.createElement(Column, { width: 4, verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, null, (0, _tool.getLabelTextByMoments)(task))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { name: 'circle', color: color }))) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
 		}]);
 
@@ -70340,6 +70340,10 @@
 
 	var _globalVarible2 = _interopRequireDefault(_globalVarible);
 
+	var _moment = __webpack_require__(1119);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -70391,21 +70395,35 @@
 		getLabelTextByMoments: function getLabelTextByMoments(task) {
 			var taskType = task.taskType,
 			    isTaskNeedTimer = task.isTaskNeedTimer,
-			    isTaskNeedRepeat = task.isTaskNeedRepeat,
 			    startDate = task.startDate,
 			    endDate = task.endDate;
 
 			var isFutureTaskType = _globalVarible2.default.futureTaskTypes.includes(taskType);
 
-			// isn't future TaskType
-			if (!isFutureTaskType) {
-				if (!isTaskNeedTimer) {
-					return '';
-				}
-				if (isTaskNeedTimer) {}
+			if (!isTaskNeedTimer) {
+				return _globalVarible2.default.taskTypesText[taskType];
 			}
+			if (isTaskNeedTimer) {
+				// timeMode
+				var isBefore = (0, _moment2.default)().isSameOrBefore(startDate);
+				var isDoing = (0, _moment2.default)().isAfter(startDate) && (0, _moment2.default)().isSameOrBefore(endDate);
+				var isAfter = (0, _moment2.default)().isAfter(endDate);
 
-			// is Future TaskType
+				if (isBefore) {
+					var s = (0, _moment2.default)().to(startDate);
+					var n = '后开始';
+					return s.trim().replace('内', n).replace('前', n);
+				}
+				if (isDoing) {
+					var _s = (0, _moment2.default)().to(endDate);
+					var _n = '后结束';
+					return _s.trim().replace('内', _n).replace('前', _n);
+				}
+				if (isAfter) {
+					var _s2 = (0, _moment2.default)().to(endDate);
+					return '已超时' + _s2.trim().replace('内', '').replace('前', '');
+				}
+			}
 		}
 	};
 
@@ -88767,6 +88785,17 @@
 		this.dayTaskTypes = ['today', 'tomorrow'];
 		this.longTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.defaultTaskType = 'today';
+		this.taskTypesText = {
+			today: '今日目标',
+			long: '长期目标',
+			thisWeek: '本周目标',
+			thisMonth: '本月目标',
+			thisYear: '今年目标',
+			tomorrow: '明日目标',
+			nextWeek: '下周目标',
+			nextMonth: '下月目标',
+			nextYear: '明年目标'
+		};
 
 		this.taskLevels = {
 			a: 'a',
