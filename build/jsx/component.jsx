@@ -1205,7 +1205,7 @@ class MultiFunctionBtn extends React.Component {
 						</div>
 						<p>
 							{/* place add button here temporarily */}
-							<Button className='ovalButton' size='huge' icon='plus' circular color='twitter' onClick={this.handleClickAddBtn} />
+							<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' onClick={this.handleClickAddBtn} />
 
 							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
 						</p>
