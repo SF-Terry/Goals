@@ -776,11 +776,29 @@ class TaskListItem extends React.Component {
 		const {taskType, isTaskNeedRepeat} = task;
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 
-		// initial items' prop
+		/* initial items' prop */
 		// update future taskType
 		if (isFutureTaskType) {
-			taskTypeMomentsObj
+			const normalStartDate = taskTypeMomentsObj[taskType][0];
+			const isNeedChange = moment().isSameOrAfter(normalStartDate)
+			let newTaskType = null;
+			switch (taskType) {
+				case 'tomorrow': 
+					newTaskType = 'today'; break;
+				case 'nextWeek': 
+					newTaskType = 'thisWeek'; break;
+				case 'nextMonth': 
+					newTaskType = 'thisMonth'; break;
+				case 'nextYear': 
+					newTaskType = 'thisYear'; break;
+				default: break;
+			}
+			if (newTaskType) {
+				task.taskType = newTaskType;
+			}
 		}
+
+		// 
 
 	}
 	textClick() {
@@ -836,7 +854,7 @@ class TaskListItem extends React.Component {
 		const {name: taskName, taskType, isTaskCompleted, taskLevel} = task;
 
 		const color = (() => {
-			switch(taskLevel) {
+			switch (taskLevel) {
 				case 'a':
 					return 'red'; break;
 				case 'b':
