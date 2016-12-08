@@ -898,17 +898,17 @@ class TaskListItem extends React.Component {
 					{!editMode ? (
 						// normal mode
 						<Row >
-							<Column width={3}>
+							<Column width={2}>
 								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
-							<Column width={10}>
+							<Column width={12} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
 								</div>
 							</Column>
-							<Column width={3} textAlign='center' verticalAlign='middle'>
+							<Column width={2} textAlign='center' verticalAlign='middle'>
 								<Icon name='circle' color={color} />
 							</Column>
 						</Row>
