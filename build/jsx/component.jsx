@@ -196,8 +196,8 @@ class TimeSetter extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: window.screen.availWidth,
-				height: window.screen.availHeight,
+				width: document.body.clientWidth,
+				height: document.body.clientHeight,
 				display: isNeedShow ? 'block' : 'none'
 			}}>
 				<Grid style={{marginTop: "20px"}}>
@@ -600,7 +600,7 @@ class TaskLevelButtons extends React.Component {
 		let buttonsInfo = {
 			a: {
 				color: 'red',
-				text: '重要紧急'
+				text: '重急'
 			},
 			b: {
 				color: 'orange',
@@ -618,12 +618,18 @@ class TaskLevelButtons extends React.Component {
 		let buttons = [];
 		for (let buttonLevel in buttonsInfo) {
 			buttons.push(
-				<Button circular basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} key={buttonLevel} />
+				<Column width={4} key={buttonLevel}>
+					<Button circular basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} />
+				</Column>
 			);
 		}
 		return (
 			<div style={{textAlign: 'center'}}>
-				{buttons}
+				<Grid>
+					<Row>
+						{buttons}
+					</Row>
+				</Grid>
 			</div>
 		);
 	}
@@ -743,8 +749,8 @@ class TaskInfo extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: window.screen.availWidth,
-				height: window.screen.availHeight
+				width: document.body.clientWidth,
+				height: document.body.clientHeight
 			}}>
 				<Grid padded>
 					{/*<Row>
@@ -869,9 +875,22 @@ class TaskListItem extends React.Component {
 	render() {
 		let {task, editMode} = this.props;
 
-		const {name: taskName, taskType, isTaskCompleted} = task;
+		const {name: taskName, taskType, isTaskCompleted, taskLevel} = task;
 
-		console.log('task isTaskCompleted', task.name, isTaskCompleted);
+		const color = (() => {
+			switch(taskLevel) {
+				case 'a':
+					return 'red'; break;
+				case 'b':
+					return 'orange'; break;
+				case 'c':
+					return 'yellow'; break;
+				case 'd':
+					return 'blue'; break;
+				default:
+					return 'orange'; break;
+			}
+		})();
 
 		return( 
 			<Item>
@@ -889,8 +908,8 @@ class TaskListItem extends React.Component {
 									{taskName}
 								</div>
 							</Column>
-							<Column width={3}>
-								...
+							<Column width={3} textAlign='center' verticalAlign='middle'>
+								<Icon name='circle' color={color} />
 							</Column>
 						</Row>
 					) : (
@@ -1092,7 +1111,9 @@ class TaskListContainer extends React.Component {
 
 				</Grid>
 				{isShowTaskList ? (
-					<TaskList taskType={taskType} editMode={editMode} isTaskCompleted={isTaskCompleted} />
+					<div>
+						<TaskList taskType={taskType} editMode={editMode} isTaskCompleted={isTaskCompleted} />
+					</div>
 				) : null}
 			</div>
 		);
