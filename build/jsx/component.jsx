@@ -54,7 +54,7 @@ if (tasks.length === 0) {
 		isTaskNeedTimer: true,
 		isTaskNeedRepeat: false,
 		startDate: moment(),	
-		endDate: moment().add(2, 'hours')
+		endDate: moment().endOf('day')
 	});
 	tasks.push({
 		name: '第一个长期目标',
@@ -871,21 +871,24 @@ class TaskListItem extends React.Component {
 					{!editMode ? (
 						// normal mode
 						<Row >
-							<Column width={2}>
+							<Column width={2} textAlign='center' verticalAlign='middle'>
 								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
-							<Column width={8} verticalAlign='middle'>
+							<Column width={!isTaskCompleted ? 7 : 12} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
 								</div>
 							</Column>
-							<Column width={4} verticalAlign='middle'>
-								<Label>
-									{getLabelTextByMoments(task)}
-								</Label>
-							</Column>
+							{!isTaskCompleted ? (
+								<Column width={5} verticalAlign='middle'>
+									<Label>
+										{getLabelTextByMoments(task)}
+									</Label>
+								</Column>
+							) : ''}
+
 							<Column width={2} textAlign='center' verticalAlign='middle'>
 								<Icon name='circle' color={color} />
 							</Column>
