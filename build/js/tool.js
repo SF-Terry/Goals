@@ -1,3 +1,4 @@
+import G from '../js/globalVarible.js';
 const tool = {
 	// singleton design mode
 	getSingle:  fn => {
@@ -37,7 +38,27 @@ const tool = {
 				return '明年目标'; break;
 			defaut: return ''; break;
 		}
-	}					
+	},			
+
+	// getLabelTextByMoments	
+	getLabelTextByMoments(task) {
+		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = task;
+		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+
+		// isn't future TaskType
+		if (!isFutureTaskType) {
+			if (!isTaskNeedTimer) {
+				return '';
+			}
+			if (isTaskNeedTimer) {
+
+			}
+		}
+
+
+		// is Future TaskType
+
+	}
 };
 
 module.exports = tool;
