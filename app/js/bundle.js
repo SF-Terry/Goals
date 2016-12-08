@@ -10297,6 +10297,11 @@
 				isOpenSetting: false
 			};
 
+			_this17.dragging = false;
+
+			_this17.handleStartDrag = _this17.handleStartDrag.bind(_this17);
+			_this17.handleDraging = _this17.handleDraging.bind(_this17);
+			_this17.handleStopDrag = _this17.handleStopDrag.bind(_this17);
 			_this17.handleClickFunctionBtn = _this17.handleClickFunctionBtn.bind(_this17);
 			_this17.handleClickAddBtn = _this17.handleClickAddBtn.bind(_this17);
 			_this17.handleClickExportBtn = _this17.handleClickExportBtn.bind(_this17);
@@ -10305,6 +10310,23 @@
 		}
 
 		_createClass(MultiFunctionBtn, [{
+			key: 'handleStartDrag',
+			value: function handleStartDrag() {
+				/*this.dragging = true;
+	   console.log(this.dragging);*/
+			}
+		}, {
+			key: 'handleDraging',
+			value: function handleDraging() {
+				this.dragging = true;
+			}
+		}, {
+			key: 'handleStopDrag',
+			value: function handleStopDrag() {
+				/*this.dragging = false;
+	   console.log('handleStopDrag', this.dragging);*/
+			}
+		}, {
 			key: 'handleClickFunctionBtn',
 			value: function handleClickFunctionBtn() {
 				this.setState(function (prevState) {
@@ -10316,12 +10338,18 @@
 		}, {
 			key: 'handleClickAddBtn',
 			value: function handleClickAddBtn() {
-				this.props.multiFunctionBtnCallback({
-					isAddBtnClicked: true
-				});
-				this.setState({
-					isShowMenu: false
-				});
+				var dragging = this.dragging;
+
+				if (!dragging) {
+					this.props.multiFunctionBtnCallback({
+						isAddBtnClicked: true
+					});
+					this.setState({
+						isShowMenu: false
+					});
+				}
+
+				this.dragging = false;
 			}
 		}, {
 			key: 'handleClickExportBtn',
@@ -10345,7 +10373,7 @@
 				    isShowMenu = _state6.isShowMenu,
 				    isOpenSetting = _state6.isOpenSetting;
 
-				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, null, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'blue', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter', onClick: this.handleClickAddBtn })))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
+				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, { onStart: this.handleStartDrag, onDrag: this.handleDraging, onStop: this.handleStopDrag }, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'huge', icon: 'plus', circular: true, color: 'blue', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter', onClick: this.handleClickAddBtn })))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
 			}
 		}]);
 

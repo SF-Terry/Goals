@@ -1155,10 +1155,26 @@ class MultiFunctionBtn extends React.Component {
 			isOpenSetting: false
 		}
 
+		this.dragging = false;
+
+		this.handleStartDrag = this.handleStartDrag.bind(this);
+		this.handleDraging = this.handleDraging.bind(this);
+		this.handleStopDrag = this.handleStopDrag.bind(this);
 		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
 		this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
 		this.handleClickExportBtn = this.handleClickExportBtn.bind(this);
 		this.handleClickSettingBtn = this.handleClickSettingBtn.bind(this);
+	}
+	handleStartDrag() {
+		/*this.dragging = true;
+		console.log(this.dragging);*/
+	}
+	handleDraging() {
+		this.dragging = true;
+	}
+	handleStopDrag() {
+		/*this.dragging = false;
+		console.log('handleStopDrag', this.dragging);*/
 	}
 	handleClickFunctionBtn() {
 		this.setState((prevState) => ({
@@ -1166,12 +1182,18 @@ class MultiFunctionBtn extends React.Component {
 		}));
 	}
 	handleClickAddBtn() {
-		this.props.multiFunctionBtnCallback({
-			isAddBtnClicked: true
-		});
-		this.setState({
-			isShowMenu: false
-		});
+		const {dragging} = this;
+
+		if (!dragging) {
+			this.props.multiFunctionBtnCallback({
+				isAddBtnClicked: true
+			});
+			this.setState({
+				isShowMenu: false
+			});
+		}
+
+		this.dragging = false;
 	}
 	handleClickExportBtn() {
 		this.setState({
@@ -1189,9 +1211,8 @@ class MultiFunctionBtn extends React.Component {
 		const {isShowMenu, isOpenSetting} = this.state;
 		return (
 			<div className='MultiFunctionBtn'>
-				<Draggable>
+				<Draggable onStart={this.handleStartDrag} onDrag={this.handleDraging} onStop={this.handleStopDrag}>
 					<div>
-						
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
 								{/*<Button className='ovalButton' size='huge' icon='setting' circular color='brown' onClick={this.handleClickSettingBtn} />*/}
