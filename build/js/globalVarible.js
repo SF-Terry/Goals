@@ -18,6 +18,16 @@ class globalVarible {
 			nextMonth: '下月目标',
 			nextYear: '明年目标'
 		};
+		this.taskTypesDateType = {
+			today: 'day',
+			thisWeek: 'week',
+			thisMonth: 'month',
+			thisYear: 'year',
+			tomorrow: 'day',
+			nextWeek: 'week',
+			nextMonth: 'month',
+			nextYear: 'year'
+		};
 
 		this.taskLevels = {
 			a: 'a',
@@ -61,7 +71,7 @@ class globalVarible {
 		const nextWeekTaskTypeMoments =  getNextMoments('week');
 		const nextMonthTaskTypeMoments = getNextMoments('month');
 		const nextYearTaskTypeMoments =  getNextMoments('year');
-		this.taskTypeMomentsObj = {
+		this.taskTypesMoment = {
 			'today': dayTaskTypeMoments,
 			'long': longTaskTypeMoments,
 			'thisWeek': weekTaskTypeMoments,

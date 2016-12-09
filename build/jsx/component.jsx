@@ -18,7 +18,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 import storekeeper from '../js/storekeeper.js';
 
-import G, {taskTypeMomentsObj} from '../js/globalVarible.js';
+import G, {taskTypesMoment, taskTypesDateType} from '../js/globalVarible.js';
 
 const {Item} = Menu;
 const {Row, Column} = Grid;
@@ -282,7 +282,7 @@ class TaskTypePanel extends React.Component {
  	constructor(props) {
  		super(props);
 		
- 		const defaultTaskTypeMoments = taskTypeMomentsObj['today'];
+ 		const defaultTaskTypeMoments = taskTypesMoment['today'];
 
  		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props;
 
@@ -306,7 +306,7 @@ class TaskTypePanel extends React.Component {
 	}	
 	taskTypeDropdownChange(e, result) {
 		const value = result.value;
-		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer} = this.state;
+		const {taskType, timeSetterTimeType, isNeedTimeSetter, isTaskNeedTimer, isTaskNeedRepeat} = this.state;
 		const isLongTask = value == 'long';
 		const isValueDifferent = value != taskType;		
 
@@ -316,8 +316,8 @@ class TaskTypePanel extends React.Component {
 				taskType: value
 			}), () => {
 				this.setState({
-					startDate:  taskTypeMomentsObj[this.state.taskType][0],
-					endDate:  taskTypeMomentsObj[this.state.taskType][1],
+					startDate:  taskTypesMoment[this.state.taskType][0],
+					endDate:  taskTypesMoment[this.state.taskType][1],
 				});
 
 				if (!isLongTask) {
@@ -334,6 +334,13 @@ class TaskTypePanel extends React.Component {
 				}
 			});
 		}
+
+		// reset isTaskNeedRepeat
+		if (isTaskNeedRepeat) {
+			this.setState({
+				isTaskNeedRepeat: false
+			});
+		} 
 	}
 	isTaskNeedTimerCheckboxClick(e, result) {
 		const checked = result.checked;
@@ -351,8 +358,8 @@ class TaskTypePanel extends React.Component {
 			// hide  timeSetter and TimerPanel
 			this.setState({
 				isNeedTimeSetter: false,
-				startDate: taskTypeMomentsObj[taskType][0],
-				endDate: taskTypeMomentsObj[taskType][1]
+				startDate: taskTypesMoment[taskType][0],
+				endDate: taskTypesMoment[taskType][1]
 			});
 		}
 		
@@ -412,8 +419,8 @@ class TaskTypePanel extends React.Component {
 
 			if (!isTaskNeedTimer) {
 				this.setState({
-					startDate: taskTypeMomentsObj[taskType][0],
-					endDate: taskTypeMomentsObj[taskType][1]
+					startDate: taskTypesMoment[taskType][0],
+					endDate: taskTypesMoment[taskType][1]
 				});
 			}
 			if (taskType === 'long') {
@@ -444,8 +451,10 @@ class TaskTypePanel extends React.Component {
 		const isNotTaskType_Long = taskType != 'long';
 		const isNeedShowCheckboxGroup = isNotTaskType_Long;
 		const minDate = startDate;
-		const maxDate = isNotTaskType_Long ? taskTypeMomentsObj[taskType][1] : moment().add(20, 'years');
+		const maxDate = isNotTaskType_Long ? taskTypesMoment[taskType][1] : moment().add(20, 'years');
 		const {taskTypePanelCallback} = this.props;
+		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+
 
 		if (taskTypePanelCallback) {
 			taskTypePanelCallback({
@@ -467,12 +476,14 @@ class TaskTypePanel extends React.Component {
 					</Row>
 					{isNeedShowCheckboxGroup ? (
 						<Row centered>
-							<Column width={8} textAlign='right'>
+							<Column width={8} textAlign='center'>
 								<Checkbox label='定时' checked={isTaskNeedTimer} onClick={this.isTaskNeedTimerCheckboxClick} />
 							</Column>
-							<Column width={8}>
-								<Checkbox label='重复' defaultChecked={isTaskNeedRepeat} onClick={this.isTaskNeedRepeatClick} />
-							</Column>
+							{!isFutureTaskType ? (
+								<Column width={8} textAlign='center'>
+									<Checkbox label='重复' checked={isTaskNeedRepeat} onClick={this.isTaskNeedRepeatClick} />
+								</Column>
+							) : null}
 						</Row>
 					) : ''}
 					
@@ -773,13 +784,14 @@ class TaskListItem extends React.Component {
 	}
 	componentDidMount() {
 		let {task} = this.props;
-		const {taskType, isTaskNeedRepeat} = task;
+		const {taskType, isTaskNeedRepeat, startDate, endDate} = task;
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+		const isLongTask = taskType === 'long';
 
 		/* initial items' prop */
 		// update future taskType
 		if (isFutureTaskType) {
-			const normalStartDate = taskTypeMomentsObj[taskType][0];
+			const normalStartDate = taskTypesMoment[taskType][0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
 			let newTaskType = null;
 			switch (taskType) {
@@ -798,7 +810,20 @@ class TaskListItem extends React.Component {
 			}
 		}
 
-		// 
+		// judge the condition of task repeat
+		// forbid future tasktype
+		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
+			const normalStartDate = taskTypesMoment[taskType][0];
+			const isNeedChange = moment().isSameOrAfter(normalStartDate)
+			const dateType = taskTypesDateType[taskType];
+			const timeInterval = startDate.startOf(dateType).diff(normalStartDate,dateType + 's');
+			const newStartDate = startDate.add(timeInterval, dateType + 's');
+			const newEndDate = endDate.add(timeInterval, dateType + 's');
+
+			task.isTaskCompleted = false;
+			task.startDate = newStartDate;
+			task.endDate = newEndDate;
+		}
 
 	}
 	textClick() {
