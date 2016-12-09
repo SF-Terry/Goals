@@ -68,7 +68,7 @@ const tool = {
 			}
 			if (isAfter) {
 				const s = moment().to(endDate);
-				return '已超时' + s.trim().replace('内', '').replace('前', '');
+				return '超时' + s.trim().replace('内', '').replace('前', '');
 			}
 		}
 

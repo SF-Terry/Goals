@@ -911,7 +911,7 @@ class TaskListItem extends React.Component {
 							</Column>
 							{!isTaskCompleted ? (
 								<Column width={5} textAlign='center' verticalAlign='middle'>
-									<Label>
+									<Label className='taskTimeLabel'>
 										{getLabelTextByMoments(task)}
 									</Label>
 								</Column>
@@ -1198,7 +1198,7 @@ class MultiFunctionBtn extends React.Component {
 		const {isShowMenu, isOpenSetting} = this.state;
 		return (
 			<div className='MultiFunctionBtn'>
-				<Draggable onStart={this.handleStartDrag} onDrag={this.handleDraging} onStop={this.handleStopDrag}>
+				<div>
 					<div>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
@@ -1215,14 +1215,14 @@ class MultiFunctionBtn extends React.Component {
 						</div>
 						<p>
 							{/* place add button here temporarily */}
-							<a href='#' onClick={this.handleClickAddButton}>
+							<a onClick={this.handleClickAddButton}>
 								<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
 							</a>
 
 							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
 						</p>
 					</div>
-				</Draggable>
+				</div>
 				<Modal size='large' open={isOpenSetting} onClose={this.close}>
 	        	  	<Modal.Header>
 	        	  	    设置
