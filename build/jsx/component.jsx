@@ -26,9 +26,9 @@ const {Row, Column} = Grid;
 // inital moment.locale
 moment.locale('zh-cn');
 
-let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
- 
+let defaultSetting = storekeeper.settings[0].defaultSetting;
+
 // observe
 let observe_taskInfo = {
 	setting: {
@@ -48,8 +48,8 @@ let observe_message = {
 
 // test
 setTimeout(() => {
-	
-}, 3000);
+
+}, 1000);
 
 // init data
 if (tasks.length === 0) {
@@ -804,7 +804,6 @@ class TaskListItem extends React.Component {
 
 		};*/
 
-
 		this.textClick = this.textClick.bind(this);
 		this.inputChange = this.inputChange.bind(this);
 		this.deleteBtnClick = this.deleteBtnClick.bind(this);
@@ -1054,6 +1053,16 @@ class TaskTypeSelector extends React.Component {
 				value: value
 			});
 		}
+
+		// set defaultSetting
+		const isDayTaskType = G.isDayTaskType(value);
+		const isLongTaskType = G.isLongTaskType(value);
+		if (isDayTaskType) {
+			defaultSetting.dayTask_taskType = value;
+		}
+		if (isLongTaskType) {
+			defaultSetting.longTask_taskType = value;
+		}
 	}
 	render() {
 		const taskTypes = this.props.taskTypes;
@@ -1083,7 +1092,7 @@ class TaskListContainer extends React.Component {
 		super(props);
 		this.state = {
 			taskType: this.props.taskType,
-			isTaskCompleted: false,
+			isTaskCompleted: this.props.isCompleted,
 			editMode: false,
 			isShowTaskList: true
 		}	
@@ -1116,6 +1125,17 @@ class TaskListContainer extends React.Component {
 			});
 		});
 
+		// set defaultSetting
+		const {taskType} = this.state;
+		const isDayTaskType = G.isDayTaskType(taskType);
+		const isLongTaskType = G.isLongTaskType(taskType);
+		if (isDayTaskType) {
+			defaultSetting.dayTask_isCompleted = Boolean(value);
+		}
+		if (isLongTaskType) {
+			defaultSetting.longTask_isCompleted = Boolean(value);
+		}
+
 	}
 	editBtnClick() {
 		this.setState((prevState) => ({
@@ -1130,14 +1150,14 @@ class TaskListContainer extends React.Component {
 			{value: 1, text: '已完成'},
 			{value: 0, text: '未完成'}
 		];
-		const defalutIsComplete = 0;
+		const defalutIsComplete = this.props.isCompleted ? 1 : 0;
 
 		return (
 			<div>
 				<Grid padded>
 					<Row>
 						<Column width={6}>
-							<TaskTypeSelector taskType={0} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
+							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
 						<Column width={6}>
 							<Dropdown fluid selection defaultValue={defalutIsComplete} options={isCompletesOptions} onChange={this.isCompleteDropdownChange}></Dropdown>
@@ -1166,7 +1186,8 @@ class TaskListContainer extends React.Component {
 class DayTaskContainer extends React.Component {
 	render() {
 		const taskTypes = G.dayTaskTypes;		
-		return <TaskListContainer taskType={taskTypes[0]} taskTypes={taskTypes} />;
+		const {dayTask_taskType, dayTask_isCompleted} = defaultSetting;
+		return <TaskListContainer taskType={dayTask_taskType} taskTypes={taskTypes} isCompleted={dayTask_isCompleted}/>;
 	}
 }
 
@@ -1176,7 +1197,8 @@ class DayTaskContainer extends React.Component {
 class LongTaskContainer extends React.Component {
 	render() {
 		const taskTypes = G.longTaskTypes;
-		return <TaskListContainer taskType={taskTypes[0]} taskTypes={taskTypes}/>;
+		const {longTask_taskType, longTask_isCompleted} = defaultSetting;
+		return <TaskListContainer taskType={longTask_taskType} taskTypes={taskTypes} isCompleted={longTask_isCompleted} />;
 	}
 }
 
@@ -1295,8 +1317,12 @@ class ToDoList extends React.Component {
 		this.observeIsNeedShowTaskInfo();
 		this.observeIsNeedShowMessage();
 
+		this.tabChange = this.tabChange.bind(this);
 		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
 		this.taskInfoCallback = this.taskInfoCallback.bind(this);
+	}
+	tabChange(index) {
+		defaultSetting.tabIndex = index;
 	}
 	multiFunctionBtnCallback(o) {
 		const {isAddBtnClicked} = o;
@@ -1390,7 +1416,7 @@ class ToDoList extends React.Component {
 				{isShowTaskInfo ? (
 					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}
-				<Tabs justified={true} initialSelectedIndex={1}>
+				<Tabs justified={true} initialSelectedIndex={defaultSetting.tabIndex} onChange={this.tabChange}>
 		            <Tab label="长期目标">
 		            	<LongTaskContainer />
 		            </Tab>

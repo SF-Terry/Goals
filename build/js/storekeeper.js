@@ -17,12 +17,13 @@ class Storekeeper {
 		this.init(name);
 
 		// observe and sync localStorage
-		observe(this.tasks, (a, b, c, d, e) => {
-			// console.log('observed: tasks changed: ', a, b, c, d);
+		observe(this.tasks, (a, b, c) => {
+			// console.log('observed: tasks changed: ', a, b, c);
 
 			that.sync();
 		});
-		observe(this.settings, () => {
+		observe(this.settings, (a, b, c) => {
+			// console.log('observed: tasks changed: ', a, b, c);
 			that.sync();
 		});
 	}
@@ -32,7 +33,15 @@ class Storekeeper {
 		const isExsitName = Boolean(value);
 
 		// init data
-		this.settings = [];
+		this.settings = [{
+			defaultSetting: {
+				tabIndex: 0,
+				dayTask_taskType: 'today',
+				dayTask_isCompleted: false,
+				longTask_taskType: 'long', 
+				longTask_isCompleted: false
+			}
+		}];
 		this.tasks = [];
 
 		// load localStorage data 

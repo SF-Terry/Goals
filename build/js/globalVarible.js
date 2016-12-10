@@ -87,7 +87,12 @@ class globalVarible {
 		// window size
 		this.windowWidth = document.body.clientWidth;
 		this.windowHeight = document.body.clientHeight;
-
+	}
+	isDayTaskType(taskType) {
+		return this.dayTaskTypes.includes(taskType);
+	}
+	isLongTaskType(taskType) {
+		return this.longTaskTypes.includes(taskType);
 	}
 }
 

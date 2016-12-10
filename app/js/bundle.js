@@ -9095,8 +9095,8 @@
 
 	_moment2.default.locale('zh-cn');
 
-	var settings = _storekeeper2.default.settings;
 	var tasks = _storekeeper2.default.tasks;
+	var defaultSetting = _storekeeper2.default.settings[0].defaultSetting;
 
 	// observe
 	var observe_taskInfo = {
@@ -9116,7 +9116,7 @@
 	};
 
 	// test
-	setTimeout(function () {}, 3000);
+	setTimeout(function () {}, 1000);
 
 	// init data
 	if (tasks.length === 0) {
@@ -10162,6 +10162,16 @@
 						value: value
 					});
 				}
+
+				// set defaultSetting
+				var isDayTaskType = _globalVarible2.default.isDayTaskType(value);
+				var isLongTaskType = _globalVarible2.default.isLongTaskType(value);
+				if (isDayTaskType) {
+					defaultSetting.dayTask_taskType = value;
+				}
+				if (isLongTaskType) {
+					defaultSetting.longTask_taskType = value;
+				}
 			}
 		}, {
 			key: 'render',
@@ -10196,7 +10206,7 @@
 
 			_this13.state = {
 				taskType: _this13.props.taskType,
-				isTaskCompleted: false,
+				isTaskCompleted: _this13.props.isCompleted,
 				editMode: false,
 				isShowTaskList: true
 			};
@@ -10236,6 +10246,18 @@
 						isShowTaskList: true
 					});
 				});
+
+				// set defaultSetting
+				var taskType = this.state.taskType;
+
+				var isDayTaskType = _globalVarible2.default.isDayTaskType(taskType);
+				var isLongTaskType = _globalVarible2.default.isLongTaskType(taskType);
+				if (isDayTaskType) {
+					defaultSetting.dayTask_isCompleted = Boolean(value);
+				}
+				if (isLongTaskType) {
+					defaultSetting.longTask_isCompleted = Boolean(value);
+				}
 			}
 		}, {
 			key: 'editBtnClick',
@@ -10257,9 +10279,9 @@
 				var taskTypes = this.props.taskTypes;
 
 				var isCompletesOptions = [{ value: 1, text: '已完成' }, { value: 0, text: '未完成' }];
-				var defalutIsComplete = 0;
+				var defalutIsComplete = this.props.isCompleted ? 1 : 0;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(TaskTypeSelector, { taskType: 0, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: defalutIsComplete, options: isCompletesOptions, onChange: this.isCompleteDropdownChange })), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'green', size: 'mini', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), isShowTaskList ? _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted })) : null);
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: defalutIsComplete, options: isCompletesOptions, onChange: this.isCompleteDropdownChange })), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'green', size: 'mini', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), isShowTaskList ? _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted })) : null);
 			}
 		}]);
 
@@ -10283,7 +10305,10 @@
 			key: 'render',
 			value: function render() {
 				var taskTypes = _globalVarible2.default.dayTaskTypes;
-				return _react2.default.createElement(TaskListContainer, { taskType: taskTypes[0], taskTypes: taskTypes });
+				var dayTask_taskType = defaultSetting.dayTask_taskType,
+				    dayTask_isCompleted = defaultSetting.dayTask_isCompleted;
+
+				return _react2.default.createElement(TaskListContainer, { taskType: dayTask_taskType, taskTypes: taskTypes, isCompleted: dayTask_isCompleted });
 			}
 		}]);
 
@@ -10307,7 +10332,10 @@
 			key: 'render',
 			value: function render() {
 				var taskTypes = _globalVarible2.default.longTaskTypes;
-				return _react2.default.createElement(TaskListContainer, { taskType: taskTypes[0], taskTypes: taskTypes });
+				var longTask_taskType = defaultSetting.longTask_taskType,
+				    longTask_isCompleted = defaultSetting.longTask_isCompleted;
+
+				return _react2.default.createElement(TaskListContainer, { taskType: longTask_taskType, taskTypes: taskTypes, isCompleted: longTask_isCompleted });
 			}
 		}]);
 
@@ -10415,12 +10443,18 @@
 			_this18.observeIsNeedShowTaskInfo();
 			_this18.observeIsNeedShowMessage();
 
+			_this18.tabChange = _this18.tabChange.bind(_this18);
 			_this18.multiFunctionBtnCallback = _this18.multiFunctionBtnCallback.bind(_this18);
 			_this18.taskInfoCallback = _this18.taskInfoCallback.bind(_this18);
 			return _this18;
 		}
 
 		_createClass(ToDoList, [{
+			key: 'tabChange',
+			value: function tabChange(index) {
+				defaultSetting.tabIndex = index;
+			}
+		}, {
 			key: 'multiFunctionBtnCallback',
 			value: function multiFunctionBtnCallback(o) {
 				var isAddBtnClicked = o.isAddBtnClicked;
@@ -10530,7 +10564,7 @@
 					} }, isShowMessage ? _react2.default.createElement('div', { className: 'message', style: {
 						position: 'fixed',
 						width: _globalVarible.windowWidth
-					} }, _react2.default.createElement(_semanticUiReact.Message, { color: messageColor, content: message })) : null, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: 1 }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
+					} }, _react2.default.createElement(_semanticUiReact.Message, { color: messageColor, content: message })) : null, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: defaultSetting.tabIndex, onChange: this.tabChange }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
 			}
 		}]);
 
@@ -70530,6 +70564,16 @@
 
 	'use strict';
 
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
+
 	var _moment = __webpack_require__(1020);
 
 	var _moment2 = _interopRequireDefault(_moment);
@@ -70544,96 +70588,112 @@
 		}
 	}
 
-	var globalVarible = function globalVarible() {
-		_classCallCheck(this, globalVarible);
+	var globalVarible = function () {
+		function globalVarible() {
+			_classCallCheck(this, globalVarible);
 
-		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
-		this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
-		this.dayTaskTypes = ['today', 'tomorrow'];
-		this.longTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
-		this.defaultTaskType = 'today';
-		this.taskTypesText = {
-			today: '今日目标',
-			long: '长期目标',
-			thisWeek: '本周目标',
-			thisMonth: '本月目标',
-			thisYear: '今年目标',
-			tomorrow: '明日目标',
-			nextWeek: '下周目标',
-			nextMonth: '下月目标',
-			nextYear: '明年目标'
-		};
-		this.taskTypesDateType = {
-			today: 'day',
-			thisWeek: 'week',
-			thisMonth: 'month',
-			thisYear: 'year',
-			tomorrow: 'day',
-			nextWeek: 'week',
-			nextMonth: 'month',
-			nextYear: 'year'
-		};
+			this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
+			this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
+			this.dayTaskTypes = ['today', 'tomorrow'];
+			this.longTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
+			this.defaultTaskType = 'today';
+			this.taskTypesText = {
+				today: '今日目标',
+				long: '长期目标',
+				thisWeek: '本周目标',
+				thisMonth: '本月目标',
+				thisYear: '今年目标',
+				tomorrow: '明日目标',
+				nextWeek: '下周目标',
+				nextMonth: '下月目标',
+				nextYear: '明年目标'
+			};
+			this.taskTypesDateType = {
+				today: 'day',
+				thisWeek: 'week',
+				thisMonth: 'month',
+				thisYear: 'year',
+				tomorrow: 'day',
+				nextWeek: 'week',
+				nextMonth: 'month',
+				nextYear: 'year'
+			};
 
-		this.taskLevels = {
-			a: 'a',
-			b: 'b',
-			c: 'c',
-			d: 'd'
-		};
-		this.defaultLevel = this.taskLevels.b;
+			this.taskLevels = {
+				a: 'a',
+				b: 'b',
+				c: 'c',
+				d: 'd'
+			};
+			this.defaultLevel = this.taskLevels.b;
 
-		this.taskInfoMode = {
-			add: 'add',
-			edit: 'edit'
-		};
+			this.taskInfoMode = {
+				add: 'add',
+				edit: 'edit'
+			};
 
-		this.initialTask = {
-			name: null,
-			taskType: this.defaultTaskType,
-			taskLevel: 'b',
-			isTaskCompleted: false,
-			isTaskNeedTimer: false,
-			isTaskNeedRepeat: false,
-			startDate: null, // use moment(...) to initial string to moment object
-			endDate: null };
-		this.timeSetterTimeType = {
-			start: 'start',
-			end: 'end'
-		};
+			this.initialTask = {
+				name: null,
+				taskType: this.defaultTaskType,
+				taskLevel: 'b',
+				isTaskCompleted: false,
+				isTaskNeedTimer: false,
+				isTaskNeedRepeat: false,
+				startDate: null, // use moment(...) to initial string to moment object
+				endDate: null };
+			this.timeSetterTimeType = {
+				start: 'start',
+				end: 'end'
+			};
 
-		// set taskTypeMomentsObj
-		var getCurrentMoments = function getCurrentMoments(dateType) {
-			return [(0, _moment2.default)().startOf(dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType)];
-		};
-		var getNextMoments = function getNextMoments(dateType) {
-			return [(0, _moment2.default)().add(1, dateType + 's').startOf(dateType), (0, _moment2.default)().add(2, dateType + 's').startOf(dateType)];
-		};
-		var dayTaskTypeMoments = getCurrentMoments('day');
-		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
-		var longTaskTypeMoments = [(0, _moment2.default)(), (0, _moment2.default)().add(2, 'days').startOf('day')];
-		var weekTaskTypeMoments = getCurrentMoments('week');
-		var monthTaskTypeMoments = getCurrentMoments('month');
-		var yearTaskTypeMoments = getCurrentMoments('year');
-		var tomorrowTaskTypeMoments = getNextMoments('day');
-		var nextWeekTaskTypeMoments = getNextMoments('week');
-		var nextMonthTaskTypeMoments = getNextMoments('month');
-		var nextYearTaskTypeMoments = getNextMoments('year');
-		this.taskTypesMoment = {
-			'today': dayTaskTypeMoments,
-			'long': longTaskTypeMoments,
-			'thisWeek': weekTaskTypeMoments,
-			'thisMonth': monthTaskTypeMoments,
-			'thisYear': yearTaskTypeMoments,
-			'tomorrow': tomorrowTaskTypeMoments,
-			'nextWeek': nextWeekTaskTypeMoments,
-			'nextMonth': nextMonthTaskTypeMoments,
-			'nextYear': nextYearTaskTypeMoments
-		};
+			// set taskTypeMomentsObj
+			var getCurrentMoments = function getCurrentMoments(dateType) {
+				return [(0, _moment2.default)().startOf(dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType)];
+			};
+			var getNextMoments = function getNextMoments(dateType) {
+				return [(0, _moment2.default)().add(1, dateType + 's').startOf(dateType), (0, _moment2.default)().add(2, dateType + 's').startOf(dateType)];
+			};
+			var dayTaskTypeMoments = getCurrentMoments('day');
+			// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
+			var longTaskTypeMoments = [(0, _moment2.default)(), (0, _moment2.default)().add(2, 'days').startOf('day')];
+			var weekTaskTypeMoments = getCurrentMoments('week');
+			var monthTaskTypeMoments = getCurrentMoments('month');
+			var yearTaskTypeMoments = getCurrentMoments('year');
+			var tomorrowTaskTypeMoments = getNextMoments('day');
+			var nextWeekTaskTypeMoments = getNextMoments('week');
+			var nextMonthTaskTypeMoments = getNextMoments('month');
+			var nextYearTaskTypeMoments = getNextMoments('year');
+			this.taskTypesMoment = {
+				'today': dayTaskTypeMoments,
+				'long': longTaskTypeMoments,
+				'thisWeek': weekTaskTypeMoments,
+				'thisMonth': monthTaskTypeMoments,
+				'thisYear': yearTaskTypeMoments,
+				'tomorrow': tomorrowTaskTypeMoments,
+				'nextWeek': nextWeekTaskTypeMoments,
+				'nextMonth': nextMonthTaskTypeMoments,
+				'nextYear': nextYearTaskTypeMoments
+			};
 
-		// window size
-		this.windowWidth = document.body.clientWidth;
-		this.windowHeight = document.body.clientHeight;
-	};
+			// window size
+			this.windowWidth = document.body.clientWidth;
+			this.windowHeight = document.body.clientHeight;
+		}
+
+		_createClass(globalVarible, [{
+			key: 'isDayTaskType',
+			value: function isDayTaskType(taskType) {
+				return this.dayTaskTypes.includes(taskType);
+			}
+		}, {
+			key: 'isLongTaskType',
+			value: function isLongTaskType(taskType) {
+				return this.longTaskTypes.includes(taskType);
+			}
+		}]);
+
+		return globalVarible;
+	}();
 
 	var G = new globalVarible();
 	module.exports = G;
@@ -88776,7 +88836,7 @@
 /* 1233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () {
 		function defineProperties(target, props) {
@@ -88821,24 +88881,33 @@
 			this.init(name);
 
 			// observe and sync localStorage
-			(0, _observe2.default)(this.tasks, function (a, b, c, d, e) {
-				// console.log('observed: tasks changed: ', a, b, c, d);
+			(0, _observe2.default)(this.tasks, function (a, b, c) {
+				// console.log('observed: tasks changed: ', a, b, c);
 
 				that.sync();
 			});
-			(0, _observe2.default)(this.settings, function () {
+			(0, _observe2.default)(this.settings, function (a, b, c) {
+				// console.log('observed: tasks changed: ', a, b, c);
 				that.sync();
 			});
 		}
 
 		_createClass(Storekeeper, [{
-			key: "init",
+			key: 'init',
 			value: function init(name) {
 				var value = localStorage[name];
 				var isExsitName = Boolean(value);
 
 				// init data
-				this.settings = [];
+				this.settings = [{
+					defaultSetting: {
+						tabIndex: 0,
+						dayTask_taskType: 'today',
+						dayTask_isCompleted: false,
+						longTask_taskType: 'long',
+						longTask_isCompleted: false
+					}
+				}];
 				this.tasks = [];
 
 				// load localStorage data 
@@ -88863,7 +88932,7 @@
 				}
 			}
 		}, {
-			key: "sync",
+			key: 'sync',
 			value: function sync() {
 				var name = this.name;
 				this.filterdObj.settings = this.settings;
@@ -88872,7 +88941,7 @@
 				// console.log("localStorage now is: ", localStorage[name]);
 			}
 		}, {
-			key: "saveUniqueSaveLibrary",
+			key: 'saveUniqueSaveLibrary',
 			value: function saveUniqueSaveLibrary(obj) {
 				this.uniqueSaveLibrary.push(obj);
 			}
