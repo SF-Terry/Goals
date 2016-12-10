@@ -812,7 +812,9 @@ class TaskListItem extends React.Component {
 	}
 	componentDidMount() {
 		let {task} = this.props;
-		const {taskType, isTaskNeedRepeat, startDate, endDate} = task;
+		const {taskType, isTaskNeedRepeat, startDateStr, endDateStr} = task;
+		const startDate = moment(startDateStr);
+		const endDate = moment(endDateStr);
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 		const isLongTask = taskType === 'long';
 
@@ -840,6 +842,7 @@ class TaskListItem extends React.Component {
 
 		// judge the condition of task repeat
 		// forbid future tasktype
+
 		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
 			const normalStartDate = taskTypesMoment[taskType][0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)

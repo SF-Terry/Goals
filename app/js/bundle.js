@@ -9914,9 +9914,11 @@
 				var task = this.props.task;
 				var taskType = task.taskType,
 				    isTaskNeedRepeat = task.isTaskNeedRepeat,
-				    startDate = task.startDate,
-				    endDate = task.endDate;
+				    startDateStr = task.startDateStr,
+				    endDateStr = task.endDateStr;
 
+				var startDate = (0, _moment2.default)(startDateStr);
+				var endDate = (0, _moment2.default)(endDateStr);
 				var isFutureTaskType = _globalVarible2.default.futureTaskTypes.includes(taskType);
 				var isLongTask = taskType === 'long';
 
@@ -9945,6 +9947,7 @@
 
 				// judge the condition of task repeat
 				// forbid future tasktype
+
 				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
 					var _normalStartDate = _globalVarible.taskTypesMoment[taskType][0];
 					var _isNeedChange = (0, _moment2.default)().isSameOrAfter(_normalStartDate);
