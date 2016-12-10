@@ -57,18 +57,16 @@ const tool = {
 			const isAfter = moment().isAfter(endDate);
 
 			if (isBefore) {
-				const s = moment().to(startDate);
-				const n = '后开始';
-				return s.trim().replace('内', n).replace('前', n);
+				const s = moment().to(startDate, true);
+				return s.replace(/ /g,"") + '后开始';
 			}
 			if (isDoing) {
-				const s = moment().to(endDate);
-				const n = '后结束';
-				return s.trim().replace('内', n).replace('前', n);
+				const s = moment().to(endDate, true);
+				return s.replace(/ /g,"") + '后结束';
 			}
 			if (isAfter) {
-				const s = moment().to(endDate);
-				return '超时' + s.trim().replace('内', '').replace('前', '');
+				const s = moment().to(endDate, true);
+				return '超时' + s.replace(/ /g,"");
 			}
 		}
 

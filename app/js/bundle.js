@@ -10027,7 +10027,8 @@
 				var taskName = task.name,
 				    taskType = task.taskType,
 				    isTaskCompleted = task.isTaskCompleted,
-				    taskLevel = task.taskLevel;
+				    taskLevel = task.taskLevel,
+				    isTaskNeedRepeat = task.isTaskNeedRepeat;
 
 				var color = function () {
 					switch (taskLevel) {
@@ -10044,7 +10045,9 @@
 					}
 				}();
 
-				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: !isTaskCompleted ? 9 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 5, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'taskTimeLabel', color: color }, (0, _tool.getLabelTextByMoments)(task))) : '') : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
+				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: !isTaskCompleted ? 9 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 5, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement('span', { style: {
+						position: 'relative'
+					} }, _react2.default.createElement(_semanticUiReact.Label, { className: 'taskTimeLabel', color: color }, (0, _tool.getLabelTextByMoments)(task), '\xA0', isTaskNeedRepeat ? _react2.default.createElement(_semanticUiReact.Icon, { name: 'repeat', size: 'mini' }) : null))) : '') : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
 		}]);
 
@@ -10544,7 +10547,7 @@
 							message: '',
 							messageColor: color
 						});
-					}, 2000);
+					}, 1000);
 				});
 			}
 		}, {
@@ -70539,18 +70542,16 @@
 				var isAfter = (0, _moment2.default)().isAfter(endDate);
 
 				if (isBefore) {
-					var s = (0, _moment2.default)().to(startDate);
-					var n = '后开始';
-					return s.trim().replace('内', n).replace('前', n);
+					var s = (0, _moment2.default)().to(startDate, true);
+					return s.replace(/ /g, "") + '后开始';
 				}
 				if (isDoing) {
-					var _s = (0, _moment2.default)().to(endDate);
-					var _n = '后结束';
-					return _s.trim().replace('内', _n).replace('前', _n);
+					var _s = (0, _moment2.default)().to(endDate, true);
+					return _s.replace(/ /g, "") + '后结束';
 				}
 				if (isAfter) {
-					var _s2 = (0, _moment2.default)().to(endDate);
-					return '超时' + _s2.trim().replace('内', '').replace('前', '');
+					var _s2 = (0, _moment2.default)().to(endDate, true);
+					return '超时' + _s2.replace(/ /g, "");
 				}
 			}
 		}
@@ -89007,7 +89008,7 @@
 
 
 	// module
-	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
+	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .label-repeatIcon {\n  background: none; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
 
 	// exports
 

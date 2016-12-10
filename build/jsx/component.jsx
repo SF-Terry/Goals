@@ -906,7 +906,7 @@ class TaskListItem extends React.Component {
 	render() {
 		let {task, editMode} = this.props;
 
-		const {name: taskName, taskType, isTaskCompleted, taskLevel} = task;
+		const {name: taskName, taskType, isTaskCompleted, taskLevel, isTaskNeedRepeat} = task;
 
 		const color = (() => {
 			switch (taskLevel) {
@@ -941,9 +941,17 @@ class TaskListItem extends React.Component {
 							</Column>
 							{!isTaskCompleted ? (
 								<Column width={5} textAlign='center' verticalAlign='middle'>
-									<Label className='taskTimeLabel' color={color}>
-										{getLabelTextByMoments(task)}
-									</Label>
+									<span style={{
+										position: 'relative'
+									}}>
+										<Label className='taskTimeLabel' color={color}>
+											{getLabelTextByMoments(task)}
+											&nbsp;
+											{isTaskNeedRepeat ? (
+												<Icon name='repeat' size='mini' />
+											) : null}
+										</Label>
+									</span>
 								</Column>
 							) : ''}
 						</Row>
@@ -1389,7 +1397,7 @@ class ToDoList extends React.Component {
 					message: '',
 					messageColor: color
 				});
-			},2000);			
+			},1000);			
 		});
 	}
 	render() {

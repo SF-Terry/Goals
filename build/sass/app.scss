@@ -28,6 +28,11 @@ html, body {
 		font-size: 12px;
 	}
 	
+	// hide the background of label
+	.label-repeatIcon{
+		background: none;
+	}
+
 	.message{
 		left: 0; top: 0; z-index: 3;
 	}
