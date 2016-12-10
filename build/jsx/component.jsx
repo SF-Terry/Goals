@@ -3,12 +3,11 @@ import {render, findDOMNode} from 'react-dom';
 import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown, Modal, Message} from 'semantic-ui-react';
 import Switch from 'react-flexible-switch';
 import Draggable from 'react-draggable'; 
+import Tappable from 'react-tappable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus, getLabelTextByMoments} from '../js/tool.js';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
 
 // datepicker
 import 'rmc-picker/assets/index.css';
@@ -1205,13 +1204,13 @@ class MultiFunctionBtn extends React.Component {
 		super(props);
 		this.state = {
 			isShowMenu: false,
-			isOpenSetting: false
+			isOpenSetting: false,
+			isMovingBtn: false
 		}
 
-		this.handleClickAddButton = this.handleClickAddButton.bind(this);
+		this.handleTapAddButton = this.handleTapAddButton.bind(this);
 
 		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
-		// this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
 		this.handleClickExportBtn = this.handleClickExportBtn.bind(this);
 		this.handleClickSettingBtn = this.handleClickSettingBtn.bind(this);
 	}
@@ -1220,13 +1219,17 @@ class MultiFunctionBtn extends React.Component {
 			isShowMenu: !prevState.isShowMenu
 		}));
 	}
-	handleClickAddButton() {
-		this.props.multiFunctionBtnCallback({
-			isAddBtnClicked: true
-		});
-		this.setState({
-			isShowMenu: false
-		});
+	handleTapAddButton(ev) {
+		const {isMovingBtn} = this.state;
+
+		if (!isMovingBtn) {
+			this.props.multiFunctionBtnCallback({
+				isAddBtnTaped: true
+			});
+			this.setState({
+				isShowMenu: false
+			});
+		}
 	}
 	handleClickExportBtn() {
 		this.setState({
@@ -1244,7 +1247,7 @@ class MultiFunctionBtn extends React.Component {
 		const {isShowMenu, isOpenSetting} = this.state;
 		return (
 			<div className='MultiFunctionBtn'>
-				<div>
+				<Draggable>
 					<div>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
@@ -1261,15 +1264,43 @@ class MultiFunctionBtn extends React.Component {
 						</div>
 						<p>
 							{/* place add button here temporarily */}
-							<a onClick={this.handleClickAddButton}>
-								<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
-							</a>
+							<Tappable   
+								onTap={() => {
+									this.handleTapAddButton();console.log('onTap');}
+								} 
+								onTouchMove={() => {
+									console.log('onTouchMove');
+									this.setState({
+										isMovingBtn: true
+									});
+								}}
+								onTouchStart={() => {
+									console.log('onTouchStart');
+									this.setState({
+										isMovingBtn: false
+									});
+								}}
+								onMouseDown={() => {
+									console.log('onMouseDown');
+									this.setState({
+										isMovingBtn: false
+									});
+								}}
+								onMouseMove={() => {
+									console.log('onMouseMove');
+									this.setState({
+										isMovingBtn: true
+									});
+								}}
+								>
+								<Button id='floatFunctionBtn' className='ovalButton' size='massive' icon='plus' circular color='twitter' />
+							</Tappable>
 
 							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
 						</p>
 					</div>
-				</div>
-				<Modal size='large' open={isOpenSetting} onClose={this.close}>
+				</Draggable>
+				{/*<Modal size='large' open={isOpenSetting} onClose={this.close}>
 	        	  	<Modal.Header>
 	        	  	    设置
 	        	  	</Modal.Header>
@@ -1283,7 +1314,7 @@ class MultiFunctionBtn extends React.Component {
 	        	  	  </Button>
 	        	  	  <Button positive icon='checkmark' labelPosition='right' content='确认' />
 	        	  	</Modal.Actions>
-	        	</Modal>
+	        	</Modal>*/}
 			</div>
 		);
 	}
@@ -1318,9 +1349,9 @@ class ToDoList extends React.Component {
 		defaultSetting.tabIndex = index;
 	}
 	multiFunctionBtnCallback(o) {
-		const {isAddBtnClicked} = o;
+		const {isAddBtnTaped} = o;
 
-		if (isAddBtnClicked != undefined && isAddBtnClicked) {
+		if (isAddBtnTaped != undefined && isAddBtnTaped) {
 			this.setState({
 				taskInfoMode:  G.taskInfoMode.add,
 				isShowTaskInfo: true,

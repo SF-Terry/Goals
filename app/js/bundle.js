@@ -9022,6 +9022,10 @@
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
+	var _reactTappable = __webpack_require__(1255);
+
+	var _reactTappable2 = _interopRequireDefault(_reactTappable);
+
 	var _tabs = __webpack_require__(1011);
 
 	var _tabs2 = _interopRequireDefault(_tabs);
@@ -9035,10 +9039,6 @@
 	var _observe2 = _interopRequireDefault(_observe);
 
 	var _tool = __webpack_require__(1018);
-
-	var _reactTapEventPlugin = __webpack_require__(1131);
-
-	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
 	__webpack_require__(1138);
 
@@ -9088,9 +9088,9 @@
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 
-	(0, _reactTapEventPlugin2.default)();
-
 	// datepicker
+
+
 	var Item = _semanticUiReact.Menu.Item;
 	var Row = _semanticUiReact.Grid.Row,
 	    Column = _semanticUiReact.Grid.Column;
@@ -10357,13 +10357,13 @@
 
 			_this16.state = {
 				isShowMenu: false,
-				isOpenSetting: false
+				isOpenSetting: false,
+				isMovingBtn: false
 			};
 
-			_this16.handleClickAddButton = _this16.handleClickAddButton.bind(_this16);
+			_this16.handleTapAddButton = _this16.handleTapAddButton.bind(_this16);
 
 			_this16.handleClickFunctionBtn = _this16.handleClickFunctionBtn.bind(_this16);
-			// this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
 			_this16.handleClickExportBtn = _this16.handleClickExportBtn.bind(_this16);
 			_this16.handleClickSettingBtn = _this16.handleClickSettingBtn.bind(_this16);
 			return _this16;
@@ -10379,14 +10379,18 @@
 				});
 			}
 		}, {
-			key: 'handleClickAddButton',
-			value: function handleClickAddButton() {
-				this.props.multiFunctionBtnCallback({
-					isAddBtnClicked: true
-				});
-				this.setState({
-					isShowMenu: false
-				});
+			key: 'handleTapAddButton',
+			value: function handleTapAddButton(ev) {
+				var isMovingBtn = this.state.isMovingBtn;
+
+				if (!isMovingBtn) {
+					this.props.multiFunctionBtnCallback({
+						isAddBtnTaped: true
+					});
+					this.setState({
+						isShowMenu: false
+					});
+				}
 			}
 		}, {
 			key: 'handleClickExportBtn',
@@ -10406,11 +10410,41 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this17 = this;
+
 				var _state6 = this.state,
 				    isShowMenu = _state6.isShowMenu,
 				    isOpenSetting = _state6.isOpenSetting;
 
-				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement('a', { onClick: this.handleClickAddButton }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter' }))))), _react2.default.createElement(_semanticUiReact.Modal, { size: 'large', open: isOpenSetting, onClose: this.close }, _react2.default.createElement(_semanticUiReact.Modal.Header, null, '\u8BBE\u7F6E'), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement('h5', null, '\u90AE\u7BB1'), _react2.default.createElement(_semanticUiReact.Input, { fluid: true, placeholder: '\u6B64\u5904\u8F93\u5165\u90AE\u7BB1\u5730\u5740' })), _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { negative: true }, '\u8FD4\u56DE'), _react2.default.createElement(_semanticUiReact.Button, { positive: true, icon: 'checkmark', labelPosition: 'right', content: '\u786E\u8BA4' }))));
+				return _react2.default.createElement('div', { className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, null, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_reactTappable2.default, {
+					onTap: function onTap() {
+						_this17.handleTapAddButton();console.log('onTap');
+					},
+					onTouchMove: function onTouchMove() {
+						console.log('onTouchMove');
+						_this17.setState({
+							isMovingBtn: true
+						});
+					},
+					onTouchStart: function onTouchStart() {
+						console.log('onTouchStart');
+						_this17.setState({
+							isMovingBtn: false
+						});
+					},
+					onMouseDown: function onMouseDown() {
+						console.log('onMouseDown');
+						_this17.setState({
+							isMovingBtn: false
+						});
+					},
+					onMouseMove: function onMouseMove() {
+						console.log('onMouseMove');
+						_this17.setState({
+							isMovingBtn: true
+						});
+					}
+				}, _react2.default.createElement(_semanticUiReact.Button, { id: 'floatFunctionBtn', className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter' }))))));
 			}
 		}]);
 
@@ -10427,9 +10461,9 @@
 		function ToDoList(props) {
 			_classCallCheck(this, ToDoList);
 
-			var _this17 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+			var _this18 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-			_this17.state = {
+			_this18.state = {
 				taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 				isShowTaskInfo: false,
 				// Message
@@ -10439,13 +10473,13 @@
 				task: null
 			};
 
-			_this17.observeIsNeedShowTaskInfo();
-			_this17.observeIsNeedShowMessage();
+			_this18.observeIsNeedShowTaskInfo();
+			_this18.observeIsNeedShowMessage();
 
-			_this17.tabChange = _this17.tabChange.bind(_this17);
-			_this17.multiFunctionBtnCallback = _this17.multiFunctionBtnCallback.bind(_this17);
-			_this17.taskInfoCallback = _this17.taskInfoCallback.bind(_this17);
-			return _this17;
+			_this18.tabChange = _this18.tabChange.bind(_this18);
+			_this18.multiFunctionBtnCallback = _this18.multiFunctionBtnCallback.bind(_this18);
+			_this18.taskInfoCallback = _this18.taskInfoCallback.bind(_this18);
+			return _this18;
 		}
 
 		_createClass(ToDoList, [{
@@ -10456,9 +10490,9 @@
 		}, {
 			key: 'multiFunctionBtnCallback',
 			value: function multiFunctionBtnCallback(o) {
-				var isAddBtnClicked = o.isAddBtnClicked;
+				var isAddBtnTaped = o.isAddBtnTaped;
 
-				if (isAddBtnClicked != undefined && isAddBtnClicked) {
+				if (isAddBtnTaped != undefined && isAddBtnTaped) {
 					this.setState({
 						taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 						isShowTaskInfo: true,
@@ -10469,7 +10503,7 @@
 		}, {
 			key: 'taskInfoCallback',
 			value: function taskInfoCallback(o) {
-				var _this18 = this;
+				var _this19 = this;
 
 				var isShowTaskInfo = o.isShowTaskInfo,
 				    isContinueToAddTask = o.isContinueToAddTask,
@@ -10486,7 +10520,7 @@
 						task: null,
 						taskInfoMode: _globalVarible2.default.taskInfoMode.add
 					}, function () {
-						_this18.setState({
+						_this19.setState({
 							isShowTaskInfo: true
 						});
 					});
@@ -10501,7 +10535,7 @@
 		}, {
 			key: 'observeIsNeedShowTaskInfo',
 			value: function observeIsNeedShowTaskInfo() {
-				var _this19 = this;
+				var _this20 = this;
 
 				(0, _observe2.default)(observe_taskInfo, function (key, setting) {
 					var task = setting.task,
@@ -10511,7 +10545,7 @@
 
 					if (isTransporting) {
 						observe_taskInfo.setting.isTransporting = false;
-						_this19.setState({
+						_this20.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
@@ -10523,7 +10557,7 @@
 		}, {
 			key: 'observeIsNeedShowMessage',
 			value: function observeIsNeedShowMessage() {
-				var _this20 = this;
+				var _this21 = this;
 
 				(0, _observe2.default)(observe_message, function (key, setting) {
 					var isShowMessage = setting.isShowMessage,
@@ -10532,13 +10566,13 @@
 
 					// animation
 
-					_this20.setState({
+					_this21.setState({
 						isShowMessage: isShowMessage,
 						message: message,
 						messageColor: color
 					});
 					setTimeout(function () {
-						_this20.setState({
+						_this21.setState({
 							isShowMessage: false,
 							message: '',
 							messageColor: color
@@ -70592,7 +70626,7 @@
 			this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 			this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 			this.dayTaskTypes = ['today', 'tomorrow'];
-			this.longTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
+			this.longTaskTypes = ['long', 'thisWeek', 'thisMonth', 'thisYear', 'nextWeek', 'nextMonth', 'nextYear'];
 			this.defaultTaskType = 'today';
 			this.taskTypesText = {
 				today: '今日目标',
@@ -83874,435 +83908,13 @@
 	});
 
 /***/ },
-/* 1131 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	var invariant = __webpack_require__(1132);
-	var defaultClickRejectionStrategy = __webpack_require__(1133);
-
-	var alreadyInjected = false;
-
-	module.exports = function injectTapEventPlugin(strategyOverrides) {
-	  strategyOverrides = strategyOverrides || {};
-	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
-
-	  if (process.env.NODE_ENV !== 'production') {
-	    invariant(!alreadyInjected, 'injectTapEventPlugin(): Can only be called once per application lifecycle.\n\n\
-	It is recommended to call injectTapEventPlugin() just before you call \
-	ReactDOM.render(). If you are using an external library which calls injectTapEventPlugin() \
-	itself, please contact the maintainer as it shouldn\'t be called in library code and \
-	should be injected by the application.');
-	  }
-
-	  alreadyInjected = true;
-
-	  __webpack_require__(341).injection.injectEventPluginsByName({
-	    'TapEventPlugin': __webpack_require__(1134)(shouldRejectClick)
-	  });
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
-
-/***/ },
-/* 1132 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-
-	'use strict';
-
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	      error.name = 'Invariant Violation';
-	    }
-
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	}
-
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)))
-
-/***/ },
-/* 1133 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = function (lastTouchEvent, clickTimestamp) {
-	  if (lastTouchEvent && clickTimestamp - lastTouchEvent < 750) {
-	    return true;
-	  }
-	};
-
-/***/ },
-/* 1134 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2014 Facebook, Inc.
-	 *
-	 * Licensed under the Apache License, Version 2.0 (the "License");
-	 * you may not use this file except in compliance with the License.
-	 * You may obtain a copy of the License at
-	 *
-	 * http://www.apache.org/licenses/LICENSE-2.0
-	 *
-	 * Unless required by applicable law or agreed to in writing, software
-	 * distributed under the License is distributed on an "AS IS" BASIS,
-	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	 * See the License for the specific language governing permissions and
-	 * limitations under the License.
-	 *
-	 * @providesModule TapEventPlugin
-	 * @typechecks static-only
-	 */
-
-	"use strict";
-
-	var EventConstants = __webpack_require__(1135);
-	var EventPluginUtils = __webpack_require__(343);
-	var EventPropagators = __webpack_require__(340);
-	var SyntheticUIEvent = __webpack_require__(377);
-	var TouchEventUtils = __webpack_require__(1136);
-	var ViewportMetrics = __webpack_require__(378);
-
-	var keyOf = __webpack_require__(1137);
-	var topLevelTypes = EventConstants.topLevelTypes;
-
-	var isStartish = EventPluginUtils.isStartish;
-	var isEndish = EventPluginUtils.isEndish;
-
-	var isTouch = function isTouch(topLevelType) {
-	  var touchTypes = ['topTouchCancel', 'topTouchEnd', 'topTouchStart', 'topTouchMove'];
-	  return touchTypes.indexOf(topLevelType) >= 0;
-	};
-
-	/**
-	 * Number of pixels that are tolerated in between a `touchStart` and `touchEnd`
-	 * in order to still be considered a 'tap' event.
-	 */
-	var tapMoveThreshold = 10;
-	var ignoreMouseThreshold = 750;
-	var startCoords = { x: null, y: null };
-	var lastTouchEvent = null;
-
-	var Axis = {
-	  x: { page: 'pageX', client: 'clientX', envScroll: 'currentPageScrollLeft' },
-	  y: { page: 'pageY', client: 'clientY', envScroll: 'currentPageScrollTop' }
-	};
-
-	function getAxisCoordOfEvent(axis, nativeEvent) {
-	  var singleTouch = TouchEventUtils.extractSingleTouch(nativeEvent);
-	  if (singleTouch) {
-	    return singleTouch[axis.page];
-	  }
-	  return axis.page in nativeEvent ? nativeEvent[axis.page] : nativeEvent[axis.client] + ViewportMetrics[axis.envScroll];
-	}
-
-	function getDistance(coords, nativeEvent) {
-	  var pageX = getAxisCoordOfEvent(Axis.x, nativeEvent);
-	  var pageY = getAxisCoordOfEvent(Axis.y, nativeEvent);
-	  return Math.pow(Math.pow(pageX - coords.x, 2) + Math.pow(pageY - coords.y, 2), 0.5);
-	}
-
-	var touchEvents = ['topTouchStart', 'topTouchCancel', 'topTouchEnd', 'topTouchMove'];
-
-	var dependencies = ['topMouseDown', 'topMouseMove', 'topMouseUp'].concat(touchEvents);
-
-	var eventTypes = {
-	  touchTap: {
-	    phasedRegistrationNames: {
-	      bubbled: keyOf({ onTouchTap: null }),
-	      captured: keyOf({ onTouchTapCapture: null })
-	    },
-	    dependencies: dependencies
-	  }
-	};
-
-	var now = function () {
-	  if (Date.now) {
-	    return Date.now;
-	  } else {
-	    // IE8 support: http://stackoverflow.com/questions/9430357/please-explain-why-and-how-new-date-works-as-workaround-for-date-now-in
-	    return function () {
-	      return +new Date();
-	    };
-	  }
-	}();
-
-	function createTapEventPlugin(shouldRejectClick) {
-	  return {
-
-	    tapMoveThreshold: tapMoveThreshold,
-
-	    ignoreMouseThreshold: ignoreMouseThreshold,
-
-	    eventTypes: eventTypes,
-
-	    /**
-	     * @param {string} topLevelType Record from `EventConstants`.
-	     * @param {DOMEventTarget} targetInst The listening component root node.
-	     * @param {object} nativeEvent Native browser event.
-	     * @return {*} An accumulation of synthetic events.
-	     * @see {EventPluginHub.extractEvents}
-	     */
-	    extractEvents: function extractEvents(topLevelType, targetInst, nativeEvent, nativeEventTarget) {
-
-	      if (!isStartish(topLevelType) && !isEndish(topLevelType)) {
-	        return null;
-	      }
-
-	      if (isTouch(topLevelType)) {
-	        lastTouchEvent = now();
-	      } else {
-	        if (shouldRejectClick(lastTouchEvent, now())) {
-	          return null;
-	        }
-	      }
-
-	      var event = null;
-	      var distance = getDistance(startCoords, nativeEvent);
-	      if (isEndish(topLevelType) && distance < tapMoveThreshold) {
-	        event = SyntheticUIEvent.getPooled(eventTypes.touchTap, targetInst, nativeEvent, nativeEventTarget);
-	      }
-	      if (isStartish(topLevelType)) {
-	        startCoords.x = getAxisCoordOfEvent(Axis.x, nativeEvent);
-	        startCoords.y = getAxisCoordOfEvent(Axis.y, nativeEvent);
-	      } else if (isEndish(topLevelType)) {
-	        startCoords.x = 0;
-	        startCoords.y = 0;
-	      }
-	      EventPropagators.accumulateTwoPhaseDispatches(event);
-	      return event;
-	    }
-
-	  };
-	}
-
-	module.exports = createTapEventPlugin;
-
-/***/ },
-/* 1135 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-
-	'use strict';
-
-	/**
-	 * Types of raw signals from the browser caught at the top level.
-	 */
-
-	var topLevelTypes = {
-	  topAbort: null,
-	  topAnimationEnd: null,
-	  topAnimationIteration: null,
-	  topAnimationStart: null,
-	  topBlur: null,
-	  topCanPlay: null,
-	  topCanPlayThrough: null,
-	  topChange: null,
-	  topClick: null,
-	  topCompositionEnd: null,
-	  topCompositionStart: null,
-	  topCompositionUpdate: null,
-	  topContextMenu: null,
-	  topCopy: null,
-	  topCut: null,
-	  topDoubleClick: null,
-	  topDrag: null,
-	  topDragEnd: null,
-	  topDragEnter: null,
-	  topDragExit: null,
-	  topDragLeave: null,
-	  topDragOver: null,
-	  topDragStart: null,
-	  topDrop: null,
-	  topDurationChange: null,
-	  topEmptied: null,
-	  topEncrypted: null,
-	  topEnded: null,
-	  topError: null,
-	  topFocus: null,
-	  topInput: null,
-	  topInvalid: null,
-	  topKeyDown: null,
-	  topKeyPress: null,
-	  topKeyUp: null,
-	  topLoad: null,
-	  topLoadedData: null,
-	  topLoadedMetadata: null,
-	  topLoadStart: null,
-	  topMouseDown: null,
-	  topMouseMove: null,
-	  topMouseOut: null,
-	  topMouseOver: null,
-	  topMouseUp: null,
-	  topPaste: null,
-	  topPause: null,
-	  topPlay: null,
-	  topPlaying: null,
-	  topProgress: null,
-	  topRateChange: null,
-	  topReset: null,
-	  topScroll: null,
-	  topSeeked: null,
-	  topSeeking: null,
-	  topSelectionChange: null,
-	  topStalled: null,
-	  topSubmit: null,
-	  topSuspend: null,
-	  topTextInput: null,
-	  topTimeUpdate: null,
-	  topTouchCancel: null,
-	  topTouchEnd: null,
-	  topTouchMove: null,
-	  topTouchStart: null,
-	  topTransitionEnd: null,
-	  topVolumeChange: null,
-	  topWaiting: null,
-	  topWheel: null
-	};
-
-	var EventConstants = {
-	  topLevelTypes: topLevelTypes
-	};
-
-	module.exports = EventConstants;
-
-/***/ },
-/* 1136 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	/**
-	 * Copyright 2013-2014 Facebook, Inc.
-	 *
-	 * Licensed under the Apache License, Version 2.0 (the "License");
-	 * you may not use this file except in compliance with the License.
-	 * You may obtain a copy of the License at
-	 *
-	 * http://www.apache.org/licenses/LICENSE-2.0
-	 *
-	 * Unless required by applicable law or agreed to in writing, software
-	 * distributed under the License is distributed on an "AS IS" BASIS,
-	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	 * See the License for the specific language governing permissions and
-	 * limitations under the License.
-	 *
-	 * @providesModule TouchEventUtils
-	 */
-
-	var TouchEventUtils = {
-	  /**
-	   * Utility function for common case of extracting out the primary touch from a
-	   * touch event.
-	   * - `touchEnd` events usually do not have the `touches` property.
-	   *   http://stackoverflow.com/questions/3666929/
-	   *   mobile-sarai-touchend-event-not-firing-when-last-touch-is-removed
-	   *
-	   * @param {Event} nativeEvent Native event that may or may not be a touch.
-	   * @return {TouchesObject?} an object with pageX and pageY or null.
-	   */
-	  extractSingleTouch: function extractSingleTouch(nativeEvent) {
-	    var touches = nativeEvent.touches;
-	    var changedTouches = nativeEvent.changedTouches;
-	    var hasTouches = touches && touches.length > 0;
-	    var hasChangedTouches = changedTouches && changedTouches.length > 0;
-
-	    return !hasTouches && hasChangedTouches ? changedTouches[0] : hasTouches ? touches[0] : nativeEvent;
-	  }
-	};
-
-	module.exports = TouchEventUtils;
-
-/***/ },
-/* 1137 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-
-	/**
-	 * Allows extraction of a minified key. Let's the build system minify keys
-	 * without losing the ability to dynamically use key strings as values
-	 * themselves. Pass in an object with a single key/val pair and it will return
-	 * you the string key of that single record. Suppose you want to grab the
-	 * value for a key 'className' inside of an object. Key/val minification may
-	 * have aliased that key to be 'xa12'. keyOf({className: null}) will return
-	 * 'xa12' in that case. Resolve keys you want to use once at startup time, then
-	 * reuse those resolutions.
-	 */
-
-	var keyOf = function keyOf(oneKeyObj) {
-	  var key;
-	  for (key in oneKeyObj) {
-	    if (!oneKeyObj.hasOwnProperty(key)) {
-	      continue;
-	    }
-	    return key;
-	  }
-	  return null;
-	};
-
-	module.exports = keyOf;
-
-/***/ },
+/* 1131 */,
+/* 1132 */,
+/* 1133 */,
+/* 1134 */,
+/* 1135 */,
+/* 1136 */,
+/* 1137 */,
 /* 1138 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -89582,6 +89194,613 @@
 	function preventScroll(e) {
 	  e.preventDefault();
 	}
+
+/***/ },
+/* 1255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+
+	var TappableMixin = __webpack_require__(1256);
+	var PinchableMixin = __webpack_require__(1257);
+	var getComponent = __webpack_require__(1258);
+	var touchStyles = __webpack_require__(1259);
+
+	var Component = getComponent([TappableMixin, PinchableMixin]);
+
+	module.exports = Component;
+	module.exports.touchStyles = touchStyles;
+	module.exports.Mixin = _extends({}, TappableMixin, {
+	  onPinchStart: PinchableMixin.onPinchStart,
+	  onPinchMove: PinchableMixin.onPinchMove,
+	  onPinchEnd: PinchableMixin.onPinchEnd
+	});
+
+/***/ },
+/* 1256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(300);
+	var ReactDOM = __webpack_require__(330);
+
+	var SPACE_KEY = 32;
+	var ENTER_KEY = 13;
+
+	function getTouchProps(touch) {
+		if (!touch) return {};
+		return {
+			pageX: touch.pageX,
+			pageY: touch.pageY,
+			clientX: touch.clientX,
+			clientY: touch.clientY
+		};
+	}
+
+	var Mixin = {
+		propTypes: {
+			moveThreshold: React.PropTypes.number, // pixels to move before cancelling tap
+			activeDelay: React.PropTypes.number, // ms to wait before adding the `-active` class
+			pressDelay: React.PropTypes.number, // ms to wait before detecting a press
+			pressMoveThreshold: React.PropTypes.number, // pixels to move before cancelling press
+			preventDefault: React.PropTypes.bool, // whether to preventDefault on all events
+			stopPropagation: React.PropTypes.bool, // whether to stopPropagation on all events
+
+			onTap: React.PropTypes.func, // fires when a tap is detected
+			onPress: React.PropTypes.func, // fires when a press is detected
+			onTouchStart: React.PropTypes.func, // pass-through touch event
+			onTouchMove: React.PropTypes.func, // pass-through touch event
+			onTouchEnd: React.PropTypes.func, // pass-through touch event
+			onMouseDown: React.PropTypes.func, // pass-through mouse event
+			onMouseUp: React.PropTypes.func, // pass-through mouse event
+			onMouseMove: React.PropTypes.func, // pass-through mouse event
+			onMouseOut: React.PropTypes.func, // pass-through mouse event
+			onKeyDown: React.PropTypes.func, // pass-through key event
+			onKeyUp: React.PropTypes.func },
+
+		// pass-through key event
+		getDefaultProps: function getDefaultProps() {
+			return {
+				activeDelay: 0,
+				moveThreshold: 100,
+				pressDelay: 1000,
+				pressMoveThreshold: 5
+			};
+		},
+
+		getInitialState: function getInitialState() {
+			return {
+				isActive: false,
+				touchActive: false,
+				pinchActive: false
+			};
+		},
+
+		componentWillUnmount: function componentWillUnmount() {
+			this.cleanupScrollDetection();
+			this.cancelPressDetection();
+			this.clearActiveTimeout();
+		},
+
+		processEvent: function processEvent(event) {
+			if (this.props.preventDefault) event.preventDefault();
+			if (this.props.stopPropagation) event.stopPropagation();
+		},
+
+		onTouchStart: function onTouchStart(event) {
+			if (this.props.onTouchStart && this.props.onTouchStart(event) === false) return;
+			this.processEvent(event);
+			window._blockMouseEvents = true;
+			if (event.touches.length === 1) {
+				this._initialTouch = this._lastTouch = getTouchProps(event.touches[0]);
+				this.initScrollDetection();
+				this.initPressDetection(event, this.endTouch);
+				this.initTouchmoveDetection();
+				this._activeTimeout = setTimeout(this.makeActive, this.props.activeDelay);
+			} else if (this.onPinchStart && (this.props.onPinchStart || this.props.onPinchMove || this.props.onPinchEnd) && event.touches.length === 2) {
+				this.onPinchStart(event);
+			}
+		},
+
+		makeActive: function makeActive() {
+			if (!this.isMounted()) return;
+			this.clearActiveTimeout();
+			this.setState({
+				isActive: true
+			});
+		},
+
+		clearActiveTimeout: function clearActiveTimeout() {
+			clearTimeout(this._activeTimeout);
+			this._activeTimeout = false;
+		},
+
+		initScrollDetection: function initScrollDetection() {
+			this._scrollPos = { top: 0, left: 0 };
+			this._scrollParents = [];
+			this._scrollParentPos = [];
+			var node = ReactDOM.findDOMNode(this);
+
+			while (node) {
+				if (node.scrollHeight > node.offsetHeight || node.scrollWidth > node.offsetWidth) {
+					this._scrollParents.push(node);
+					this._scrollParentPos.push(node.scrollTop + node.scrollLeft);
+					this._scrollPos.top += node.scrollTop;
+					this._scrollPos.left += node.scrollLeft;
+				}
+
+				node = node.parentNode;
+			}
+		},
+
+		initTouchmoveDetection: function initTouchmoveDetection() {
+			this._touchmoveTriggeredTimes = 0;
+		},
+
+		cancelTouchmoveDetection: function cancelTouchmoveDetection() {
+			if (this._touchmoveDetectionTimeout) {
+				clearTimeout(this._touchmoveDetectionTimeout);
+				this._touchmoveDetectionTimeout = null;
+				this._touchmoveTriggeredTimes = 0;
+			}
+		},
+
+		calculateMovement: function calculateMovement(touch) {
+			return {
+				x: Math.abs(touch.clientX - this._initialTouch.clientX),
+				y: Math.abs(touch.clientY - this._initialTouch.clientY)
+			};
+		},
+
+		detectScroll: function detectScroll() {
+			var currentScrollPos = { top: 0, left: 0 };
+			for (var i = 0; i < this._scrollParents.length; i++) {
+				currentScrollPos.top += this._scrollParents[i].scrollTop;
+				currentScrollPos.left += this._scrollParents[i].scrollLeft;
+			}
+			return !(currentScrollPos.top === this._scrollPos.top && currentScrollPos.left === this._scrollPos.left);
+		},
+
+		cleanupScrollDetection: function cleanupScrollDetection() {
+			this._scrollParents = undefined;
+			this._scrollPos = undefined;
+		},
+
+		initPressDetection: function initPressDetection(event, callback) {
+			if (!this.props.onPress) return;
+			this._pressTimeout = setTimeout(function () {
+				this.props.onPress(event);
+				callback();
+			}.bind(this), this.props.pressDelay);
+		},
+
+		cancelPressDetection: function cancelPressDetection() {
+			clearTimeout(this._pressTimeout);
+		},
+
+		onTouchMove: function onTouchMove(event) {
+			if (this._initialTouch) {
+				this.processEvent(event);
+
+				if (this.detectScroll()) {
+					return this.endTouch(event);
+				} else {
+					if (this._touchmoveTriggeredTimes++ === 0) {
+						this._touchmoveDetectionTimeout = setTimeout(function () {
+							if (this._touchmoveTriggeredTimes === 1) {
+								this.endTouch(event);
+							}
+						}.bind(this), 64);
+					}
+				}
+
+				this.props.onTouchMove && this.props.onTouchMove(event);
+				this._lastTouch = getTouchProps(event.touches[0]);
+				var movement = this.calculateMovement(this._lastTouch);
+				if (movement.x > this.props.pressMoveThreshold || movement.y > this.props.pressMoveThreshold) {
+					this.cancelPressDetection();
+				}
+				if (movement.x > this.props.moveThreshold || movement.y > this.props.moveThreshold) {
+					if (this.state.isActive) {
+						this.setState({
+							isActive: false
+						});
+					} else if (this._activeTimeout) {
+						this.clearActiveTimeout();
+					}
+				} else {
+					if (!this.state.isActive && !this._activeTimeout) {
+						this.setState({
+							isActive: true
+						});
+					}
+				}
+			} else if (this._initialPinch && event.touches.length === 2 && this.onPinchMove) {
+				this.onPinchMove(event);
+				event.preventDefault();
+			}
+		},
+
+		onTouchEnd: function onTouchEnd(event) {
+			var _this = this;
+
+			if (this._initialTouch) {
+				this.processEvent(event);
+				var afterEndTouch;
+				var movement = this.calculateMovement(this._lastTouch);
+				if (movement.x <= this.props.moveThreshold && movement.y <= this.props.moveThreshold && this.props.onTap) {
+					event.preventDefault();
+					afterEndTouch = function afterEndTouch() {
+						var finalParentScrollPos = _this._scrollParents.map(function (node) {
+							return node.scrollTop + node.scrollLeft;
+						});
+						var stoppedMomentumScroll = _this._scrollParentPos.some(function (end, i) {
+							return end !== finalParentScrollPos[i];
+						});
+						if (!stoppedMomentumScroll) {
+							_this.props.onTap(event);
+						}
+					};
+				}
+				this.endTouch(event, afterEndTouch);
+			} else if (this.onPinchEnd && this._initialPinch && event.touches.length + event.changedTouches.length === 2) {
+				this.onPinchEnd(event);
+				event.preventDefault();
+			}
+		},
+
+		endTouch: function endTouch(event, callback) {
+			this.cancelTouchmoveDetection();
+			this.cancelPressDetection();
+			this.clearActiveTimeout();
+			if (event && this.props.onTouchEnd) {
+				this.props.onTouchEnd(event);
+			}
+			this._initialTouch = null;
+			this._lastTouch = null;
+			if (callback) {
+				callback();
+			}
+			if (this.state.isActive) {
+				this.setState({
+					isActive: false
+				});
+			}
+		},
+
+		onMouseDown: function onMouseDown(event) {
+			if (window._blockMouseEvents) {
+				window._blockMouseEvents = false;
+				return;
+			}
+			if (this.props.onMouseDown && this.props.onMouseDown(event) === false) return;
+			this.processEvent(event);
+			this.initPressDetection(event, this.endMouseEvent);
+			this._mouseDown = true;
+			this.setState({
+				isActive: true
+			});
+		},
+
+		onMouseMove: function onMouseMove(event) {
+			if (window._blockMouseEvents || !this._mouseDown) return;
+			this.processEvent(event);
+			this.props.onMouseMove && this.props.onMouseMove(event);
+		},
+
+		onMouseUp: function onMouseUp(event) {
+			if (window._blockMouseEvents || !this._mouseDown) return;
+			this.processEvent(event);
+			this.props.onMouseUp && this.props.onMouseUp(event);
+			this.props.onTap && this.props.onTap(event);
+			this.endMouseEvent();
+		},
+
+		onMouseOut: function onMouseOut(event) {
+			if (window._blockMouseEvents || !this._mouseDown) return;
+			this.processEvent(event);
+			this.props.onMouseOut && this.props.onMouseOut(event);
+			this.endMouseEvent();
+		},
+
+		endMouseEvent: function endMouseEvent() {
+			this.cancelPressDetection();
+			this._mouseDown = false;
+			this.setState({
+				isActive: false
+			});
+		},
+
+		onKeyUp: function onKeyUp(event) {
+			if (!this._keyDown) return;
+			this.processEvent(event);
+			this.props.onKeyUp && this.props.onKeyUp(event);
+			this.props.onTap && this.props.onTap(event);
+			this._keyDown = false;
+			this.cancelPressDetection();
+			this.setState({
+				isActive: false
+			});
+		},
+
+		onKeyDown: function onKeyDown(event) {
+			if (this.props.onKeyDown && this.props.onKeyDown(event) === false) return;
+			if (event.which !== SPACE_KEY && event.which !== ENTER_KEY) return;
+			if (this._keyDown) return;
+			this.initPressDetection(event, this.endKeyEvent);
+			this.processEvent(event);
+			this._keyDown = true;
+			this.setState({
+				isActive: true
+			});
+		},
+
+		endKeyEvent: function endKeyEvent() {
+			this.cancelPressDetection();
+			this._keyDown = false;
+			this.setState({
+				isActive: false
+			});
+		},
+
+		cancelTap: function cancelTap() {
+			this.endTouch();
+			this._mouseDown = false;
+		},
+
+		handlers: function handlers() {
+			return {
+				onTouchStart: this.onTouchStart,
+				onTouchMove: this.onTouchMove,
+				onTouchEnd: this.onTouchEnd,
+				onMouseDown: this.onMouseDown,
+				onMouseUp: this.onMouseUp,
+				onMouseMove: this.onMouseMove,
+				onMouseOut: this.onMouseOut,
+				onKeyDown: this.onKeyDown,
+				onKeyUp: this.onKeyUp
+			};
+		}
+	};
+
+	module.exports = Mixin;
+
+/***/ },
+/* 1257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}return target;
+	};
+
+	var React = __webpack_require__(300);
+
+	function getPinchProps(touches) {
+		return {
+			touches: Array.prototype.map.call(touches, function copyTouch(touch) {
+				return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY };
+			}),
+			center: { x: (touches[0].pageX + touches[1].pageX) / 2, y: (touches[0].pageY + touches[1].pageY) / 2 },
+			angle: Math.atan() * (touches[1].pageY - touches[0].pageY) / (touches[1].pageX - touches[0].pageX) * 180 / Math.PI,
+			distance: Math.sqrt(Math.pow(Math.abs(touches[1].pageX - touches[0].pageX), 2) + Math.pow(Math.abs(touches[1].pageY - touches[0].pageY), 2))
+		};
+	}
+
+	var Mixin = {
+		propTypes: {
+			onPinchStart: React.PropTypes.func, // fires when a pinch gesture is started
+			onPinchMove: React.PropTypes.func, // fires on every touch-move when a pinch action is active
+			onPinchEnd: React.PropTypes.func // fires when a pinch action ends
+		},
+
+		onPinchStart: function onPinchStart(event) {
+			// in case the two touches didn't start exactly at the same time
+			if (this._initialTouch) {
+				this.endTouch();
+			}
+			var touches = event.touches;
+			this._initialPinch = getPinchProps(touches);
+			this._initialPinch = _extends(this._initialPinch, {
+				displacement: { x: 0, y: 0 },
+				displacementVelocity: { x: 0, y: 0 },
+				rotation: 0,
+				rotationVelocity: 0,
+				zoom: 1,
+				zoomVelocity: 0,
+				time: Date.now()
+			});
+			this._lastPinch = this._initialPinch;
+			this.props.onPinchStart && this.props.onPinchStart(this._initialPinch, event);
+		},
+
+		onPinchMove: function onPinchMove(event) {
+			if (this._initialTouch) {
+				this.endTouch();
+			}
+			var touches = event.touches;
+			if (touches.length !== 2) {
+				return this.onPinchEnd(event); // bail out before disaster
+			}
+
+			var currentPinch = touches[0].identifier === this._initialPinch.touches[0].identifier && touches[1].identifier === this._initialPinch.touches[1].identifier ? getPinchProps(touches) // the touches are in the correct order
+			: touches[1].identifier === this._initialPinch.touches[0].identifier && touches[0].identifier === this._initialPinch.touches[1].identifier ? getPinchProps(touches.reverse()) // the touches have somehow changed order
+			: getPinchProps(touches); // something is wrong, but we still have two touch-points, so we try not to fail
+
+			currentPinch.displacement = {
+				x: currentPinch.center.x - this._initialPinch.center.x,
+				y: currentPinch.center.y - this._initialPinch.center.y
+			};
+
+			currentPinch.time = Date.now();
+			var timeSinceLastPinch = currentPinch.time - this._lastPinch.time;
+
+			currentPinch.displacementVelocity = {
+				x: (currentPinch.displacement.x - this._lastPinch.displacement.x) / timeSinceLastPinch,
+				y: (currentPinch.displacement.y - this._lastPinch.displacement.y) / timeSinceLastPinch
+			};
+
+			currentPinch.rotation = currentPinch.angle - this._initialPinch.angle;
+			currentPinch.rotationVelocity = currentPinch.rotation - this._lastPinch.rotation / timeSinceLastPinch;
+
+			currentPinch.zoom = currentPinch.distance / this._initialPinch.distance;
+			currentPinch.zoomVelocity = (currentPinch.zoom - this._lastPinch.zoom) / timeSinceLastPinch;
+
+			this.props.onPinchMove && this.props.onPinchMove(currentPinch, event);
+
+			this._lastPinch = currentPinch;
+		},
+
+		onPinchEnd: function onPinchEnd(event) {
+			// TODO use helper to order touches by identifier and use actual values on touchEnd.
+			var currentPinch = _extends({}, this._lastPinch);
+			currentPinch.time = Date.now();
+
+			if (currentPinch.time - this._lastPinch.time > 16) {
+				currentPinch.displacementVelocity = 0;
+				currentPinch.rotationVelocity = 0;
+				currentPinch.zoomVelocity = 0;
+			}
+
+			this.props.onPinchEnd && this.props.onPinchEnd(currentPinch, event);
+
+			this._initialPinch = this._lastPinch = null;
+
+			// If one finger is still on screen, it should start a new touch event for swiping etc
+			// But it should never fire an onTap or onPress event.
+			// Since there is no support swipes yet, this should be disregarded for now
+			// if (event.touches.length === 1) {
+			// 	this.onTouchStart(event);
+			// }
+		}
+	};
+
+	module.exports = Mixin;
+
+/***/ },
+/* 1258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}return target;
+	};
+
+	var React = __webpack_require__(300);
+	var touchStyles = __webpack_require__(1259);
+
+	/**
+	 * Tappable Component
+	 * ==================
+	 */
+	module.exports = function (mixins) {
+		return React.createClass({
+			displayName: 'Tappable',
+
+			mixins: mixins,
+
+			propTypes: {
+				component: React.PropTypes.any, // component to create
+				className: React.PropTypes.string, // optional className
+				classBase: React.PropTypes.string, // base for generated classNames
+				classes: React.PropTypes.object, // object containing the active and inactive class names
+				style: React.PropTypes.object, // additional style properties for the component
+				disabled: React.PropTypes.bool // only applies to buttons
+			},
+
+			getDefaultProps: function getDefaultProps() {
+				return {
+					component: 'span',
+					classBase: 'Tappable'
+				};
+			},
+
+			render: function render() {
+				var props = this.props;
+				var className = props.classBase + (this.state.isActive ? '-active' : '-inactive');
+
+				if (props.className) {
+					className += ' ' + props.className;
+				}
+
+				if (props.classes) {
+					className += ' ' + (this.state.isActive ? props.classes.active : props.classes.inactive);
+				}
+
+				var style = {};
+				_extends(style, touchStyles, props.style);
+
+				var newComponentProps = _extends({}, props, {
+					style: style,
+					className: className,
+					disabled: props.disabled,
+					handlers: this.handlers
+				}, this.handlers());
+
+				delete newComponentProps.activeDelay;
+				delete newComponentProps.classBase;
+				delete newComponentProps.classes;
+				delete newComponentProps.handlers;
+				delete newComponentProps.onTap;
+				delete newComponentProps.onPress;
+				delete newComponentProps.onPinchStart;
+				delete newComponentProps.onPinchMove;
+				delete newComponentProps.onPinchEnd;
+				delete newComponentProps.moveThreshold;
+				delete newComponentProps.pressDelay;
+				delete newComponentProps.pressMoveThreshold;
+				delete newComponentProps.preventDefault;
+				delete newComponentProps.stopPropagation;
+				delete newComponentProps.component;
+
+				return React.createElement(props.component, newComponentProps, props.children);
+			}
+		});
+	};
+
+/***/ },
+/* 1259 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var touchStyles = {
+	  WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+	  WebkitTouchCallout: 'none',
+	  WebkitUserSelect: 'none',
+	  KhtmlUserSelect: 'none',
+	  MozUserSelect: 'none',
+	  msUserSelect: 'none',
+	  userSelect: 'none',
+	  cursor: 'pointer'
+	};
+
+	module.exports = touchStyles;
 
 /***/ }
 /******/ ]);

@@ -5,7 +5,7 @@ class globalVarible {
 		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.dayTaskTypes = ['today', 'tomorrow'];
-		this.longTaskTypes = ['long', 'thisYear', 'thisMonth', 'thisWeek', 'nextWeek', 'nextMonth', 'nextYear'];
+		this.longTaskTypes = ['long', 'thisWeek', 'thisMonth', 'thisYear', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.defaultTaskType = 'today';
 		this.taskTypesText = {
 			today: '今日目标',
