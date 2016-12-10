@@ -9014,6 +9014,10 @@
 
 	var _semanticUiReact = __webpack_require__(481);
 
+	var _reactFlexibleSwitch = __webpack_require__(1251);
+
+	var _reactFlexibleSwitch2 = _interopRequireDefault(_reactFlexibleSwitch);
+
 	var _reactDraggable = __webpack_require__(1010);
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
@@ -10045,7 +10049,9 @@
 					}
 				}();
 
-				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ? _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: !isTaskCompleted ? 9 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 5, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement('span', { style: {
+				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ?
+				// normal mode
+				_react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { defaultChecked: isTaskCompleted, onClick: this.completeCheckboxClick })), _react2.default.createElement(Column, { width: !isTaskCompleted ? 9 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 5, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement('span', { style: {
 						position: 'relative'
 					} }, _react2.default.createElement(_semanticUiReact.Label, { className: 'taskTimeLabel', color: color }, (0, _tool.getLabelTextByMoments)(task), '\xA0', isTaskNeedRepeat ? _react2.default.createElement(_semanticUiReact.Icon, { name: 'repeat', size: 'mini' }) : null))) : '') : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
@@ -10215,7 +10221,7 @@
 			};
 
 			_this13.taskTypeSelectorCallback = _this13.taskTypeSelectorCallback.bind(_this13);
-			_this13.isCompleteDropdownChange = _this13.isCompleteDropdownChange.bind(_this13);
+			_this13.handleIsCompleteSwitchChange = _this13.handleIsCompleteSwitchChange.bind(_this13);
 			_this13.editBtnClick = _this13.editBtnClick.bind(_this13);
 			return _this13;
 		}
@@ -10232,22 +10238,10 @@
 				}
 			}
 		}, {
-			key: 'isCompleteDropdownChange',
-			value: function isCompleteDropdownChange(ev, result) {
-				var _this14 = this;
-
-				var value = result.value;
-
+			key: 'handleIsCompleteSwitchChange',
+			value: function handleIsCompleteSwitchChange(active) {
 				this.setState({
-					isTaskCompleted: Boolean(value)
-				});
-
-				this.setState({
-					isShowTaskList: false
-				}, function () {
-					_this14.setState({
-						isShowTaskList: true
-					});
+					isTaskCompleted: active
 				});
 
 				// set defaultSetting
@@ -10256,10 +10250,10 @@
 				var isDayTaskType = _globalVarible2.default.isDayTaskType(taskType);
 				var isLongTaskType = _globalVarible2.default.isLongTaskType(taskType);
 				if (isDayTaskType) {
-					defaultSetting.dayTask_isCompleted = Boolean(value);
+					defaultSetting.dayTask_isCompleted = active;
 				}
 				if (isLongTaskType) {
-					defaultSetting.longTask_isCompleted = Boolean(value);
+					defaultSetting.longTask_isCompleted = active;
 				}
 			}
 		}, {
@@ -10282,9 +10276,13 @@
 				var taskTypes = this.props.taskTypes;
 
 				var isCompletesOptions = [{ value: 1, text: '已完成' }, { value: 0, text: '未完成' }];
-				var defalutIsComplete = this.props.isCompleted ? 1 : 0;
+				var defalutIsComplete = this.props.isCompleted;
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, defaultValue: defalutIsComplete, options: isCompletesOptions, onChange: this.isCompleteDropdownChange })), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'green', size: 'mini', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), isShowTaskList ? _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted })) : null);
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 6, verticalAlign: 'middle' }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'isTaskCompletedSwitch' }, _react2.default.createElement(_reactFlexibleSwitch2.default, { value: isTaskCompleted,
+					labels: { on: '已完成', off: '未完成' },
+					circleStyles: { diameter: 24 },
+					switchStyles: { width: 90 },
+					onChange: this.handleIsCompleteSwitchChange }))), _react2.default.createElement(Column, { width: 4, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Button, { color: !editMode ? 'blue' : 'green', size: 'mini', onClick: this.editBtnClick }, !editMode ? '编辑' : '完成')))), isShowTaskList ? _react2.default.createElement('div', null, _react2.default.createElement(TaskList, { taskType: taskType, editMode: editMode, isTaskCompleted: isTaskCompleted })) : null);
 			}
 		}]);
 
@@ -10357,20 +10355,20 @@
 		function MultiFunctionBtn(props) {
 			_classCallCheck(this, MultiFunctionBtn);
 
-			var _this17 = _possibleConstructorReturn(this, (MultiFunctionBtn.__proto__ || Object.getPrototypeOf(MultiFunctionBtn)).call(this, props));
+			var _this16 = _possibleConstructorReturn(this, (MultiFunctionBtn.__proto__ || Object.getPrototypeOf(MultiFunctionBtn)).call(this, props));
 
-			_this17.state = {
+			_this16.state = {
 				isShowMenu: false,
 				isOpenSetting: false
 			};
 
-			_this17.handleClickAddButton = _this17.handleClickAddButton.bind(_this17);
+			_this16.handleClickAddButton = _this16.handleClickAddButton.bind(_this16);
 
-			_this17.handleClickFunctionBtn = _this17.handleClickFunctionBtn.bind(_this17);
+			_this16.handleClickFunctionBtn = _this16.handleClickFunctionBtn.bind(_this16);
 			// this.handleClickAddBtn = this.handleClickAddBtn.bind(this);
-			_this17.handleClickExportBtn = _this17.handleClickExportBtn.bind(_this17);
-			_this17.handleClickSettingBtn = _this17.handleClickSettingBtn.bind(_this17);
-			return _this17;
+			_this16.handleClickExportBtn = _this16.handleClickExportBtn.bind(_this16);
+			_this16.handleClickSettingBtn = _this16.handleClickSettingBtn.bind(_this16);
+			return _this16;
 		}
 
 		_createClass(MultiFunctionBtn, [{
@@ -10431,9 +10429,9 @@
 		function ToDoList(props) {
 			_classCallCheck(this, ToDoList);
 
-			var _this18 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+			var _this17 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-			_this18.state = {
+			_this17.state = {
 				taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 				isShowTaskInfo: false,
 				// Message
@@ -10443,13 +10441,13 @@
 				task: null
 			};
 
-			_this18.observeIsNeedShowTaskInfo();
-			_this18.observeIsNeedShowMessage();
+			_this17.observeIsNeedShowTaskInfo();
+			_this17.observeIsNeedShowMessage();
 
-			_this18.tabChange = _this18.tabChange.bind(_this18);
-			_this18.multiFunctionBtnCallback = _this18.multiFunctionBtnCallback.bind(_this18);
-			_this18.taskInfoCallback = _this18.taskInfoCallback.bind(_this18);
-			return _this18;
+			_this17.tabChange = _this17.tabChange.bind(_this17);
+			_this17.multiFunctionBtnCallback = _this17.multiFunctionBtnCallback.bind(_this17);
+			_this17.taskInfoCallback = _this17.taskInfoCallback.bind(_this17);
+			return _this17;
 		}
 
 		_createClass(ToDoList, [{
@@ -10473,7 +10471,7 @@
 		}, {
 			key: 'taskInfoCallback',
 			value: function taskInfoCallback(o) {
-				var _this19 = this;
+				var _this18 = this;
 
 				var isShowTaskInfo = o.isShowTaskInfo,
 				    isContinueToAddTask = o.isContinueToAddTask,
@@ -10490,7 +10488,7 @@
 						task: null,
 						taskInfoMode: _globalVarible2.default.taskInfoMode.add
 					}, function () {
-						_this19.setState({
+						_this18.setState({
 							isShowTaskInfo: true
 						});
 					});
@@ -10505,7 +10503,7 @@
 		}, {
 			key: 'observeIsNeedShowTaskInfo',
 			value: function observeIsNeedShowTaskInfo() {
-				var _this20 = this;
+				var _this19 = this;
 
 				(0, _observe2.default)(observe_taskInfo, function (key, setting) {
 					var task = setting.task,
@@ -10515,7 +10513,7 @@
 
 					if (isTransporting) {
 						observe_taskInfo.setting.isTransporting = false;
-						_this20.setState({
+						_this19.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
@@ -10527,7 +10525,7 @@
 		}, {
 			key: 'observeIsNeedShowMessage',
 			value: function observeIsNeedShowMessage() {
-				var _this21 = this;
+				var _this20 = this;
 
 				(0, _observe2.default)(observe_message, function (key, setting) {
 					var isShowMessage = setting.isShowMessage,
@@ -10536,13 +10534,13 @@
 
 					// animation
 
-					_this21.setState({
+					_this20.setState({
 						isShowMessage: isShowMessage,
 						message: message,
 						messageColor: color
 					});
 					setTimeout(function () {
-						_this21.setState({
+						_this20.setState({
 							isShowMessage: false,
 							message: '',
 							messageColor: color
@@ -89008,7 +89006,7 @@
 
 
 	// module
-	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .label-repeatIcon {\n  background: none; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
+	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .label-repeatIcon, .ToDoList .isTaskCompletedSwitch {\n  background: none; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
 
 	// exports
 
@@ -89043,6 +89041,549 @@
 	// reactify dom
 	circleOvalButton();
 	forbidSafariDefaultDragEvent();
+
+/***/ },
+/* 1238 */,
+/* 1239 */,
+/* 1240 */,
+/* 1241 */,
+/* 1242 */,
+/* 1243 */,
+/* 1244 */,
+/* 1245 */,
+/* 1246 */,
+/* 1247 */,
+/* 1248 */,
+/* 1249 */,
+/* 1250 */,
+/* 1251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+
+	var _get = function get(_x, _x2, _x3) {
+	  var _again = true;_function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;_x2 = property;_x3 = receiver;_again = true;desc = parent = undefined;continue _function;
+	      }
+	    } else if ('value' in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;if (getter === undefined) {
+	        return undefined;
+	      }return getter.call(receiver);
+	    }
+	  }
+	};
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError('Cannot call a class as a function');
+	  }
+	}
+
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== 'function' && superClass !== null) {
+	    throw new TypeError('Super expression must either be null or a function, not ' + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+
+	var _react = __webpack_require__(300);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(1252);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _Label = __webpack_require__(1253);
+
+	var _Label2 = _interopRequireDefault(_Label);
+
+	var _utils = __webpack_require__(1254);
+
+	var Switch = function (_React$Component) {
+	  _inherits(Switch, _React$Component);
+
+	  function Switch(props) {
+	    _classCallCheck(this, Switch);
+
+	    _get(Object.getPrototypeOf(Switch.prototype), 'constructor', this).call(this, props);
+
+	    this.onSlideEnd = this.onSlideEnd.bind(this);
+	    this.onSlideStart = this.onSlideStart.bind(this);
+	    this.onMouseLeave = this.onMouseLeave.bind(this);
+
+	    this.isTouchDevice = window['ontouchstart'] !== undefined;
+
+	    this.state = { sliding: false, value: this.props.value };
+	  }
+
+	  _createClass(Switch, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.addListener();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.value === undefined) {
+	        return;
+	      }
+
+	      if (nextProps.value !== this.state.value) {
+	        this.setState({ value: nextProps.value });
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps, prevState) {
+	      if (this.state.value != prevState.value) {
+	        this.props.onChange(this.state.value);
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.removeListener();
+	    }
+	  }, {
+	    key: 'addListener',
+	    value: function addListener() {
+	      if (this.isTouchDevice) {
+	        document.addEventListener(_utils.events.touch.start, this.onSlideStart, false);
+	        document.addEventListener(_utils.events.touch.stop, this.onSlideEnd, false);
+	      } else {
+	        document.addEventListener(_utils.events.mouse.start, this.onSlideStart, false);
+	        document.addEventListener(_utils.events.mouse.stop, this.onSlideEnd, false);
+	      }
+	    }
+	  }, {
+	    key: 'removeListener',
+	    value: function removeListener() {
+	      if (this.isTouchDevice) {
+	        document.removeEventListener(_utils.events.touch.start, this.onSlideStart, false);
+	        document.removeEventListener(_utils.events.touch.stop, this.onSlideEnd, false);
+	      } else {
+	        document.removeEventListener(_utils.events.mouse.start, this.onSlideStart, false);
+	        document.removeEventListener(_utils.events.mouse.stop, this.onSlideEnd, false);
+	      }
+	    }
+	  }, {
+	    key: 'onSlideEnd',
+	    value: function onSlideEnd() {
+	      if (this.props.locked) {
+	        return;
+	      }
+
+	      if (this.state.sliding) {
+	        this.setState({ sliding: false, value: !this.state.value });
+	        (0, _utils.reEnableScroll)();
+	      }
+	    }
+	  }, {
+	    key: 'onSlideStart',
+	    value: function onSlideStart(e) {
+	      if (this.props.locked) {
+	        return;
+	      }
+
+	      if (e.target == this.refs.circle || e.target == this.refs['switch']) {
+	        this.setState({ sliding: true });
+	        (0, _utils.disableScroll)();
+	      }
+	    }
+	  }, {
+	    key: 'onMouseLeave',
+	    value: function onMouseLeave(e) {
+	      this.onSlideEnd(e);
+	    }
+	  }, {
+	    key: 'classes',
+	    value: function classes() {
+	      return (0, _classnames2['default'])('switch', { sliding: this.state.sliding }, { active: this.state.value }, { inactive: !this.state.value });
+	    }
+	  }, {
+	    key: 'switchStyles',
+	    value: function switchStyles() {
+	      var switchStyles = this.switchStylesProps();
+	      return (0, _utils.merge)({ borderRadius: switchStyles.width / 2 }, switchStyles);
+	    }
+	  }, {
+	    key: 'translationStyle',
+	    value: function translationStyle() {
+	      var circleStyles = this.circleStylesProps();
+	      var switchStyles = this.switchStyles();
+
+	      var offset = switchStyles.width - circleStyles.diameter;
+	      var translation = this.state.value ? offset : 0;
+
+	      if (this.state.sliding && this.state.value) {
+	        translation -= circleStyles.diameter / 4 + switchStyles.padding / 4;
+	      }
+
+	      return {
+	        transform: 'translateX(' + translation + 'px)'
+	      };
+	    }
+	  }, {
+	    key: 'backgroundStyle',
+	    value: function backgroundStyle() {
+	      var circleStyles = this.circleStylesProps();
+	      var backgroundColor = this.state.value ? circleStyles.onColor : circleStyles.offColor;
+	      return { backgroundColor: backgroundColor };
+	    }
+	  }, {
+	    key: 'circleStylesProps',
+	    value: function circleStylesProps() {
+	      return (0, _utils.merge)(defaultCircleStyles, this.props.circleStyles);
+	    }
+	  }, {
+	    key: 'switchStylesProps',
+	    value: function switchStylesProps() {
+	      return (0, _utils.merge)(defaultSwitchStyles, this.props.switchStyles);
+	    }
+	  }, {
+	    key: 'circleDimensionsStyle',
+	    value: function circleDimensionsStyle() {
+	      var switchStyles = this.switchStyles();
+	      var circleStyles = this.circleStylesProps();
+	      var width = this.state.sliding ? circleStyles.diameter + circleStyles.diameter / 4 : circleStyles.diameter;
+	      return { width: width, height: circleStyles.diameter };
+	    }
+	  }, {
+	    key: 'circleStyles',
+	    value: function circleStyles() {
+	      return (0, _utils.merge)(this.circleDimensionsStyle(), this.backgroundStyle(), this.translationStyle(), this.circleStylesProps());
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement('span', { style: this.switchStyles(),
+	        className: this.classes(),
+	        ref: 'switch',
+	        onMouseLeave: this.onMouseLeave }, _react2['default'].createElement(_Label2['default'], { active: this.state.value, labels: this.props.labels, ref: 'label' }), _react2['default'].createElement('span', { style: this.circleStyles(), className: 'circle', ref: 'circle' }));
+	    }
+	  }]);
+
+	  return Switch;
+	}(_react2['default'].Component);
+
+	var defaultSwitchStyles = {
+	  width: 80,
+	  padding: 4,
+	  border: '1px solid #CFCFCF',
+	  display: 'flex',
+	  position: 'relative',
+	  backgroundColor: 'white',
+	  boxSizing: 'content-box'
+	};
+
+	var defaultCircleStyles = {
+	  diameter: 35,
+	  borderRadius: 35,
+	  display: 'block',
+	  transition: 'transform 200ms, width 200ms, background-color 200ms',
+	  onColor: '#70D600',
+	  offColor: '#CFCFCF'
+	};
+
+	Switch.propTypes = {
+	  value: _react2['default'].PropTypes.bool,
+
+	  circleStyles: _react2['default'].PropTypes.shape({
+	    onColor: _react2['default'].PropTypes.string,
+	    offColor: _react2['default'].PropTypes.string,
+	    diameter: _react2['default'].PropTypes.number
+	  }),
+
+	  labels: _react2['default'].PropTypes.shape({
+	    on: _react2['default'].PropTypes.string,
+	    off: _react2['default'].PropTypes.string
+	  }),
+
+	  locked: _react2['default'].PropTypes.bool,
+
+	  onChange: _react2['default'].PropTypes.func,
+
+	  switchStyles: _react2['default'].PropTypes.shape({
+	    width: _react2['default'].PropTypes.number
+	  })
+	};
+
+	Switch.defaultProps = {
+	  onChange: function onChange() {},
+	  circleStyles: defaultCircleStyles,
+	  switchStyles: defaultSwitchStyles,
+	  labels: { on: '', off: '' },
+	  locked: false
+	};
+
+	exports['default'] = Switch;
+	module.exports = exports['default'];
+
+/***/ },
+/* 1252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+		return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+		return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames() {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg === 'undefined' ? 'undefined' : _typeof(arg);
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if ("function" === 'function' && _typeof(__webpack_require__(685)) === 'object' && __webpack_require__(685)) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	})();
+
+/***/ },
+/* 1253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+
+	var _get = function get(_x, _x2, _x3) {
+	  var _again = true;_function: while (_again) {
+	    var object = _x,
+	        property = _x2,
+	        receiver = _x3;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+	      var parent = Object.getPrototypeOf(object);if (parent === null) {
+	        return undefined;
+	      } else {
+	        _x = parent;_x2 = property;_x3 = receiver;_again = true;desc = parent = undefined;continue _function;
+	      }
+	    } else if ('value' in desc) {
+	      return desc.value;
+	    } else {
+	      var getter = desc.get;if (getter === undefined) {
+	        return undefined;
+	      }return getter.call(receiver);
+	    }
+	  }
+	};
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError('Cannot call a class as a function');
+	  }
+	}
+
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== 'function' && superClass !== null) {
+	    throw new TypeError('Super expression must either be null or a function, not ' + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+
+	var _react = __webpack_require__(300);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _utils = __webpack_require__(1254);
+
+	var Label = function (_React$Component) {
+	  _inherits(Label, _React$Component);
+
+	  function Label() {
+	    _classCallCheck(this, Label);
+
+	    _get(Object.getPrototypeOf(Label.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(Label, [{
+	    key: 'styles',
+	    value: function styles() {
+	      var offset = this.props.active ? { left: '20% ' } : { right: '20%' };
+
+	      return (0, _utils.merge)({
+	        position: 'absolute',
+	        top: '50%',
+	        transform: 'translateY(-50%)',
+	        pointerEvents: 'none'
+	      }, offset);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement('span', { style: this.styles(), className: 'label' }, this.props.active ? this.props.labels.on : this.props.labels.off);
+	    }
+	  }]);
+
+	  return Label;
+	}(_react2['default'].Component);
+
+	exports['default'] = Label;
+
+	Label.propTypes = {
+	  active: _react2['default'].PropTypes.bool,
+	  labels: _react2['default'].PropTypes.shape({
+	    on: _react2['default'].PropTypes.string,
+	    off: _react2['default'].PropTypes.string
+	  })
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 1254 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+
+	exports.merge = merge;
+	exports.disableScroll = disableScroll;
+	exports.reEnableScroll = reEnableScroll;
+	var events = {
+	  touch: {
+	    start: 'touchstart',
+	    stop: 'touchend',
+	    move: 'touchmove'
+	  },
+	  mouse: {
+	    start: 'mousedown',
+	    stop: 'mouseup'
+	  }
+	};
+
+	exports.events = events;
+
+	function merge() {
+	  for (var _len = arguments.length, hashes = Array(_len), _key = 0; _key < _len; _key++) {
+	    hashes[_key] = arguments[_key];
+	  }
+
+	  return _extends.apply(undefined, [{}].concat(hashes));
+	}
+
+	function disableScroll() {
+	  document.addEventListener(events.touch.move, preventScroll, false);
+	}
+
+	function reEnableScroll() {
+	  document.removeEventListener(events.touch.move, preventScroll, false);
+	}
+
+	function preventScroll(e) {
+	  e.preventDefault();
+	}
 
 /***/ }
 /******/ ]);

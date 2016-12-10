@@ -1,6 +1,7 @@
 import React,  { Component } from 'react';
 import {render, findDOMNode} from 'react-dom';
 import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown, Modal, Message} from 'semantic-ui-react';
+import Switch from 'react-flexible-switch';
 import Draggable from 'react-draggable'; 
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
@@ -932,7 +933,6 @@ class TaskListItem extends React.Component {
 							<Column width={2} textAlign='center' verticalAlign='middle'>
 								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
 							</Column>
-							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
 							<Column width={!isTaskCompleted ? 9 : 14} verticalAlign='middle'>
 								<div onClick={this.textClick}>
@@ -1102,7 +1102,7 @@ class TaskListContainer extends React.Component {
 		}	
 
 		this.taskTypeSelectorCallback = this.taskTypeSelectorCallback.bind(this);
-		this.isCompleteDropdownChange = this.isCompleteDropdownChange.bind(this);
+		this.handleIsCompleteSwitchChange = this.handleIsCompleteSwitchChange.bind(this);
 		this.editBtnClick = this.editBtnClick.bind(this);
 	}
 	taskTypeSelectorCallback(o) {
@@ -1114,19 +1114,9 @@ class TaskListContainer extends React.Component {
 			});
 		}
 	}
-	isCompleteDropdownChange(ev, result) {
-		const {value} = result;
-
+	handleIsCompleteSwitchChange(active) {
 		this.setState({
-			isTaskCompleted: Boolean(value)
-		});
-
-		this.setState({
-			isShowTaskList: false
-		}, () => {
-			this.setState({
-				isShowTaskList: true
-			});
+			isTaskCompleted: active
 		});
 
 		// set defaultSetting
@@ -1134,12 +1124,11 @@ class TaskListContainer extends React.Component {
 		const isDayTaskType = G.isDayTaskType(taskType);
 		const isLongTaskType = G.isLongTaskType(taskType);
 		if (isDayTaskType) {
-			defaultSetting.dayTask_isCompleted = Boolean(value);
+			defaultSetting.dayTask_isCompleted = active;
 		}
 		if (isLongTaskType) {
-			defaultSetting.longTask_isCompleted = Boolean(value);
+			defaultSetting.longTask_isCompleted = active;
 		}
-
 	}
 	editBtnClick() {
 		this.setState((prevState) => ({
@@ -1154,17 +1143,23 @@ class TaskListContainer extends React.Component {
 			{value: 1, text: '已完成'},
 			{value: 0, text: '未完成'}
 		];
-		const defalutIsComplete = this.props.isCompleted ? 1 : 0;
+		const defalutIsComplete = this.props.isCompleted;
 
 		return (
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={6}>
+						<Column width={6} verticalAlign='middle'>
 							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
-						<Column width={6}>
-							<Dropdown fluid selection defaultValue={defalutIsComplete} options={isCompletesOptions} onChange={this.isCompleteDropdownChange}></Dropdown>
+						<Column width={6} textAlign='center' verticalAlign='middle'>
+							<Label className='isTaskCompletedSwitch'>
+								<Switch value={isTaskCompleted}
+										labels={{ on: '已完成', off: '未完成' }} 
+										circleStyles={{ diameter: 24 }} 
+										switchStyles={{ width: 90 }}
+										onChange={this.handleIsCompleteSwitchChange} />
+							</Label>
 						</Column>
 						<Column width={4} textAlign='center' verticalAlign='middle'>
 							<Button color={!editMode ? 'blue' : 'green'} size='mini' onClick={this.editBtnClick}>
