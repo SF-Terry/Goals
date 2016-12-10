@@ -930,30 +930,26 @@ class TaskListItem extends React.Component {
 					{!editMode ? (
 						// normal mode
 						<Row >
-							<Column width={2} textAlign='center' verticalAlign='middle'>
-								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
-							</Column>
-							
-							<Column width={!isTaskCompleted ? 9 : 14} verticalAlign='middle'>
+							<Column width={!isTaskCompleted ? 8 : 14} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
 								</div>
 							</Column>
 							{!isTaskCompleted ? (
-								<Column width={5} textAlign='center' verticalAlign='middle'>
-									<span style={{
-										position: 'relative'
-									}}>
-										<Label className='taskTimeLabel' color={color}>
-											{getLabelTextByMoments(task)}
-											&nbsp;
-											{isTaskNeedRepeat ? (
-												<Icon name='repeat' size='mini' />
-											) : null}
-										</Label>
-									</span>
+								<Column width={6} textAlign='right' verticalAlign='middle'>
+									<Label className='taskTimeLabel' color={color}>
+										{getLabelTextByMoments(task)}
+										&nbsp;
+										{isTaskNeedRepeat ? (
+											<Icon name='repeat' size='mini' />
+										) : null}
+									</Label>
 								</Column>
 							) : ''}
+							<Column width={2} textAlign='center' verticalAlign='middle'>
+								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
+							</Column>
+							
 						</Row>
 					) : (
 						// edit mode
@@ -1162,9 +1158,7 @@ class TaskListContainer extends React.Component {
 							</Label>
 						</Column>
 						<Column width={4} textAlign='center' verticalAlign='middle'>
-							<Button color={!editMode ? 'blue' : 'green'} size='mini' onClick={this.editBtnClick}>
-								{!editMode ? '编辑' : '完成'}
-							</Button>
+							<Icon size='big' name={!editMode ? 'edit' : 'check'} color={!editMode ? 'blue' : 'green'} onClick={this.editBtnClick} />
 						</Column>
 					</Row>
 
