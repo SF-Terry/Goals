@@ -27,6 +27,10 @@ html, body {
 	.taskTimeLabel{
 		font-size: 12px;
 	}
+	
+	.message{
+		left: 0; top: 0; z-index: 3;
+	}
 
 	// Dropdown: cover semantic.css
 	.ui.selection.dropdown{

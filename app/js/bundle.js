@@ -9099,12 +9099,19 @@
 	var tasks = _storekeeper2.default.tasks;
 
 	// observe
-	var observe_isNeedShowTaskInfo = {
+	var observe_taskInfo = {
 		setting: {
 			isShowTaskInfo: false,
 			taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 			task: null,
 			isTransporting: false
+		}
+	};
+	var observe_message = {
+		setting: {
+			isShowMessage: false,
+			message: '',
+			color: 'red'
 		}
 	};
 
@@ -9257,8 +9264,8 @@
 						position: 'fixed',
 						left: 0,
 						top: 0,
-						width: document.body.clientWidth,
-						height: document.body.clientHeight,
+						width: _globalVarible.windowWidth,
+						height: _globalVarible.windowHeight,
 						display: isNeedShow ? 'block' : 'none'
 					} }, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5F00\u59CB\u65F6\u95F4', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7ED3\u675F\u65F6\u95F4', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isStartTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: startDate, timepickerCallback: this.startTimepickerCallback })), _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isEndTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: endDate, timepickerCallback: this.endTimepickerCallback })))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u8FD4\u56DE', color: 'grey', onClick: this.cancelBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u786E\u8BA4', color: 'green', onClick: this.confirmBtnClick })))));
 			}
@@ -9733,6 +9740,18 @@
 				var isAddMode = mode === _globalVarible2.default.taskInfoMode.add;
 				var isEditMode = mode === _globalVarible2.default.taskInfoMode.edit;
 				var task = this.props.task;
+				var name = this.tempTask.name;
+
+				// check
+
+				if (!name) {
+					observe_message.setting = {
+						isShowMessage: true,
+						message: '任务内容为空，请重新输入！',
+						color: 'red'
+					};
+					return;
+				}
 
 				// save
 				if (isAddMode) {
@@ -9794,6 +9813,16 @@
 
 				var isAddMode = mode === _globalVarible2.default.taskInfoMode.add;
 
+				// check
+				if (!name) {
+					observe_message.setting = {
+						isShowMessage: true,
+						message: '任务内容为空，请重新输入！',
+						color: 'red'
+					};
+					return;
+				}
+
 				// save
 				// add mode
 				if (isAddMode) {
@@ -9839,9 +9868,9 @@
 						position: 'fixed',
 						left: 0,
 						top: 0,
-						width: document.body.clientWidth,
-						height: document.body.clientHeight
-					} }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { id: 'taskInfo_taskNameInput', defaultValue: name, placeholder: 'Task Content', onChange: this.taskNameInputChange, fluid: true, ref: function ref(o) {
+						width: _globalVarible.windowWidth,
+						height: _globalVarible.windowHeight
+					} }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { id: 'taskInfo_taskNameInput', defaultValue: name, placeholder: '\u4EFB\u52A1\u5185\u5BB9', onChange: this.taskNameInputChange, fluid: true, ref: function ref(o) {
 						if (o && o.props && o.props.id && mode == _globalVarible2.default.taskInfoMode.add) {
 							var inputDom = document.getElementById(o.props.id).children[0];
 							inputDom.focus();
@@ -9934,7 +9963,7 @@
 			value: function textClick() {
 				var task = this.props.task;
 
-				observe_isNeedShowTaskInfo.setting = {
+				observe_taskInfo.setting = {
 					isShowTaskInfo: true,
 					taskInfoMode: _globalVarible2.default.taskInfoMode.edit,
 					task: task,
@@ -10373,10 +10402,15 @@
 			_this18.state = {
 				taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 				isShowTaskInfo: false,
+				// Message
+				isShowMessage: false,
+				message: '',
+				messageColor: 'red',
 				task: null
 			};
 
 			_this18.observeIsNeedShowTaskInfo();
+			_this18.observeIsNeedShowMessage();
 
 			_this18.multiFunctionBtnCallback = _this18.multiFunctionBtnCallback.bind(_this18);
 			_this18.taskInfoCallback = _this18.taskInfoCallback.bind(_this18);
@@ -10433,21 +10467,47 @@
 			value: function observeIsNeedShowTaskInfo() {
 				var _this20 = this;
 
-				(0, _observe2.default)(observe_isNeedShowTaskInfo, function (key, setting) {
+				(0, _observe2.default)(observe_taskInfo, function (key, setting) {
 					var task = setting.task,
 					    taskInfoMode = setting.taskInfoMode,
 					    isShowTaskInfo = setting.isShowTaskInfo,
 					    isTransporting = setting.isTransporting;
 
 					if (isTransporting) {
-						observe_isNeedShowTaskInfo.setting.isTransporting = false;
+						observe_taskInfo.setting.isTransporting = false;
 						_this20.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
 						});
-						observe_isNeedShowTaskInfo.setting.task = null;
+						observe_taskInfo.setting.task = null;
 					}
+				});
+			}
+		}, {
+			key: 'observeIsNeedShowMessage',
+			value: function observeIsNeedShowMessage() {
+				var _this21 = this;
+
+				(0, _observe2.default)(observe_message, function (key, setting) {
+					var isShowMessage = setting.isShowMessage,
+					    message = setting.message,
+					    color = setting.color;
+
+					// animation
+
+					_this21.setState({
+						isShowMessage: isShowMessage,
+						message: message,
+						messageColor: color
+					});
+					setTimeout(function () {
+						_this21.setState({
+							isShowMessage: false,
+							message: '',
+							messageColor: color
+						});
+					}, 2000);
 				});
 			}
 		}, {
@@ -10456,12 +10516,18 @@
 				var _state7 = this.state,
 				    taskInfoMode = _state7.taskInfoMode,
 				    isShowTaskInfo = _state7.isShowTaskInfo,
-				    task = _state7.task;
+				    task = _state7.task,
+				    isShowMessage = _state7.isShowMessage,
+				    message = _state7.message,
+				    messageColor = _state7.messageColor;
 
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',
 						height: '100%'
-					} }, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: 1 }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
+					} }, isShowMessage ? _react2.default.createElement('div', { className: 'message', style: {
+						position: 'fixed',
+						width: _globalVarible.windowWidth
+					} }, _react2.default.createElement(_semanticUiReact.Message, { color: messageColor, content: message })) : null, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: 1 }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
 			}
 		}]);
 
@@ -70560,6 +70626,10 @@
 			'nextMonth': nextMonthTaskTypeMoments,
 			'nextYear': nextYearTaskTypeMoments
 		};
+
+		// window size
+		this.windowWidth = document.body.clientWidth;
+		this.windowHeight = document.body.clientHeight;
 	};
 
 	var G = new globalVarible();
@@ -88865,7 +88935,7 @@
 
 
 	// module
-	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
+	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
 
 	// exports
 

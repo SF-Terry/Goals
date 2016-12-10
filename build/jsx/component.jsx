@@ -1,6 +1,6 @@
 import React,  { Component } from 'react';
 import {render, findDOMNode} from 'react-dom';
-import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown, Modal } from 'semantic-ui-react';
+import { Button, Grid, Checkbox, Form, Input, Label, Segment, Icon, Menu, Dropdown, Modal, Message} from 'semantic-ui-react';
 import Draggable from 'react-draggable'; 
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
@@ -18,7 +18,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 import storekeeper from '../js/storekeeper.js';
 
-import G, {taskTypesMoment, taskTypesDateType} from '../js/globalVarible.js';
+import G, {taskTypesMoment, taskTypesDateType, windowWidth, windowHeight} from '../js/globalVarible.js';
 
 const {Item} = Menu;
 const {Row, Column} = Grid;
@@ -30,12 +30,19 @@ let settings = storekeeper.settings;
 let tasks = storekeeper.tasks;
  
 // observe
-let observe_isNeedShowTaskInfo = {
+let observe_taskInfo = {
 	setting: {
 		isShowTaskInfo: false,
 		taskInfoMode: G.taskInfoMode.add,
 		task: null,
 		isTransporting: false
+	}
+};
+let observe_message = {
+	setting: {
+		isShowMessage: false,
+		message: '',
+		color: 'red'
 	}
 };
 
@@ -165,8 +172,8 @@ class TimeSetter extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: document.body.clientWidth,
-				height: document.body.clientHeight,
+				width: windowWidth,
+				height: windowHeight,
 				display: isNeedShow ? 'block' : 'none'
 			}}>
 				<Grid style={{marginTop: "20px"}}>
@@ -625,6 +632,17 @@ class TaskInfo extends React.Component {
 		const isAddMode = mode === G.taskInfoMode.add;
 		const isEditMode = mode === G.taskInfoMode.edit;
 		let task = this.props.task;
+		const {name} = this.tempTask;
+
+		// check
+		if (!name) {
+			observe_message.setting = {
+				isShowMessage: true,
+				message: '任务内容为空，请重新输入！',
+				color: 'red'
+			}
+			return;
+		}
 
 		// save
 		if (isAddMode) {
@@ -670,6 +688,16 @@ class TaskInfo extends React.Component {
 		const {taskInfoCallback, mode} = this.props;
 		const isAddMode = mode === G.taskInfoMode.add;
 
+		// check
+		if (!name) {
+			observe_message.setting = {
+				isShowMessage: true,
+				message: '任务内容为空，请重新输入！',
+				color: 'red'
+			}
+			return;
+		}
+
 		// save
 		// add mode
 		if (isAddMode) {
@@ -700,8 +728,8 @@ class TaskInfo extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: document.body.clientWidth,
-				height: document.body.clientHeight
+				width: windowWidth,
+				height: windowHeight
 			}}>
 				<Grid padded>
 					{/*<Row>
@@ -711,7 +739,7 @@ class TaskInfo extends React.Component {
 					</Row>*/}
 					<Row centered>
 						<Column width={14}>
-							<Input id='taskInfo_taskNameInput' defaultValue={name} placeholder='Task Content' onChange={this.taskNameInputChange} fluid ref={(o) => {
+							<Input id='taskInfo_taskNameInput' defaultValue={name} placeholder='任务内容' onChange={this.taskNameInputChange} fluid ref={(o) => {
 								if (o && o.props && o.props.id && mode == G.taskInfoMode.add) {
 									let inputDom = document.getElementById(o.props.id).children[0];
 									inputDom.focus();
@@ -829,7 +857,7 @@ class TaskListItem extends React.Component {
 	textClick() {
 		let {task} = this.props;
 
-		observe_isNeedShowTaskInfo.setting = {
+		observe_taskInfo.setting = {
 			isShowTaskInfo: true,
 			taskInfoMode: G.taskInfoMode.edit,
 			task: task,
@@ -1254,10 +1282,15 @@ class ToDoList extends React.Component {
 		this.state = {
 			taskInfoMode: G.taskInfoMode.add,
 			isShowTaskInfo: false,
-			task: null
+			// Message
+			isShowMessage: false,
+			message: '',
+			messageColor: 'red',
+			task: null			
 		};
 
 		this.observeIsNeedShowTaskInfo();
+		this.observeIsNeedShowMessage();
 
 		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
 		this.taskInfoCallback = this.taskInfoCallback.bind(this);
@@ -1300,29 +1333,57 @@ class ToDoList extends React.Component {
 		}
 	}
 	observeIsNeedShowTaskInfo() {
-		observe(observe_isNeedShowTaskInfo, (key, setting) => {
+		observe(observe_taskInfo, (key, setting) => {
 			let {task, taskInfoMode, isShowTaskInfo, isTransporting} = setting;
 
 			if (isTransporting) {
-				observe_isNeedShowTaskInfo.setting.isTransporting = false;
+				observe_taskInfo.setting.isTransporting = false;
 				this.setState({
 					isShowTaskInfo: isShowTaskInfo,
 					taskInfoMode: taskInfoMode,
 					task: task
 				});	
-				observe_isNeedShowTaskInfo.setting.task = null;
+				observe_taskInfo.setting.task = null;
 			}
 			
 		});
 	}
+	observeIsNeedShowMessage() {
+		observe(observe_message, (key, setting) => {
+			let {isShowMessage, message, color} = setting;
+
+			// animation
+			this.setState({
+				isShowMessage: isShowMessage,
+				message: message,
+				messageColor: color
+			});
+			setTimeout(() => {
+				this.setState({
+					isShowMessage: false,
+					message: '',
+					messageColor: color
+				});
+			},2000);			
+		});
+	}
 	render() {
-		const {taskInfoMode, isShowTaskInfo, task} = this.state;
+		const {taskInfoMode, isShowTaskInfo, task, isShowMessage, message, messageColor} = this.state;
 
 		return (
 			<div className='ToDoList' style={{
 				width: '100%',
 				height: '100%'
 			}}>
+				{isShowMessage ? (
+					<div className='message' style={{
+						position: 'fixed',
+						width: windowWidth
+					}}>
+						<Message color={messageColor} content={message} />
+					</div>
+				) : null}
+				  
 				{isShowTaskInfo ? (
 					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
 				) : ''}

@@ -82,6 +82,12 @@ class globalVarible {
 			'nextMonth': nextMonthTaskTypeMoments,
 			'nextYear': nextYearTaskTypeMoments
 		};
+
+
+		// window size
+		this.windowWidth = document.body.clientWidth;
+		this.windowHeight = document.body.clientHeight;
+
 	}
 }
 
