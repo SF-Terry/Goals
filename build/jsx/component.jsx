@@ -934,22 +934,18 @@ class TaskListItem extends React.Component {
 							</Column>
 							{/* <p className="TaskNameText" onClick={this.textClick}></p> */}
 							
-							<Column width={!isTaskCompleted ? 7 : 12} verticalAlign='middle'>
+							<Column width={!isTaskCompleted ? 9 : 14} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
 								</div>
 							</Column>
 							{!isTaskCompleted ? (
 								<Column width={5} textAlign='center' verticalAlign='middle'>
-									<Label className='taskTimeLabel'>
+									<Label className='taskTimeLabel' color={color}>
 										{getLabelTextByMoments(task)}
 									</Label>
 								</Column>
 							) : ''}
-
-							<Column width={2} textAlign='center' verticalAlign='middle'>
-								<Icon name='circle' color={color} />
-							</Column>
 						</Row>
 					) : (
 						// edit mode
