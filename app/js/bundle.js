@@ -46,8 +46,11 @@
 
 	'use strict';
 
-	// polyfill 
+	// version control
 
+	__webpack_require__(1240);
+
+	// polyfill 
 	__webpack_require__(1);
 
 	// jsx
@@ -89853,6 +89856,21 @@
 	// reactify dom
 	circleOvalButton();
 	forbidSafariDefaultDragEvent();
+
+/***/ },
+/* 1240 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var publishVersion = 1.0;
+	var currentVersion = localStorage['version'] ? parseFloat(localStorage['version']) : 0;
+
+	// reset localstorage when new version published
+	if (currentVersion != parseFloat(publishVersion)) {
+		localStorage.removeItem('todolistStorekeeper');
+		localStorage.version = parseFloat(publishVersion);
+	}
 
 /***/ }
 /******/ ]);

@@ -1,3 +1,6 @@
+// version control
+require('./js/version.js');
+
 // polyfill 
 require('babel-polyfill');
 
