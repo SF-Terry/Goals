@@ -1110,8 +1110,6 @@ class TaskList extends React.Component {
 
 		// sortable list
 		const {mouseY, isPressed, originalPosOfLastPressed, order} = this.state;
-		console.log('originalPosOfLastPressed', originalPosOfLastPressed);
-		console.log('order', order);
 
 		const filterdTasks = tasks.filter(task => {
 			const {taskType: t, isTaskCompleted: c} = task;
@@ -1129,7 +1127,7 @@ class TaskList extends React.Component {
 					) : null}
 
 					{/* sortable list */}
-					<div className="demo8">
+					{/*<div className="demo8">
 					    {range(itemsCount).map(i => {
 					        const style = originalPosOfLastPressed === i && isPressed
 					              ? {
@@ -1166,7 +1164,7 @@ class TaskList extends React.Component {
 					            </Motion>
 					        );
 					    })}
-					</div>
+					</div>*/}
 				</div>
 			);
 	}
@@ -1286,10 +1284,10 @@ class TaskListContainer extends React.Component {
 			<div>
 				<Grid padded>
 					<Row>
-						<Column width={6} verticalAlign='middle'>
+						<Column width={8} verticalAlign='middle'>
 							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
-						<Column width={6} textAlign='center' verticalAlign='middle'>
+						<Column width={5} textAlign='center' verticalAlign='middle'>
 							<Label className='isTaskCompletedSwitch'>
 								<Switch value={isTaskCompleted}
 										labels={{ on: '已完成', off: '未完成' }} 
@@ -1298,7 +1296,7 @@ class TaskListContainer extends React.Component {
 										onChange={this.handleIsCompleteSwitchChange} />
 							</Label>
 						</Column>
-						<Column width={4} textAlign='center' verticalAlign='middle'>
+						<Column width={3} textAlign='center' verticalAlign='middle'>
 							<Icon size='big' name={!editMode ? 'edit' : 'check'} color={!editMode ? 'blue' : 'green'} onClick={this.editBtnClick} />
 						</Column>
 					</Row>
