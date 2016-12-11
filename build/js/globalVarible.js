@@ -62,6 +62,7 @@ class globalVarible {
 			isTaskNeedRepeat: false,
 			startDate: null,	// use moment(...) to initial string to moment object
 			endDate: null,	// use moment(...) to initial string to moment object
+			sort: null
 		};
 		this.timeSetterTimeType = {
 			start: 'start',

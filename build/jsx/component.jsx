@@ -6,6 +6,8 @@ import Draggable from 'react-draggable';
 import Tappable from 'react-tappable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
+import {Motion, spring} from 'react-motion';
+import {range} from 'lodash';
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus, getLabelTextByMoments} from '../js/tool.js';
 
@@ -61,7 +63,8 @@ if (tasks.length === 0) {
 		isTaskNeedTimer: true,
 		isTaskNeedRepeat: false,
 		startDate: moment(),	
-		endDate: moment().endOf('day')
+		endDate: moment().endOf('day'),
+		sortNum: 0
 	});
 	tasks.push({
 		name: '第一个长期目标',
@@ -71,9 +74,12 @@ if (tasks.length === 0) {
 		isTaskNeedTimer: true,
 		isTaskNeedRepeat: false,
 		startDate: moment(),	
-		endDate: moment().add(6, 'months')
+		endDate: moment().add(6, 'months'),
+		sortNum: 1
 	});
 }
+
+
 
 
 /**
@@ -624,6 +630,11 @@ class TaskInfo extends React.Component {
 
 		this.tempTask = mode === G.taskInfoMode.add ? Object.assign({}, G.initialTask) : Object.assign({}, this.props.task);
 
+		// add task sortNum
+		if (mode === G.taskInfoMode.add) {
+			this.tempTask.sortNum = tasks.length + 1;
+		}
+
 		this.taskNameInputChange = this.taskNameInputChange.bind(this);
 		this.completeBtnClick = this.completeBtnClick.bind(this);
 		this.backBtnClick = this.backBtnClick.bind(this);
@@ -982,22 +993,57 @@ class TaskListItem extends React.Component {
 	}
 }
 
+
 /**
  * class TaskList
  * @receiveProps {string} taskType - current taskType
  * @receiveProps {bool} isTaskCompleted - isTaskCompleted
  * @receiveProps {bool} editMode - editMode
  */
+function reinsert(arr, from, to) {
+  const _arr = arr.slice(0);
+  const val = _arr[from];
+  _arr.splice(from, 1);
+  _arr.splice(to, 0, val);
+  return _arr;
+}
+function clamp(n, min, max) {
+  return Math.max(Math.min(n, max), min);
+}
+const springConfig = {stiffness: 300, damping: 50};
+const itemsCount = 10;
 class TaskList extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			isShowTaskLists: true
+			isShowTaskLists: true,
+			// sortable list
+			topDeltaY: 0,
+			mouseY: 0,
+			isPressed: false,
+			originalPosOfLastPressed: 0,
+			order: range(itemsCount)
 		}
 
 		this.taskListItemCallback = this.taskListItemCallback.bind(this);
+
+		// sortablel list
+		this.handleTouchStart = this.handleTouchStart.bind(this);
+		this.handleTouchMove = this.handleTouchMove.bind(this);
+		this.handleMouseDown = this.handleMouseDown.bind(this);
+		this.handleMouseMove = this.handleMouseMove.bind(this);
+		this.handleMouseUp = this.handleMouseUp.bind(this);
 	}
+
+	// sortable list
+	componentDidMount() {
+	    window.addEventListener('touchmove', this.handleTouchMove);
+	    window.addEventListener('touchend', this.handleMouseUp);
+	    window.addEventListener('mousemove', this.handleMouseMove);
+	    window.addEventListener('mouseup', this.handleMouseUp);
+	}
+
 	taskListItemCallback(o) {
 		const {isDeleteTask, isCompleteTask} = o;
 
@@ -1021,10 +1067,51 @@ class TaskList extends React.Component {
 				});
 			});
 		}
-	};
+	}
+
+	// sortable list
+	handleTouchStart(key, pressLocation, e) {
+	    this.handleMouseDown(key, pressLocation, e.touches[0]);
+	}
+	handleTouchMove(e) {
+	    e.preventDefault();
+	    this.handleMouseMove(e.touches[0]);
+	}
+	handleMouseDown(pos, pressY, {pageY}) {
+	    this.setState({
+	        topDeltaY: pageY - pressY,
+	        mouseY: pressY,
+	        isPressed: true,
+	        originalPosOfLastPressed: pos,
+	    });
+	}
+	handleMouseMove({pageY}) {
+	    const {isPressed, topDeltaY, order, originalPosOfLastPressed} = this.state;
+	
+	    if (isPressed) {
+	        const mouseY = pageY - topDeltaY;
+	        const currentRow = clamp(Math.round(mouseY / 100), 0, itemsCount - 1);
+	        let newOrder = order;
+	  
+	        if (currentRow !== order.indexOf(originalPosOfLastPressed)){
+	          newOrder = reinsert(order, order.indexOf(originalPosOfLastPressed), currentRow);
+	        }
+	  
+	        this.setState({mouseY: mouseY, order: newOrder});
+	    }
+	}
+	handleMouseUp() {
+	    this.setState({isPressed: false, topDeltaY: 0});
+	}
+
 	render() {
 		const {taskType, isTaskCompleted, editMode} = this.props;
 		const {isShowTaskLists} = this.state;
+
+		// sortable list
+		const {mouseY, isPressed, originalPosOfLastPressed, order} = this.state;
+		console.log('originalPosOfLastPressed', originalPosOfLastPressed);
+		console.log('order', order);
 
 		const filterdTasks = tasks.filter(task => {
 			const {taskType: t, isTaskCompleted: c} = task;
@@ -1040,6 +1127,46 @@ class TaskList extends React.Component {
 							{filterdTasks.map((task, index) => (<TaskListItem key={index} task={task} editMode={editMode} taskListItemCallback={this.taskListItemCallback}/>))}
 						</Menu>
 					) : null}
+
+					{/* sortable list */}
+					<div className="demo8">
+					    {range(itemsCount).map(i => {
+					        const style = originalPosOfLastPressed === i && isPressed
+					              ? {
+					                    scale: spring(1.1, springConfig),
+					                    shadow: spring(16, springConfig),
+					                    y: mouseY,
+					                }
+					              : {
+					                    scale: spring(1, springConfig),
+					                    shadow: spring(1, springConfig),
+					                    y: spring(order.indexOf(i) * 100, springConfig),
+					                };
+					        return (
+					            <Motion style={style} key={i}>
+					                {({scale, shadow, y}) =>
+					                    <div
+					                        className="demo8-item"
+					                        style={{
+					                          boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
+					                          transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+					                          WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+					                          zIndex: i === originalPosOfLastPressed ? 99 : i,
+					                        }}>
+					                        {order.indexOf(i) + 1}
+					      
+					                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                        Num: {i}
+					                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                         
+					                        <Icon name='list layout' onMouseDown={this.handleMouseDown.bind(null, i, y)}
+					                        onTouchStart={this.handleTouchStart.bind(null, i, y)}/>
+					                  </div>
+					                }
+					            </Motion>
+					        );
+					    })}
+					</div>
 				</div>
 			);
 	}
@@ -1254,40 +1381,6 @@ class MultiFunctionBtn extends React.Component {
 	}
 	handleAddBtnDrag(ev) {
 		// restirct the bound of screen
-		let dom = this.floatFunctionBtnContainerDom;
-		let layerX = ev.layerX;
-		let layerY = ev.layerY;
-		const currentX = ev.x;
-		const currentY = ev.y;
-
-		const bound = {
-			left: dom.offsetWidth / 2,
-			top: dom.offsetHeight / 2,
-			right: G.windowWidth - dom.offsetWidth / 2,
-			bottom: G.windowHeight - dom.offsetHeight / 2
-		}
-		const minLayerX = -( (currentX + layerX) - dom.offsetWidth / 2 ); 
-		const minLayerY = -( (currentY + layerY) - dom.offsetHeight / 2 );
-		const maxLayerX = G.windowWidth - (currentX + layerX) - dom.offsetWidth / 2;
-		const maxLayerY = G.windowHeight - (currentY + layerY) - dom.offsetHeight / 2;
-		
-		layerX = layerX < minLayerX ? minLayerX : layerX;
-		layerY = layerY < minLayerY ? minLayerY : layerY;
-		layerX = layerX > maxLayerX ? maxLayerX : layerX;
-		layerY = layerY > maxLayerY ? maxLayerY : layerY;
-
-		console.log(currentX + layerX, currentY + layerY);		
-		console.log('min ', minLayerX, minLayerY);		
-		console.log('max ', maxLayerX, maxLayerY);		
-		// console.log(layerX, layerY);		
-
-		this.setState({
-			movingBtnX: layerX,
-			movingBtnY: layerY
-		});
-		// console.log([ev]);
-		// console.log('layer' + [ev.layerX, ev.layerY]);
-		// console.log('offset' + [ev.offsetX, ev.offsetY]);
 
 	}
 	handleClickExportBtn() {
@@ -1306,7 +1399,7 @@ class MultiFunctionBtn extends React.Component {
 		const {isShowMenu, isOpenSetting, movingBtnX, movingBtnY} = this.state;
 		return (
 			<div id='floatFunctionBtnContainer' className='MultiFunctionBtn'>
-				<Draggable onDrag={this.handleAddBtnDrag} position={{x: movingBtnX, y: movingBtnY}}>
+				<Draggable onDrag={this.handleAddBtnDrag} >
 					<div>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
@@ -1372,6 +1465,7 @@ class MultiFunctionBtn extends React.Component {
 		);
 	}
 }
+
 
 
 /**
@@ -1502,8 +1596,6 @@ class ToDoList extends React.Component {
 		            </Tab>
 		        </Tabs>
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
-
-				{/* <Input id='testInput' defaultValue='默认值' ref ={setSemanticInputInitialledFocus} /> */}
 
 			</div>
 			);
