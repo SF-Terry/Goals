@@ -18,6 +18,17 @@ class globalVarible {
 			nextMonth: '下月目标',
 			nextYear: '明年目标'
 		};
+		this.taskTypesLabel = {
+			today: '全天',
+			long: '长期',
+			thisWeek: '本周',
+			thisMonth: '本月',
+			thisYear: '今年',
+			tomorrow: '明天',
+			nextWeek: '下周',
+			nextMonth: '下月',
+			nextYear: '明年'
+		};
 		this.taskTypesDateType = {
 			today: 'day',
 			thisWeek: 'week',

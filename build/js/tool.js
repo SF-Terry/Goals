@@ -48,7 +48,7 @@ const tool = {
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 
 		if (!isTaskNeedTimer) {
-			return G.taskTypesText[taskType];
+			return G.taskTypesLabel[taskType];
 		}
 		if (isTaskNeedTimer) {
 			// timeMode

@@ -1205,14 +1205,20 @@ class MultiFunctionBtn extends React.Component {
 		this.state = {
 			isShowMenu: false,
 			isOpenSetting: false,
-			isMovingBtn: false
+			isMovingBtn: false,
+			movingBtnX: 0,
+			movingBtnY: 0
 		}
 
 		this.handleTapAddButton = this.handleTapAddButton.bind(this);
+		this.handleAddBtnDrag = this.handleAddBtnDrag.bind(this);
 
 		this.handleClickFunctionBtn = this.handleClickFunctionBtn.bind(this);
 		this.handleClickExportBtn = this.handleClickExportBtn.bind(this);
 		this.handleClickSettingBtn = this.handleClickSettingBtn.bind(this);
+	}
+	componentDidMount() {
+		this.floatFunctionBtnContainerDom = document.getElementById('floatFunctionBtnContainer');
 	}
 	handleClickFunctionBtn() {
 		this.setState((prevState) => ({
@@ -1231,6 +1237,44 @@ class MultiFunctionBtn extends React.Component {
 			});
 		}
 	}
+	handleAddBtnDrag(ev) {
+		// restirct the bound of screen
+		let dom = this.floatFunctionBtnContainerDom;
+		let layerX = ev.layerX;
+		let layerY = ev.layerY;
+		const currentX = ev.x;
+		const currentY = ev.y;
+
+		const bound = {
+			left: dom.offsetWidth / 2,
+			top: dom.offsetHeight / 2,
+			right: G.windowWidth - dom.offsetWidth / 2,
+			bottom: G.windowHeight - dom.offsetHeight / 2
+		}
+		const minLayerX = -( (currentX + layerX) - dom.offsetWidth / 2 ); 
+		const minLayerY = -( (currentY + layerY) - dom.offsetHeight / 2 );
+		const maxLayerX = G.windowWidth - (currentX + layerX) - dom.offsetWidth / 2;
+		const maxLayerY = G.windowHeight - (currentY + layerY) - dom.offsetHeight / 2;
+		
+		layerX = layerX < minLayerX ? minLayerX : layerX;
+		layerY = layerY < minLayerY ? minLayerY : layerY;
+		layerX = layerX > maxLayerX ? maxLayerX : layerX;
+		layerY = layerY > maxLayerY ? maxLayerY : layerY;
+
+		console.log(currentX + layerX, currentY + layerY);		
+		console.log('min ', minLayerX, minLayerY);		
+		console.log('max ', maxLayerX, maxLayerY);		
+		// console.log(layerX, layerY);		
+
+		this.setState({
+			movingBtnX: layerX,
+			movingBtnY: layerY
+		});
+		// console.log([ev]);
+		// console.log('layer' + [ev.layerX, ev.layerY]);
+		// console.log('offset' + [ev.offsetX, ev.offsetY]);
+
+	}
 	handleClickExportBtn() {
 		this.setState({
 			isShowMenu: false
@@ -1244,10 +1288,10 @@ class MultiFunctionBtn extends React.Component {
 
 	}
 	render() {
-		const {isShowMenu, isOpenSetting} = this.state;
+		const {isShowMenu, isOpenSetting, movingBtnX, movingBtnY} = this.state;
 		return (
-			<div className='MultiFunctionBtn'>
-				<Draggable>
+			<div id='floatFunctionBtnContainer' className='MultiFunctionBtn'>
+				<Draggable onDrag={this.handleAddBtnDrag} position={{x: movingBtnX, y: movingBtnY}}>
 					<div>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p>
@@ -1265,35 +1309,29 @@ class MultiFunctionBtn extends React.Component {
 						<p>
 							{/* place add button here temporarily */}
 							<Tappable   
-								onTap={() => {
-									this.handleTapAddButton();console.log('onTap');}
-								} 
+								onTap={this.handleTapAddButton}
 								onTouchMove={() => {
-									console.log('onTouchMove');
 									this.setState({
 										isMovingBtn: true
 									});
 								}}
 								onTouchStart={() => {
-									console.log('onTouchStart');
 									this.setState({
 										isMovingBtn: false
 									});
 								}}
 								onMouseDown={() => {
-									console.log('onMouseDown');
 									this.setState({
 										isMovingBtn: false
 									});
 								}}
 								onMouseMove={() => {
-									console.log('onMouseMove');
 									this.setState({
 										isMovingBtn: true
 									});
 								}}
 								>
-								<Button id='floatFunctionBtn' className='ovalButton' size='massive' icon='plus' circular color='twitter' />
+								<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
 							</Tappable>
 
 							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
