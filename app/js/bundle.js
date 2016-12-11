@@ -9221,6 +9221,21 @@
 			key: 'confirmBtnClick',
 			value: function confirmBtnClick() {
 				var timeSetterCallback = this.props.timeSetterCallback;
+				var _state = this.state,
+				    startDate = _state.startDate,
+				    endDate = _state.endDate;
+
+				// check
+
+				var isEndDateBeforeStartDate = endDate.isBefore(startDate);
+				if (isEndDateBeforeStartDate) {
+					observe_message.setting = {
+						isShowMessage: true,
+						message: '开始时间晚于结束时间，请重新选择！',
+						color: 'red'
+					};
+					return;
+				}
 
 				if (timeSetterCallback) {
 					timeSetterCallback({
@@ -9253,9 +9268,9 @@
 			key: 'render',
 			value: function render() {
 				var props = this.props;
-				var _state = this.state,
-				    timeType = _state.timeType,
-				    isNeedShow = _state.isNeedShow;
+				var _state2 = this.state,
+				    timeType = _state2.timeType,
+				    isNeedShow = _state2.isNeedShow;
 
 				var isStartTime = timeType === _globalVarible2.default.timeSetterTimeType.start;
 				var isEndTime = timeType === _globalVarible2.default.timeSetterTimeType.end;
@@ -9408,12 +9423,12 @@
 				var _this4 = this;
 
 				var value = result.value;
-				var _state2 = this.state,
-				    taskType = _state2.taskType,
-				    timeSetterTimeType = _state2.timeSetterTimeType,
-				    isNeedTimeSetter = _state2.isNeedTimeSetter,
-				    isTaskNeedTimer = _state2.isTaskNeedTimer,
-				    isTaskNeedRepeat = _state2.isTaskNeedRepeat;
+				var _state3 = this.state,
+				    taskType = _state3.taskType,
+				    timeSetterTimeType = _state3.timeSetterTimeType,
+				    isNeedTimeSetter = _state3.isNeedTimeSetter,
+				    isTaskNeedTimer = _state3.isTaskNeedTimer,
+				    isTaskNeedRepeat = _state3.isTaskNeedRepeat;
 
 				var isLongTask = value == 'long';
 				var isValueDifferent = value != taskType;
@@ -9457,9 +9472,9 @@
 			value: function isTaskNeedTimerCheckboxClick(e, result) {
 				var checked = result.checked;
 				var task = this.props.task;
-				var _state3 = this.state,
-				    isNeedTimeSetter = _state3.isNeedTimeSetter,
-				    taskType = _state3.taskType;
+				var _state4 = this.state,
+				    isNeedTimeSetter = _state4.isNeedTimeSetter,
+				    taskType = _state4.taskType;
 
 				var isFutureTaskType = _globalVarible2.default.futureTaskTypes.includes(taskType);
 
@@ -9571,14 +9586,14 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state4 = this.state,
-				    taskType = _state4.taskType,
-				    isTaskNeedTimer = _state4.isTaskNeedTimer,
-				    isTaskNeedRepeat = _state4.isTaskNeedRepeat,
-				    isNeedTimeSetter = _state4.isNeedTimeSetter,
-				    timeSetterTimeType = _state4.timeSetterTimeType,
-				    startDate = _state4.startDate,
-				    endDate = _state4.endDate;
+				var _state5 = this.state,
+				    taskType = _state5.taskType,
+				    isTaskNeedTimer = _state5.isTaskNeedTimer,
+				    isTaskNeedRepeat = _state5.isTaskNeedRepeat,
+				    isNeedTimeSetter = _state5.isNeedTimeSetter,
+				    timeSetterTimeType = _state5.timeSetterTimeType,
+				    startDate = _state5.startDate,
+				    endDate = _state5.endDate;
 
 				var taskTypesOptions = _globalVarible2.default.taskTypes.map(function (item, index) {
 					var text = (0, _tool.getLanguageTextByTaskType)(item);
@@ -10266,11 +10281,11 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state5 = this.state,
-				    taskType = _state5.taskType,
-				    isTaskCompleted = _state5.isTaskCompleted,
-				    editMode = _state5.editMode,
-				    isShowTaskList = _state5.isShowTaskList;
+				var _state6 = this.state,
+				    taskType = _state6.taskType,
+				    isTaskCompleted = _state6.isTaskCompleted,
+				    editMode = _state6.editMode,
+				    isShowTaskList = _state6.isShowTaskList;
 				var taskTypes = this.props.taskTypes;
 
 				var isCompletesOptions = [{ value: 1, text: '已完成' }, { value: 0, text: '未完成' }];
@@ -10459,11 +10474,11 @@
 			value: function render() {
 				var _this17 = this;
 
-				var _state6 = this.state,
-				    isShowMenu = _state6.isShowMenu,
-				    isOpenSetting = _state6.isOpenSetting,
-				    movingBtnX = _state6.movingBtnX,
-				    movingBtnY = _state6.movingBtnY;
+				var _state7 = this.state,
+				    isShowMenu = _state7.isShowMenu,
+				    isOpenSetting = _state7.isOpenSetting,
+				    movingBtnX = _state7.movingBtnX,
+				    movingBtnY = _state7.movingBtnY;
 
 				return _react2.default.createElement('div', { id: 'floatFunctionBtnContainer', className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, { onDrag: this.handleAddBtnDrag, position: { x: movingBtnX, y: movingBtnY } }, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null), _react2.default.createElement('p', null)), _react2.default.createElement('p', null, _react2.default.createElement(_reactTappable2.default, {
 					onTap: this.handleTapAddButton,
@@ -10620,19 +10635,19 @@
 							message: '',
 							messageColor: color
 						});
-					}, 1000);
+					}, 2000);
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _state7 = this.state,
-				    taskInfoMode = _state7.taskInfoMode,
-				    isShowTaskInfo = _state7.isShowTaskInfo,
-				    task = _state7.task,
-				    isShowMessage = _state7.isShowMessage,
-				    message = _state7.message,
-				    messageColor = _state7.messageColor;
+				var _state8 = this.state,
+				    taskInfoMode = _state8.taskInfoMode,
+				    isShowTaskInfo = _state8.isShowTaskInfo,
+				    task = _state8.task,
+				    isShowMessage = _state8.isShowMessage,
+				    message = _state8.message,
+				    messageColor = _state8.messageColor;
 
 				return _react2.default.createElement('div', { className: 'ToDoList', style: {
 						width: '100%',

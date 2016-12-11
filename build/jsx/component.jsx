@@ -134,6 +134,19 @@ class TimeSetter extends React.Component {
 	}	
 	confirmBtnClick() {
 		const {timeSetterCallback} = this.props;
+		const {startDate, endDate} = this.state;
+
+		// check
+		const isEndDateBeforeStartDate = endDate.isBefore(startDate);
+		if (isEndDateBeforeStartDate) {
+			observe_message.setting = {
+				isShowMessage: true,
+				message: '开始时间晚于结束时间，请重新选择！',
+				color: 'red'
+			}
+			return;
+		}
+
 		if (timeSetterCallback) {
 			timeSetterCallback({
 				startDate: this.state.startDate,
@@ -928,7 +941,7 @@ class TaskListItem extends React.Component {
 				<Grid>
 					{!editMode ? (
 						// normal mode
-						<Row >
+						<Row>
 							<Column width={!isTaskCompleted ? 8 : 14} verticalAlign='middle'>
 								<div onClick={this.textClick}>
 									{taskName}
@@ -1455,7 +1468,7 @@ class ToDoList extends React.Component {
 					message: '',
 					messageColor: color
 				});
-			},1000);			
+			},2000);			
 		});
 	}
 	render() {
