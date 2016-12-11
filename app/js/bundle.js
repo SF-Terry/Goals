@@ -9831,8 +9831,11 @@
 				    mode = _props.mode;
 
 				var isAddMode = mode === _globalVarible2.default.taskInfoMode.add;
+				var task = this.props.task;
+				var name = this.tempTask.name;
 
 				// check
+
 				if (!name) {
 					observe_message.setting = {
 						isShowMessage: true,

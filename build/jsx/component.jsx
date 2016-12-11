@@ -700,6 +700,8 @@ class TaskInfo extends React.Component {
 	continueToAddBtn() {
 		const {taskInfoCallback, mode} = this.props;
 		const isAddMode = mode === G.taskInfoMode.add;
+		let task = this.props.task;
+		const {name} = this.tempTask;
 
 		// check
 		if (!name) {
