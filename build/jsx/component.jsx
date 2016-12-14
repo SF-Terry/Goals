@@ -6,8 +6,8 @@ import Draggable from 'react-draggable';
 import Tappable from 'react-tappable';
 import Tabs from 'muicss/lib/react/tabs';
 import Tab from 'muicss/lib/react/tab';
-import {Motion, spring} from 'react-motion';
-import {range} from 'lodash';
+// import {Motion, spring} from 'react-motion';
+// import {range} from 'lodash';
 import observe from '../js/observe.js';
 import {getSingle, getShowOrHideDomStyle, getLanguageTextByTaskType, setSemanticInputInitialledFocus, getLabelTextByMoments} from '../js/tool.js';
 
@@ -1000,7 +1000,7 @@ class TaskListItem extends React.Component {
  * @receiveProps {bool} isTaskCompleted - isTaskCompleted
  * @receiveProps {bool} editMode - editMode
  */
-function reinsert(arr, from, to) {
+/*function reinsert(arr, from, to) {
   const _arr = arr.slice(0);
   const val = _arr[from];
   _arr.splice(from, 1);
@@ -1011,7 +1011,7 @@ function clamp(n, min, max) {
   return Math.max(Math.min(n, max), min);
 }
 const springConfig = {stiffness: 300, damping: 50};
-const itemsCount = 10;
+const itemsCount = 10;*/
 class TaskList extends React.Component {
 	constructor(props) {
 		super(props);
@@ -1019,11 +1019,11 @@ class TaskList extends React.Component {
 		this.state = {
 			isShowTaskLists: true,
 			// sortable list
-			topDeltaY: 0,
-			mouseY: 0,
-			isPressed: false,
-			originalPosOfLastPressed: 0,
-			order: range(itemsCount)
+			// topDeltaY: 0,
+			// mouseY: 0,
+			// isPressed: false,
+			// originalPosOfLastPressed: 0,
+			// order: range(itemsCount)
 		}
 
 		this.taskListItemCallback = this.taskListItemCallback.bind(this);
@@ -1042,6 +1042,15 @@ class TaskList extends React.Component {
 	    window.addEventListener('touchend', this.handleMouseUp);
 	    window.addEventListener('mousemove', this.handleMouseMove);
 	    window.addEventListener('mouseup', this.handleMouseUp);
+
+	    // update list realtime in real time
+	    window.setInterval(() => {
+	    	this.setState({
+	    		isShowTaskLists: true
+	    	});
+	    	// console.log('time updating');
+	    },1000);
+
 	}
 
 	taskListItemCallback(o) {
