@@ -1387,7 +1387,9 @@ class MultiFunctionBtn extends React.Component {
 		}
 	}
 	handleAddBtnDrag(ev) {
-		// restirct the bound of screen
+		this.setState({
+			isShowMenu: false
+		});
 
 	}
 	handleClickExportBtn() {
@@ -1403,71 +1405,61 @@ class MultiFunctionBtn extends React.Component {
 
 	}
 	render() {
-		const {isShowMenu, isOpenSetting, movingBtnX, movingBtnY} = this.state;
+		const {isShowMenu, isOpenSetting, movingBtnX, movingBtnY, isMovingBtn} = this.state;
 		return (
 			<div id='floatFunctionBtnContainer' className='MultiFunctionBtn'>
-				<Draggable onDrag={this.handleAddBtnDrag} >
+				<Draggable onDrag={this.handleAddBtnDrag} disabled={isShowMenu} >
 					<div>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
-							<p>
-								{/*<Button className='ovalButton' size='huge' icon='setting' circular color='brown' onClick={this.handleClickSettingBtn} />*/}
+							<p style={{
+								marginTop: '8px'
+							}}>
+								{<Button className='ovalButton' size='massive' icon='sign in' circular color='orange' onClick={this.handleClickExportBtn} />}
 							</p>
-							<p>
-								{/*<Button className='ovalButton' size='huge' icon='sign out' circular color='violet' onClick={this.handleClickExportBtn} />*/}
+							<p style={{
+								marginTop: '8px'
+							}}>
+								{ <Button className='ovalButton' size='massive' icon='sign out' circular color='violet' onClick={this.handleClickAddBtn} /> }
 							</p>
-							<p>
-								{/* <Button className='ovalButton' size='huge' icon='plus' circular color='blue' onClick={this.handleClickAddBtn} /> */}
-							</p>
-							<p>
+							<p style={{
+								marginTop: '8px'
+							}}>
 							</p>
 						</div>
-						<p>
-							{/* place add button here temporarily */}
-							<Tappable   
-								onTap={this.handleTapAddButton}
-								onTouchMove={() => {
-									this.setState({
-										isMovingBtn: true
-									});
-								}}
-								onTouchStart={() => {
-									this.setState({
-										isMovingBtn: false
-									});
-								}}
-								onMouseDown={() => {
-									this.setState({
-										isMovingBtn: false
-									});
-								}}
-								onMouseMove={() => {
-									this.setState({
-										isMovingBtn: true
-									});
-								}}
-								>
-								<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
-							</Tappable>
+						<Tappable 
+							onTap={this.handleTapAddButton} 
+							onTouchMove={() => {
+								this.setState({
+									isMovingBtn: true
+								});
+							}}
+							onTouchStart={(e) => {
+								this.setState({
+									isMovingBtn: false
+								});
 
-							{/*<Button className='ovalButton' size='huge' icon='ellipsis horizontal' circular color='twitter' onClick={this.handleClickFunctionBtn} />*/}
-						</p>
+								e.preventDefault();
+
+							}}
+							onMouseDown={() => {
+								this.setState({
+									isMovingBtn: false
+								});
+							}}
+							onMouseMove={() => {
+								this.setState({
+									isMovingBtn: true
+								});
+							}}
+							onPress={() => {
+								this.setState(prevState => ({
+									isShowMenu: !prevState.isShowMenu
+								}));
+							}}>
+							<Button className='ovalButton' size='massive' icon='plus' circular color='twitter' />
+						</Tappable>
 					</div>
 				</Draggable>
-				{/*<Modal size='large' open={isOpenSetting} onClose={this.close}>
-	        	  	<Modal.Header>
-	        	  	    设置
-	        	  	</Modal.Header>
-	        	  	<Modal.Content>
-	        	  	    <h5>邮箱</h5>
-	        	  	    <Input fluid placeholder='此处输入邮箱地址' />
-	        	  	</Modal.Content>
-	        	  	<Modal.Actions>
-	        	  	  <Button negative>
-	        	  	      返回
-	        	  	  </Button>
-	        	  	  <Button positive icon='checkmark' labelPosition='right' content='确认' />
-	        	  	</Modal.Actions>
-	        	</Modal>*/}
 			</div>
 		);
 	}
