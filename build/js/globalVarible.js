@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-class globalVarible {
+class GlobalVarible {
 	constructor() {
 		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -109,5 +109,5 @@ class globalVarible {
 }
 
 
-let G = new globalVarible();
+let G = new GlobalVarible();
 module.exports = G;

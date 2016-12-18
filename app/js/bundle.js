@@ -9020,7 +9020,13 @@
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+		return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+		return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
 
 	var _createClass = function () {
 		function defineProperties(target, props) {
@@ -9052,13 +9058,17 @@
 
 	var _reactTappable2 = _interopRequireDefault(_reactTappable);
 
-	var _tabs = __webpack_require__(1025);
+	var _tabs = __webpack_require__(1029);
 
 	var _tabs2 = _interopRequireDefault(_tabs);
 
-	var _tab = __webpack_require__(1027);
+	var _tab = __webpack_require__(1031);
 
 	var _tab2 = _interopRequireDefault(_tab);
+
+	var _fileSaver = __webpack_require__(1249);
+
+	var _fileSaver2 = _interopRequireDefault(_fileSaver);
 
 	var _observe = __webpack_require__(1035);
 
@@ -9105,12 +9115,12 @@
 	function _possibleConstructorReturn(self, call) {
 		if (!self) {
 			throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-		}return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+		}return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 	}
 
 	function _inherits(subClass, superClass) {
 		if (typeof superClass !== "function" && superClass !== null) {
-			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+			throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
 		}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 	// import {Motion, spring} from 'react-motion';
@@ -9149,7 +9159,9 @@
 	};
 
 	// test
-	setTimeout(function () {}, 1000);
+	setTimeout(function () {
+		// sendMail("547522203@qq.com", "标题", "正文");
+	}, 1000);
 
 	// init data
 	if (tasks.length === 0) {
@@ -9317,7 +9329,7 @@
 						width: _globalVarible.windowWidth,
 						height: _globalVarible.windowHeight,
 						display: isNeedShow ? 'block' : 'none'
-					} }, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5F00\u59CB\u65F6\u95F4', basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7ED3\u675F\u65F6\u95F4', basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isStartTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: startDate, timepickerCallback: this.startTimepickerCallback })), _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isEndTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: endDate, timepickerCallback: this.endTimepickerCallback })))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u8FD4\u56DE', color: 'grey', onClick: this.cancelBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u786E\u8BA4', color: 'green', onClick: this.confirmBtnClick })))));
+					} }, _react2.default.createElement(_semanticUiReact.Grid, { style: { marginTop: "20px" } }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u5F00\u59CB\u65F6\u95F4", basic: isStartTime ? false : true, primary: isStartTime ? true : false, onClick: this.startTimeBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u7ED3\u675F\u65F6\u95F4", basic: isEndTime ? false : true, primary: isEndTime ? true : false, onClick: this.endTimeBtnClick }))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isStartTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: startDate, timepickerCallback: this.startTimepickerCallback })), _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isEndTime) }, _react2.default.createElement(Timepicker, { minDate: minDate, maxDate: maxDate, defaultDate: endDate, timepickerCallback: this.endTimepickerCallback })))), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, style: { textAlign: 'right' } }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u8FD4\u56DE", color: 'grey', onClick: this.cancelBtnClick })), _react2.default.createElement(Column, { width: 8, style: { textAlign: 'left' } }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u786E\u8BA4", color: 'green', onClick: this.confirmBtnClick })))));
 			}
 		}]);
 
@@ -9648,7 +9660,7 @@
 					});
 				}
 
-				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'center' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u5B9A\u65F6', checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), !isFutureTaskType ? _react2.default.createElement(Column, { width: 8, textAlign: 'center' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', checked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick })) : null) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
+				return _react2.default.createElement('div', null, _react2.default.createElement(_semanticUiReact.Grid, { style: { display: isNeedTimeSetter ? 'none' : 'block' } }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Dropdown, { fluid: true, selection: true, value: taskType, options: taskTypesOptions, onChange: this.taskTypeDropdownChange }))), isNeedShowCheckboxGroup ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 8, textAlign: 'center' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: "\u5B9A\u65F6", checked: isTaskNeedTimer, onClick: this.isTaskNeedTimerCheckboxClick })), !isFutureTaskType ? _react2.default.createElement(Column, { width: 8, textAlign: 'center' }, _react2.default.createElement(_semanticUiReact.Checkbox, { label: "\u91CD\u590D", checked: isTaskNeedRepeat, onClick: this.isTaskNeedRepeatClick })) : null) : '', isTaskNeedTimer ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.startDatePanelClick }, _react2.default.createElement('h3', null, startDate.format('HH:mm')), _react2.default.createElement('h5', null, startDate.format('YYYY/M/D')))), _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }), _react2.default.createElement(Column, { width: 6 }, _react2.default.createElement(_semanticUiReact.Segment, { textAlign: 'center', onClick: this.endDatePanelClick }, _react2.default.createElement('h3', null, endDate.format('HH:mm')), _react2.default.createElement('h5', null, endDate.format('YYYY/M/D'))))) : ''), isNeedTimeSetter ? _react2.default.createElement(TimeSetter, { timeType: timeSetterTimeType, minDate: minDate, maxDate: maxDate, startDate: startDate, endDate: endDate, timeSetterCallback: this.timeSetterCallback, isNeedShow: isNeedTimeSetter }) : '');
 			}
 		}]);
 
@@ -9928,12 +9940,12 @@
 						top: 0,
 						width: _globalVarible.windowWidth,
 						height: _globalVarible.windowHeight
-					} }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { id: 'taskInfo_taskNameInput', defaultValue: name, placeholder: '\u4EFB\u52A1\u5185\u5BB9', onChange: this.taskNameInputChange, fluid: true, ref: function ref(o) {
+					} }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 14 }, _react2.default.createElement(_semanticUiReact.Input, { id: 'taskInfo_taskNameInput', defaultValue: name, placeholder: "\u4EFB\u52A1\u5185\u5BB9", onChange: this.taskNameInputChange, fluid: true, ref: function ref(o) {
 						if (o && o.props && o.props.id && mode == _globalVarible2.default.taskInfoMode.add) {
 							var inputDom = document.getElementById(o.props.id).children[0];
 							inputDom.focus();
 						}
-					} }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskLevelButtons, { level: taskLevel, taskLevelButtonsCallback: this.taskLevelButtonsCallback }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskTypePanel, { taskType: taskType, isTaskNeedTimer: isTaskNeedTimer, isTaskNeedRepeat: isTaskNeedRepeat, isNeedTimeSetter: isNeedTimeSetter, startDate: startDate, endDate: endDate, taskTypePanelCallback: this.taskTypePanelCallback }))), _react2.default.createElement(Row, null), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210', fluid: true, color: 'blue', onClick: this.completeBtnClick }))), mode === _globalVarible2.default.taskInfoMode.add ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0', fluid: true, color: 'teal', onClick: this.continueToAddBtn }))) : '', _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: '\u8FD4\u56DE', fluid: true, color: 'grey', onClick: this.backBtnClick }))))))));
+					} }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskLevelButtons, { level: taskLevel, taskLevelButtonsCallback: this.taskLevelButtonsCallback }))), _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(TaskTypePanel, { taskType: taskType, isTaskNeedTimer: isTaskNeedTimer, isTaskNeedRepeat: isTaskNeedRepeat, isNeedTimeSetter: isNeedTimeSetter, startDate: startDate, endDate: endDate, taskTypePanelCallback: this.taskTypePanelCallback }))), _react2.default.createElement(Row, null), _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 16 }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u5B8C\u6210", fluid: true, color: 'blue', onClick: this.completeBtnClick }))), mode === _globalVarible2.default.taskInfoMode.add ? _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u7EE7\u7EED\u6DFB\u52A0", fluid: true, color: 'teal', onClick: this.continueToAddBtn }))) : '', _react2.default.createElement(Row, { centered: true }, _react2.default.createElement(Column, { width: 12 }, _react2.default.createElement(_semanticUiReact.Button, { content: "\u8FD4\u56DE", fluid: true, color: 'grey', onClick: this.backBtnClick }))))))));
 			}
 		}]);
 
@@ -10512,8 +10524,13 @@
 
 			_this17.state = {
 				isShowMenu: false,
-				isOpenSetting: false,
 				isMovingBtn: false,
+				exportingModalOpen: false,
+				importingModalOpen: false,
+				showMailView: false,
+				showMailButton: false,
+				mailValue: localStorage['mail'] || '',
+				importValue: '',
 				movingBtnX: 0,
 				movingBtnY: 0
 			};
@@ -10521,25 +10538,27 @@
 			_this17.handleTapAddButton = _this17.handleTapAddButton.bind(_this17);
 			_this17.handleAddBtnDrag = _this17.handleAddBtnDrag.bind(_this17);
 
-			_this17.handleClickFunctionBtn = _this17.handleClickFunctionBtn.bind(_this17);
 			_this17.handleClickExportBtn = _this17.handleClickExportBtn.bind(_this17);
-			_this17.handleClickSettingBtn = _this17.handleClickSettingBtn.bind(_this17);
+			_this17.handleClickImportBtn = _this17.handleClickImportBtn.bind(_this17);
+			_this17.handleClickDownloadBtn = _this17.handleClickDownloadBtn.bind(_this17);
+			_this17.handleClickCopyBtn = _this17.handleClickCopyBtn.bind(_this17);
+			_this17.handleClickMailBtn = _this17.handleClickMailBtn.bind(_this17);
+			_this17.handleClickMailExportBtn = _this17.handleClickMailExportBtn.bind(_this17);
+			_this17.mailInputChange = _this17.mailInputChange.bind(_this17);
+			_this17.importInputChange = _this17.importInputChange.bind(_this17);
+			_this17.handleClickSubImportDataBtn = _this17.handleClickSubImportDataBtn.bind(_this17);
+
+			_this17.openExportingModal = _this17.openExportingModal.bind(_this17);
+			_this17.closeExportingModal = _this17.closeExportingModal.bind(_this17);
+			_this17.openImportingModal = _this17.openImportingModal.bind(_this17);
+			_this17.closeImportingModal = _this17.closeImportingModal.bind(_this17);
 			return _this17;
 		}
 
 		_createClass(MultiFunctionBtn, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				this.floatFunctionBtnContainerDom = document.getElementById('floatFunctionBtnContainer');
-			}
-		}, {
-			key: 'handleClickFunctionBtn',
-			value: function handleClickFunctionBtn() {
-				this.setState(function (prevState) {
-					return {
-						isShowMenu: !prevState.isShowMenu
-					};
-				});
+				this.floatFunctionBtnDom = document.getElementById('floatFunctionBtn');
 			}
 		}, {
 			key: 'handleTapAddButton',
@@ -10557,75 +10576,238 @@
 			}
 		}, {
 			key: 'handleAddBtnDrag',
-			value: function handleAddBtnDrag(ev) {
-				this.setState({
-					isShowMenu: false
-				});
-			}
+			value: function handleAddBtnDrag(ev) {}
 		}, {
 			key: 'handleClickExportBtn',
 			value: function handleClickExportBtn() {
 				this.setState({
 					isShowMenu: false
 				});
+
+				this.openExportingModal();
+				this.setState({
+					showMailView: false,
+					showMailButton: false
+				});
 			}
 		}, {
-			key: 'handleClickSettingBtn',
-			value: function handleClickSettingBtn() {
+			key: 'handleClickImportBtn',
+			value: function handleClickImportBtn() {
 				this.setState({
-					isShowMenu: false,
-					isOpenSetting: true
+					isShowMenu: false
+				});
+
+				this.openImportingModal();
+			}
+		}, {
+			key: 'importInputChange',
+			value: function importInputChange(ev, result) {
+				var value = result.value;
+
+				this.setState({
+					importValue: value
+				});
+			}
+		}, {
+			key: 'handleClickSubImportDataBtn',
+			value: function handleClickSubImportDataBtn() {
+				var importValue = this.state.importValue;
+
+				try {
+					var o = JSON.parse(importValue);
+
+					if (o && (typeof o === 'undefined' ? 'undefined' : _typeof(o)) === "object") {
+
+						// import data
+						localStorage.todolistStorekeeper = importValue;
+
+						// refresh page
+						observe_message.setting = {
+							isShowMessage: true,
+							message: '导入成功',
+							color: 'green'
+						};
+						location.href = location.href;
+					}
+				} catch (e) {
+					observe_message.setting = {
+						isShowMessage: true,
+						message: '数据格式错误',
+						color: 'red'
+					};
+				}
+			}
+		}, {
+			key: 'handleClickDownloadBtn',
+			value: function handleClickDownloadBtn() {
+				var data = localStorage["todolistStorekeeper"] || '';
+				var dateStr = new Date().toLocaleString();
+
+				var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+				_fileSaver2.default.saveAs(blob, '目标系统数据(' + dateStr + ").json");
+			}
+		}, {
+			key: 'handleClickCopyBtn',
+			value: function handleClickCopyBtn() {
+				var _this18 = this;
+
+				var data = localStorage["todolistStorekeeper"] || '';
+				var dom = document.getElementById('exportDataInput');
+				(0, _tool.copyToClipboard)(dom, function (b) {
+					if (b) {
+						observe_message.setting = {
+							isShowMessage: true,
+							message: '复制成功',
+							color: 'green'
+						};
+					}
+					if (!b) {
+						observe_message.setting = {
+							isShowMessage: true,
+							message: '本浏览器版本不支持此功能，请手动复制!',
+							color: 'red'
+						};
+					}
+
+					_this18.setState({
+						showMailButton: true
+					});
+				});
+			}
+		}, {
+			key: 'handleClickMailBtn',
+			value: function handleClickMailBtn() {
+				this.setState({
+					showMailView: true
+				});
+			}
+		}, {
+			key: 'handleClickMailExportBtn',
+			value: function handleClickMailExportBtn() {
+				var mailValue = this.state.mailValue;
+
+				var dateStr = new Date().toLocaleString();
+				var subject = '目标系统数据(' + dateStr + ")";
+				var content = localStorage['todolistStorekeeper'] || '';
+
+				localStorage.mail = mailValue;
+				(0, _tool.sendMail)(mailValue, subject, "在此处粘贴数据");
+				console.log('导出成功');
+			}
+		}, {
+			key: 'mailInputChange',
+			value: function mailInputChange(ev, result) {
+				var value = result.value;
+
+				this.setState({
+					mailValue: value
+				});
+			}
+		}, {
+			key: 'getData',
+			value: function getData() {
+				return localStorage['todolistStorekeeper'] || '';
+			}
+		}, {
+			key: 'exportData',
+			value: function exportData() {}
+		}, {
+			key: 'importData',
+			value: function importData(data) {
+				localStorage["todolistStorekeeper"] = data;
+				// refresh page
+				location.href = location.href;
+			}
+		}, {
+			key: 'openExportingModal',
+			value: function openExportingModal() {
+				this.setState({
+					exportingModalOpen: true
+				});
+			}
+		}, {
+			key: 'closeExportingModal',
+			value: function closeExportingModal() {
+				this.setState({
+					exportingModalOpen: false
+				});
+			}
+		}, {
+			key: 'openImportingModal',
+			value: function openImportingModal() {
+				this.setState({
+					importingModalOpen: true
+				});
+			}
+		}, {
+			key: 'closeImportingModal',
+			value: function closeImportingModal() {
+				this.setState({
+					importingModalOpen: false
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this18 = this;
+				var _this19 = this;
 
 				var _state9 = this.state,
 				    isShowMenu = _state9.isShowMenu,
 				    isOpenSetting = _state9.isOpenSetting,
 				    movingBtnX = _state9.movingBtnX,
 				    movingBtnY = _state9.movingBtnY,
-				    isMovingBtn = _state9.isMovingBtn;
+				    isMovingBtn = _state9.isMovingBtn,
+				    exportingModalOpen = _state9.exportingModalOpen,
+				    showMailView = _state9.showMailView,
+				    mailValue = _state9.mailValue,
+				    showMailButton = _state9.showMailButton,
+				    importingModalOpen = _state9.importingModalOpen;
 
-				return _react2.default.createElement('div', { id: 'floatFunctionBtnContainer', className: 'MultiFunctionBtn' }, _react2.default.createElement(_reactDraggable2.default, { onDrag: this.handleAddBtnDrag, disabled: isShowMenu }, _react2.default.createElement('div', null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', { style: {
+				return _react2.default.createElement('div', null, _react2.default.createElement(_reactDraggable2.default, {
+					onDrag: this.handleAddBtnDrag,
+					disabled: isShowMenu }, _react2.default.createElement('div', { className: 'MultiFunctionBtnContainer' }, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', { style: {
 						marginTop: '8px'
-					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'sign in', circular: true, color: 'orange', onClick: this.handleClickExportBtn })), _react2.default.createElement('p', { style: {
+					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'sign in', circular: true, color: 'violet', onClick: this.handleClickImportBtn })), _react2.default.createElement('p', { style: {
 						marginTop: '8px'
-					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'sign out', circular: true, color: 'violet', onClick: this.handleClickAddBtn })), _react2.default.createElement('p', { style: {
+					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'sign out', circular: true, color: 'orange', onClick: this.handleClickExportBtn })), _react2.default.createElement(_semanticUiReact.Modal, {
+					open: exportingModalOpen,
+					onClose: this.closeExportingModal,
+					size: 'small' }, _react2.default.createElement(_semanticUiReact.Header, { content: "\u5BFC\u51FA\u6570\u636E" }), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement(_semanticUiReact.Form, null, _react2.default.createElement(_semanticUiReact.Form.Field, null, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(!showMailView) }, _react2.default.createElement(_semanticUiReact.Input, { id: 'exportDataInput', defaultValue: this.getData() })), _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(showMailView) }, _react2.default.createElement(_semanticUiReact.Input, { id: 'mailInput', placeholder: "\u8BF7\u8F93\u5165\u90AE\u7BB1\u5730\u5740", defaultValue: mailValue, onChange: this.mailInputChange, action: _react2.default.createElement(_semanticUiReact.Label, { color: 'green', content: "\u5BFC\u51FA", onClick: this.handleClickMailExportBtn }) }))))), !showMailView ? _react2.default.createElement(_semanticUiReact.Modal.Actions, null, _react2.default.createElement(_semanticUiReact.Button, { color: 'blue', icon: 'download', onClick: this.handleClickDownloadBtn }), _react2.default.createElement(_semanticUiReact.Button, { color: 'orange', icon: 'copy', onClick: this.handleClickCopyBtn }), showMailButton ? _react2.default.createElement(_semanticUiReact.Button, { color: 'green', icon: 'mail', onClick: this.handleClickMailBtn }) : null) : null), _react2.default.createElement(_semanticUiReact.Modal, {
+					open: importingModalOpen,
+					onClose: this.closeImportingModal,
+					size: 'small' }, _react2.default.createElement(_semanticUiReact.Header, { content: "\u5BFC\u5165\u6570\u636E\uFF08\u6CE8\u610F\uFF1A\u5C06\u8986\u76D6\u539F\u6570\u636E\uFF09" }), _react2.default.createElement(_semanticUiReact.Modal.Content, null, _react2.default.createElement(_semanticUiReact.Form, null, _react2.default.createElement(_semanticUiReact.Form.Field, null, _react2.default.createElement(_semanticUiReact.Input, { id: 'importInput', placeholder: "\u8981\u5BFC\u5165\u7684\u6570\u636E", onChange: this.importInputChange, action: _react2.default.createElement(_semanticUiReact.Label, { color: 'green', content: "\u5BFC\u5165", onClick: this.handleClickSubImportDataBtn }) }))))), _react2.default.createElement('p', { style: {
 						marginTop: '8px'
 					} })), _react2.default.createElement(_reactTappable2.default, {
 					onTap: this.handleTapAddButton,
 					onTouchMove: function onTouchMove() {
-						_this18.setState({
+						_this19.setState({
 							isMovingBtn: true
 						});
 					},
 					onTouchStart: function onTouchStart(e) {
-						_this18.setState({
+						_this19.setState({
 							isMovingBtn: false
 						});
 
 						e.preventDefault();
 					},
 					onMouseDown: function onMouseDown() {
-						_this18.setState({
+						_this19.setState({
 							isMovingBtn: false
 						});
 					},
 					onMouseMove: function onMouseMove() {
-						_this18.setState({
+						_this19.setState({
 							isMovingBtn: true
 						});
 					},
 					onPress: function onPress() {
-						_this18.setState(function (prevState) {
+						_this19.setState(function (prevState) {
 							return {
 								isShowMenu: !prevState.isShowMenu
 							};
 						});
-					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'plus', circular: true, color: 'twitter' })))));
+					} }, _react2.default.createElement(_semanticUiReact.Button, { id: 'floatFunctionBtn', className: 'ovalButton MultiFunctionBtn', size: 'massive', icon: 'plus', circular: true, color: 'twitter' })))));
 			}
 		}]);
 
@@ -10642,9 +10824,9 @@
 		function ToDoList(props) {
 			_classCallCheck(this, ToDoList);
 
-			var _this19 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+			var _this20 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-			_this19.state = {
+			_this20.state = {
 				taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 				isShowTaskInfo: false,
 				// Message
@@ -10654,13 +10836,13 @@
 				task: null
 			};
 
-			_this19.observeIsNeedShowTaskInfo();
-			_this19.observeIsNeedShowMessage();
+			_this20.observeIsNeedShowTaskInfo();
+			_this20.observeIsNeedShowMessage();
 
-			_this19.tabChange = _this19.tabChange.bind(_this19);
-			_this19.multiFunctionBtnCallback = _this19.multiFunctionBtnCallback.bind(_this19);
-			_this19.taskInfoCallback = _this19.taskInfoCallback.bind(_this19);
-			return _this19;
+			_this20.tabChange = _this20.tabChange.bind(_this20);
+			_this20.multiFunctionBtnCallback = _this20.multiFunctionBtnCallback.bind(_this20);
+			_this20.taskInfoCallback = _this20.taskInfoCallback.bind(_this20);
+			return _this20;
 		}
 
 		_createClass(ToDoList, [{
@@ -10684,7 +10866,7 @@
 		}, {
 			key: 'taskInfoCallback',
 			value: function taskInfoCallback(o) {
-				var _this20 = this;
+				var _this21 = this;
 
 				var isShowTaskInfo = o.isShowTaskInfo,
 				    isContinueToAddTask = o.isContinueToAddTask,
@@ -10701,7 +10883,7 @@
 						task: null,
 						taskInfoMode: _globalVarible2.default.taskInfoMode.add
 					}, function () {
-						_this20.setState({
+						_this21.setState({
 							isShowTaskInfo: true
 						});
 					});
@@ -10716,7 +10898,7 @@
 		}, {
 			key: 'observeIsNeedShowTaskInfo',
 			value: function observeIsNeedShowTaskInfo() {
-				var _this21 = this;
+				var _this22 = this;
 
 				(0, _observe2.default)(observe_taskInfo, function (key, setting) {
 					var task = setting.task,
@@ -10726,7 +10908,7 @@
 
 					if (isTransporting) {
 						observe_taskInfo.setting.isTransporting = false;
-						_this21.setState({
+						_this22.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
@@ -10738,7 +10920,7 @@
 		}, {
 			key: 'observeIsNeedShowMessage',
 			value: function observeIsNeedShowMessage() {
-				var _this22 = this;
+				var _this23 = this;
 
 				(0, _observe2.default)(observe_message, function (key, setting) {
 					var isShowMessage = setting.isShowMessage,
@@ -10747,13 +10929,13 @@
 
 					// animation
 
-					_this22.setState({
+					_this23.setState({
 						isShowMessage: isShowMessage,
 						message: message,
 						messageColor: color
 					});
 					setTimeout(function () {
-						_this22.setState({
+						_this23.setState({
 							isShowMessage: false,
 							message: '',
 							messageColor: color
@@ -10778,7 +10960,7 @@
 					} }, isShowMessage ? _react2.default.createElement('div', { className: 'message', style: {
 						position: 'fixed',
 						width: _globalVarible.windowWidth
-					} }, _react2.default.createElement(_semanticUiReact.Message, { color: messageColor, content: message })) : null, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: defaultSetting.tabIndex, onChange: this.tabChange }, _react2.default.createElement(_tab2.default, { label: '\u957F\u671F\u76EE\u6807' }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: '\u4ECA\u65E5\u76EE\u6807' }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
+					} }, _react2.default.createElement(_semanticUiReact.Message, { color: messageColor, content: message })) : null, isShowTaskInfo ? _react2.default.createElement(TaskInfo, { mode: taskInfoMode, task: task, taskInfoCallback: this.taskInfoCallback }) : '', _react2.default.createElement(_tabs2.default, { justified: true, initialSelectedIndex: defaultSetting.tabIndex, onChange: this.tabChange }, _react2.default.createElement(_tab2.default, { label: "\u957F\u671F\u76EE\u6807" }, _react2.default.createElement(LongTaskContainer, null)), _react2.default.createElement(_tab2.default, { label: "\u4ECA\u65E5\u76EE\u6807" }, _react2.default.createElement(DayTaskContainer, null))), _react2.default.createElement(MultiFunctionBtn, { multiFunctionBtnCallback: this.multiFunctionBtnCallback }));
 			}
 		}]);
 
@@ -70988,12 +71170,16 @@
 	module.exports = touchStyles;
 
 /***/ },
-/* 1025 */
+/* 1025 */,
+/* 1026 */,
+/* 1027 */,
+/* 1028 */,
+/* 1029 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(1026);
+	var babelHelpers = __webpack_require__(1030);
 	/**
 	 * MUI React tabs module
 	 * @module react/tabs
@@ -71011,11 +71197,11 @@
 
 	var _react2 = babelHelpers.interopRequireDefault(_react);
 
-	var _tab = __webpack_require__(1027);
+	var _tab = __webpack_require__(1031);
 
 	var _tab2 = babelHelpers.interopRequireDefault(_tab);
 
-	var _util = __webpack_require__(1028);
+	var _util = __webpack_require__(1032);
 
 	var util = babelHelpers.interopRequireWildcard(_util);
 
@@ -71120,7 +71306,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 1026 */
+/* 1030 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
@@ -71243,12 +71429,12 @@
 	});
 
 /***/ },
-/* 1027 */
+/* 1031 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(1026);
+	var babelHelpers = __webpack_require__(1030);
 	/**
 	 * MUI React tabs module
 	 * @module react/tabs
@@ -71306,7 +71492,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 1028 */
+/* 1032 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -71316,8 +71502,8 @@
 
 	'use strict';
 
-	var config = __webpack_require__(1029),
-	    jqLite = __webpack_require__(1030),
+	var config = __webpack_require__(1033),
+	    jqLite = __webpack_require__(1034),
 	    scrollLock = 0,
 	    scrollLockCls = 'mui-scroll-lock',
 	    scrollStyleEl,
@@ -71557,7 +71743,7 @@
 	};
 
 /***/ },
-/* 1029 */
+/* 1033 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -71575,7 +71761,7 @@
 	};
 
 /***/ },
-/* 1030 */
+/* 1034 */
 /***/ function(module, exports) {
 
 	/**
@@ -71963,10 +72149,6 @@
 	};
 
 /***/ },
-/* 1031 */,
-/* 1032 */,
-/* 1033 */,
-/* 1034 */,
 /* 1035 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -72245,6 +72427,51 @@
 					return '超时' + _s2.replace(/ /g, "");
 				}
 			}
+		},
+
+		// copy content to clipboard
+		copyToClipboard: function copyToClipboard(el, callback) {
+			// Copy textarea, pre, div, etc.
+			if (document.body.createTextRange) {
+				// IE 
+				var textRange = document.body.createTextRange();
+				textRange.moveToElementText(el);
+				textRange.select();
+				textRange.execCommand("Copy");
+				// tooltip(el, "Copied!");  
+				callback(true);
+			} else if (window.getSelection && document.createRange) {
+				// non-IE
+				var editable = el.contentEditable; // Record contentEditable status of element
+				var readOnly = el.readOnly; // Record readOnly status of element
+				el.contentEditable = true; // iOS will only select text on non-form elements if contentEditable = true;
+				el.readOnly = false; // iOS will not select in a read only form element
+				var range = document.createRange();
+				range.selectNodeContents(el);
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range); // Does not work for Firefox if a textarea or input
+				if (el.nodeName == "TEXTAREA" || el.nodeName == "INPUT") el.select(); // Firefox will only select a form element with select()
+				if (el.setSelectionRange && navigator.userAgent.match(/ipad|ipod|iphone/i)) el.setSelectionRange(0, 999999); // iOS only selects "form" elements with SelectionRange
+				el.contentEditable = editable; // Restore previous contentEditable status
+				el.readOnly = readOnly; // Restore previous readOnly status 
+				if (document.queryCommandSupported("copy")) {
+					var successful = document.execCommand('copy');
+					// if (successful) tooltip(el, "Copied to clipboard.");
+					if (successful) callback(true);
+					// else tooltip(el, "Press CTRL+C to copy");
+					else callback(false);
+				} else {
+					if (!navigator.userAgent.match(/ipad|ipod|iphone|android|silk/i))
+						// tooltip(el, "Press CTRL+C to copy");	
+						callback(false);
+				}
+			}
+		},
+
+		// send mail 
+		sendMail: function sendMail(address, subject, message) {
+			window.location.href = "mailto:" + address + "?subject=" + subject + "&body=" + message;
 		}
 	};
 
@@ -72280,9 +72507,9 @@
 		}
 	}
 
-	var globalVarible = function () {
-		function globalVarible() {
-			_classCallCheck(this, globalVarible);
+	var GlobalVarible = function () {
+		function GlobalVarible() {
+			_classCallCheck(this, GlobalVarible);
 
 			this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 			this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -72385,7 +72612,7 @@
 			this.windowHeight = document.body.clientHeight;
 		}
 
-		_createClass(globalVarible, [{
+		_createClass(GlobalVarible, [{
 			key: 'isDayTaskType',
 			value: function isDayTaskType(taskType) {
 				return this.dayTaskTypes.includes(taskType);
@@ -72397,10 +72624,10 @@
 			}
 		}]);
 
-		return globalVarible;
+		return GlobalVarible;
 	}();
 
-	var G = new globalVarible();
+	var G = new GlobalVarible();
 	module.exports = G;
 
 /***/ },
@@ -92464,7 +92691,7 @@
 
 
 	// module
-	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .label-repeatIcon, .ToDoList .isTaskCompletedSwitch {\n  background: none; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 3; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n.ToDoList * {\n  padding: 0;\n  margin: 0;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  user-select: none; }\n\n.ToDoList .demo8-outer {\n  background-color: #EEE;\n  color: #FFF;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  font: 28px/1em \"Helvetica\";\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  display: -webkit-flex;\n  -webkit-justify-content: center;\n  -webkit-align-items: center; }\n\n.ToDoList .demo8 {\n  width: 320px;\n  height: 400px; }\n\n.ToDoList .demo8-item {\n  position: absolute;\n  width: 320px;\n  height: 90px;\n  overflow: visible;\n  pointer-events: auto;\n  transform-origin: 50% 50% 0px;\n  border-radius: 4px;\n  color: #999999;\n  line-height: 96px;\n  padding-left: 32px;\n  font-size: 24px;\n  font-weight: 400;\n  background-color: white;\n  box-sizing: border-box;\n  -webkit-box-sizing: border-box; }\n\n.ToDoList .link {\n  position: absolute;\n  color: #4c4c4c;\n  text-decoration: none;\n  font: 14px/1em \"Helvetica\";\n  padding: 10px;\n  top: 0;\n  left: 0; }\n", ""]);
+	exports.push([module.id, "/* Environment */\nhtml, body {\n  /* overflow:hidden; */ }\n\n/* Components */\n.ToDoList .MultiFunctionBtnContainer {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n.ToDoList .TaskInfo {\n  z-index: 1;\n  background: white;\n  overflow-y: scroll; }\n  .ToDoList .TaskInfo .TimeSetter {\n    z-index: 2;\n    overflow-y: scroll;\n    background: white; }\n\n.ToDoList .taskTimeLabel {\n  font-size: 12px; }\n\n.ToDoList .label-repeatIcon, .ToDoList .isTaskCompletedSwitch {\n  background: none; }\n\n.ToDoList .message {\n  left: 0;\n  top: 0;\n  z-index: 1001; }\n\n.ToDoList .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n", ""]);
 
 	// exports
 
@@ -92499,6 +92726,205 @@
 	// reactify dom
 	circleOvalButton();
 	forbidSafariDefaultDragEvent();
+
+/***/ },
+/* 1248 */,
+/* 1249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
+
+	/* FileSaver.js
+	 * A saveAs() FileSaver implementation.
+	 * 1.3.2
+	 * 2016-06-16 18:25:19
+	 *
+	 * By Eli Grey, http://eligrey.com
+	 * License: MIT
+	 *   See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+	 */
+
+	/*global self */
+	/*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
+
+	/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+
+	var saveAs = saveAs || function (view) {
+		"use strict";
+		// IE <10 is explicitly unsupported
+
+		if (typeof view === "undefined" || typeof navigator !== "undefined" && /MSIE [1-9]\./.test(navigator.userAgent)) {
+			return;
+		}
+		var doc = view.document
+		// only get URL when necessary in case Blob.js hasn't overridden it yet
+
+		,
+		    get_URL = function get_URL() {
+			return view.URL || view.webkitURL || view;
+		},
+		    save_link = doc.createElementNS("http://www.w3.org/1999/xhtml", "a"),
+		    can_use_save_link = "download" in save_link,
+		    click = function click(node) {
+			var event = new MouseEvent("click");
+			node.dispatchEvent(event);
+		},
+		    is_safari = /constructor/i.test(view.HTMLElement) || view.safari,
+		    is_chrome_ios = /CriOS\/[\d]+/.test(navigator.userAgent),
+		    throw_outside = function throw_outside(ex) {
+			(view.setImmediate || view.setTimeout)(function () {
+				throw ex;
+			}, 0);
+		},
+		    force_saveable_type = "application/octet-stream"
+		// the Blob API is fundamentally broken as there is no "downloadfinished" event to subscribe to
+
+		,
+		    arbitrary_revoke_timeout = 1000 * 40 // in ms
+
+		,
+		    revoke = function revoke(file) {
+			var revoker = function revoker() {
+				if (typeof file === "string") {
+					// file is an object URL
+					get_URL().revokeObjectURL(file);
+				} else {
+					// file is a File
+					file.remove();
+				}
+			};
+			setTimeout(revoker, arbitrary_revoke_timeout);
+		},
+		    dispatch = function dispatch(filesaver, event_types, event) {
+			event_types = [].concat(event_types);
+			var i = event_types.length;
+			while (i--) {
+				var listener = filesaver["on" + event_types[i]];
+				if (typeof listener === "function") {
+					try {
+						listener.call(filesaver, event || filesaver);
+					} catch (ex) {
+						throw_outside(ex);
+					}
+				}
+			}
+		},
+		    auto_bom = function auto_bom(blob) {
+			// prepend BOM for UTF-8 XML and text/* types (including HTML)
+			// note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
+			if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+				return new Blob([String.fromCharCode(0xFEFF), blob], { type: blob.type });
+			}
+			return blob;
+		},
+		    FileSaver = function FileSaver(blob, name, no_auto_bom) {
+			if (!no_auto_bom) {
+				blob = auto_bom(blob);
+			}
+			// First try a.download, then web filesystem, then object URLs
+			var filesaver = this,
+			    type = blob.type,
+			    force = type === force_saveable_type,
+			    object_url,
+			    dispatch_all = function dispatch_all() {
+				dispatch(filesaver, "writestart progress write writeend".split(" "));
+			}
+			// on any filesys errors revert to saving with object URLs
+
+			,
+			    fs_error = function fs_error() {
+				if ((is_chrome_ios || force && is_safari) && view.FileReader) {
+					// Safari doesn't allow downloading of blob urls
+					var reader = new FileReader();
+					reader.onloadend = function () {
+						var url = is_chrome_ios ? reader.result : reader.result.replace(/^data:[^;]*;/, 'data:attachment/file;');
+						var popup = view.open(url, '_blank');
+						if (!popup) view.location.href = url;
+						url = undefined; // release reference before dispatching
+						filesaver.readyState = filesaver.DONE;
+						dispatch_all();
+					};
+					reader.readAsDataURL(blob);
+					filesaver.readyState = filesaver.INIT;
+					return;
+				}
+				// don't create more object URLs than needed
+				if (!object_url) {
+					object_url = get_URL().createObjectURL(blob);
+				}
+				if (force) {
+					view.location.href = object_url;
+				} else {
+					var opened = view.open(object_url, "_blank");
+					if (!opened) {
+						// Apple does not allow window.open, see https://developer.apple.com/library/safari/documentation/Tools/Conceptual/SafariExtensionGuide/WorkingwithWindowsandTabs/WorkingwithWindowsandTabs.html
+						view.location.href = object_url;
+					}
+				}
+				filesaver.readyState = filesaver.DONE;
+				dispatch_all();
+				revoke(object_url);
+			};
+			filesaver.readyState = filesaver.INIT;
+
+			if (can_use_save_link) {
+				object_url = get_URL().createObjectURL(blob);
+				setTimeout(function () {
+					save_link.href = object_url;
+					save_link.download = name;
+					click(save_link);
+					dispatch_all();
+					revoke(object_url);
+					filesaver.readyState = filesaver.DONE;
+				});
+				return;
+			}
+
+			fs_error();
+		},
+		    FS_proto = FileSaver.prototype,
+		    saveAs = function saveAs(blob, name, no_auto_bom) {
+			return new FileSaver(blob, name || blob.name || "download", no_auto_bom);
+		};
+		// IE 10+ (native saveAs)
+		if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob) {
+			return function (blob, name, no_auto_bom) {
+				name = name || blob.name || "download";
+
+				if (!no_auto_bom) {
+					blob = auto_bom(blob);
+				}
+				return navigator.msSaveOrOpenBlob(blob, name);
+			};
+		}
+
+		FS_proto.abort = function () {};
+		FS_proto.readyState = FS_proto.INIT = 0;
+		FS_proto.WRITING = 1;
+		FS_proto.DONE = 2;
+
+		FS_proto.error = FS_proto.onwritestart = FS_proto.onprogress = FS_proto.onwrite = FS_proto.onabort = FS_proto.onerror = FS_proto.onwriteend = null;
+
+		return saveAs;
+	}(typeof self !== "undefined" && self || typeof window !== "undefined" && window || undefined.content);
+	// `self` is undefined in Firefox for Android content script context
+	// while `this` is nsIContentFrameMessageManager
+	// with an attribute `content` that corresponds to the window
+
+	if (typeof module !== "undefined" && module.exports) {
+		module.exports.saveAs = saveAs;
+	} else if ("function" !== "undefined" && __webpack_require__(1250) !== null && __webpack_require__(686) !== null) {
+		!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+			return saveAs;
+		}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}
+
+/***/ },
+/* 1250 */
+/***/ function(module, exports) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
 
 /***/ }
 /******/ ]);
