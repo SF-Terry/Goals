@@ -1462,6 +1462,11 @@ class MultiFunctionBtn extends React.Component {
 	handleClickCopyBtn() {
 		const data = localStorage["todolistStorekeeper"] || '';
 		const dom = document.getElementById('exportDataInput');
+
+		this.setState({
+			showMailButton: true
+		});
+			
 		copyToClipboard(dom, (b) => {
 			if (b) {
 				observe_message.setting = {
@@ -1477,10 +1482,6 @@ class MultiFunctionBtn extends React.Component {
 					color: 'red'
 				}
 			}
-
-			this.setState({
-				showMailButton: true
-			});
 		});
 	}
 	handleClickMailBtn() {

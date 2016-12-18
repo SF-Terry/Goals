@@ -10649,10 +10649,13 @@
 		}, {
 			key: 'handleClickCopyBtn',
 			value: function handleClickCopyBtn() {
-				var _this18 = this;
-
 				var data = localStorage["todolistStorekeeper"] || '';
 				var dom = document.getElementById('exportDataInput');
+
+				this.setState({
+					showMailButton: true
+				});
+
 				(0, _tool.copyToClipboard)(dom, function (b) {
 					if (b) {
 						observe_message.setting = {
@@ -10668,10 +10671,6 @@
 							color: 'red'
 						};
 					}
-
-					_this18.setState({
-						showMailButton: true
-					});
 				});
 			}
 		}, {
@@ -10749,7 +10748,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this19 = this;
+				var _this18 = this;
 
 				var _state9 = this.state,
 				    isShowMenu = _state9.isShowMenu,
@@ -10780,29 +10779,29 @@
 					} })), _react2.default.createElement(_reactTappable2.default, {
 					onTap: this.handleTapAddButton,
 					onTouchMove: function onTouchMove() {
-						_this19.setState({
+						_this18.setState({
 							isMovingBtn: true
 						});
 					},
 					onTouchStart: function onTouchStart(e) {
-						_this19.setState({
+						_this18.setState({
 							isMovingBtn: false
 						});
 
 						e.preventDefault();
 					},
 					onMouseDown: function onMouseDown() {
-						_this19.setState({
+						_this18.setState({
 							isMovingBtn: false
 						});
 					},
 					onMouseMove: function onMouseMove() {
-						_this19.setState({
+						_this18.setState({
 							isMovingBtn: true
 						});
 					},
 					onPress: function onPress() {
-						_this19.setState(function (prevState) {
+						_this18.setState(function (prevState) {
 							return {
 								isShowMenu: !prevState.isShowMenu
 							};
@@ -10824,9 +10823,9 @@
 		function ToDoList(props) {
 			_classCallCheck(this, ToDoList);
 
-			var _this20 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+			var _this19 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-			_this20.state = {
+			_this19.state = {
 				taskInfoMode: _globalVarible2.default.taskInfoMode.add,
 				isShowTaskInfo: false,
 				// Message
@@ -10836,13 +10835,13 @@
 				task: null
 			};
 
-			_this20.observeIsNeedShowTaskInfo();
-			_this20.observeIsNeedShowMessage();
+			_this19.observeIsNeedShowTaskInfo();
+			_this19.observeIsNeedShowMessage();
 
-			_this20.tabChange = _this20.tabChange.bind(_this20);
-			_this20.multiFunctionBtnCallback = _this20.multiFunctionBtnCallback.bind(_this20);
-			_this20.taskInfoCallback = _this20.taskInfoCallback.bind(_this20);
-			return _this20;
+			_this19.tabChange = _this19.tabChange.bind(_this19);
+			_this19.multiFunctionBtnCallback = _this19.multiFunctionBtnCallback.bind(_this19);
+			_this19.taskInfoCallback = _this19.taskInfoCallback.bind(_this19);
+			return _this19;
 		}
 
 		_createClass(ToDoList, [{
@@ -10866,7 +10865,7 @@
 		}, {
 			key: 'taskInfoCallback',
 			value: function taskInfoCallback(o) {
-				var _this21 = this;
+				var _this20 = this;
 
 				var isShowTaskInfo = o.isShowTaskInfo,
 				    isContinueToAddTask = o.isContinueToAddTask,
@@ -10883,7 +10882,7 @@
 						task: null,
 						taskInfoMode: _globalVarible2.default.taskInfoMode.add
 					}, function () {
-						_this21.setState({
+						_this20.setState({
 							isShowTaskInfo: true
 						});
 					});
@@ -10898,7 +10897,7 @@
 		}, {
 			key: 'observeIsNeedShowTaskInfo',
 			value: function observeIsNeedShowTaskInfo() {
-				var _this22 = this;
+				var _this21 = this;
 
 				(0, _observe2.default)(observe_taskInfo, function (key, setting) {
 					var task = setting.task,
@@ -10908,7 +10907,7 @@
 
 					if (isTransporting) {
 						observe_taskInfo.setting.isTransporting = false;
-						_this22.setState({
+						_this21.setState({
 							isShowTaskInfo: isShowTaskInfo,
 							taskInfoMode: taskInfoMode,
 							task: task
@@ -10920,7 +10919,7 @@
 		}, {
 			key: 'observeIsNeedShowMessage',
 			value: function observeIsNeedShowMessage() {
-				var _this23 = this;
+				var _this22 = this;
 
 				(0, _observe2.default)(observe_message, function (key, setting) {
 					var isShowMessage = setting.isShowMessage,
@@ -10929,13 +10928,13 @@
 
 					// animation
 
-					_this23.setState({
+					_this22.setState({
 						isShowMessage: isShowMessage,
 						message: message,
 						messageColor: color
 					});
 					setTimeout(function () {
-						_this23.setState({
+						_this22.setState({
 							isShowMessage: false,
 							message: '',
 							messageColor: color
