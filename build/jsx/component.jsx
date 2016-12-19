@@ -1185,10 +1185,10 @@ class TaskListContainer extends React.Component {
 			<div className='TaskListContainer'>
 				<Grid padded>
 					<Row>
-						<Column width={8} verticalAlign='middle'>
+						<Column width={7} verticalAlign='middle'>
 							<TaskTypeSelector taskType={taskType} taskTypes={taskTypes} taskTypeSelectorCallback={this.taskTypeSelectorCallback} />
 						</Column>
-						<Column width={5} textAlign='center' verticalAlign='middle'>
+						<Column width={6} textAlign='right' verticalAlign='middle'>
 							<Label className='isTaskCompletedSwitch'>
 								<Switch value={isTaskCompleted}
 										labels={{ on: '已完成', off: '未完成' }} 
@@ -1434,7 +1434,7 @@ class MultiFunctionBtn extends React.Component {
 			<div>
 				<Draggable 
 					onDrag={this.handleAddBtnDrag} 
-					disabled={isShowMenu} >
+					disabled={!isShowMenu} >
 					<div className='MultiFunctionBtnContainer'>
 						<div style={getShowOrHideDomStyle(isShowMenu)}>
 							<p style={{

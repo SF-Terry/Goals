@@ -10353,7 +10353,7 @@
 				var isCompletesOptions = [{ value: 1, text: '已完成' }, { value: 0, text: '未完成' }];
 				var defalutIsComplete = this.props.isCompleted;
 
-				return _react2.default.createElement('div', { className: 'TaskListContainer' }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 8, verticalAlign: 'middle' }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 5, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'isTaskCompletedSwitch' }, _react2.default.createElement(_reactFlexibleSwitch2.default, { value: isTaskCompleted,
+				return _react2.default.createElement('div', { className: 'TaskListContainer' }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 7, verticalAlign: 'middle' }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6, textAlign: 'right', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'isTaskCompletedSwitch' }, _react2.default.createElement(_reactFlexibleSwitch2.default, { value: isTaskCompleted,
 					labels: { on: '已完成', off: '未完成' },
 					circleStyles: { diameter: 24 },
 					switchStyles: { width: 90 },
@@ -10674,7 +10674,7 @@
 
 				return _react2.default.createElement('div', null, _react2.default.createElement(_reactDraggable2.default, {
 					onDrag: this.handleAddBtnDrag,
-					disabled: isShowMenu }, _react2.default.createElement('div', { className: 'MultiFunctionBtnContainer' }, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', { style: {
+					disabled: !isShowMenu }, _react2.default.createElement('div', { className: 'MultiFunctionBtnContainer' }, _react2.default.createElement('div', { style: (0, _tool.getShowOrHideDomStyle)(isShowMenu) }, _react2.default.createElement('p', { style: {
 						marginTop: '8px'
 					} }, _react2.default.createElement(_semanticUiReact.Button, { className: 'ovalButton', size: 'massive', icon: 'sign in', circular: true, color: 'violet', onClick: this.handleClickImportBtn })), _react2.default.createElement('p', { style: {
 						marginTop: '8px'
