@@ -51,7 +51,7 @@ let observe_message = {
 
 // test
 setTimeout(() => {
-	// sendMail("547522203@qq.com", "标题", "正文");
+
 }, 1000);
 
 // init data

@@ -9159,9 +9159,7 @@
 	};
 
 	// test
-	setTimeout(function () {
-		// sendMail("547522203@qq.com", "标题", "正文");
-	}, 1000);
+	setTimeout(function () {}, 1000);
 
 	// init data
 	if (tasks.length === 0) {
