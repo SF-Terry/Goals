@@ -35,7 +35,7 @@ class Storekeeper {
 		// init data
 		this.settings = [{
 			defaultSetting: {
-				tabIndex: 0,
+				tabIndex: 1,
 				dayTask_taskType: 'today',
 				dayTask_isCompleted: false,
 				longTask_taskType: 'long', 
