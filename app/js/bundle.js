@@ -9983,7 +9983,8 @@
 				var taskType = task.taskType,
 				    isTaskNeedRepeat = task.isTaskNeedRepeat,
 				    startDateStr = task.startDateStr,
-				    endDateStr = task.endDateStr;
+				    endDateStr = task.endDateStr,
+				    isTaskCompleted = task.isTaskCompleted;
 
 				var startDate = (0, _moment2.default)(startDateStr);
 				var endDate = (0, _moment2.default)(endDateStr);
@@ -10017,17 +10018,20 @@
 
 				// judge the condition of task repeat
 				// forbid future tasktype
-				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
-					var _normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0];
+				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
+					var taskDateType = _globalVarible.taskTypesDateType[taskType];
+					var _normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0].add(1, taskDateType);
 					var _isNeedChange = (0, _moment2.default)().isSameOrAfter(_normalStartDate);
 					var dateType = _globalVarible.taskTypesDateType[taskType];
 					var timeInterval = startDate.startOf(dateType).diff(_normalStartDate, dateType + 's');
 					var newStartDate = startDate.add(timeInterval, dateType + 's');
 					var newEndDate = endDate.add(timeInterval, dateType + 's');
 
-					task.isTaskCompleted = false;
-					task.startDate = newStartDate;
-					task.endDate = newEndDate;
+					if (_isNeedChange) {
+						task.isTaskCompleted = false;
+						task.startDate = newStartDate;
+						task.endDate = newEndDate;
+					}
 				}
 			}
 		}, {

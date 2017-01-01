@@ -841,7 +841,7 @@ class TaskListItem extends React.Component {
 	}
 	componentDidUpdate() {
 		let {task} = this.props;
-		const {taskType, isTaskNeedRepeat, startDateStr, endDateStr} = task;
+		const {taskType, isTaskNeedRepeat, startDateStr, endDateStr, isTaskCompleted} = task;
 		const startDate = moment(startDateStr);
 		const endDate = moment(endDateStr);
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
@@ -871,22 +871,23 @@ class TaskListItem extends React.Component {
 			}	
 		}
 
-
 		// judge the condition of task repeat
 		// forbid future tasktype
-		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
-			const normalStartDate = getTaskTypesMoment(taskType)[0];
+		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
+			const taskDateType = taskTypesDateType[taskType];
+			const normalStartDate = getTaskTypesMoment(taskType)[0].add(1, taskDateType);
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
 			const dateType = taskTypesDateType[taskType];
 			const timeInterval = startDate.startOf(dateType).diff(normalStartDate,dateType + 's');
 			const newStartDate = startDate.add(timeInterval, dateType + 's');
 			const newEndDate = endDate.add(timeInterval, dateType + 's');
 
-			task.isTaskCompleted = false;
-			task.startDate = newStartDate;
-			task.endDate = newEndDate;
+			if (isNeedChange) {
+				task.isTaskCompleted = false;
+				task.startDate = newStartDate;
+				task.endDate = newEndDate;
+			}
 		}
-
 	}
 	textClick() {
 		let {task} = this.props;
