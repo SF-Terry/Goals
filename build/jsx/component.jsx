@@ -21,7 +21,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 import storekeeper from '../js/storekeeper.js';
 
-import G, {getTaskTypesMoment, taskTypesDateType, windowWidth, windowHeight} from '../js/globalVarible.js';
+import G, {getTaskTypesMoment, taskTypesDateType, windowWidth, windowHeight, taskTypeToAddObj, longTaskTypes} from '../js/globalVarible.js';
 
 const {Item} = Menu;
 const {Row, Column} = Grid;
@@ -314,7 +314,7 @@ class TaskTypePanel extends React.Component {
  		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props;
 
  		this.state = {
- 			taskType: taskType,
+ 			taskType: taskTypeToAddObj.target,
  			isTaskNeedTimer: isTaskNeedTimer,
  			isTaskNeedRepeat: isTaskNeedRepeat,
  			isNeedTimeSetter: false,
@@ -346,9 +346,6 @@ class TaskTypePanel extends React.Component {
 					startDate:  getTaskTypesMoment(this.state.taskType)[0],
 					endDate:  getTaskTypesMoment(this.state.taskType)[1],
 				});
-
-				
-
 
 				if (!isLongTask) {
 					this.setState({
@@ -1186,6 +1183,17 @@ class TaskListContainer extends React.Component {
 		];
 		const defalutIsComplete = this.props.isCompleted;
 
+		// set taskTypeToAdd
+		const isLongTaskType = longTaskTypes.includes(taskType);
+		if (isLongTaskType) {
+			taskTypeToAddObj.long = taskType;
+		} else {
+			taskTypeToAddObj.day = taskType;
+		}
+		taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? taskTypeToAddObj.long : taskTypeToAddObj.day;
+
+
+
 		return (
 			<div className='TaskListContainer'>
 				<Grid padded>
@@ -1574,6 +1582,14 @@ class ToDoList extends React.Component {
 	}
 	tabChange(index) {
 		defaultSetting.tabIndex = index;
+
+		// set taskTypeToAdd
+		if (index === 0) {
+			taskTypeToAddObj.target = taskTypeToAddObj.long;
+		}
+		if (index === 1) {
+			taskTypeToAddObj.target = taskTypeToAddObj.day;
+		}
 	}
 	multiFunctionBtnCallback(o) {
 		const {isAddBtnTaped} = o;

@@ -69,7 +69,7 @@
 
 	'use strict';
 
-	var publishVersion = 1.0;
+	var publishVersion = 1.1;
 	var currentVersion = localStorage['version'] ? parseFloat(localStorage['version']) : 0;
 
 	// reset localstorage when new version published
@@ -9439,7 +9439,7 @@
 			    endDate = _this3$props.endDate;
 
 			_this3.state = {
-				taskType: taskType,
+				taskType: _globalVarible.taskTypeToAddObj.target,
 				isTaskNeedTimer: isTaskNeedTimer,
 				isTaskNeedRepeat: isTaskNeedRepeat,
 				isNeedTimeSetter: false,
@@ -10357,6 +10357,15 @@
 				var isCompletesOptions = [{ value: 1, text: '已完成' }, { value: 0, text: '未完成' }];
 				var defalutIsComplete = this.props.isCompleted;
 
+				// set taskTypeToAdd
+				var isLongTaskType = _globalVarible.longTaskTypes.includes(taskType);
+				if (isLongTaskType) {
+					_globalVarible.taskTypeToAddObj.long = taskType;
+				} else {
+					_globalVarible.taskTypeToAddObj.day = taskType;
+				}
+				_globalVarible.taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? _globalVarible.taskTypeToAddObj.long : _globalVarible.taskTypeToAddObj.day;
+
 				return _react2.default.createElement('div', { className: 'TaskListContainer' }, _react2.default.createElement(_semanticUiReact.Grid, { padded: true }, _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 7, verticalAlign: 'middle' }, _react2.default.createElement(TaskTypeSelector, { taskType: taskType, taskTypes: taskTypes, taskTypeSelectorCallback: this.taskTypeSelectorCallback })), _react2.default.createElement(Column, { width: 6, textAlign: 'right', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'isTaskCompletedSwitch' }, _react2.default.createElement(_reactFlexibleSwitch2.default, { value: isTaskCompleted,
 					labels: { on: '已完成', off: '未完成' },
 					circleStyles: { diameter: 24 },
@@ -10762,6 +10771,14 @@
 			key: 'tabChange',
 			value: function tabChange(index) {
 				defaultSetting.tabIndex = index;
+
+				// set taskTypeToAdd
+				if (index === 0) {
+					_globalVarible.taskTypeToAddObj.target = _globalVarible.taskTypeToAddObj.long;
+				}
+				if (index === 1) {
+					_globalVarible.taskTypeToAddObj.target = _globalVarible.taskTypeToAddObj.day;
+				}
 			}
 		}, {
 			key: 'multiFunctionBtnCallback',
@@ -72604,6 +72621,10 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
+	var _storekeeper = __webpack_require__(1241);
+
+	var _storekeeper2 = _interopRequireDefault(_storekeeper);
+
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -72613,6 +72634,8 @@
 			throw new TypeError("Cannot call a class as a function");
 		}
 	}
+
+	var defaultSetting = _storekeeper2.default.settings[0].defaultSetting;
 
 	var GlobalVarible = function () {
 		function GlobalVarible() {
@@ -72724,6 +72747,13 @@
 					default:
 						return getCurrentMoments('day');break;
 				}
+			};
+
+			// taskTypeToAdd: '长期目标' or '今日目标'...
+			this.taskTypeToAddObj = {
+				long: defaultSetting.longTask_taskType,
+				day: defaultSetting.dayTask_taskType,
+				target: defaultSetting.tabIndex === 0 ? defaultSetting.longTask_taskType : defaultSetting.dayTask_taskType
 			};
 
 			// window size

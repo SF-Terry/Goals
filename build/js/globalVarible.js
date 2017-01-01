@@ -1,4 +1,7 @@
 import moment from 'moment';
+import storekeeper from '../js/storekeeper.js';
+
+let defaultSetting = storekeeper.settings[0].defaultSetting;
 
 class GlobalVarible {
 	constructor() {
@@ -97,6 +100,13 @@ class GlobalVarible {
 			} 
 		};
 
+
+		// taskTypeToAdd: '长期目标' or '今日目标'...
+		this.taskTypeToAddObj = {
+			long: defaultSetting.longTask_taskType,
+			day: defaultSetting.dayTask_taskType,
+			target: defaultSetting.tabIndex === 0 ? defaultSetting.longTask_taskType : defaultSetting.dayTask_taskType
+		}; 
 
 		// window size
 		this.windowWidth = document.body.clientWidth;
