@@ -21,7 +21,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn.js';
 import storekeeper from '../js/storekeeper.js';
 
-import G, {taskTypesMoment, taskTypesDateType, windowWidth, windowHeight} from '../js/globalVarible.js';
+import G, {getTaskTypesMoment, taskTypesDateType, windowWidth, windowHeight} from '../js/globalVarible.js';
 
 const {Item} = Menu;
 const {Row, Column} = Grid;
@@ -309,7 +309,7 @@ class TaskTypePanel extends React.Component {
  	constructor(props) {
  		super(props);
 		
- 		const defaultTaskTypeMoments = taskTypesMoment['today'];
+ 		const defaultTaskTypeMoments = getTaskTypesMoment('today');
 
  		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props;
 
@@ -343,9 +343,12 @@ class TaskTypePanel extends React.Component {
 				taskType: value
 			}), () => {
 				this.setState({
-					startDate:  taskTypesMoment[this.state.taskType][0],
-					endDate:  taskTypesMoment[this.state.taskType][1],
+					startDate:  getTaskTypesMoment(this.state.taskType)[0],
+					endDate:  getTaskTypesMoment(this.state.taskType)[1],
 				});
+
+				
+
 
 				if (!isLongTask) {
 					this.setState({
@@ -385,8 +388,8 @@ class TaskTypePanel extends React.Component {
 			// hide  timeSetter and TimerPanel
 			this.setState({
 				isNeedTimeSetter: false,
-				startDate: taskTypesMoment[taskType][0],
-				endDate: taskTypesMoment[taskType][1]
+				startDate: getTaskTypesMoment(taskType)[0],
+				endDate: getTaskTypesMoment(taskType)[1]
 			});
 		}
 		
@@ -446,8 +449,8 @@ class TaskTypePanel extends React.Component {
 
 			if (!isTaskNeedTimer) {
 				this.setState({
-					startDate: taskTypesMoment[taskType][0],
-					endDate: taskTypesMoment[taskType][1]
+					startDate: getTaskTypesMoment(taskType)[0],
+					endDate: getTaskTypesMoment(taskType)[1]
 				});
 			}
 			if (taskType === 'long') {
@@ -478,7 +481,7 @@ class TaskTypePanel extends React.Component {
 		const isNotTaskType_Long = taskType != 'long';
 		const isNeedShowCheckboxGroup = isNotTaskType_Long;
 		const minDate = startDate;
-		const maxDate = isNotTaskType_Long ? taskTypesMoment[taskType][1] : moment().add(20, 'years');
+		const maxDate = isNotTaskType_Long ? getTaskTypesMoment(taskType)[1] : moment().add(20, 'years');
 		const {taskTypePanelCallback} = this.props;
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 
@@ -847,7 +850,7 @@ class TaskListItem extends React.Component {
 		/* initial items' prop */
 		// update future taskType
 		if (isFutureTaskType) {
-			const normalStartDate = taskTypesMoment[taskType][0];
+			const normalStartDate = getTaskTypesMoment(taskType)[0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
 			let newTaskType = null;
 			switch (taskType) {
@@ -870,7 +873,7 @@ class TaskListItem extends React.Component {
 		// forbid future tasktype
 
 		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
-			const normalStartDate = taskTypesMoment[taskType][0];
+			const normalStartDate = getTaskTypesMoment(taskType)[0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
 			const dateType = taskTypesDateType[taskType];
 			const timeInterval = startDate.startOf(dateType).diff(normalStartDate,dateType + 's');

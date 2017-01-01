@@ -74,29 +74,27 @@ class GlobalVarible {
 		const getCurrentMoments = dateType => ([moment().startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
 		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
 		const dayTaskTypeMoments = getCurrentMoments('day');
-		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 		const weekTaskTypeMoments = getCurrentMoments('week');
-		
-		console.log(4, weekTaskTypeMoments[0].format(), weekTaskTypeMoments[1].format());
-		console.log(5, moment().startOf('week').format(), moment().endOf('week').format());
-
 		const monthTaskTypeMoments = getCurrentMoments('month');
 		const yearTaskTypeMoments = getCurrentMoments('year');
 		const tomorrowTaskTypeMoments =  getNextMoments('day');
 		const nextWeekTaskTypeMoments =  getNextMoments('week');
 		const nextMonthTaskTypeMoments = getNextMoments('month');
 		const nextYearTaskTypeMoments =  getNextMoments('year');
-		this.taskTypesMoment = {
-			'today': dayTaskTypeMoments,
-			'long': longTaskTypeMoments,
-			'thisWeek': weekTaskTypeMoments,
-			'thisMonth': monthTaskTypeMoments,
-			'thisYear': yearTaskTypeMoments,
-			'tomorrow': tomorrowTaskTypeMoments,
-			'nextWeek': nextWeekTaskTypeMoments,
-			'nextMonth': nextMonthTaskTypeMoments,
-			'nextYear': nextYearTaskTypeMoments
+		this.getTaskTypesMoment = (dateType) => {
+			switch(dateType) {
+				case 'today': return getCurrentMoments('day'); break;
+				case 'long': return [moment(), moment().add(2, 'days').startOf('day')]; break;
+				case 'thisWeek': return getCurrentMoments('week'); break;
+				case 'thisMonth': return getCurrentMoments('month'); break;
+				case 'thisYear': return getCurrentMoments('year'); break;
+				case 'tomorrow': return getNextMoments('day'); break;
+				case 'nextWeek': return getNextMoments('week'); break;
+				case 'nextMonth': return getNextMoments('month'); break;
+				case 'nextYear': return getNextMoments('year'); break;
+				default: return getCurrentMoments('day'); break;
+			} 
 		};
 
 

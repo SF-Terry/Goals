@@ -9429,7 +9429,7 @@
 
 			var _this3 = _possibleConstructorReturn(this, (TaskTypePanel.__proto__ || Object.getPrototypeOf(TaskTypePanel)).call(this, props));
 
-			var defaultTaskTypeMoments = _globalVarible.taskTypesMoment['today'];
+			var defaultTaskTypeMoments = (0, _globalVarible.getTaskTypesMoment)('today');
 
 			var _this3$props = _this3.props,
 			    taskType = _this3$props.taskType,
@@ -9482,8 +9482,8 @@
 						};
 					}, function () {
 						_this4.setState({
-							startDate: _globalVarible.taskTypesMoment[_this4.state.taskType][0],
-							endDate: _globalVarible.taskTypesMoment[_this4.state.taskType][1]
+							startDate: (0, _globalVarible.getTaskTypesMoment)(_this4.state.taskType)[0],
+							endDate: (0, _globalVarible.getTaskTypesMoment)(_this4.state.taskType)[1]
 						});
 
 						if (!isLongTask) {
@@ -9529,8 +9529,8 @@
 					// hide  timeSetter and TimerPanel
 					this.setState({
 						isNeedTimeSetter: false,
-						startDate: _globalVarible.taskTypesMoment[taskType][0],
-						endDate: _globalVarible.taskTypesMoment[taskType][1]
+						startDate: (0, _globalVarible.getTaskTypesMoment)(taskType)[0],
+						endDate: (0, _globalVarible.getTaskTypesMoment)(taskType)[1]
 					});
 				}
 
@@ -9597,8 +9597,8 @@
 
 					if (!isTaskNeedTimer) {
 						this.setState({
-							startDate: _globalVarible.taskTypesMoment[taskType][0],
-							endDate: _globalVarible.taskTypesMoment[taskType][1]
+							startDate: (0, _globalVarible.getTaskTypesMoment)(taskType)[0],
+							endDate: (0, _globalVarible.getTaskTypesMoment)(taskType)[1]
 						});
 					}
 					if (taskType === 'long') {
@@ -9643,7 +9643,7 @@
 				var isNotTaskType_Long = taskType != 'long';
 				var isNeedShowCheckboxGroup = isNotTaskType_Long;
 				var minDate = startDate;
-				var maxDate = isNotTaskType_Long ? _globalVarible.taskTypesMoment[taskType][1] : (0, _moment2.default)().add(20, 'years');
+				var maxDate = isNotTaskType_Long ? (0, _globalVarible.getTaskTypesMoment)(taskType)[1] : (0, _moment2.default)().add(20, 'years');
 				var taskTypePanelCallback = this.props.taskTypePanelCallback;
 
 				var isFutureTaskType = _globalVarible2.default.futureTaskTypes.includes(taskType);
@@ -9993,7 +9993,7 @@
 				/* initial items' prop */
 				// update future taskType
 				if (isFutureTaskType) {
-					var normalStartDate = _globalVarible.taskTypesMoment[taskType][0];
+					var normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0];
 					var isNeedChange = (0, _moment2.default)().isSameOrAfter(normalStartDate);
 					var newTaskType = null;
 					switch (taskType) {
@@ -10017,7 +10017,7 @@
 				// forbid future tasktype
 
 				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
-					var _normalStartDate = _globalVarible.taskTypesMoment[taskType][0];
+					var _normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0];
 					var _isNeedChange = (0, _moment2.default)().isSameOrAfter(_normalStartDate);
 					var dateType = _globalVarible.taskTypesDateType[taskType];
 					var timeInterval = startDate.startOf(dateType).diff(_normalStartDate, dateType + 's');
@@ -72688,29 +72688,37 @@
 				return [(0, _moment2.default)().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), (0, _moment2.default)().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)];
 			};
 			var dayTaskTypeMoments = getCurrentMoments('day');
-			// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 			var longTaskTypeMoments = [(0, _moment2.default)(), (0, _moment2.default)().add(2, 'days').startOf('day')];
 			var weekTaskTypeMoments = getCurrentMoments('week');
-
-			console.log(4, weekTaskTypeMoments[0].format(), weekTaskTypeMoments[1].format());
-			console.log(5, (0, _moment2.default)().startOf('week').format(), (0, _moment2.default)().endOf('week').format());
-
 			var monthTaskTypeMoments = getCurrentMoments('month');
 			var yearTaskTypeMoments = getCurrentMoments('year');
 			var tomorrowTaskTypeMoments = getNextMoments('day');
 			var nextWeekTaskTypeMoments = getNextMoments('week');
 			var nextMonthTaskTypeMoments = getNextMoments('month');
 			var nextYearTaskTypeMoments = getNextMoments('year');
-			this.taskTypesMoment = {
-				'today': dayTaskTypeMoments,
-				'long': longTaskTypeMoments,
-				'thisWeek': weekTaskTypeMoments,
-				'thisMonth': monthTaskTypeMoments,
-				'thisYear': yearTaskTypeMoments,
-				'tomorrow': tomorrowTaskTypeMoments,
-				'nextWeek': nextWeekTaskTypeMoments,
-				'nextMonth': nextMonthTaskTypeMoments,
-				'nextYear': nextYearTaskTypeMoments
+			this.getTaskTypesMoment = function (dateType) {
+				switch (dateType) {
+					case 'today':
+						return getCurrentMoments('day');break;
+					case 'long':
+						return [(0, _moment2.default)(), (0, _moment2.default)().add(2, 'days').startOf('day')];break;
+					case 'thisWeek':
+						return getCurrentMoments('week');break;
+					case 'thisMonth':
+						return getCurrentMoments('month');break;
+					case 'thisYear':
+						return getCurrentMoments('year');break;
+					case 'tomorrow':
+						return getNextMoments('day');break;
+					case 'nextWeek':
+						return getNextMoments('week');break;
+					case 'nextMonth':
+						return getNextMoments('month');break;
+					case 'nextYear':
+						return getNextMoments('year');break;
+					default:
+						return getCurrentMoments('day');break;
+				}
 			};
 
 			// window size
