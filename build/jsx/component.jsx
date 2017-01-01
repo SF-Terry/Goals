@@ -1018,7 +1018,6 @@ class TaskList extends React.Component {
 	    	this.setState({
 	    		isShowTaskLists: true
 	    	});
-	    	// console.log('time updating');
 	    },1000);
 
 	}
@@ -1604,7 +1603,7 @@ class ToDoList extends React.Component {
 			this.setState({
 				isShowTaskInfo: false,
 				task: null
-			});
+			}); 
 		}
 	}
 	observeIsNeedShowTaskInfo() {

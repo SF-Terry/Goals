@@ -71,12 +71,16 @@ class GlobalVarible {
 
 
 		// set taskTypeMomentsObj
-		const getCurrentMoments = dateType => ([moment().startOf(dateType), moment().add(1, dateType + 's').startOf(dateType)]); 
-		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType), moment().add(2, dateType + 's').startOf(dateType)]); 
+		const getCurrentMoments = dateType => ([moment().startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
+		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
 		const dayTaskTypeMoments = getCurrentMoments('day');
 		// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 		const weekTaskTypeMoments = getCurrentMoments('week');
+		
+		console.log(4, weekTaskTypeMoments[0].format(), weekTaskTypeMoments[1].format());
+		console.log(5, moment().startOf('week').format(), moment().endOf('week').format());
+
 		const monthTaskTypeMoments = getCurrentMoments('month');
 		const yearTaskTypeMoments = getCurrentMoments('year');
 		const tomorrowTaskTypeMoments =  getNextMoments('day');

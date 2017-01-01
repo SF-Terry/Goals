@@ -10155,7 +10155,6 @@
 					_this10.setState({
 						isShowTaskLists: true
 					});
-					// console.log('time updating');
 				}, 1000);
 			}
 		}, {
@@ -72683,15 +72682,19 @@
 
 			// set taskTypeMomentsObj
 			var getCurrentMoments = function getCurrentMoments(dateType) {
-				return [(0, _moment2.default)().startOf(dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType)];
+				return [(0, _moment2.default)().startOf(dateType === 'week' ? 'isoWeek' : dateType), (0, _moment2.default)().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)];
 			};
 			var getNextMoments = function getNextMoments(dateType) {
-				return [(0, _moment2.default)().add(1, dateType + 's').startOf(dateType), (0, _moment2.default)().add(2, dateType + 's').startOf(dateType)];
+				return [(0, _moment2.default)().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), (0, _moment2.default)().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)];
 			};
 			var dayTaskTypeMoments = getCurrentMoments('day');
 			// const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 			var longTaskTypeMoments = [(0, _moment2.default)(), (0, _moment2.default)().add(2, 'days').startOf('day')];
 			var weekTaskTypeMoments = getCurrentMoments('week');
+
+			console.log(4, weekTaskTypeMoments[0].format(), weekTaskTypeMoments[1].format());
+			console.log(5, (0, _moment2.default)().startOf('week').format(), (0, _moment2.default)().endOf('week').format());
+
 			var monthTaskTypeMoments = getCurrentMoments('month');
 			var yearTaskTypeMoments = getCurrentMoments('year');
 			var tomorrowTaskTypeMoments = getNextMoments('day');
