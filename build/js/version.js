@@ -1,4 +1,4 @@
-const publishVersion = 1.1;
+const publishVersion = 1.0;
 const currentVersion = localStorage['version'] ? parseFloat(localStorage['version']) : 0;
 
 // reset localstorage when new version published

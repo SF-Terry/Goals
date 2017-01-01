@@ -69,7 +69,7 @@
 
 	'use strict';
 
-	var publishVersion = 1.1;
+	var publishVersion = 1.0;
 	var currentVersion = localStorage['version'] ? parseFloat(localStorage['version']) : 0;
 
 	// reset localstorage when new version published
@@ -9973,6 +9973,7 @@
 			_this8.inputChange = _this8.inputChange.bind(_this8);
 			_this8.deleteBtnClick = _this8.deleteBtnClick.bind(_this8);
 			_this8.completeCheckboxClick = _this8.completeCheckboxClick.bind(_this8);
+			_this8.labelClick = _this8.labelClick.bind(_this8);
 			return _this8;
 		}
 
@@ -10037,6 +10038,18 @@
 		}, {
 			key: 'textClick',
 			value: function textClick() {
+				var task = this.props.task;
+
+				observe_taskInfo.setting = {
+					isShowTaskInfo: true,
+					taskInfoMode: _globalVarible2.default.taskInfoMode.edit,
+					task: task,
+					isTransporting: true
+				};
+			}
+		}, {
+			key: 'labelClick',
+			value: function labelClick() {
 				var task = this.props.task;
 
 				observe_taskInfo.setting = {
@@ -10120,7 +10133,7 @@
 
 				return _react2.default.createElement(Item, null, _react2.default.createElement(_semanticUiReact.Grid, null, !editMode ?
 				// normal mode
-				_react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: !isTaskCompleted ? 8 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 6, textAlign: 'right', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'taskTimeLabel', color: color }, (0, _tool.getLabelTextByMoments)(task), '\xA0', isTaskNeedRepeat ? _react2.default.createElement(_semanticUiReact.Icon, { name: 'repeat', size: 'mini' }) : null)) : '', _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { checked: isTaskCompleted, onClick: this.completeCheckboxClick }))) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
+				_react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: !isTaskCompleted ? 8 : 14, verticalAlign: 'middle' }, _react2.default.createElement('div', { onClick: this.textClick }, taskName)), !isTaskCompleted ? _react2.default.createElement(Column, { width: 6, textAlign: 'right', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Label, { className: 'taskTimeLabel', color: color, onClick: this.labelClick }, (0, _tool.getLabelTextByMoments)(task), '\xA0', isTaskNeedRepeat ? _react2.default.createElement(_semanticUiReact.Icon, { name: 'repeat', size: 'mini' }) : null)) : '', _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Checkbox, { checked: isTaskCompleted, onClick: this.completeCheckboxClick }))) : _react2.default.createElement(Row, null, _react2.default.createElement(Column, { width: 3, textAlign: 'center', verticalAlign: 'middle' }, _react2.default.createElement(_semanticUiReact.Icon, { size: 'large', color: 'red', name: 'minus circle', onClick: this.deleteBtnClick })), _react2.default.createElement(Column, { width: 13 }, _react2.default.createElement(_semanticUiReact.Input, { fluid: true, className: 'Tasklist_TaskNameInput', defaultValue: taskName, onChange: this.inputChange })))));
 			}
 		}]);
 

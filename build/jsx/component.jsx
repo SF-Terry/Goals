@@ -835,6 +835,7 @@ class TaskListItem extends React.Component {
 		this.inputChange = this.inputChange.bind(this);
 		this.deleteBtnClick = this.deleteBtnClick.bind(this);
 		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
+		this.labelClick = this.labelClick.bind(this);
 	}
 	componentDidUpdate() {
 		let {task} = this.props;
@@ -887,6 +888,16 @@ class TaskListItem extends React.Component {
 		}
 	}
 	textClick() {
+		let {task} = this.props;
+
+		observe_taskInfo.setting = {
+			isShowTaskInfo: true,
+			taskInfoMode: G.taskInfoMode.edit,
+			task: task,
+			isTransporting: true
+		}
+	}
+	labelClick() {
 		let {task} = this.props;
 
 		observe_taskInfo.setting = {
@@ -966,7 +977,7 @@ class TaskListItem extends React.Component {
 							</Column>
 							{!isTaskCompleted ? (
 								<Column width={6} textAlign='right' verticalAlign='middle'>
-									<Label className='taskTimeLabel' color={color}>
+									<Label className='taskTimeLabel' color={color} onClick={this.labelClick}>
 										{getLabelTextByMoments(task)}
 										&nbsp;
 										{isTaskNeedRepeat ? (
