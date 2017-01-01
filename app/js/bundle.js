@@ -9977,8 +9977,8 @@
 		}
 
 		_createClass(TaskListItem, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
+			key: 'componentDidUpdate',
+			value: function componentDidUpdate() {
 				var task = this.props.task;
 				var taskType = task.taskType,
 				    isTaskNeedRepeat = task.isTaskNeedRepeat,
@@ -9992,30 +9992,32 @@
 
 				/* initial items' prop */
 				// update future taskType
+				// console.log(1, task.name, isFutureTaskType);
 				if (isFutureTaskType) {
 					var normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0];
 					var isNeedChange = (0, _moment2.default)().isSameOrAfter(normalStartDate);
 					var newTaskType = null;
-					switch (taskType) {
-						case 'tomorrow':
-							newTaskType = 'today';break;
-						case 'nextWeek':
-							newTaskType = 'thisWeek';break;
-						case 'nextMonth':
-							newTaskType = 'thisMonth';break;
-						case 'nextYear':
-							newTaskType = 'thisYear';break;
-						default:
-							break;
-					}
-					if (newTaskType) {
-						task.taskType = newTaskType;
+					if (isNeedChange) {
+						switch (taskType) {
+							case 'tomorrow':
+								newTaskType = 'today';break;
+							case 'nextWeek':
+								newTaskType = 'thisWeek';break;
+							case 'nextMonth':
+								newTaskType = 'thisMonth';break;
+							case 'nextYear':
+								newTaskType = 'thisYear';break;
+							default:
+								break;
+						}
+						if (newTaskType) {
+							task.taskType = newTaskType;
+						}
 					}
 				}
 
 				// judge the condition of task repeat
 				// forbid future tasktype
-
 				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
 					var _normalStartDate = (0, _globalVarible.getTaskTypesMoment)(taskType)[0];
 					var _isNeedChange = (0, _moment2.default)().isSameOrAfter(_normalStartDate);

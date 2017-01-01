@@ -839,7 +839,7 @@ class TaskListItem extends React.Component {
 		this.deleteBtnClick = this.deleteBtnClick.bind(this);
 		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
 	}
-	componentDidMount() {
+	componentDidUpdate() {
 		let {task} = this.props;
 		const {taskType, isTaskNeedRepeat, startDateStr, endDateStr} = task;
 		const startDate = moment(startDateStr);
@@ -849,29 +849,32 @@ class TaskListItem extends React.Component {
 
 		/* initial items' prop */
 		// update future taskType
+		// console.log(1, task.name, isFutureTaskType);
 		if (isFutureTaskType) {
 			const normalStartDate = getTaskTypesMoment(taskType)[0];
-			const isNeedChange = moment().isSameOrAfter(normalStartDate)
+			const isNeedChange = moment().isSameOrAfter(normalStartDate);
 			let newTaskType = null;
-			switch (taskType) {
-				case 'tomorrow': 
-					newTaskType = 'today'; break;
-				case 'nextWeek': 
-					newTaskType = 'thisWeek'; break;
-				case 'nextMonth': 
-					newTaskType = 'thisMonth'; break;
-				case 'nextYear': 
-					newTaskType = 'thisYear'; break;
-				default: break;
-			}
-			if (newTaskType) {
-				task.taskType = newTaskType;
-			}
+			if (isNeedChange) {
+				switch (taskType) {
+					case 'tomorrow': 
+						newTaskType = 'today'; break;
+					case 'nextWeek': 
+						newTaskType = 'thisWeek'; break;
+					case 'nextMonth': 
+						newTaskType = 'thisMonth'; break;
+					case 'nextYear': 
+						newTaskType = 'thisYear'; break;
+					default: break;
+				}
+				if (newTaskType) {
+					task.taskType = newTaskType;
+				}	
+			}	
 		}
+
 
 		// judge the condition of task repeat
 		// forbid future tasktype
-
 		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask) {
 			const normalStartDate = getTaskTypesMoment(taskType)[0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
