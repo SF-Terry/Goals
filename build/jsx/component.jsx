@@ -849,7 +849,6 @@ class TaskListItem extends React.Component {
 
 		/* initial items' prop */
 		// update future taskType
-		// console.log(1, task.name, isFutureTaskType);
 		if (isFutureTaskType) {
 			const normalStartDate = getTaskTypesMoment(taskType)[0];
 			const isNeedChange = moment().isSameOrAfter(normalStartDate);
@@ -979,7 +978,7 @@ class TaskListItem extends React.Component {
 								</Column>
 							) : ''}
 							<Column width={2} textAlign='center' verticalAlign='middle'>
-								<Checkbox defaultChecked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
+								<Checkbox checked={isTaskCompleted} onClick={this.completeCheckboxClick}/>
 							</Column>
 							
 						</Row>
