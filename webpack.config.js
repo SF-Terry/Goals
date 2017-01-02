@@ -20,7 +20,18 @@ var config = {
   },
   resolve: {
     extensions: ['', '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json'],
-  }
+  },
+
+  // solve the problem that bundle.js is too big
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('vendor',  'vendor.js'),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ]
 };
 
 module.exports = config;
