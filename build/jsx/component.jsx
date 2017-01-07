@@ -845,33 +845,16 @@ class TaskListItem extends React.Component {
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
 		const isLongTask = taskType === 'long';
 
+
 		/* initial items' prop */
-		// update future taskType
-		if (isFutureTaskType) {
-			const normalStartDate = getTaskTypesMoment(taskType)[0];
-			const isNeedChange = moment().isSameOrAfter(normalStartDate);
-			let newTaskType = null;
-			if (isNeedChange) {
-				switch (taskType) {
-					case 'tomorrow': 
-						newTaskType = 'today'; break;
-					case 'nextWeek': 
-						newTaskType = 'thisWeek'; break;
-					case 'nextMonth': 
-						newTaskType = 'thisMonth'; break;
-					case 'nextYear': 
-						newTaskType = 'thisYear'; break;
-					default: break;
-				}
-				if (newTaskType) {
-					task.taskType = newTaskType;
-				}	
-			}	
-		}
+
 
 		// judge the condition of task repeat
 		// forbid future tasktype
 		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
+
+
+
 			const taskDateType = taskTypesDateType[taskType];
 			const normalStartDate = getTaskTypesMoment(taskType)[0].add(1, taskDateType);
 			const isNeedChange = moment().isSameOrAfter(normalStartDate)
@@ -1032,7 +1015,37 @@ class TaskList extends React.Component {
 	    	this.setState({
 	    		isShowTaskLists: true
 	    	});
-	    },1000);
+
+	    	// update future taskType
+			tasks.forEach( task => {
+				const {taskType} = task; 
+				const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+
+				if (isFutureTaskType) {
+					const taskDateType = taskTypesDateType[taskType]
+					const normalStartDate = moment(task.startDate).startOf(taskDateType);
+					const isNeedChange = moment().isSameOrAfter(normalStartDate);
+					let newTaskType = null;
+					if (isNeedChange) {
+						switch (taskType) {
+							case 'tomorrow': 
+								newTaskType = 'today'; break;
+							case 'nextWeek': 
+								newTaskType = 'thisWeek'; break;
+							case 'nextMonth': 
+								newTaskType = 'thisMonth'; break;
+							case 'nextYear': 
+								newTaskType = 'thisYear'; break;
+							default: break;
+						}
+						if (newTaskType) {
+							task.taskType = newTaskType;
+						}	
+					}	
+				}
+			} );
+
+	    },3000);
 
 	}
 
