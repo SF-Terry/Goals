@@ -837,39 +837,6 @@ class TaskListItem extends React.Component {
 		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
 		this.labelClick = this.labelClick.bind(this);
 	}
-	componentDidUpdate() {
-		let {task} = this.props;
-		const {taskType, isTaskNeedRepeat, startDateStr, endDateStr, isTaskCompleted} = task;
-		const startDate = moment(startDateStr);
-		const endDate = moment(endDateStr);
-		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
-		const isLongTask = taskType === 'long';
-
-
-		/* initial items' prop */
-
-
-		// judge the condition of task repeat
-		// forbid future tasktype
-		if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
-
-
-
-			const taskDateType = taskTypesDateType[taskType];
-			const normalStartDate = getTaskTypesMoment(taskType)[0].add(1, taskDateType);
-			const isNeedChange = moment().isSameOrAfter(normalStartDate)
-			const dateType = taskTypesDateType[taskType];
-			const timeInterval = startDate.startOf(dateType).diff(normalStartDate,dateType + 's');
-			const newStartDate = startDate.add(timeInterval, dateType + 's');
-			const newEndDate = endDate.add(timeInterval, dateType + 's');
-
-			if (isNeedChange) {
-				task.isTaskCompleted = false;
-				task.startDate = newStartDate;
-				task.endDate = newEndDate;
-			}
-		}
-	}
 	textClick() {
 		let {task} = this.props;
 
@@ -1016,11 +983,13 @@ class TaskList extends React.Component {
 	    		isShowTaskLists: true
 	    	});
 
-	    	// update future taskType
+	    	// update future taskType and show or do not show based on the condition of task repeat
 			tasks.forEach( task => {
-				const {taskType} = task; 
+				const {taskType, isTaskNeedRepeat, isTaskCompleted} = task;
 				const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+				const isLongTask = taskType === 'long';
 
+				// update future taskType
 				if (isFutureTaskType) {
 					const taskDateType = taskTypesDateType[taskType]
 					const normalStartDate = moment(task.startDate).startOf(taskDateType);
@@ -1042,6 +1011,25 @@ class TaskList extends React.Component {
 							task.taskType = newTaskType;
 						}	
 					}	
+				}
+				
+				// judge the condition of task repeat
+				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
+					const startDate = moment(task.startDate);
+					const endDate = moment(task.endDate);
+					const taskDateType = taskTypesDateType[taskType];
+					const normalStartDate = moment(endDate.format()).endOf(taskDateType);
+					const isNeedChange = moment().isSameOrAfter(normalStartDate)
+					const timeInterval = moment().startOf(taskDateType).diff(moment(startDate.format()).startOf(taskDateType), taskDateType + 's');
+					const newStartDate = moment(startDate.format()).add(timeInterval, taskDateType + 's');
+					const newEndDate = moment(endDate.format()).add(timeInterval, taskDateType + 's');
+
+					if (isNeedChange) {
+						task.isTaskCompleted = false;
+						task.startDate = newStartDate;
+						task.endDate = newEndDate;
+
+					}
 				}
 			} );
 
