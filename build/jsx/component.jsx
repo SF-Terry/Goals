@@ -450,11 +450,11 @@ class TaskTypePanel extends React.Component {
 					endDate: getTaskTypesMoment(taskType)[1]
 				});
 			}
-			if (taskType === 'long') {
+			/*if (taskType === 'long') {
 				this.setState({
 					taskType: G.defaultTaskType
 				});
-			}
+			}*/
 		}
 	}
 	startDatePanelClick() {
@@ -470,18 +470,32 @@ class TaskTypePanel extends React.Component {
 		});
 	}
 	render() {
-		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType, startDate, endDate} = this.state;
+		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, timeSetterTimeType} = this.state;
+
+		let startDate = this.state.startDate;
+		let endDate = this.state.endDate;
 		const taskTypesOptions = G.taskTypes.map((item, index) => {
 			let text = getLanguageTextByTaskType(item);			
 			return {text: text, value: item};
 		});
 		const isNotTaskType_Long = taskType != 'long';
-		const isNeedShowCheckboxGroup = isNotTaskType_Long;
 		const minDate = startDate;
-		const maxDate = isNotTaskType_Long ? getTaskTypesMoment(taskType)[1] : moment().add(20, 'years');
+		const maxDate = isNotTaskType_Long ? getTaskTypesMoment(taskType)[1] : moment().add(100, 'years');
+		// const maxDate = getTaskTypesMoment(taskType)[1];
+
+		// when task's type is 'long', change endDate 
+		if (!isNotTaskType_Long) {
+			if (!isTaskNeedTimer) {
+				endDate = moment().add(1000, 'years');
+			}
+			// set endDate to normal date
+			if (!isTaskNeedTimer && isNeedTimeSetter) {
+				endDate = getTaskTypesMoment(taskType)[1];
+			}
+		}
+
 		const {taskTypePanelCallback} = this.props;
 		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
-
 
 		if (taskTypePanelCallback) {
 			taskTypePanelCallback({
@@ -501,12 +515,12 @@ class TaskTypePanel extends React.Component {
 							<Dropdown fluid selection value={taskType} options={taskTypesOptions} onChange={this.taskTypeDropdownChange} ></Dropdown>
 						</Column>
 					</Row>
-					{isNeedShowCheckboxGroup ? (
+					{/*isNeedShowCheckboxGroup*/true ? (
 						<Row centered>
 							<Column width={8} textAlign='center'>
 								<Checkbox label='定时' checked={isTaskNeedTimer} onClick={this.isTaskNeedTimerCheckboxClick} />
 							</Column>
-							{!isFutureTaskType ? (
+							{!isFutureTaskType && isNotTaskType_Long ? (
 								<Column width={8} textAlign='center'>
 									<Checkbox label='重复' checked={isTaskNeedRepeat} onClick={this.isTaskNeedRepeatClick} />
 								</Column>
@@ -692,6 +706,7 @@ class TaskInfo extends React.Component {
 	}
 	taskTypePanelCallback(o) {
 		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = o;
+
 		if (taskType) {
 			this.tempTask.taskType = taskType;
 		}
