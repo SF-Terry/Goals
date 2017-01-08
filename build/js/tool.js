@@ -2,6 +2,25 @@ import G from '../js/globalVarible.js';
 import moment from 'moment';
 
 const tool = {
+
+	// observer
+	observe_taskInfo: {
+		setting: {
+			isShowTaskInfo: false,
+			taskInfoMode: G.taskInfoMode.add,
+			task: null,
+			isTransporting: false
+		}
+	},
+	observe_message: {
+		setting: {
+			isShowMessage: false,
+			message: '',
+			color: 'red'
+		}
+	},
+
+
 	// singleton design mode
 	getSingle:  fn => {
 	    var result = null;

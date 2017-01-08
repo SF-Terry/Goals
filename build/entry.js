@@ -5,8 +5,7 @@ require('./js/version.js');
 require('babel-polyfill');
 
 // jsx
-require('./jsx/component.jsx');
-require('./jsx/composition.jsx');
+require('./jsx/app.jsx');
  
 
 // sass
