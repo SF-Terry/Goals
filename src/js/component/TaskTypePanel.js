@@ -9,7 +9,7 @@ import tool from '../util/tool'
 
 import moment from 'moment'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 
 
@@ -32,16 +32,16 @@ class TaskTypePanel extends React.Component {
  	constructor(props) {
  		super(props)
 		
- 		const defaultTaskTypeMoments = G.getTaskTypesMoment('today')
+ 		const defaultTaskTypeMoments = GV.getTaskTypesMoment('today')
 
  		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, startDate, endDate} = this.props
 
  		this.state = {
- 			taskType: G.taskTypeToAddObj.target,
+ 			taskType: GV.taskTypeToAddObj.target,
  			isTaskNeedTimer: isTaskNeedTimer,
  			isTaskNeedRepeat: isTaskNeedRepeat,
  			isNeedTimeSetter: false,
- 			timeSetterTimeType: G.timeSetterTimeType.start,
+ 			timeSetterTimeType: GV.timeSetterTimeType.start,
  			/* parse task's string startdate and end date */
  			startDate: startDate ? moment(startDate) : defaultTaskTypeMoments[0],
  			endDate: endDate ? moment(endDate) : defaultTaskTypeMoments[1]
@@ -66,8 +66,8 @@ class TaskTypePanel extends React.Component {
 				taskType: value
 			}), () => {
 				this.setState({
-					startDate:  G.getTaskTypesMoment(this.state.taskType)[0],
-					endDate:  G.getTaskTypesMoment(this.state.taskType)[1],
+					startDate:  GV.getTaskTypesMoment(this.state.taskType)[0],
+					endDate:  GV.getTaskTypesMoment(this.state.taskType)[1],
 				})
 
 				if (!isLongTask) {
@@ -96,7 +96,7 @@ class TaskTypePanel extends React.Component {
 		const checked = result.checked
 		let {task} = this.props
 		const {isNeedTimeSetter, taskType} = this.state
-		const isFutureTaskType = G.futureTaskTypes.includes(taskType)
+		const isFutureTaskType = GV.futureTaskTypes.includes(taskType)
 
 		/* @Tansporting checked value: Only when past checked is true that change checked to false, if past checked is false, needing isConfirmSetting to change it */
 		// if past checked is true 
@@ -108,8 +108,8 @@ class TaskTypePanel extends React.Component {
 			// hide  timeSetter and TimerPanel
 			this.setState({
 				isNeedTimeSetter: false,
-				startDate: G.getTaskTypesMoment(taskType)[0],
-				endDate: G.getTaskTypesMoment(taskType)[1]
+				startDate: GV.getTaskTypesMoment(taskType)[0],
+				endDate: GV.getTaskTypesMoment(taskType)[1]
 			})
 		}
 		
@@ -117,7 +117,7 @@ class TaskTypePanel extends React.Component {
 		if (!checked) {
 			this.setState({
 				isNeedTimeSetter: true,
-				timeSetterTimeType: G.timeSetterTimeType.start,
+				timeSetterTimeType: GV.timeSetterTimeType.start,
 			})
 
 			if (!isFutureTaskType) {
@@ -169,13 +169,13 @@ class TaskTypePanel extends React.Component {
 
 			if (!isTaskNeedTimer) {
 				this.setState({
-					startDate: G.getTaskTypesMoment(taskType)[0],
-					endDate: G.getTaskTypesMoment(taskType)[1]
+					startDate: GV.getTaskTypesMoment(taskType)[0],
+					endDate: GV.getTaskTypesMoment(taskType)[1]
 				})
 			}
 			/*if (taskType === 'long') {
 				this.setState({
-					taskType: G.defaultTaskType
+					taskType: GV.defaultTaskType
 				})
 			}*/
 		}
@@ -183,13 +183,13 @@ class TaskTypePanel extends React.Component {
 	startDatePanelClick() {
 		this.setState({
 			isNeedTimeSetter: true,
-			timeSetterTimeType: G.timeSetterTimeType.start
+			timeSetterTimeType: GV.timeSetterTimeType.start
 		})
 	}
 	endDatePanelClick() {
 		this.setState({
 			isNeedTimeSetter: true,
-			timeSetterTimeType: G.timeSetterTimeType.end
+			timeSetterTimeType: GV.timeSetterTimeType.end
 		})
 	}
 	render() {
@@ -197,14 +197,14 @@ class TaskTypePanel extends React.Component {
 
 		let startDate = this.state.startDate
 		let endDate = this.state.endDate
-		const taskTypesOptions = G.taskTypes.map((item, index) => {
+		const taskTypesOptions = GV.taskTypes.map((item, index) => {
 			let text = tool.getLanguageTextByTaskType(item)			
 			return {text: text, value: item}
 		})
 		const isNotTaskType_Long = taskType != 'long'
 		const minDate = startDate
-		const maxDate = isNotTaskType_Long ? G.getTaskTypesMoment(taskType)[1] : moment().add(100, 'years')
-		// const maxDate = G.getTaskTypesMoment(taskType)[1]
+		const maxDate = isNotTaskType_Long ? GV.getTaskTypesMoment(taskType)[1] : moment().add(100, 'years')
+		// const maxDate = GV.getTaskTypesMoment(taskType)[1]
 
 		// when task's type is 'long', change endDate 
 		if (!isNotTaskType_Long) {
@@ -213,12 +213,12 @@ class TaskTypePanel extends React.Component {
 			}
 			// set endDate to normal date
 			if (!isTaskNeedTimer && isNeedTimeSetter) {
-				endDate = G.getTaskTypesMoment(taskType)[1]
+				endDate = GV.getTaskTypesMoment(taskType)[1]
 			}
 		}
 
 		const {taskTypePanelCallback} = this.props
-		const isFutureTaskType = G.futureTaskTypes.includes(taskType)
+		const isFutureTaskType = GV.futureTaskTypes.includes(taskType)
 
 		if (taskTypePanelCallback) {
 			taskTypePanelCallback({

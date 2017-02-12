@@ -22993,7 +22993,7 @@
 					}
 					/*if (taskType === 'long') {
 	    	this.setState({
-	    		taskType: G.defaultTaskType
+	    		taskType: GV.defaultTaskType
 	    	})
 	    }*/
 				}
@@ -23034,7 +23034,7 @@
 				var isNotTaskType_Long = taskType != 'long';
 				var minDate = startDate;
 				var maxDate = isNotTaskType_Long ? _globalVarible2.default.getTaskTypesMoment(taskType)[1] : (0, _moment2.default)().add(100, 'years');
-				// const maxDate = G.getTaskTypesMoment(taskType)[1]
+				// const maxDate = GV.getTaskTypesMoment(taskType)[1]
 
 				// when task's type is 'long', change endDate 
 				if (!isNotTaskType_Long) {
@@ -23193,7 +23193,7 @@
 	 * @receiveProps {moment} minDate - current minDate
 	 * @receiveProps {moment} startDate - current startDate
 	 * @receiveProps {moment} endDate - current endDate
-	 * @receiveProps {string} timeType - G.timeSetterTimeType.start or G.timeSetterTimeType.end
+	 * @receiveProps {string} timeType - GV.timeSetterTimeType.start or GV.timeSetterTimeType.end
 	 * @receiveProps {bool} isNeedShow - show or hide
 	 * @receiveProps {function} timeSetterCallback 
 	 	@callback {moment} startDate - current startDate

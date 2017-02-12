@@ -9,7 +9,7 @@ import tool from '../util/tool'
 
 import moment from 'moment'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 
 /**
@@ -18,7 +18,7 @@ import G from '../util/globalVarible'
  * @receiveProps {moment} minDate - current minDate
  * @receiveProps {moment} startDate - current startDate
  * @receiveProps {moment} endDate - current endDate
- * @receiveProps {string} timeType - G.timeSetterTimeType.start or G.timeSetterTimeType.end
+ * @receiveProps {string} timeType - GV.timeSetterTimeType.start or GV.timeSetterTimeType.end
  * @receiveProps {bool} isNeedShow - show or hide
  * @receiveProps {function} timeSetterCallback 
  	@callback {moment} startDate - current startDate
@@ -29,7 +29,7 @@ import G from '../util/globalVarible'
 class TimeSetter extends React.Component {
 	constructor(props) {
 		super(props)
-		this.timeType = this.props.timeType || G.timeSetterTimeType.start
+		this.timeType = this.props.timeType || GV.timeSetterTimeType.start
 
 		this.state = {
 			timeType: this.timeType,
@@ -46,12 +46,12 @@ class TimeSetter extends React.Component {
 	}
 	startTimeBtnClick() {
 		this.setState({
-			timeType: G.timeSetterTimeType.start
+			timeType: GV.timeSetterTimeType.start
 		})
 	}
 	endTimeBtnClick() {
 		this.setState({
-			timeType: G.timeSetterTimeType.end
+			timeType: GV.timeSetterTimeType.end
 		})
 	}
 	cancelBtnClick() {
@@ -109,8 +109,8 @@ class TimeSetter extends React.Component {
 	render() {
 		const {props} = this
 		const {timeType, isNeedShow} = this.state	 
-		const isStartTime = timeType === G.timeSetterTimeType.start
-		const isEndTime = timeType === G.timeSetterTimeType.end
+		const isStartTime = timeType === GV.timeSetterTimeType.start
+		const isEndTime = timeType === GV.timeSetterTimeType.end
 
 		const minDate = props.minDate
 		const maxDate = props.maxDate
@@ -121,8 +121,8 @@ class TimeSetter extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: G.windowWidth,
-				height: G.windowHeight,
+				width: GV.windowWidth,
+				height: GV.windowHeight,
 				display: isNeedShow ? 'block' : 'none'
 			}}>
 				<Grid style={{marginTop: "20px"}}>

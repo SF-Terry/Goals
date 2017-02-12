@@ -18,7 +18,7 @@ import tool from '../util/tool'
 
 import moment from 'moment'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks
@@ -37,7 +37,7 @@ class ToDoList extends React.Component {
 			tasks.push({
 				name: '第一个今日目标',
 				taskType: 'today',
-				taskLevel: G.taskLevels.a,
+				taskLevel: GV.taskLevels.a,
 				isTaskCompleted: false,
 				isTaskNeedTimer: true,
 				isTaskNeedRepeat: false,
@@ -48,7 +48,7 @@ class ToDoList extends React.Component {
 			tasks.push({
 				name: '第一个长期目标',
 				taskType: 'long',
-				taskLevel: G.taskLevels.b,
+				taskLevel: GV.taskLevels.b,
 				isTaskCompleted: false,
 				isTaskNeedTimer: true,
 				isTaskNeedRepeat: false,
@@ -59,7 +59,7 @@ class ToDoList extends React.Component {
 		}
 
 		this.state = {
-			taskInfoMode: G.taskInfoMode.add,
+			taskInfoMode: GV.taskInfoMode.add,
 			isShowTaskInfo: false,
 			// Message
 			isShowMessage: false,
@@ -80,10 +80,10 @@ class ToDoList extends React.Component {
 
 		// set taskTypeToAdd
 		if (index === 0) {
-			G.taskTypeToAddObj.target = G.taskTypeToAddObj.long
+			GV.taskTypeToAddObj.target = GV.taskTypeToAddObj.long
 		}
 		if (index === 1) {
-			G.taskTypeToAddObj.target = G.taskTypeToAddObj.day
+			GV.taskTypeToAddObj.target = GV.taskTypeToAddObj.day
 		}
 	}
 	multiFunctionBtnCallback(o) {
@@ -91,7 +91,7 @@ class ToDoList extends React.Component {
 
 		if (isAddBtnTaped != undefined && isAddBtnTaped) {
 			this.setState({
-				taskInfoMode:  G.taskInfoMode.add,
+				taskInfoMode:  GV.taskInfoMode.add,
 				isShowTaskInfo: true,
 				task: null
 			})
@@ -109,7 +109,7 @@ class ToDoList extends React.Component {
 			this.setState({
 				isShowTaskInfo: false,
 				task: null,
-				taskInfoMode: G.taskInfoMode.add
+				taskInfoMode: GV.taskInfoMode.add
 			},  () => {
 					this.setState({
 						isShowTaskInfo: true
@@ -169,7 +169,7 @@ class ToDoList extends React.Component {
 				{isShowMessage ? (
 					<div className='message' style={{
 						position: 'fixed',
-						width: G.windowWidth
+						width: GV.windowWidth
 					}}>
 						<Message color={messageColor} content={message} />
 					</div>

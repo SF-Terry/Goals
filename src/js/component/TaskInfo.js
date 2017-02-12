@@ -8,7 +8,7 @@ const {Row, Column} = Grid
 
 import tool from '../util/tool'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks
@@ -29,10 +29,10 @@ class TaskInfo extends React.Component {
 
 		const {mode} = this.props
 
-		this.tempTask = mode === G.taskInfoMode.add ? Object.assign({}, G.initialTask) : Object.assign({}, this.props.task)
+		this.tempTask = mode === GV.taskInfoMode.add ? Object.assign({}, GV.initialTask) : Object.assign({}, this.props.task)
 
 		// add task sortNum
-		if (mode === G.taskInfoMode.add) {
+		if (mode === GV.taskInfoMode.add) {
 			this.tempTask.sortNum = tasks.length + 1
 		}
 
@@ -54,8 +54,8 @@ class TaskInfo extends React.Component {
 	completeBtnClick() {
 		const {taskInfoCallback} = this.props
 		const {mode} = this.props
-		const isAddMode = mode === G.taskInfoMode.add
-		const isEditMode = mode === G.taskInfoMode.edit
+		const isAddMode = mode === GV.taskInfoMode.add
+		const isEditMode = mode === GV.taskInfoMode.edit
 		let task = this.props.task
 		const {name} = this.tempTask
 
@@ -112,7 +112,7 @@ class TaskInfo extends React.Component {
 	// add mode
 	continueToAddBtn() {
 		const {taskInfoCallback, mode} = this.props
-		const isAddMode = mode === G.taskInfoMode.add
+		const isAddMode = mode === GV.taskInfoMode.add
 		let task = this.props.task
 		const {name} = this.tempTask
 
@@ -148,7 +148,7 @@ class TaskInfo extends React.Component {
 		}
 	}
 	render() {
-		const {mode} = this.props || G.taskInfoMode.add
+		const {mode} = this.props || GV.taskInfoMode.add
 		const {name, taskLevel, taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = this.tempTask
 
 		return (
@@ -156,8 +156,8 @@ class TaskInfo extends React.Component {
 				position: 'fixed',
 				left: 0,
 				top: 0,
-				width: G.windowWidth,
-				height: G.windowHeight
+				width: GV.windowWidth,
+				height: GV.windowHeight
 			}}>
 				<Grid padded>
 					{/*<Row>
@@ -168,7 +168,7 @@ class TaskInfo extends React.Component {
 					<Row centered>
 						<Column width={14}>
 							<Input id='taskInfo_taskNameInput' defaultValue={name} placeholder='任务内容' onChange={this.taskNameInputChange} fluid ref={(o) => {
-								if (o && o.props && o.props.id && mode == G.taskInfoMode.add) {
+								if (o && o.props && o.props.id && mode == GV.taskInfoMode.add) {
 									let inputDom = document.getElementById(o.props.id).children[0]
 									inputDom.focus()
 								}
@@ -196,7 +196,7 @@ class TaskInfo extends React.Component {
 								</Row>
 
 								{/* add mode */}
-								{mode === G.taskInfoMode.add ? (
+								{mode === GV.taskInfoMode.add ? (
 									<Row centered>
 										<Column width={12} >
 											<Button content='继续添加' fluid color='teal' onClick={this.continueToAddBtn} />

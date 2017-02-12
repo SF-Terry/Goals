@@ -14,7 +14,7 @@ import Switch from 'react-flexible-switch'
 
 import moment from 'moment'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 import storekeeper from '../util/storekeeper'
 let defaultSetting = storekeeper.settings[0].defaultSetting
@@ -55,8 +55,8 @@ class TaskListContainer extends React.Component {
 
 		// set defaultSetting
 		const {taskType} = this.state
-		const isDayTaskType = G.isDayTaskType(taskType)
-		const isLongTaskType = G.isLongTaskType(taskType)
+		const isDayTaskType = GV.isDayTaskType(taskType)
+		const isLongTaskType = GV.isLongTaskType(taskType)
 		if (isDayTaskType) {
 			defaultSetting.dayTask_isCompleted = active
 		}
@@ -80,13 +80,13 @@ class TaskListContainer extends React.Component {
 		const defalutIsComplete = this.props.isCompleted
 
 		// set taskTypeToAdd
-		const isLongTaskType = G.longTaskTypes.includes(taskType)
+		const isLongTaskType = GV.longTaskTypes.includes(taskType)
 		if (isLongTaskType) {
-			G.taskTypeToAddObj.long = taskType
+			GV.taskTypeToAddObj.long = taskType
 		} else {
-			G.taskTypeToAddObj.day = taskType
+			GV.taskTypeToAddObj.day = taskType
 		}
-		G.taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? G.taskTypeToAddObj.long : G.taskTypeToAddObj.day
+		GV.taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? GV.taskTypeToAddObj.long : GV.taskTypeToAddObj.day
 
 
 

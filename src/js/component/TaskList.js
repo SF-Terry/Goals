@@ -8,7 +8,7 @@ import {
 
 import moment from 'moment'
 
-import G from '../util/globalVarible'
+import GV from '../util/globalVarible'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks
@@ -41,12 +41,12 @@ class TaskList extends React.Component {
 	    	// update future taskType and show or do not show based on the condition of task repeat
 			tasks.forEach( task => {
 				const {taskType, isTaskNeedRepeat, isTaskCompleted} = task
-				const isFutureTaskType = G.futureTaskTypes.includes(taskType)
+				const isFutureTaskType = GV.futureTaskTypes.includes(taskType)
 				const isLongTask = taskType === 'long'
 
 				// update future taskType
 				if (isFutureTaskType) {
-					const taskDateType = G.taskTypesDateType[taskType]
+					const taskDateType = GV.taskTypesDateType[taskType]
 					const normalStartDate = moment(task.startDate).startOf(taskDateType)
 					const isNeedChange = moment().isSameOrAfter(normalStartDate)
 					let newTaskType = null
@@ -71,7 +71,7 @@ class TaskList extends React.Component {
 				if (isTaskNeedRepeat && !isFutureTaskType && !isLongTask && isTaskCompleted) {
 					const startDate = moment(task.startDate)
 					const endDate = moment(task.endDate)
-					const taskDateType = G.taskTypesDateType[taskType]
+					const taskDateType = GV.taskTypesDateType[taskType]
 					const normalStartDate = moment(endDate.format()).endOf(taskDateType)
 					const isNeedChange = moment().isSameOrAfter(normalStartDate)
 					const timeInterval = moment().startOf(taskDateType).diff(moment(startDate.format()).startOf(taskDateType), taskDateType + 's')
