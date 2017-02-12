@@ -1,17 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import Timepicker from './Timepicker.jsx';
+import Timepicker from './Timepicker'
 
-import { Button, Grid,} from 'semantic-ui-react';
-const {Row, Column} = Grid;
+import { Button, Grid,} from 'semantic-ui-react'
+const {Row, Column} = Grid
 
-import tool from '../js/tool.js';
+import tool from '../util/tool'
 
-import moment from 'moment';
+import moment from 'moment'
 
-import G from '../js/globalVarible.js';
-
-
+import G from '../util/globalVarible'
 
 
 /**
@@ -30,8 +28,8 @@ import G from '../js/globalVarible.js';
  */
 class TimeSetter extends React.Component {
 	constructor(props) {
-		super(props);
-		this.timeType = this.props.timeType || G.timeSetterTimeType.start;
+		super(props)
+		this.timeType = this.props.timeType || G.timeSetterTimeType.start
 
 		this.state = {
 			timeType: this.timeType,
@@ -39,50 +37,50 @@ class TimeSetter extends React.Component {
 			endDate: this.props.endDate,
 			isNeedShow: this.props.isNeedShow || true
 		}
-		this.startTimeBtnClick = this.startTimeBtnClick.bind(this);
-		this.endTimeBtnClick = this.endTimeBtnClick.bind(this);
-		this.cancelBtnClick = this.cancelBtnClick.bind(this);
-		this.confirmBtnClick = this.confirmBtnClick.bind(this);
-		this.startTimepickerCallback = this.startTimepickerCallback.bind(this);
-		this.endTimepickerCallback = this.endTimepickerCallback.bind(this);
+		this.startTimeBtnClick = this.startTimeBtnClick.bind(this)
+		this.endTimeBtnClick = this.endTimeBtnClick.bind(this)
+		this.cancelBtnClick = this.cancelBtnClick.bind(this)
+		this.confirmBtnClick = this.confirmBtnClick.bind(this)
+		this.startTimepickerCallback = this.startTimepickerCallback.bind(this)
+		this.endTimepickerCallback = this.endTimepickerCallback.bind(this)
 	}
 	startTimeBtnClick() {
 		this.setState({
 			timeType: G.timeSetterTimeType.start
-		});
+		})
 	}
 	endTimeBtnClick() {
 		this.setState({
 			timeType: G.timeSetterTimeType.end
-		});
+		})
 	}
 	cancelBtnClick() {
-		const {timeSetterCallback} = this.props;
+		const {timeSetterCallback} = this.props
 
 		// hide TimeSetter
 		this.setState({
 			isNeedShow: false
-		});
+		})
 
 		if (timeSetterCallback) {
 			timeSetterCallback({
 				isCancelSetting: true
-			});
+			})
 		}
 	}	
 	confirmBtnClick() {
-		const {timeSetterCallback} = this.props;
-		const {startDate, endDate} = this.state;
+		const {timeSetterCallback} = this.props
+		const {startDate, endDate} = this.state
 
 		// check
-		const isEndDateBeforeStartDate = endDate.isBefore(startDate);
+		const isEndDateBeforeStartDate = endDate.isBefore(startDate)
 		if (isEndDateBeforeStartDate) {
 			tool.observe_message.setting = {
 				isShowMessage: true,
 				message: '开始时间晚于结束时间，请重新选择！',
 				color: 'red'
 			}
-			return;
+			return
 		}
 
 		if (timeSetterCallback) {
@@ -90,34 +88,34 @@ class TimeSetter extends React.Component {
 				startDate: this.state.startDate,
 				endDate: this.state.endDate,
 				isConfirmSetting: true
-			});
+			})
 		}
 
 		// hide TimeSetter
 		this.setState({
 			isNeedShow: false
-		});
+		})
 	}
 	startTimepickerCallback(o) {
 		this.setState({
 			startDate: o.date
-		});				
+		})				
 	}
 	endTimepickerCallback(o) {
 		this.setState({
 			endDate: o.date
-		});				
+		})				
 	}
 	render() {
-		const {props} = this;
-		const {timeType, isNeedShow} = this.state;	 
-		const isStartTime = timeType === G.timeSetterTimeType.start;
-		const isEndTime = timeType === G.timeSetterTimeType.end;
+		const {props} = this
+		const {timeType, isNeedShow} = this.state	 
+		const isStartTime = timeType === G.timeSetterTimeType.start
+		const isEndTime = timeType === G.timeSetterTimeType.end
 
-		const minDate = props.minDate;
-		const maxDate = props.maxDate;
-		const startDate = props.startDate;
-		const endDate = props.endDate;
+		const minDate = props.minDate
+		const maxDate = props.maxDate
+		const startDate = props.startDate
+		const endDate = props.endDate
 		return (
 			<div className='TimeSetter' style={{
 				position: 'fixed',
@@ -155,10 +153,9 @@ class TimeSetter extends React.Component {
 						</Column>
 					</Row>
 				</Grid>
-			</div>);
+			</div>)
 	}
 }
 
 
-
-export default TimeSetter;
+export default TimeSetter

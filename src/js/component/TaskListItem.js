@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import { 
 	Grid, 
@@ -7,18 +7,18 @@ import {
 	Label, 
 	Icon,
 	Menu
-} from 'semantic-ui-react';
-const {Item} = Menu;
-const {Row, Column} = Grid;
+} from 'semantic-ui-react'
+const {Item} = Menu
+const {Row, Column} = Grid
 
-import tool from '../js/tool.js';
+import tool from '../util/tool'
 
-import moment from 'moment';
+import moment from 'moment'
 
-import G from '../js/globalVarible.js';
+import GV from '../util/globalVarible'
 
-import storekeeper from '../js/storekeeper.js';
-let tasks = storekeeper.tasks;
+import storekeeper from '../util/storekeeper'
+let tasks = storekeeper.tasks
 
 
 
@@ -32,94 +32,94 @@ let tasks = storekeeper.tasks;
  */
 class TaskListItem extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
 		/*this.state = {
 
-		};*/
+		}*/
 
-		this.textClick = this.textClick.bind(this);
-		this.inputChange = this.inputChange.bind(this);
-		this.deleteBtnClick = this.deleteBtnClick.bind(this);
-		this.completeCheckboxClick = this.completeCheckboxClick.bind(this);
-		this.labelClick = this.labelClick.bind(this);
+		this.textClick = this.textClick.bind(this)
+		this.inputChange = this.inputChange.bind(this)
+		this.deleteBtnClick = this.deleteBtnClick.bind(this)
+		this.completeCheckboxClick = this.completeCheckboxClick.bind(this)
+		this.labelClick = this.labelClick.bind(this)
 	}
 	textClick() {
-		let {task} = this.props;
+		let {task} = this.props
 
 		tool.observe_taskInfo.setting = {
 			isShowTaskInfo: true,
-			taskInfoMode: G.taskInfoMode.edit,
+			taskInfoMode: GV.taskInfoMode.edit,
 			task: task,
 			isTransporting: true
 		}
 	}
 	labelClick() {
-		let {task} = this.props;
+		let {task} = this.props
 
 		tool.observe_taskInfo.setting = {
 			isShowTaskInfo: true,
-			taskInfoMode: G.taskInfoMode.edit,
+			taskInfoMode: GV.taskInfoMode.edit,
 			task: task,
 			isTransporting: true
 		}
 	}
 	inputChange(ev, result) {
-		const {value} = result;
-		let {task} = this.props;
+		const {value} = result
+		let {task} = this.props
 
 		/* modify name */
-		task.name = value;
+		task.name = value
 	}
 	deleteBtnClick() {
-		let {task} = this.props;
-		const index = tasks.indexOf(task);
-		const {taskListItemCallback} = this.props;
+		let {task} = this.props
+		const index = tasks.indexOf(task)
+		const {taskListItemCallback} = this.props
 
 		/* delete item */
-		tasks.splice(index, 1);
+		tasks.splice(index, 1)
 
 		if (taskListItemCallback) {
 			taskListItemCallback({
 				isDeleteTask: true
-			});
+			})
 		}
 		
 	}
 	completeCheckboxClick() {
-		let {task} = this.props;
-		const {isTaskCompleted} = task;
-		const {taskListItemCallback} = this.props;
+		let {task} = this.props
+		const {isTaskCompleted} = task
+		const {taskListItemCallback} = this.props
 
 		/* modify task is completed or not */
-		task.isTaskCompleted = !isTaskCompleted;
+		task.isTaskCompleted = !isTaskCompleted
 
 		if (taskListItemCallback) {
 			taskListItemCallback({
 				isCompleteTask: true
-			});
+			})
 		}
 
 	}
 	render() {
-		let {task, editMode} = this.props;
+		let {task, editMode} = this.props
 
-		const {name: taskName, taskType, isTaskCompleted, taskLevel, isTaskNeedRepeat} = task;
+		const {name: taskName, taskType, isTaskCompleted, taskLevel, isTaskNeedRepeat} = task
 
 		const color = (() => {
 			switch (taskLevel) {
 				case 'a':
-					return 'red'; break;
+					return 'red'
 				case 'b':
-					return 'orange'; break;
+					return 'orange'
 				case 'c':
-					return 'yellow'; break;
+					return 'yellow'
 				case 'd':
-					return 'blue'; break;
+					return 'blue'
 				default:
-					return 'orange'; break;
+					return 'orange'
 			}
-		})();
+		})()
 
 		return( 
 			<Item>
@@ -161,9 +161,9 @@ class TaskListItem extends React.Component {
 						</Row>
 					)}
 				</Grid>
-			</Item>);
+			</Item>)
 	}
 }
 
 
-export default TaskListItem;
+export default TaskListItem

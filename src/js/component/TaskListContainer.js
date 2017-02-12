@@ -1,23 +1,23 @@
-import React from 'react';
+import React from 'react'
 
-import TaskList from './TaskList.jsx';
-import TaskTypeSelector from './TaskTypeSelector.jsx';
+import TaskList from './TaskList'
+import TaskTypeSelector from './TaskTypeSelector'
 
 import { 
 	Grid,
 	Label, 
 	Icon 
-} from 'semantic-ui-react';
-const {Row, Column} = Grid;
+} from 'semantic-ui-react'
+const {Row, Column} = Grid
 
-import Switch from 'react-flexible-switch';
+import Switch from 'react-flexible-switch'
 
-import moment from 'moment';
+import moment from 'moment'
 
-import G from '../js/globalVarible.js';
+import G from '../util/globalVarible'
 
-import storekeeper from '../js/storekeeper.js';
-let defaultSetting = storekeeper.settings[0].defaultSetting;
+import storekeeper from '../util/storekeeper'
+let defaultSetting = storekeeper.settings[0].defaultSetting
 
 
 /**
@@ -27,7 +27,7 @@ let defaultSetting = storekeeper.settings[0].defaultSetting;
  */
 class TaskListContainer extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
 			taskType: this.props.taskType,
 			isTaskCompleted: this.props.isCompleted,
@@ -35,58 +35,58 @@ class TaskListContainer extends React.Component {
 			isShowTaskList: true
 		}	
 
-		this.taskTypeSelectorCallback = this.taskTypeSelectorCallback.bind(this);
-		this.handleIsCompleteSwitchChange = this.handleIsCompleteSwitchChange.bind(this);
-		this.editBtnClick = this.editBtnClick.bind(this);
+		this.taskTypeSelectorCallback = this.taskTypeSelectorCallback.bind(this)
+		this.handleIsCompleteSwitchChange = this.handleIsCompleteSwitchChange.bind(this)
+		this.editBtnClick = this.editBtnClick.bind(this)
 	}
 	taskTypeSelectorCallback(o) {
-		const {value} = o;
+		const {value} = o
 
 		if (value != undefined) {
 			this.setState({
 				taskType: value
-			});
+			})
 		}
 	}
 	handleIsCompleteSwitchChange(active) {
 		this.setState({
 			isTaskCompleted: active
-		});
+		})
 
 		// set defaultSetting
-		const {taskType} = this.state;
-		const isDayTaskType = G.isDayTaskType(taskType);
-		const isLongTaskType = G.isLongTaskType(taskType);
+		const {taskType} = this.state
+		const isDayTaskType = G.isDayTaskType(taskType)
+		const isLongTaskType = G.isLongTaskType(taskType)
 		if (isDayTaskType) {
-			defaultSetting.dayTask_isCompleted = active;
+			defaultSetting.dayTask_isCompleted = active
 		}
 		if (isLongTaskType) {
-			defaultSetting.longTask_isCompleted = active;
+			defaultSetting.longTask_isCompleted = active
 		}
 	}
 	editBtnClick() {
 		this.setState((prevState) => ({
 			editMode: !prevState.editMode
-		}));
+		}))
 	}
 	render() {	
-		const {taskType, isTaskCompleted, editMode, isShowTaskList} = this.state;	
-		const {taskTypes} = this.props;
+		const {taskType, isTaskCompleted, editMode, isShowTaskList} = this.state	
+		const {taskTypes} = this.props
 
 		const isCompletesOptions = [
 			{value: 1, text: '已完成'},
 			{value: 0, text: '未完成'}
-		];
-		const defalutIsComplete = this.props.isCompleted;
+		]
+		const defalutIsComplete = this.props.isCompleted
 
 		// set taskTypeToAdd
-		const isLongTaskType = G.longTaskTypes.includes(taskType);
+		const isLongTaskType = G.longTaskTypes.includes(taskType)
 		if (isLongTaskType) {
-			G.taskTypeToAddObj.long = taskType;
+			G.taskTypeToAddObj.long = taskType
 		} else {
-			G.taskTypeToAddObj.day = taskType;
+			G.taskTypeToAddObj.day = taskType
 		}
-		G.taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? G.taskTypeToAddObj.long : G.taskTypeToAddObj.day;
+		G.taskTypeToAddObj.target = defaultSetting.tabIndex === 0 ? G.taskTypeToAddObj.long : G.taskTypeToAddObj.day
 
 
 
@@ -118,9 +118,9 @@ class TaskListContainer extends React.Component {
 					</div>
 				) : null}
 			</div>
-		);
+		)
 	}
 }
 
 
-export default TaskListContainer;
+export default TaskListContainer

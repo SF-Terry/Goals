@@ -1,17 +1,17 @@
-import React,  { Component } from 'react';
-import {render} from 'react-dom';
+import React,  { Component } from 'react'
+import {render} from 'react-dom'
 
 // datepicker
-import 'rmc-picker/assets/index.css';
-import 'rmc-date-picker/assets/index.css';
-import DatePicker from 'rmc-date-picker/lib/index.web';
-import zhCn from 'rmc-date-picker/lib/locale/zh_CN';
-import moment from 'moment';
-import 'moment/locale/zh-cn.js';
-import storekeeper from '../js/storekeeper.js';
+import 'rmc-picker/assets/index.css'
+import 'rmc-date-picker/assets/index.css'
+import DatePicker from 'rmc-date-picker/lib/index.web'
+import zhCn from 'rmc-date-picker/lib/locale/zh_CN'
+import moment from 'moment'
+import 'moment/locale/zh-cn.js'
+import storekeeper from '../util/storekeeper'
 
 // inital moment.locale
-moment.locale('zh-cn');
+moment.locale('zh-cn')
 
 
 /**
@@ -24,38 +24,38 @@ moment.locale('zh-cn');
  */
 class Timepicker extends React.Component {
 	constructor(props) {
-		super(props);
-		let that = this;
+		super(props)
+		let that = this
 		this.state = {
 	        date: null
-	    };
+	    }
 
-	    this.onDateChange = this.onDateChange.bind(this);
+	    this.onDateChange = this.onDateChange.bind(this)
 	}
 	onDateChange(date) {
     	this.setState({
     		date: date
-    	});
+    	})
 
-    	let {timepickerCallback} = this.props;
+    	let {timepickerCallback} = this.props
     	if (timepickerCallback) {
     		timepickerCallback({
     			date: date
-    		});
+    		})
     	}
-    };
+    }
 	render() {
-		const props = this.props;
-		const {date} = this.state;
+		const props = this.props
+		const {date} = this.state
 
-		const minDate = props.minDate || moment();
-		const maxDate = props.maxDate || moment().add(100, 'years');
-		const defaultDate = props.defaultDate || moment();
-		minDate.locale('zh-cn').utcOffset(8);
-		maxDate.locale('zh-cn').utcOffset(8);
-		defaultDate.locale('zh-cn').utcOffset(8);
+		const minDate = props.minDate || moment()
+		const maxDate = props.maxDate || moment().add(100, 'years')
+		const defaultDate = props.defaultDate || moment()
+		minDate.locale('zh-cn').utcOffset(8)
+		maxDate.locale('zh-cn').utcOffset(8)
+		defaultDate.locale('zh-cn').utcOffset(8)
 		function format(date) {
-		  return date.format('YYYY-MM-DD HH:mm');
+		  return date.format('YYYY-MM-DD HH:mm')
 		}
 	    
 	    return (
@@ -72,9 +72,9 @@ class Timepicker extends React.Component {
 	      		    onDateChange={this.onDateChange}
 	      		  />
 	      		</div>
-	    	</div>);
+	    	</div>)
 	  }
 }
 
 
-export default Timepicker;
+export default Timepicker

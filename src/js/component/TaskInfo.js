@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-import TaskTypePanel from './TaskTypePanel.jsx';
-import TaskLevelButtons from './TaskLevelButtons.jsx';
+import TaskTypePanel from './TaskTypePanel'
+import TaskLevelButtons from './TaskLevelButtons'
 
-import {Button, Grid, Input} from 'semantic-ui-react';
-const {Row, Column} = Grid;
+import {Button, Grid, Input} from 'semantic-ui-react'
+const {Row, Column} = Grid
 
-import tool from '../js/tool.js';
+import tool from '../util/tool'
 
-import G from '../js/globalVarible.js';
+import G from '../util/globalVarible'
 
-import storekeeper from '../js/storekeeper.js';
-let tasks = storekeeper.tasks;
+import storekeeper from '../util/storekeeper'
+let tasks = storekeeper.tasks
 
 
 /**
@@ -25,39 +25,39 @@ let tasks = storekeeper.tasks;
  */
 class TaskInfo extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
-		const {mode} = this.props;
+		const {mode} = this.props
 
-		this.tempTask = mode === G.taskInfoMode.add ? Object.assign({}, G.initialTask) : Object.assign({}, this.props.task);
+		this.tempTask = mode === G.taskInfoMode.add ? Object.assign({}, G.initialTask) : Object.assign({}, this.props.task)
 
 		// add task sortNum
 		if (mode === G.taskInfoMode.add) {
-			this.tempTask.sortNum = tasks.length + 1;
+			this.tempTask.sortNum = tasks.length + 1
 		}
 
-		this.taskNameInputChange = this.taskNameInputChange.bind(this);
-		this.completeBtnClick = this.completeBtnClick.bind(this);
-		this.backBtnClick = this.backBtnClick.bind(this);
+		this.taskNameInputChange = this.taskNameInputChange.bind(this)
+		this.completeBtnClick = this.completeBtnClick.bind(this)
+		this.backBtnClick = this.backBtnClick.bind(this)
 
 		// add mode
-		this.continueToAddBtn = this.continueToAddBtn.bind(this);
+		this.continueToAddBtn = this.continueToAddBtn.bind(this)
 
-		this.taskLevelButtonsCallback = this.taskLevelButtonsCallback.bind(this);
-		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this);
+		this.taskLevelButtonsCallback = this.taskLevelButtonsCallback.bind(this)
+		this.taskTypePanelCallback = this.taskTypePanelCallback.bind(this)
 	}
 	taskNameInputChange(ev, result) {
-		const {value} = result;
+		const {value} = result
 
-		this.tempTask.name = value;
+		this.tempTask.name = value
 	}
 	completeBtnClick() {
-		const {taskInfoCallback} = this.props;
-		const {mode} = this.props;
-		const isAddMode = mode === G.taskInfoMode.add;
-		const isEditMode = mode === G.taskInfoMode.edit;
-		let task = this.props.task;
-		const {name} = this.tempTask;
+		const {taskInfoCallback} = this.props
+		const {mode} = this.props
+		const isAddMode = mode === G.taskInfoMode.add
+		const isEditMode = mode === G.taskInfoMode.edit
+		let task = this.props.task
+		const {name} = this.tempTask
 
 		// check
 		if (!name) {
@@ -66,55 +66,55 @@ class TaskInfo extends React.Component {
 				message: '任务内容为空，请重新输入！',
 				color: 'red'
 			}
-			return;
+			return
 		}
 
 		// save
 		if (isAddMode) {
-			tasks.push(this.tempTask);
+			tasks.push(this.tempTask)
 		}
 		if (isEditMode) {
-			Object.assign(task, this.tempTask);
+			Object.assign(task, this.tempTask)
 		}
 
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
 				isShowTaskInfo: false
-			});
+			})
 		}
 	}
 	taskLevelButtonsCallback(o) {
-		const {level} = o;
+		const {level} = o
 		if (level) {
-			this.tempTask.taskLevel = level;
+			this.tempTask.taskLevel = level
 		}
 	}
 	taskTypePanelCallback(o) {
-		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = o;
+		const {taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = o
 
 		if (taskType) {
-			this.tempTask.taskType = taskType;
+			this.tempTask.taskType = taskType
 		}
 		if (isTaskNeedTimer != undefined) {
-			this.tempTask.isTaskNeedTimer = isTaskNeedTimer;
+			this.tempTask.isTaskNeedTimer = isTaskNeedTimer
 		}
 		if (isTaskNeedRepeat != undefined) {
-			this.tempTask.isTaskNeedRepeat = isTaskNeedRepeat;
+			this.tempTask.isTaskNeedRepeat = isTaskNeedRepeat
 		}
 		if (startDate != undefined) {
-			this.tempTask.startDate = startDate;
+			this.tempTask.startDate = startDate
 		}
 		if (endDate != undefined) {
-			this.tempTask.endDate = endDate;
+			this.tempTask.endDate = endDate
 		}
 	}
 	// add mode
 	continueToAddBtn() {
-		const {taskInfoCallback, mode} = this.props;
-		const isAddMode = mode === G.taskInfoMode.add;
-		let task = this.props.task;
-		const {name} = this.tempTask;
+		const {taskInfoCallback, mode} = this.props
+		const isAddMode = mode === G.taskInfoMode.add
+		let task = this.props.task
+		const {name} = this.tempTask
 
 		// check
 		if (!name) {
@@ -123,33 +123,33 @@ class TaskInfo extends React.Component {
 				message: '任务内容为空，请重新输入！',
 				color: 'red'
 			}
-			return;
+			return
 		}
 
 		// save
 		// add mode
 		if (isAddMode) {
-			tasks.push(this.tempTask);
+			tasks.push(this.tempTask)
 		}
 
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
 				isContinueToAddTask: true
-			});
+			})
 		}
 	}
 	// edit mode
 	backBtnClick() {
-		const {taskInfoCallback} = this.props;
+		const {taskInfoCallback} = this.props
 		if (taskInfoCallback != undefined) {
 			taskInfoCallback({
 				isBackTask: true
-			});
+			})
 		}
 	}
 	render() {
-		const {mode} = this.props || G.taskInfoMode.add;
-		const {name, taskLevel, taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = this.tempTask;
+		const {mode} = this.props || G.taskInfoMode.add
+		const {name, taskLevel, taskType, isTaskNeedTimer, isTaskNeedRepeat, isNeedTimeSetter, startDate, endDate} = this.tempTask
 
 		return (
 			<div className="TaskInfo" style={{
@@ -169,8 +169,8 @@ class TaskInfo extends React.Component {
 						<Column width={14}>
 							<Input id='taskInfo_taskNameInput' defaultValue={name} placeholder='任务内容' onChange={this.taskNameInputChange} fluid ref={(o) => {
 								if (o && o.props && o.props.id && mode == G.taskInfoMode.add) {
-									let inputDom = document.getElementById(o.props.id).children[0];
-									inputDom.focus();
+									let inputDom = document.getElementById(o.props.id).children[0]
+									inputDom.focus()
 								}
 							}} />
 						</Column>	
@@ -213,9 +213,9 @@ class TaskInfo extends React.Component {
 						</Column>
 					</Row>
 				</Grid>
-			</div>);
+			</div>)
 	}
 }
 
 
-export default TaskInfo;
+export default TaskInfo

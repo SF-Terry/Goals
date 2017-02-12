@@ -1,5 +1,5 @@
 // import observe library to Adapt to IE
-import observe from '../js/observe.js';
+import observe from './observe';
 
 class Storekeeper {
 	constructor(name) {

@@ -1,4 +1,4 @@
-import G from '../js/globalVarible.js';
+import GV from './globalVarible';
 import moment from 'moment';
 
 const tool = {
@@ -7,7 +7,7 @@ const tool = {
 	observe_taskInfo: {
 		setting: {
 			isShowTaskInfo: false,
-			taskInfoMode: G.taskInfoMode.add,
+			taskInfoMode: GV.taskInfoMode.add,
 			task: null,
 			isTransporting: false
 		}
@@ -64,10 +64,10 @@ const tool = {
 	// getLabelTextByMoments	
 	getLabelTextByMoments(task) {
 		const {taskType, isTaskNeedTimer, startDate, endDate} = task;
-		const isFutureTaskType = G.futureTaskTypes.includes(taskType);
+		const isFutureTaskType = GV.futureTaskTypes.includes(taskType);
 
 		if (!isTaskNeedTimer) {
-			return G.taskTypesLabel[taskType];
+			return GV.taskTypesLabel[taskType];
 		}
 		if (isTaskNeedTimer) {
 			// timeMode

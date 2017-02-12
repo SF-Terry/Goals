@@ -1,37 +1,41 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'build');
-var APP_DIR = path.resolve(__dirname, 'app');
-
-var config = {
-  entry: BUILD_DIR + '/entry.js',//['webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:8080', BUILD_DIR + '/entry.js'],
+module.exports = {
+  entry: './src/entry.js',
   output: {
-    path: APP_DIR + '/js',
+    path: path.resolve(__dirname, 'app/js'),
     filename: 'bundle.js'
   },
-  module : {
-    loaders : [
-      {test : /\.js?/,loader : 'babel'},
-      {test : /\.jsx?/,loader : 'babel'},
-      {test: /\.css?/, loader: "style!css"},
-      {test: /\.scss?/, loader: "style!css!sass"}
+  module: {
+    loaders: [
+      {
+        test: /\.js.*/, 
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+					    presets: ['es2015', 'react']					
+					}
+      },
+      {
+        test: /\.css?/, 
+        loader: "style!css"
+      },
+      {
+        test: /\.scss?/, 
+        exclude: /node_modules/,
+        loader: "style!css!sass"
+      }
     ]
   },
-  resolve: {
-    extensions: ['', '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx', '.js', '.jsx', '.json'],
-  },
-
-  // solve the problem that bundle.js is too big
+  // minify bundle.js
   plugins: [
-    /*new webpack.optimize.CommonsChunkPlugin('vendor',  'vendor.js'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin()*/
+    // new webpack.optimize.CommonsChunkPlugin('vendor',  'vendor.js'),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
+    // }),
+    // new webpack.optimize.UglifyJsPlugin()
   ]
-};
-
-module.exports = config;
+}

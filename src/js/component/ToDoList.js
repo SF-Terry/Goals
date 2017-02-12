@@ -1,28 +1,28 @@
-import React from 'react';
+import React from 'react'
 
-import TaskInfo from './TaskInfo.jsx';
-import DayTaskContainer from './DayTaskContainer.jsx';
-import LongTaskContainer from './LongTaskContainer.jsx';
-import MultiFunctionBtn from './MultiFunctionBtn.jsx';
+import TaskInfo from './TaskInfo'
+import DayTaskContainer from './DayTaskContainer'
+import LongTaskContainer from './LongTaskContainer'
+import MultiFunctionBtn from './MultiFunctionBtn'
 
 import { 
 	Message
-} from 'semantic-ui-react';
+} from 'semantic-ui-react'
 
-import Tabs from 'muicss/lib/react/tabs';
-import Tab from 'muicss/lib/react/tab';
+import Tabs from 'muicss/lib/react/tabs'
+import Tab from 'muicss/lib/react/tab'
 
-import observe from '../js/observe.js';
+import observe from '../util/observe'
 
-import tool from '../js/tool.js';
+import tool from '../util/tool'
 
-import moment from 'moment';
+import moment from 'moment'
 
-import G from '../js/globalVarible.js';
+import G from '../util/globalVarible'
 
-import storekeeper from '../js/storekeeper.js';
-let tasks = storekeeper.tasks;
-let defaultSetting = storekeeper.settings[0].defaultSetting;
+import storekeeper from '../util/storekeeper'
+let tasks = storekeeper.tasks
+let defaultSetting = storekeeper.settings[0].defaultSetting
 
 
 /**
@@ -30,7 +30,7 @@ let defaultSetting = storekeeper.settings[0].defaultSetting;
  */
 class ToDoList extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
 		// init data
 		if (tasks.length === 0) {
@@ -44,7 +44,7 @@ class ToDoList extends React.Component {
 				startDate: moment(),	
 				endDate: moment().endOf('day'),
 				sortNum: 0
-			});
+			})
 			tasks.push({
 				name: '第一个长期目标',
 				taskType: 'long',
@@ -55,7 +55,7 @@ class ToDoList extends React.Component {
 				startDate: moment(),	
 				endDate: moment().add(6, 'months'),
 				sortNum: 1
-			});
+			})
 		}
 
 		this.state = {
@@ -66,44 +66,44 @@ class ToDoList extends React.Component {
 			message: '',
 			messageColor: 'red',
 			task: null			
-		};
+		}
 
-		this.observeIsNeedShowTaskInfo();
-		this.observeIsNeedShowMessage();
+		this.observeIsNeedShowTaskInfo()
+		this.observeIsNeedShowMessage()
 
-		this.tabChange = this.tabChange.bind(this);
-		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this);
-		this.taskInfoCallback = this.taskInfoCallback.bind(this);
+		this.tabChange = this.tabChange.bind(this)
+		this.multiFunctionBtnCallback = this.multiFunctionBtnCallback.bind(this)
+		this.taskInfoCallback = this.taskInfoCallback.bind(this)
 	}
 	tabChange(index) {
-		defaultSetting.tabIndex = index;
+		defaultSetting.tabIndex = index
 
 		// set taskTypeToAdd
 		if (index === 0) {
-			G.taskTypeToAddObj.target = G.taskTypeToAddObj.long;
+			G.taskTypeToAddObj.target = G.taskTypeToAddObj.long
 		}
 		if (index === 1) {
-			G.taskTypeToAddObj.target = G.taskTypeToAddObj.day;
+			G.taskTypeToAddObj.target = G.taskTypeToAddObj.day
 		}
 	}
 	multiFunctionBtnCallback(o) {
-		const {isAddBtnTaped} = o;
+		const {isAddBtnTaped} = o
 
 		if (isAddBtnTaped != undefined && isAddBtnTaped) {
 			this.setState({
 				taskInfoMode:  G.taskInfoMode.add,
 				isShowTaskInfo: true,
 				task: null
-			});
+			})
 		}
 	}
 	taskInfoCallback(o) {
-		const {isShowTaskInfo, isContinueToAddTask, isBackTask} = o;
+		const {isShowTaskInfo, isContinueToAddTask, isBackTask} = o
 
 		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
 			this.setState({
 				isShowTaskInfo: false
-			});
+			})
 		}
 		if (isContinueToAddTask != undefined && isContinueToAddTask) {
 			this.setState({
@@ -113,53 +113,53 @@ class ToDoList extends React.Component {
 			},  () => {
 					this.setState({
 						isShowTaskInfo: true
-					});
-				});
+					})
+				})
 		}
 		if (isBackTask != undefined && isBackTask) {
 			this.setState({
 				isShowTaskInfo: false,
 				task: null
-			}); 
+			}) 
 		}
 	}
 	observeIsNeedShowTaskInfo() {
 		observe(tool.observe_taskInfo, (key, setting) => {
-			let {task, taskInfoMode, isShowTaskInfo, isTransporting} = setting;
+			let {task, taskInfoMode, isShowTaskInfo, isTransporting} = setting
 
 			if (isTransporting) {
-				tool.observe_taskInfo.setting.isTransporting = false;
+				tool.observe_taskInfo.setting.isTransporting = false
 				this.setState({
 					isShowTaskInfo: isShowTaskInfo,
 					taskInfoMode: taskInfoMode,
 					task: task
-				});	
-				tool.observe_taskInfo.setting.task = null;
+				})	
+				tool.observe_taskInfo.setting.task = null
 			}
 			
-		});
+		})
 	}
 	observeIsNeedShowMessage() {
 		observe(tool.observe_message, (key, setting) => {
-			let {isShowMessage, message, color} = setting;
+			let {isShowMessage, message, color} = setting
 
 			// animation
 			this.setState({
 				isShowMessage: isShowMessage,
 				message: message,
 				messageColor: color
-			});
+			})
 			setTimeout(() => {
 				this.setState({
 					isShowMessage: false,
 					message: '',
 					messageColor: color
-				});
-			},2000);			
-		});
+				})
+			},2000)			
+		})
 	}
 	render() {
-		const {taskInfoMode, isShowTaskInfo, task, isShowMessage, message, messageColor} = this.state;
+		const {taskInfoMode, isShowTaskInfo, task, isShowMessage, message, messageColor} = this.state
 
 		return (
 			<div className='ToDoList' style={{
@@ -189,9 +189,9 @@ class ToDoList extends React.Component {
 				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
 
 			</div>
-			);
+			)
 	}
 }
 
 
-export default ToDoList;
+export default ToDoList

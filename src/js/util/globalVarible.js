@@ -1,9 +1,9 @@
 import moment from 'moment';
-import storekeeper from '../js/storekeeper.js';
+import storekeeper from './storekeeper';
 
 let defaultSetting = storekeeper.settings[0].defaultSetting;
 
-class GlobalVarible {
+class globalVarible {
 	constructor() {
 		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
@@ -120,6 +120,6 @@ class GlobalVarible {
 	}
 }
 
+const GV = new globalVarible()
 
-let G = new GlobalVarible();
-module.exports = G;
+export default GV

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import {Button} from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react'
 
 
 /**
@@ -11,32 +11,32 @@ import {Button} from 'semantic-ui-react';
  */
 class TaskLevelButtons extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
-		let {level} = this.props;
+		let {level} = this.props
 
 
 		this.state = {
 			level: level || 'b'
 		}
 
-		this.setLevel = this.setLevel.bind(this);
+		this.setLevel = this.setLevel.bind(this)
 	}
 	setLevel(level) {
-		const {taskLevelButtonsCallback} = this.props;
+		const {taskLevelButtonsCallback} = this.props
 		
 		this.setState({
 			level: level
-		});
+		})
 
 		if (taskLevelButtonsCallback) {
 			taskLevelButtonsCallback({
 				level: level
-			});
+			})
 		}
 	}
 	render() {
-		const {level} = this.state;
+		const {level} = this.state
 
 		let buttonsInfo = {
 			a: {
@@ -55,15 +55,15 @@ class TaskLevelButtons extends React.Component {
 				color: 'blue',
 				text: '正常'
 			}
-		};
-		let buttons = [];
+		}
+		let buttons = []
 		for (let buttonLevel in buttonsInfo) {
 			buttons.push(
 				<span key={buttonLevel}>
 					&nbsp;&nbsp;
 					<Button className='taskLevelButton' basic={buttonLevel != this.state.level} content={buttonsInfo[buttonLevel].text} color={buttonsInfo[buttonLevel].color} onClick={()=>{this.setLevel(buttonLevel)}} />
 				</span>
-			);
+			)
 		}
 		return (
 			<div style={{
@@ -71,9 +71,9 @@ class TaskLevelButtons extends React.Component {
 			}}>
 				{buttons}
 			</div>
-		);
+		)
 	}
 }
 
 
-export default TaskLevelButtons;
+export default TaskLevelButtons
