@@ -8,7 +8,7 @@ const {Row, Column} = Grid
 
 import tool from '../util/tool'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks

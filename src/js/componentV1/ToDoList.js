@@ -5,7 +5,7 @@ import DayTaskContainer from './DayTaskContainer'
 import LongTaskContainer from './LongTaskContainer'
 import MultiFunctionBtn from './MultiFunctionBtn'
 
-import { 
+import {
 	Message
 } from 'semantic-ui-react'
 
@@ -18,7 +18,7 @@ import tool from '../util/tool'
 
 import moment from 'moment'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks
@@ -41,7 +41,7 @@ class ToDoList extends React.Component {
 				isTaskCompleted: false,
 				isTaskNeedTimer: true,
 				isTaskNeedRepeat: false,
-				startDate: moment(),	
+				startDate: moment(),
 				endDate: moment().endOf('day'),
 				sortNum: 0
 			})
@@ -52,7 +52,7 @@ class ToDoList extends React.Component {
 				isTaskCompleted: false,
 				isTaskNeedTimer: true,
 				isTaskNeedRepeat: false,
-				startDate: moment(),	
+				startDate: moment(),
 				endDate: moment().add(6, 'months'),
 				sortNum: 1
 			})
@@ -65,7 +65,7 @@ class ToDoList extends React.Component {
 			isShowMessage: false,
 			message: '',
 			messageColor: 'red',
-			task: null			
+			task: null
 		}
 
 		this.observeIsNeedShowTaskInfo()
@@ -91,7 +91,7 @@ class ToDoList extends React.Component {
 
 		if (isAddBtnTaped != undefined && isAddBtnTaped) {
 			this.setState({
-				taskInfoMode:  GV.taskInfoMode.add,
+				taskInfoMode: GV.taskInfoMode.add,
 				isShowTaskInfo: true,
 				task: null
 			})
@@ -100,7 +100,7 @@ class ToDoList extends React.Component {
 	taskInfoCallback(o) {
 		const {isShowTaskInfo, isContinueToAddTask, isBackTask} = o
 
-		if (isShowTaskInfo != undefined  && !isShowTaskInfo) {
+		if (isShowTaskInfo != undefined && !isShowTaskInfo) {
 			this.setState({
 				isShowTaskInfo: false
 			})
@@ -110,17 +110,17 @@ class ToDoList extends React.Component {
 				isShowTaskInfo: false,
 				task: null,
 				taskInfoMode: GV.taskInfoMode.add
-			},  () => {
-					this.setState({
-						isShowTaskInfo: true
-					})
+			}, () => {
+				this.setState({
+					isShowTaskInfo: true
 				})
+			})
 		}
 		if (isBackTask != undefined && isBackTask) {
 			this.setState({
 				isShowTaskInfo: false,
 				task: null
-			}) 
+			})
 		}
 	}
 	observeIsNeedShowTaskInfo() {
@@ -133,10 +133,10 @@ class ToDoList extends React.Component {
 					isShowTaskInfo: isShowTaskInfo,
 					taskInfoMode: taskInfoMode,
 					task: task
-				})	
+				})
 				tool.observe_taskInfo.setting.task = null
 			}
-			
+
 		})
 	}
 	observeIsNeedShowMessage() {
@@ -155,7 +155,7 @@ class ToDoList extends React.Component {
 					message: '',
 					messageColor: color
 				})
-			},2000)			
+			}, 2000)
 		})
 	}
 	render() {
@@ -174,22 +174,22 @@ class ToDoList extends React.Component {
 						<Message color={messageColor} content={message} />
 					</div>
 				) : null}
-				  
+
 				{isShowTaskInfo ? (
-					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback}/> 
+					<TaskInfo mode={taskInfoMode} task={task} taskInfoCallback={this.taskInfoCallback} />
 				) : ''}
 				<Tabs justified={true} initialSelectedIndex={defaultSetting.tabIndex} onChange={this.tabChange}>
-		            <Tab label="长期目标">
-		            	<LongTaskContainer />
-		            </Tab>
-		            <Tab label="今日目标">
-		            	<DayTaskContainer />
-		            </Tab>
-		        </Tabs>
-				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback}/>
+					<Tab label="长期目标">
+						<LongTaskContainer />
+					</Tab>
+					<Tab label="今日目标">
+						<DayTaskContainer />
+					</Tab>
+				</Tabs>
+				<MultiFunctionBtn multiFunctionBtnCallback={this.multiFunctionBtnCallback} />
 
 			</div>
-			)
+		)
 	}
 }
 

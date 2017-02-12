@@ -9,7 +9,7 @@ import tool from '../util/tool'
 
 import moment from 'moment'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 
 

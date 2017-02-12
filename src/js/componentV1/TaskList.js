@@ -8,7 +8,7 @@ import {
 
 import moment from 'moment'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 import storekeeper from '../util/storekeeper'
 let tasks = storekeeper.tasks

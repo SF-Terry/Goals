@@ -2,7 +2,7 @@ import React from 'react'
 
 import TaskListContainer from './TaskListContainer'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 import storekeeper from '../util/storekeeper'
 let defaultSetting = storekeeper.settings[0].defaultSetting

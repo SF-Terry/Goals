@@ -14,7 +14,7 @@ import Switch from 'react-flexible-switch'
 
 import moment from 'moment'
 
-import GV from '../util/globalVarible'
+import GV from '../util/global'
 
 import storekeeper from '../util/storekeeper'
 let defaultSetting = storekeeper.settings[0].defaultSetting

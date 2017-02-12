@@ -1,6 +1,3 @@
-// version control
-import './js/util/version.js'
-
 // style
 import './sass/app.scss'
 

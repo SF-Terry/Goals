@@ -3,8 +3,11 @@ import storekeeper from './storekeeper';
 
 let defaultSetting = storekeeper.settings[0].defaultSetting;
 
-class globalVarible {
+class global {
 	constructor() {
+		// name in localstorage
+		this.storeName = 'TargetsManagement'
+
 		this.taskTypes = ['today', 'long', 'thisWeek', 'thisMonth', 'thisYear', 'tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.futureTaskTypes = ['tomorrow', 'nextWeek', 'nextMonth', 'nextYear'];
 		this.dayTaskTypes = ['today', 'tomorrow'];
@@ -74,19 +77,19 @@ class globalVarible {
 
 
 		// set taskTypeMomentsObj
-		const getCurrentMoments = dateType => ([moment().startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
-		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]); 
+		const getCurrentMoments = dateType => ([moment().startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]);
+		const getNextMoments = dateType => ([moment().add(1, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType), moment().add(2, dateType + 's').startOf(dateType === 'week' ? 'isoWeek' : dateType)]);
 		const dayTaskTypeMoments = getCurrentMoments('day');
 		const longTaskTypeMoments = [moment(), moment().add(2, 'days').startOf('day')];
 		const weekTaskTypeMoments = getCurrentMoments('week');
 		const monthTaskTypeMoments = getCurrentMoments('month');
 		const yearTaskTypeMoments = getCurrentMoments('year');
-		const tomorrowTaskTypeMoments =  getNextMoments('day');
-		const nextWeekTaskTypeMoments =  getNextMoments('week');
+		const tomorrowTaskTypeMoments = getNextMoments('day');
+		const nextWeekTaskTypeMoments = getNextMoments('week');
 		const nextMonthTaskTypeMoments = getNextMoments('month');
-		const nextYearTaskTypeMoments =  getNextMoments('year');
+		const nextYearTaskTypeMoments = getNextMoments('year');
 		this.getTaskTypesMoment = (dateType) => {
-			switch(dateType) {
+			switch (dateType) {
 				case 'today': return getCurrentMoments('day'); break;
 				case 'long': return [moment(), moment().add(2, 'days').startOf('day')]; break;
 				case 'thisWeek': return getCurrentMoments('week'); break;
@@ -97,7 +100,7 @@ class globalVarible {
 				case 'nextMonth': return getNextMoments('month'); break;
 				case 'nextYear': return getNextMoments('year'); break;
 				default: return getCurrentMoments('day'); break;
-			} 
+			}
 		};
 
 
@@ -106,12 +109,13 @@ class globalVarible {
 			long: defaultSetting.longTask_taskType,
 			day: defaultSetting.dayTask_taskType,
 			target: defaultSetting.tabIndex === 0 ? defaultSetting.longTask_taskType : defaultSetting.dayTask_taskType
-		}; 
+		};
 
 		// window size
 		this.windowWidth = document.body.clientWidth;
 		this.windowHeight = document.body.clientHeight;
 	}
+
 	isDayTaskType(taskType) {
 		return this.dayTaskTypes.includes(taskType);
 	}
@@ -120,6 +124,6 @@ class globalVarible {
 	}
 }
 
-const GV = new globalVarible()
+const GV = new global()
 
 export default GV

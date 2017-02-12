@@ -1,4 +1,4 @@
-import GV from './globalVarible';
+import GV from './global';
 import moment from 'moment';
 
 const tool = {
