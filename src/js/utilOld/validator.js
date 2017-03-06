@@ -1,4 +1,4 @@
-import { initialSetting, initialTask } from '../store/initialState'
+import { initialSetting, initialTask } from '../util/global'
 
 const validator = {
   /**

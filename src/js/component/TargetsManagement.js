@@ -1,10 +1,22 @@
 import React from 'react'
-import TabsBoxContainer from '../container/TabsBoxContainer'
+import Topbar from './Topbar'
+import MainContent from './MainContent'
+import AddBtn from './AddBtn'
+import InfoPanel from './InfoPanel/index'
 
 
+/**
+ * composition
+ * - Topbar
+ * - MainContent
+ * - AddBtn
+ */
 const TargetsManagement = () => (
-	<div>
-		<TabsBoxContainer />		
+	<div id="TargetsManagement">
+		{/*<Topbar />*/}
+		{/*<MainContent />*/}
+		{/*<AddBtn />*/}
+		<InfoPanel />
 	</div>
 )
 

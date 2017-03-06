@@ -1,4 +1,4 @@
-import { getLocalStore, setLocalStore } from '../store/localStore'
+import { getLocalStore, setLocalStore } from './localStore'
 
 
 /**

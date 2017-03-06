@@ -1,14 +1,14 @@
-import { getLocalStore } from '../util/localStore'
-import tasks from './tasks.js'
+import { getLocalStore } from '../store/localStore'
+import targets from './targets.js'
 import setting from './setting.js'
-import { initialSetting } from '../util/initialState'
+import { initialSetting } from '../store/initialState'
 
 
 const localStore = getLocalStore() || {}
 
 const targetsManagement = (state = localStore, action) => {
   return {
-    tasks: tasks(setting.tasks, action),
+    targets: targets(setting.tasks, action),
     setting: setting(state.setting, action)    
   }
 }

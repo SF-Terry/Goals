@@ -5,4 +5,4 @@ import './sass/app.scss'
 import './js/component/app.js'
 
 // reactify
-import './js/util/rectify.js'
+// import './js/util/rectify.js'
