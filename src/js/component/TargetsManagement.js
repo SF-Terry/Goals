@@ -3,6 +3,7 @@ import Topbar from './Topbar'
 import MainContent from './MainContent'
 import AddBtn from './AddBtn'
 import InfoPanel from './InfoPanel/index'
+import TimeSelector from './InfoPanel/TimeSelector'
 
 
 /**
@@ -16,7 +17,8 @@ const TargetsManagement = () => (
 		{/*<Topbar />*/}
 		{/*<MainContent />*/}
 		{/*<AddBtn />*/}
-		<InfoPanel />
+		{/*<InfoPanel />*/}
+		<TimeSelector targetType={1} timeType={1} timeSelectorCallback={ data => console.log(data) } />
 	</div>
 )
 

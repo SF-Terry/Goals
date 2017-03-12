@@ -9,7 +9,7 @@ class TypeSelector extends React.Component {
   constructor(props) {
     super(props)
 
-    this.options = allTargetTypes.map( (type, index) => ({
+    this.options = Object.values(allTargetTypes).map( (type, index) => ({
       text: type,
       value: type  
     }) )

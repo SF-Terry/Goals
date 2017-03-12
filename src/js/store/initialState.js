@@ -1,3 +1,6 @@
+import moment from 'moment'
+
+
 export const storeName = 'TargetsManagement'
 
 export const targetModel = {
@@ -10,21 +13,30 @@ export const targetModel = {
     isTiming: null,
     startDate: null,
     endDate: null,
-    isRepeating: null,
+    isRepeating: null
   }
 
 export const settingModel = {
 
 }
 
-export const allTargetTypes = [
-    'today',
-    'week',
-    'month',
-    'project',
-    'year',
-    'long',
-    'nextWeek',
-    'nextMonth',
-    'nextYear'
-]
+export const allTargetTypes = new Map([
+    ['today', 1],    
+    ['week', 2],    
+    ['month', 3],       
+    ['project', 4],     
+    ['year', 5],    
+    ['long', 6],    
+    ['tomorrow', 7],    
+    ['nextWeek', 8],    
+    ['nextMonth', 9],       
+    ['nextYear', 10]
+])
+
+/**
+ * time type in TimeSelector
+ */
+export const allTimeType = new Map([
+    ['startTime', 1],
+    ['endTime', 2]
+])

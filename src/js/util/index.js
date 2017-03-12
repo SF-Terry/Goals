@@ -26,3 +26,13 @@ export const setStateToLocalStore = store => next => action => {
   console.log('localStorage: ', getLocalStore())
   return result
 }
+
+/**
+ * hide component
+ * @param {boolean} bool 
+ */
+export const hide = bool => ({
+  width: bool ? '100%' : '0px',
+  height: bool ? 'auto' : '0px',
+  overflow: 'hidden'
+})

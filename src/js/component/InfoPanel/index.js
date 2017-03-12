@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Grid, Input } from 'semantic-ui-react'
-const {Row, Column} = Grid
+import { Button, Grid, Input, Checkbox } from 'semantic-ui-react'
+const { Row, Column } = Grid
 
 import LevelBtnGroup from './LevelBtnGroup'
 import TypeSelector from './TypeSelector'
@@ -33,7 +33,7 @@ class InfoPanel extends React.Component {
     const { level } = this.props
 
     return (
-      <div>
+      <Grid>
         {/*  Name{ */}
         <Row centered>
           <Column width={14}>
@@ -44,8 +44,8 @@ class InfoPanel extends React.Component {
 
         {/* Level{ */}
         <Row centered>
-          <Column width={16}>
-            <LevelBtnGroup level={level} callback={ this.levelBtnGroup_callback } />
+          <Column width={16} textAlign='center'>
+            <LevelBtnGroup level={level} callback={this.levelBtnGroup_callback} />
           </Column>
         </Row>
         {/* Level} */}
@@ -53,11 +53,50 @@ class InfoPanel extends React.Component {
         {/* TypeSelector{ */}
         <Row centered>
           <Column width={16}>
-            <TypeSelector callback={ this.typeSelector_callback } />
+            <TypeSelector callback={this.typeSelector_callback} />
           </Column>
         </Row>
         {/* TypeSelector} */}
-      </div>
+
+        <Row centered>
+          {/* Timer{ */}
+          <Column width={8} textAlign='center'>
+            <Checkbox label='定时' />
+          </Column>
+          {/* Timer}*/}
+
+          {/* Repeat{ */}
+          <Column width={8} textAlign='center'>
+            <Checkbox label='重复' />
+          </Column>
+          {/* Repeat}*/}
+        </Row>
+
+        {/* Complete Btn{ */}
+        <Row centered>
+          <Column width={12} >
+            <Button content='完成' fluid color='blue' />
+          </Column>
+        </Row>
+        {/* Complete Btn} */}
+
+        {/* ContinueToAdd Btn{ */}
+        <Row centered>
+          <Column width={12} >
+            <Button content='继续添加' fluid color='teal' />
+          </Column>
+        </Row>
+        {/* ContinueToAdd Btn} */}
+
+        {/* Cancel Btn{ */}
+        <Row centered>
+          <Column width={12} >
+            <Button content='返回' fluid color='grey' />
+          </Column>
+        </Row>
+        {/* Cancel Btn} */}
+        
+      </Grid>
     )
   }
 }
