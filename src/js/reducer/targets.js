@@ -3,12 +3,12 @@ import { targetModel } from '../store/initialState'
 
 const target = (state = { ...targetModel }, action) => {
   switch (action.type) {
-    case 'ADD_TASK':
+    case 'ADD_TARGET':
       return {
-        ...initialTarget,
+        ...state,
         ...action.target
       }
-    case 'MODIFY_TASK':
+    case 'MODIFY_TARGET':
       const {key, value} = action
       if (state) {
         return {
@@ -21,12 +21,12 @@ const target = (state = { ...targetModel }, action) => {
 
 const targets = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_TASK':
+    case 'ADD_TARGET':
       return [
         ...state,
         target(undefined, action)
       ]
-    case 'MODIFY_TASK':
+    case 'MODIFY_TARGET':
       return state.map(target => {
         if (target.id === action.id) {
           return target(target, action)
@@ -34,6 +34,7 @@ const targets = (state = [], action) => {
         return target
       })
   }
+  return state
 }
 
 

@@ -28,6 +28,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "timeType": action.value
       }
+    case 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT':
+      return {
+        ...state,
+        "shouldShowCaveat": action.value
+      }
     case 'MODIFY_INNERSTATE_TMPTARGET':
       return {
         ...state,

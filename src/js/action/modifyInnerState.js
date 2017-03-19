@@ -4,6 +4,7 @@
 
 const MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE'
 const MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE'
+const MODIFY_INNERSTATE_SHOULDSHOWCAVEAT= 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT'
 const MODIFY_INNERSTATE_TMPTARGET = 'MODIFY_INNERSTATE_TMPTARGET'
 const MODIFY_INNERSTATE_TMPTARGET_NAME = 'MODIFY_INNERSTATE_TMPTARGET_NAME'
 const MODIFY_INNERSTATE_TMPTARGET_LEVEL = 'MODIFY_INNERSTATE_TMPTARGET_LEVEL'
@@ -41,6 +42,12 @@ export const modifyInnerState_route = manufature(MODIFY_INNERSTATE_ROUTE)
  * @param  {number} value 
  */
 export const modifyInnerState_timeType = manufature(MODIFY_INNERSTATE_TIMETYPE)
+
+/**
+ * modify showing caveat state in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_shouldShowCaveat = manufature(MODIFY_INNERSTATE_SHOULDSHOWCAVEAT)
 
 /**
  * modify temporary target in innerState

@@ -11,11 +11,11 @@ import Timepicker from './TimePicker'
 let startDate, endDate, minDate, maxDate
 
 /**
- * get min date by type
- * @param {number} targetType 
+ * get min date by target type
+ * @param {number} type 
  */
-const getMinDate = targetType => {
-  switch (targetType) {
+const getMinDate = type => {
+  switch (type) {
     case 1:
       // today
       return moment().startOf('day')
@@ -50,12 +50,12 @@ const getMinDate = targetType => {
 }
 
 /**
- * get max date by targetType
- * @param {number} targetType 
+ * get max date by target type
+ * @param {number} type 
  */
-const getMaxDate = (minDate, targetType) => {
+const getMaxDate = (minDate, type) => {
   const targetDate = moment(minDate)
-  switch (targetType) {
+  switch (type) {
     case 1:
       // today
       return targetDate.add(1, 'days')
@@ -106,12 +106,14 @@ class TimeSelector extends React.Component {
   constructor(props) {
     super(props)
 
-    const { type } = props
+    const { type } = this.props
 
-    minDate = props.minDate || getMinDate(type)
-    maxDate = props.maxDate || getMaxDate(minDate, type)
-    startDate = props.startDate || minDate
-    endDate = props.endDate || minDate
+    console.log(1, type)
+
+    minDate = this.props.minDate || getMinDate(type)
+    maxDate = this.props.maxDate || getMaxDate(minDate, type)
+    startDate = this.props.startDate || minDate
+    endDate = this.props.endDate || minDate
 
     this.state = {
       shouldShowStartTime: true
@@ -192,14 +194,13 @@ class TimeSelector extends React.Component {
   }
 }
 
-
 TimeSelector.propTypes = {
   type: React.PropTypes.number,
   timeType: React.PropTypes.number,
-  minDate: React.PropTypes.instanceOf(moment),
-  maxDate: React.PropTypes.instanceOf(moment),
-  startDate: React.PropTypes.instanceOf(moment),
-  endDate: React.PropTypes.instanceOf(moment),
+  minDate: React.PropTypes.object,
+  maxDate: React.PropTypes.object,
+  startDate: React.PropTypes.object,
+  endDate: React.PropTypes.object,
   onStartTimeClick: React.PropTypes.func,
   onEndTimeClick: React.PropTypes.func,
   onConfirmClick: React.PropTypes.func,

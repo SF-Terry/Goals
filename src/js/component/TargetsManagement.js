@@ -1,11 +1,23 @@
 import React from 'react'
 
+import { Message } from 'semantic-ui-react'
+
 import Topbar from './Topbar'
 import MainContent from './MainContent'
 import AddBtnContainer from '../container/AddBtnContainer'
 import AddPageInfoPanelContainer from '../container/InfoPanelContainer/AddPageInfoPanelContainer'
 import EditPageInfoPanelContainer from '../container/InfoPanelContainer/EditPageInfoPanelContainer'
 import TimeSelectorContainer from '../container/TimeSelectorContainer'
+
+
+
+const MessageExampleNegative = () => (
+	<div id='caveat'>
+		<Message negative>
+			<Message.Header>{GV.caveat}</Message.Header>
+		</Message>
+	</div>
+)
 
 
 /**
@@ -15,9 +27,16 @@ import TimeSelectorContainer from '../container/TimeSelectorContainer'
  * - AddBtn
  */
 const TargetsManagement = ({
+	shouldShowCaveat,
 	route
 }) => (
 		<div id="TargetsManagement">
+			{
+				// caveat message
+				shouldShowCaveat && <MessageExampleNegative />
+			}
+
+
 			{
 				// route to home page
 				route === 0 && (

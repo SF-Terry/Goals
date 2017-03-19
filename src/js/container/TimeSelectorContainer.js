@@ -8,7 +8,8 @@ import {
   modifyInnerState_tmpTarget_startDate,
   modifyInnerState_tmpTarget_endDate,
   modifyInnerState_tmpTarget_minDate,
-  modifyInnerState_tmpTarget_maxDate
+  modifyInnerState_tmpTarget_maxDate,
+  modifyInnerState_tmpTarget_isTiming
 } from '../action/modifyInnerState'
 
 
@@ -59,6 +60,8 @@ const mapDispatchToProps = (dispatch) => {
       // route to adding Page info panel
       const prevRoute = ReduxStore.getState().innerState.prevRoute
       dispatch(modifyInnerState_route(prevRoute))
+      // if the time is selected, temporary muse be timing
+      dispatch(modifyInnerState_tmpTarget_isTiming(true))
     },
     /**
      * cancel button's click event

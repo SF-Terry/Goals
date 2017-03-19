@@ -1,14 +1,14 @@
-const MODIFY_TASK = 'MODIFY_TASK'
+const ADD_TARGET = 'MODIFY_TARGET'
 
 
 
 /**
- * modify task
+ * modify target
  * @param {object} param0 
  */
-export const modifyTask = ({id, key, value}) => {
+export const modifyTarget = ({id, key, value}) => {
   return {
-    type: MODIFY_TASK,
+    type: MODIFY_TARGET,
     id,
     key,
     value

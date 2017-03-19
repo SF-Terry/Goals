@@ -16,6 +16,12 @@ export const storeName = 'TargetsManagement'
  */
 export const targetModel = {
     /**
+     * @var {number}
+     * id
+     * default is null
+     */
+    id: null,
+    /**
      * @var {string}
      * name
      * default is empty string
@@ -97,7 +103,7 @@ export const innerStateModel = {
      * current mock page id
      * default is 0(home page)
      */
-    route: 0,
+    route: 2,
     /**
      * @var {number}
      * prev mock page id
@@ -115,6 +121,10 @@ export const innerStateModel = {
      * default is 'startTime'
      */
     timeType: 1,
+    /**
+     * show caveat or not
+     */
+    shouldShowCaveat: false
 }
 
 /**
@@ -183,3 +193,4 @@ export const allPages = new Map([
     ['modify', 2],
     ['setTime', 3]
 ])
+

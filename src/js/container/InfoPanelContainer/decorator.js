@@ -1,43 +1,46 @@
+import {
+  modifyInnerState_route,
+  modifyInnerState_tmpTarget_name,
+  modifyInnerState_tmpTarget_level,
+  modifyInnerState_tmpTarget_type,
+  modifyInnerState_tmpTarget_isTiming,
+  modifyInnerState_tmpTarget_isRepeating
+} from '../../action/modifyInnerState'
+
+import validator from '../../util/validator'
+
+
+/**
+ * get current state
+ */
+const getState = () => ReduxStore.getState()
+/**
+ * get temporary target
+ */
+const getTmpTarget = () => getState().innerState.tmpTarget
+
+
 /**
  * decorate InfoPanel 
  * @param {object} o obect parameter
  *     @param {function} connect redux's connect method 
  *     @param {React.Component} InfoPanel 
- *     @param {function} getName 
- *         @return {string}
- *     @param {function} getLevel 
- *         @return {number}
- *     @param {function} getType 
- *         @return {number}
- *     @param {function} modifyName 
- *     @param {function} modifyLevel 
- *     @param {function} modifyType 
- * 
- * 
- *     @param {function} modifyRoute 
+ *     @param {function} onClickConfirm confirm button's click event
+ *     @param {function} onClickContinueAdd continute adding button's click event
  */
 const decorate = ({
   connect,
   InfoPanel,
-  getName,
-  getLevel,
-  getType,
-  getIsTiming,
-  getIsRepeating,
-  modifyRoute,
-  modifyName,
-  modifyLevel,
-  modifyType,
-  modifyIsTiming,
-  modifyIsRepeating,
+  onConfirmClick,
+  onContinueAddClick
 }) => {
   const mapStateToProps = state => {
     return {
-      name: getName(),
-      level: getLevel(),
-      type: getType(),
-      isTiming: getIsTiming(),
-      isRepeating: getIsRepeating(),
+      name: getTmpTarget().name,
+      level: getTmpTarget().level,
+      type: getTmpTarget().type,
+      isTiming: getTmpTarget().isTiming,
+      isRepeating: getTmpTarget().isRepeating,
     }
   }
 
@@ -52,7 +55,7 @@ const decorate = ({
         const { value } = info
 
         // change the name of temporary target
-        dispatch(modifyName(value))
+        dispatch(modifyInnerState_tmpTarget_name(value))
       },
       /**
        * level button click event
@@ -60,7 +63,7 @@ const decorate = ({
        */
       onLevelBtnClick(level) {
         // change the level of temporary target
-        dispatch(modifyLevel(level))
+        dispatch(modifyInnerState_tmpTarget_level(level))
       },
       /**
        * type selector change event
@@ -69,21 +72,24 @@ const decorate = ({
        */
       onTypeSelectorChange(type) {
         // change the type of temporary target
-        dispatch(modifyType(type))
+        dispatch(modifyInnerState_tmpTarget_type(type))
+        // reset timer to untime
+        dispatch(modifyInnerState_tmpTarget_isTiming(false))
         // show time selector when type is 'project' or 'long'
         const shouldShowTimeSelector = type === 4 || type === 6
-        shouldShowTimeSelector && dispatch(modifyRoute(3))
+        shouldShowTimeSelector && dispatch(modifyInnerState_route(3))
       },
       /**
        * timer's click event
        * @param {boolean} isTiming 
        */
       onTimerClick(isTiming) {
-        // change the timing state of temporary target
-        dispatch(modifyIsTiming(isTiming))
+        // make timer unchecked when timer is checked
+        const shouldUncheck = isTiming
+        shouldUncheck && dispatch(modifyInnerState_tmpTarget_isTiming(false))
         // show time selector when timer is activated
-        const shouldShowTimeSelector = isTiming
-        shouldShowTimeSelector && dispatch(modifyRoute(3))
+        const shouldShowTimeSelector = !isTiming
+        shouldShowTimeSelector && dispatch(modifyInnerState_route(3))
       },
       /**
        * repeater's click event
@@ -91,13 +97,29 @@ const decorate = ({
        */
       onRepeaterClick(isRepeating) {
         // change the repeating state of temporary target
-        dispatch(modifyIsRepeating(isRepeating))
+        dispatch(modifyInnerState_tmpTarget_isRepeating(!isRepeating))
       },
+      /**
+       * confirm button's click event
+       */
+      onConfirmClick,
+      /**
+       * continute to add button's click event, used in adding page info panel
+       */
+      onContinueAddClick,
       /**
        * cancel button click event
        */
       onCancelClick() {
-        dispatch(modifyRoute(0))
+        dispatch(modifyInnerState_route(0))
+      },
+      /**
+       * validate the temporary target
+       */
+      validate() {
+        const { tmpTarget } = ReduxStore.getState().innerState
+        const isValidSuccess = validator.target(tmpTarget)
+        return isValidSuccess
       }
     }
   }

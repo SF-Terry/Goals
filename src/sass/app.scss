@@ -1,4 +1,9 @@
 #TargetsManagement {
+	#caveat{
+		position: fixed; top: 1%; left: 1%; z-index: 9;
+		width: 98%; 
+		text-align: center;
+	}
   #AddBtn{
 		// width: 50px; height: 50px;
 		position: fixed; bottom: 10%; right: 10%;

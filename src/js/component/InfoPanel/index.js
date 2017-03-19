@@ -13,6 +13,8 @@ class InfoPanel extends React.Component {
 
     this._onTimerClick = this._onTimerClick.bind(this)
     this._onRepeaterClick = this._onRepeaterClick.bind(this)
+    this._onConfirmClick = this._onConfirmClick.bind(this)
+    this._onContinueAddClick = this._onContinueAddClick.bind(this)
   }
 
   /**
@@ -23,8 +25,8 @@ class InfoPanel extends React.Component {
   _onTimerClick(e, info) {
     const { onTimerClick } = this.props
     const { checked } = info
-    
-    onTimerClick(!checked)
+
+    onTimerClick(checked)
   }
 
   /**
@@ -35,8 +37,34 @@ class InfoPanel extends React.Component {
   _onRepeaterClick(e, info) {
     const { onRepeaterClick } = this.props
     const { checked } = info
-    
-    onRepeaterClick(!checked)
+
+    onRepeaterClick(checked)
+  }
+
+  /**
+   * confirm button's click event
+   */
+  _onConfirmClick() {
+    const { validate, onConfirmClick } = this.props
+
+    // validate temporary target
+    const isValidateSuccess = validate()
+
+    // if validation is successful, invoke function onConfirmClick
+    isValidateSuccess && onConfirmClick()
+  }
+
+  /**
+   * continue to add button's click event
+   */
+  _onContinueAddClick() {
+    const { validate, onContinueAddClick } = this.props
+
+    // validate temporary target
+    const isValidateSuccess = validate()
+
+    // if validation is successful, invoke function onContinueAddClick
+    isValidateSuccess && onContinueAddClick()
   }
 
   /**
@@ -57,8 +85,13 @@ class InfoPanel extends React.Component {
       onNameInputChange,
       onLevelBtnClick,
       onTypeSelectorChange,
+      onConfirmClick,
+      onContinueAddClick,
       onCancelClick
     } = this.props
+
+    // if onContinueAddClick exsits, show continute to add button
+    const exsitContinuteAddBtn = !!onContinueAddClick
 
     return (
       <Grid>
@@ -89,7 +122,7 @@ class InfoPanel extends React.Component {
         <Row centered>
           {/* Timer{ */}
           <Column width={8} textAlign='center'>
-            <Checkbox label='定时'  checked={isTiming} onClick={this._onTimerClick} />
+            <Checkbox label='定时' checked={isTiming} onClick={this._onTimerClick} />
           </Column>
           {/* Timer}*/}
 
@@ -100,20 +133,23 @@ class InfoPanel extends React.Component {
           {/* Repeat}*/}
         </Row>
 
-        {/* Complete Btn{ */}
+        {/* Confirm Btn{ */}
         <Row centered>
           <Column width={12} >
-            <Button content='完成' fluid color='blue' />
+            <Button content='完成' fluid color='blue' onClick={this._onConfirmClick} />
           </Column>
         </Row>
-        {/* Complete Btn} */}
+        {/* Confirm Btn} */}
 
         {/* ContinueToAdd Btn{ */}
-        <Row centered>
-          <Column width={12} >
-            <Button content='继续添加' fluid color='teal' />
-          </Column>
-        </Row>
+        {
+          exsitContinuteAddBtn &&
+          <Row centered>
+            <Column width={12} >
+              <Button content='继续添加' fluid color='teal' onClick={this._onContinueAddClick} />
+            </Column>
+          </Row>
+        }
         {/* ContinueToAdd Btn} */}
 
         {/* Cancel Btn{ */}
@@ -141,6 +177,7 @@ InfoPanel.propTypes = {
   onTimerClick: React.PropTypes.func,
   onRepeaterClick: React.PropTypes.func,
   onCancelClick: React.PropTypes.func,
+  validate: React.PropTypes.func
 }
 
 

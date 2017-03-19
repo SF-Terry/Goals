@@ -8,6 +8,7 @@ import { allPages } from '../store/initialState'
 const mapStateToProps = (state) => {
 	const home = allPages.get("home")
 	return {
+		shouldShowCaveat: state.innerState.shouldShowCaveat,
 		route: state.innerState.route || home
 	}
 }

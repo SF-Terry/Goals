@@ -4,31 +4,48 @@ import { connect } from 'react-redux'
 import InfoPanel from '../../component/InfoPanel/index'
 
 import {
+  addTarget
+} from '../../action'
+import {
   modifyInnerState_route,
-  modifyInnerState_tmpTarget_name,
-  modifyInnerState_tmpTarget_level,
-  modifyInnerState_tmpTarget_type,
-  modifyInnerState_tmpTarget_isTiming,
-  modifyInnerState_tmpTarget_isRepeating
+  modifyInnerState_tmpTarget
 } from '../../action/modifyInnerState'
 
+import { targetModel } from '../../store/initialState'
 import decorate from './decorator'
 
+
+/**
+ * confirm button's click event
+ */
+const onConfirmClick = () => {
+  // add target
+  const { tmpTarget } = ReduxStore.getState().innerState
+  ReduxStore.dispatch(addTarget(tmpTarget))
+
+  // route to home page
+  ReduxStore.dispatch(modifyInnerState_route(0))
+}
+
+/**
+ * continute to add button's click event
+ */
+const onContinueAddClick = () => {
+  // add target
+  const { tmpTarget } = ReduxStore.getState().innerState
+  ReduxStore.dispatch(addTarget(tmpTarget))
+
+  // reset temporary target
+  ReduxStore.dispatch(modifyInnerState_tmpTarget({
+    ...targetModel
+  }))
+}
 
 const AddPageInfoPanelContainer = decorate({
   connect,
   InfoPanel,
-  getName: () => ReduxStore.getState().innerState.tmpTarget.name,
-  getLevel: () => ReduxStore.getState().innerState.tmpTarget.level,
-  getType: () => ReduxStore.getState().innerState.tmpTarget.type,
-  getIsTiming: () => ReduxStore.getState().innerState.tmpTarget.isTiming,
-  getIsRepeating: () => ReduxStore.getState().innerState.tmpTarget.isRepeating,
-  modifyRoute: modifyInnerState_route,
-  modifyName: modifyInnerState_tmpTarget_name,
-  modifyLevel: modifyInnerState_tmpTarget_level,
-  modifyType: modifyInnerState_tmpTarget_type,
-  modifyIsTiming: modifyInnerState_tmpTarget_isTiming,
-  modifyIsRepeating: modifyInnerState_tmpTarget_isRepeating
+  onConfirmClick,
+  onContinueAddClick
 })
 
 

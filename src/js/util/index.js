@@ -1,5 +1,13 @@
 import { getLocalStore, setLocalStore } from '../store/localStore'
+import $ from './jQuery'
 
+import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
+
+/**
+ * @var {number}
+ * timer for hiding caveat
+ */
+let caveatTimer = null
 
 /**
  * console the dispatching and state info
@@ -42,6 +50,29 @@ export const hide = bool => ({
  */
 export const getReverseMap = map => {
   const arr = [...map.entries()]
-  const newContructor = arr.map( subArr => subArr.reverse() )
+  const newContructor = arr.map(subArr => subArr.reverse())
   return new Map(newContructor)
+}
+
+
+/**
+ * show caveat message
+ */
+export const showCaveat = msg => {
+  GV.caveat = msg
+
+  const showCaveat = () => ReduxStore.dispatch(modifyInnerState_shouldShowCaveat(true))
+  const hideCaveat = () => ReduxStore.dispatch(modifyInnerState_shouldShowCaveat(false))
+
+  // show caveat
+  showCaveat()
+
+  // hide caveat
+  if (caveatTimer) {
+    clearInterval(caveatTimer)
+  }
+  caveatTimer = setTimeout(() => {
+    hideCaveat()
+  }, 1200)
+
 }

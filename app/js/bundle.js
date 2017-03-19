@@ -85,7 +85,7 @@
 
 
 	// module
-	exports.push([module.id, "#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n", ""]);
+	exports.push([module.id, "#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n", ""]);
 
 	// exports
 
@@ -24456,6 +24456,12 @@
 	 */
 	var targetModel = exports.targetModel = {
 	  /**
+	   * @var {number}
+	   * id
+	   * default is null
+	   */
+	  id: null,
+	  /**
 	   * @var {string}
 	   * name
 	   * default is empty string
@@ -24535,7 +24541,7 @@
 	   * current mock page id
 	   * default is 0(home page)
 	   */
-	  route: 0,
+	  route: 2,
 	  /**
 	   * @var {number}
 	   * prev mock page id
@@ -24552,7 +24558,11 @@
 	   * the time type of time selector
 	   * default is 'startTime'
 	   */
-	  timeType: 1
+	  timeType: 1,
+	  /**
+	   * show caveat or not
+	   */
+	  shouldShowCaveat: false
 	};
 
 	/**
@@ -39490,11 +39500,25 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getReverseMap = exports.hide = exports.setStateToLocalStore = exports.logger = undefined;
+	exports.showCaveat = exports.getReverseMap = exports.hide = exports.setStateToLocalStore = exports.logger = undefined;
 
 	var _localStore = __webpack_require__(227);
 
+	var _jQuery = __webpack_require__(974);
+
+	var _jQuery2 = _interopRequireDefault(_jQuery);
+
+	var _modifyInnerState = __webpack_require__(871);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	/**
+	 * @var {number}
+	 * timer for hiding caveat
+	 */
+	var caveatTimer = null;
 
 	/**
 	 * console the dispatching and state info
@@ -39553,6 +39577,31 @@
 	  return new Map(newContructor);
 	};
 
+	/**
+	 * show caveat message
+	 */
+	var showCaveat = exports.showCaveat = function showCaveat(msg) {
+	  GV.caveat = msg;
+
+	  var showCaveat = function showCaveat() {
+	    return ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_shouldShowCaveat)(true));
+	  };
+	  var hideCaveat = function hideCaveat() {
+	    return ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_shouldShowCaveat)(false));
+	  };
+
+	  // show caveat
+	  showCaveat();
+
+	  // hide caveat
+	  if (caveatTimer) {
+	    clearInterval(caveatTimer);
+	  }
+	  caveatTimer = setTimeout(function () {
+	    hideCaveat();
+	  }, 1200);
+	};
+
 /***/ },
 /* 340 */
 /***/ function(module, exports, __webpack_require__) {
@@ -39576,9 +39625,9 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case 'ADD_TASK':
-	      return _extends({}, initialTarget, action.target);
-	    case 'MODIFY_TASK':
+	    case 'ADD_TARGET':
+	      return _extends({}, state, action.target);
+	    case 'MODIFY_TARGET':
 	      var key = action.key,
 	          value = action.value;
 
@@ -39593,9 +39642,9 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case 'ADD_TASK':
+	    case 'ADD_TARGET':
 	      return [].concat(_toConsumableArray(state), [target(undefined, action)]);
-	    case 'MODIFY_TASK':
+	    case 'MODIFY_TARGET':
 	      return state.map(function (target) {
 	        if (target.id === action.id) {
 	          return target(target, action);
@@ -39603,6 +39652,7 @@
 	        return target;
 	      });
 	  }
+	  return state;
 	};
 
 	exports.default = targets;
@@ -39682,6 +39732,10 @@
 	    case 'MODIFY_INNERSTATE_TIMETYPE':
 	      return _extends({}, state, {
 	        "timeType": action.value
+	      });
+	    case 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT':
+	      return _extends({}, state, {
+	        "shouldShowCaveat": action.value
 	      });
 	    case 'MODIFY_INNERSTATE_TMPTARGET':
 	      return _extends({}, state, {
@@ -39769,6 +39823,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 		var home = _initialState.allPages.get("home");
 		return {
+			shouldShowCaveat: state.innerState.shouldShowCaveat,
 			route: state.innerState.route || home
 		};
 	};
@@ -39790,6 +39845,8 @@
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(346);
 
 	var _Topbar = __webpack_require__(345);
 
@@ -39817,6 +39874,22 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var MessageExampleNegative = function MessageExampleNegative() {
+		return _react2.default.createElement(
+			'div',
+			{ id: 'caveat' },
+			_react2.default.createElement(
+				_semanticUiReact.Message,
+				{ negative: true },
+				_react2.default.createElement(
+					_semanticUiReact.Message.Header,
+					null,
+					GV.caveat
+				)
+			)
+		);
+	};
+
 	/**
 	 * composition
 	 * - Topbar
@@ -39824,10 +39897,14 @@
 	 * - AddBtn
 	 */
 	var TargetsManagement = function TargetsManagement(_ref) {
-		var route = _ref.route;
+		var shouldShowCaveat = _ref.shouldShowCaveat,
+		    route = _ref.route;
 		return _react2.default.createElement(
 			'div',
 			{ id: 'TargetsManagement' },
+
+			// caveat message
+			shouldShowCaveat && _react2.default.createElement(MessageExampleNegative, null),
 
 			// route to home page
 			route === 0 && _react2.default.createElement(
@@ -73730,6 +73807,7 @@
 
 	var MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE';
 	var MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE';
+	var MODIFY_INNERSTATE_SHOULDSHOWCAVEAT = 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT';
 	var MODIFY_INNERSTATE_TMPTARGET = 'MODIFY_INNERSTATE_TMPTARGET';
 	var MODIFY_INNERSTATE_TMPTARGET_NAME = 'MODIFY_INNERSTATE_TMPTARGET_NAME';
 	var MODIFY_INNERSTATE_TMPTARGET_LEVEL = 'MODIFY_INNERSTATE_TMPTARGET_LEVEL';
@@ -73770,6 +73848,12 @@
 	 * @param  {number} value 
 	 */
 	var modifyInnerState_timeType = exports.modifyInnerState_timeType = manufature(MODIFY_INNERSTATE_TIMETYPE);
+
+	/**
+	 * modify showing caveat state in innerState
+	 * @param  {number} value 
+	 */
+	var modifyInnerState_shouldShowCaveat = exports.modifyInnerState_shouldShowCaveat = manufature(MODIFY_INNERSTATE_SHOULDSHOWCAVEAT);
 
 	/**
 	 * modify temporary target in innerState
@@ -73859,6 +73943,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -73869,7 +73955,11 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
+	var _action = __webpack_require__(977);
+
 	var _modifyInnerState = __webpack_require__(871);
+
+	var _initialState = __webpack_require__(228);
 
 	var _decorator = __webpack_require__(876);
 
@@ -73877,30 +73967,37 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * confirm button's click event
+	 */
+	var onConfirmClick = function onConfirmClick() {
+	  // add target
+	  var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
+
+	  ReduxStore.dispatch((0, _action.addTarget)(tmpTarget));
+
+	  // route to home page
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	};
+
+	/**
+	 * continute to add button's click event
+	 */
+	var onContinueAddClick = function onContinueAddClick() {
+	  // add target
+	  var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
+
+	  ReduxStore.dispatch((0, _action.addTarget)(tmpTarget));
+
+	  // reset temporary target
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(_extends({}, _initialState.targetModel)));
+	};
+
 	var AddPageInfoPanelContainer = (0, _decorator2.default)({
 	  connect: _reactRedux.connect,
 	  InfoPanel: _index2.default,
-	  getName: function getName() {
-	    return ReduxStore.getState().innerState.tmpTarget.name;
-	  },
-	  getLevel: function getLevel() {
-	    return ReduxStore.getState().innerState.tmpTarget.level;
-	  },
-	  getType: function getType() {
-	    return ReduxStore.getState().innerState.tmpTarget.type;
-	  },
-	  getIsTiming: function getIsTiming() {
-	    return ReduxStore.getState().innerState.tmpTarget.isTiming;
-	  },
-	  getIsRepeating: function getIsRepeating() {
-	    return ReduxStore.getState().innerState.tmpTarget.isRepeating;
-	  },
-	  modifyRoute: _modifyInnerState.modifyInnerState_route,
-	  modifyName: _modifyInnerState.modifyInnerState_tmpTarget_name,
-	  modifyLevel: _modifyInnerState.modifyInnerState_tmpTarget_level,
-	  modifyType: _modifyInnerState.modifyInnerState_tmpTarget_type,
-	  modifyIsTiming: _modifyInnerState.modifyInnerState_tmpTarget_isTiming,
-	  modifyIsRepeating: _modifyInnerState.modifyInnerState_tmpTarget_isRepeating
+	  onConfirmClick: onConfirmClick,
+	  onContinueAddClick: onContinueAddClick
 	});
 
 	exports.default = AddPageInfoPanelContainer;
@@ -73952,6 +74049,8 @@
 
 	    _this._onTimerClick = _this._onTimerClick.bind(_this);
 	    _this._onRepeaterClick = _this._onRepeaterClick.bind(_this);
+	    _this._onConfirmClick = _this._onConfirmClick.bind(_this);
+	    _this._onContinueAddClick = _this._onContinueAddClick.bind(_this);
 	    return _this;
 	  }
 
@@ -73969,7 +74068,7 @@
 	      var checked = info.checked;
 
 
-	      onTimerClick(!checked);
+	      onTimerClick(checked);
 	    }
 
 	    /**
@@ -73985,7 +74084,45 @@
 	      var checked = info.checked;
 
 
-	      onRepeaterClick(!checked);
+	      onRepeaterClick(checked);
+	    }
+
+	    /**
+	     * confirm button's click event
+	     */
+
+	  }, {
+	    key: '_onConfirmClick',
+	    value: function _onConfirmClick() {
+	      var _props = this.props,
+	          validate = _props.validate,
+	          onConfirmClick = _props.onConfirmClick;
+
+	      // validate temporary target
+
+	      var isValidateSuccess = validate();
+
+	      // if validation is successful, invoke function onConfirmClick
+	      isValidateSuccess && onConfirmClick();
+	    }
+
+	    /**
+	     * continue to add button's click event
+	     */
+
+	  }, {
+	    key: '_onContinueAddClick',
+	    value: function _onContinueAddClick() {
+	      var _props2 = this.props,
+	          validate = _props2.validate,
+	          onContinueAddClick = _props2.onContinueAddClick;
+
+	      // validate temporary target
+
+	      var isValidateSuccess = validate();
+
+	      // if validation is successful, invoke function onContinueAddClick
+	      isValidateSuccess && onContinueAddClick();
 	    }
 
 	    /**
@@ -74001,17 +74138,22 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props,
-	          name = _props.name,
-	          level = _props.level,
-	          type = _props.type,
-	          isTiming = _props.isTiming,
-	          isRepeating = _props.isRepeating,
-	          onNameInputChange = _props.onNameInputChange,
-	          onLevelBtnClick = _props.onLevelBtnClick,
-	          onTypeSelectorChange = _props.onTypeSelectorChange,
-	          onCancelClick = _props.onCancelClick;
+	      var _props3 = this.props,
+	          name = _props3.name,
+	          level = _props3.level,
+	          type = _props3.type,
+	          isTiming = _props3.isTiming,
+	          isRepeating = _props3.isRepeating,
+	          onNameInputChange = _props3.onNameInputChange,
+	          onLevelBtnClick = _props3.onLevelBtnClick,
+	          onTypeSelectorChange = _props3.onTypeSelectorChange,
+	          onConfirmClick = _props3.onConfirmClick,
+	          onContinueAddClick = _props3.onContinueAddClick,
+	          onCancelClick = _props3.onCancelClick;
 
+	      // if onContinueAddClick exsits, show continute to add button
+
+	      var exsitContinuteAddBtn = !!onContinueAddClick;
 
 	      return _react2.default.createElement(
 	        _semanticUiReact.Grid,
@@ -74063,16 +74205,16 @@
 	          _react2.default.createElement(
 	            Column,
 	            { width: 12 },
-	            _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210', fluid: true, color: 'blue' })
+	            _react2.default.createElement(_semanticUiReact.Button, { content: '\u5B8C\u6210', fluid: true, color: 'blue', onClick: this._onConfirmClick })
 	          )
 	        ),
-	        _react2.default.createElement(
+	        exsitContinuteAddBtn && _react2.default.createElement(
 	          Row,
 	          { centered: true },
 	          _react2.default.createElement(
 	            Column,
 	            { width: 12 },
-	            _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0', fluid: true, color: 'teal' })
+	            _react2.default.createElement(_semanticUiReact.Button, { content: '\u7EE7\u7EED\u6DFB\u52A0', fluid: true, color: 'teal', onClick: this._onContinueAddClick })
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -74102,7 +74244,8 @@
 	  onTypeSelectorChange: _react2.default.PropTypes.func,
 	  onTimerClick: _react2.default.PropTypes.func,
 	  onRepeaterClick: _react2.default.PropTypes.func,
-	  onCancelClick: _react2.default.PropTypes.func
+	  onCancelClick: _react2.default.PropTypes.func,
+	  validate: _react2.default.PropTypes.func
 	};
 
 	exports.default = InfoPanel;
@@ -74288,53 +74431,56 @@
 
 /***/ },
 /* 876 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _modifyInnerState = __webpack_require__(871);
+
+	var _validator = __webpack_require__(976);
+
+	var _validator2 = _interopRequireDefault(_validator);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * get current state
+	 */
+	var getState = function getState() {
+	  return ReduxStore.getState();
+	};
+	/**
+	 * get temporary target
+	 */
+	var getTmpTarget = function getTmpTarget() {
+	  return getState().innerState.tmpTarget;
+	};
+
 	/**
 	 * decorate InfoPanel 
 	 * @param {object} o obect parameter
 	 *     @param {function} connect redux's connect method 
 	 *     @param {React.Component} InfoPanel 
-	 *     @param {function} getName 
-	 *         @return {string}
-	 *     @param {function} getLevel 
-	 *         @return {number}
-	 *     @param {function} getType 
-	 *         @return {number}
-	 *     @param {function} modifyName 
-	 *     @param {function} modifyLevel 
-	 *     @param {function} modifyType 
-	 * 
-	 * 
-	 *     @param {function} modifyRoute 
+	 *     @param {function} onClickConfirm confirm button's click event
+	 *     @param {function} onClickContinueAdd continute adding button's click event
 	 */
 	var decorate = function decorate(_ref) {
 	  var connect = _ref.connect,
 	      InfoPanel = _ref.InfoPanel,
-	      getName = _ref.getName,
-	      getLevel = _ref.getLevel,
-	      getType = _ref.getType,
-	      getIsTiming = _ref.getIsTiming,
-	      getIsRepeating = _ref.getIsRepeating,
-	      modifyRoute = _ref.modifyRoute,
-	      modifyName = _ref.modifyName,
-	      modifyLevel = _ref.modifyLevel,
-	      modifyType = _ref.modifyType,
-	      modifyIsTiming = _ref.modifyIsTiming,
-	      modifyIsRepeating = _ref.modifyIsRepeating;
+	      onConfirmClick = _ref.onConfirmClick,
+	      onContinueAddClick = _ref.onContinueAddClick;
 
 	  var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	      name: getName(),
-	      level: getLevel(),
-	      type: getType(),
-	      isTiming: getIsTiming(),
-	      isRepeating: getIsRepeating()
+	      name: getTmpTarget().name,
+	      level: getTmpTarget().level,
+	      type: getTmpTarget().type,
+	      isTiming: getTmpTarget().isTiming,
+	      isRepeating: getTmpTarget().isRepeating
 	    };
 	  };
 
@@ -74350,7 +74496,7 @@
 
 	        // change the name of temporary target
 
-	        dispatch(modifyName(value));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_name)(value));
 	      },
 
 	      /**
@@ -74359,7 +74505,7 @@
 	       */
 	      onLevelBtnClick: function onLevelBtnClick(level) {
 	        // change the level of temporary target
-	        dispatch(modifyLevel(level));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_level)(level));
 	      },
 
 	      /**
@@ -74369,10 +74515,12 @@
 	       */
 	      onTypeSelectorChange: function onTypeSelectorChange(type) {
 	        // change the type of temporary target
-	        dispatch(modifyType(type));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_type)(type));
+	        // reset timer to untime
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
 	        // show time selector when type is 'project' or 'long'
 	        var shouldShowTimeSelector = type === 4 || type === 6;
-	        shouldShowTimeSelector && dispatch(modifyRoute(3));
+	        shouldShowTimeSelector && dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
 	      },
 
 	      /**
@@ -74380,11 +74528,12 @@
 	       * @param {boolean} isTiming 
 	       */
 	      onTimerClick: function onTimerClick(isTiming) {
-	        // change the timing state of temporary target
-	        dispatch(modifyIsTiming(isTiming));
+	        // make timer unchecked when timer is checked
+	        var shouldUncheck = isTiming;
+	        shouldUncheck && dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
 	        // show time selector when timer is activated
-	        var shouldShowTimeSelector = isTiming;
-	        shouldShowTimeSelector && dispatch(modifyRoute(3));
+	        var shouldShowTimeSelector = !isTiming;
+	        shouldShowTimeSelector && dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
 	      },
 
 	      /**
@@ -74393,14 +74542,32 @@
 	       */
 	      onRepeaterClick: function onRepeaterClick(isRepeating) {
 	        // change the repeating state of temporary target
-	        dispatch(modifyIsRepeating(isRepeating));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isRepeating)(!isRepeating));
 	      },
 
+	      /**
+	       * confirm button's click event
+	       */
+	      onConfirmClick: onConfirmClick,
+	      /**
+	       * continute to add button's click event, used in adding page info panel
+	       */
+	      onContinueAddClick: onContinueAddClick,
 	      /**
 	       * cancel button click event
 	       */
 	      onCancelClick: function onCancelClick() {
-	        dispatch(modifyRoute(0));
+	        dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      },
+
+	      /**
+	       * validate the temporary target
+	       */
+	      validate: function validate() {
+	        var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
+
+	        var isValidSuccess = _validator2.default.target(tmpTarget);
+	        return isValidSuccess;
 	      }
 	    };
 	  };
@@ -74432,26 +74599,21 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _modifyInnerState = __webpack_require__(871);
-
 	var _decorator = __webpack_require__(876);
 
 	var _decorator2 = _interopRequireDefault(_decorator);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/**
+	 * confirm button's click event
+	 */
+	var onConfirmClick = function onConfirmClick() {};
+
 	var EditPageInfoPanelContainer = (0, _decorator2.default)({
 	  connect: _reactRedux.connect,
 	  InfoPanel: _index2.default,
-	  getName: function getName() {
-	    return ReduxStore.getState().innerState.tmpTarget.name;
-	  },
-	  getLevel: function getLevel() {
-	    return ReduxStore.getState().innerState.tmpTarget.level;
-	  },
-	  modifyName: _modifyInnerState.modifyInnerState_tmpTarget_name,
-	  modifyLevel: _modifyInnerState.modifyInnerState_tmpTarget_level,
-	  modifyRoute: _modifyInnerState.modifyInnerState_route
+	  onConfirmClick: onConfirmClick
 	});
 
 	exports.default = EditPageInfoPanelContainer;
@@ -74529,6 +74691,8 @@
 	      // route to adding Page info panel
 	      var prevRoute = ReduxStore.getState().innerState.prevRoute;
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(prevRoute));
+	      // if the time is selected, temporary muse be timing
+	      dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(true));
 	    },
 
 	    /**
@@ -74592,11 +74756,11 @@
 	    maxDate = void 0;
 
 	/**
-	 * get min date by type
-	 * @param {number} targetType 
+	 * get min date by target type
+	 * @param {number} type 
 	 */
-	var getMinDate = function getMinDate(targetType) {
-	  switch (targetType) {
+	var getMinDate = function getMinDate(type) {
+	  switch (type) {
 	    case 1:
 	      // today
 	      return (0, _moment2.default)().startOf('day');
@@ -74631,12 +74795,12 @@
 	};
 
 	/**
-	 * get max date by targetType
-	 * @param {number} targetType 
+	 * get max date by target type
+	 * @param {number} type 
 	 */
-	var getMaxDate = function getMaxDate(minDate, targetType) {
+	var getMaxDate = function getMaxDate(minDate, type) {
 	  var targetDate = (0, _moment2.default)(minDate);
-	  switch (targetType) {
+	  switch (type) {
 	    case 1:
 	      // today
 	      return targetDate.add(1, 'days');
@@ -74692,13 +74856,15 @@
 
 	    var _this = _possibleConstructorReturn(this, (TimeSelector.__proto__ || Object.getPrototypeOf(TimeSelector)).call(this, props));
 
-	    var type = props.type;
+	    var type = _this.props.type;
 
 
-	    minDate = props.minDate || getMinDate(type);
-	    maxDate = props.maxDate || getMaxDate(minDate, type);
-	    startDate = props.startDate || minDate;
-	    endDate = props.endDate || minDate;
+	    console.log(1, type);
+
+	    minDate = _this.props.minDate || getMinDate(type);
+	    maxDate = _this.props.maxDate || getMaxDate(minDate, type);
+	    startDate = _this.props.startDate || minDate;
+	    endDate = _this.props.endDate || minDate;
 
 	    _this.state = {
 	      shouldShowStartTime: true
@@ -74807,10 +74973,10 @@
 	TimeSelector.propTypes = {
 	  type: _react2.default.PropTypes.number,
 	  timeType: _react2.default.PropTypes.number,
-	  minDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  maxDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  startDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  endDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  minDate: _react2.default.PropTypes.object,
+	  maxDate: _react2.default.PropTypes.object,
+	  startDate: _react2.default.PropTypes.object,
+	  endDate: _react2.default.PropTypes.object,
 	  onStartTimeClick: _react2.default.PropTypes.func,
 	  onEndTimeClick: _react2.default.PropTypes.func,
 	  onConfirmClick: _react2.default.PropTypes.func,
@@ -81257,6 +81423,86 @@
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 976 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _modifyInnerState = __webpack_require__(871);
+
+	var _index = __webpack_require__(339);
+
+	var nameInvalidMsg = 'Target name is empty!';
+
+	var validator = {
+	  // validate the target
+	  target: function target(_target) {
+	    var t = _target;
+	    var isNameInValid = t.name === '';
+	    // if name is invalid, show caveat
+	    if (isNameInValid) {
+	      (0, _index.showCaveat)(nameInvalidMsg);
+	      return false;
+	    } else {
+	      return true;
+	    }
+	  }
+	};
+
+	exports.default = validator;
+
+/***/ },
+/* 977 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var ADD_TARGET = 'ADD_TARGET';
+	var MODIFY_SETTING = 'MODIFY_SETTING';
+
+	/**
+	 * generate unique ID
+	 */
+	var generateId = function generateId() {
+	  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+	    var r = Math.random() * 16 | 0,
+	        v = c == 'x' ? r : r & 0x3 | 0x8;
+	    return v.toString(16);
+	  }) + new Date().getTime();
+	};
+
+	/**
+	 * add target
+	 * @param {object} target 
+	 */
+	var addTarget = exports.addTarget = function addTarget(target) {
+	  return {
+	    type: ADD_TARGET,
+	    target: _extends({}, target, {
+	      id: generateId()
+	    })
+	  };
+	};
+
+	var modifySetting = exports.modifySetting = function modifySetting(key, value) {
+	  return {
+	    type: MODIFY_SETTING,
+	    key: key,
+	    value: value
+	  };
+	};
 
 /***/ }
 /******/ ]);

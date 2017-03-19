@@ -1,20 +1,26 @@
-const ADD_TASK = 'ADD_TASK'
+const ADD_TARGET= 'ADD_TARGET'
 const MODIFY_SETTING = 'MODIFY_SETTING'
 
-const tasks = ReduxStore.getState().tasks || []
-const idArr = tasks.map(task => task.id)
-let id = Math.max(...idArr)
+/**
+ * generate unique ID
+ */
+const generateId = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    let r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8
+    return v.toString(16)
+  }) + (new Date().getTime())
+}
 
 /**
- * add task
- * @param {object} taskInfo 
+ * add target
+ * @param {object} target 
  */
-export const addTask = taskInfo => {
+export const addTarget = target => {
   return {
-    type: ADD_TASK,
-    task: {
-      ...taskInfo,
-      id: id
+    type: ADD_TARGET,
+    target: {
+      ...target,
+      id: generateId()
     }
   }
 }
