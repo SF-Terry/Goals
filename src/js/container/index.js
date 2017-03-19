@@ -1,8 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import TargetsManagement from '../component/TargetsManagement'
+import { allPages } from '../store/initialState'
 
 
-const AppContainer = connect()(TabsBox)
+const mapStateToProps = (state) => {
+	const home = allPages.get("home")
+	return {
+		route: state.innerState.route || home
+	}
+}
 
-export default AppContainer
+const TargetsManagementContainer = connect(
+	mapStateToProps
+)(TargetsManagement)
+
+
+export default TargetsManagementContainer

@@ -7,37 +7,65 @@ import TypeSelector from './TypeSelector'
 
 
 
-
 class InfoPanel extends React.Component {
   constructor(props) {
     super(props)
+
+    this._onTimerClick = this._onTimerClick.bind(this)
+    this._onRepeaterClick = this._onRepeaterClick.bind(this)
   }
 
   /**
-   * LevelBtnGroup component's callback 
-   * @param {String} level target level
+   * timer checkbox's click event
+   * @param {*} e 
+   * @param {*} info 
    */
-  levelBtnGroup_callback(level) {
-    console.log(level)
+  _onTimerClick(e, info) {
+    const { onTimerClick } = this.props
+    const { checked } = info
+    
+    onTimerClick(!checked)
+  }
+
+  /**
+   * repeater checkbox's click event
+   * @param {*} e 
+   * @param {*} info 
+   */
+  _onRepeaterClick(e, info) {
+    const { onRepeaterClick } = this.props
+    const { checked } = info
+    
+    onRepeaterClick(!checked)
   }
 
   /**
    * TypeSelector component's callback 
    * @param {String}  type target type
    */
-  typeSelector_callback(type) {
+  _typeSelector_callback(type) {
     console.log(type)
   }
 
   render() {
-    const { level } = this.props
+    const {
+      name,
+      level,
+      type,
+      isTiming,
+      isRepeating,
+      onNameInputChange,
+      onLevelBtnClick,
+      onTypeSelectorChange,
+      onCancelClick
+    } = this.props
 
     return (
       <Grid>
         {/*  Name{ */}
         <Row centered>
           <Column width={14}>
-            <Input placeholder='任务内容' fluid value={name} />
+            <Input placeholder='任务内容' fluid value={name} onChange={onNameInputChange} />
           </Column>
         </Row>
         {/*  Name} */}
@@ -45,15 +73,15 @@ class InfoPanel extends React.Component {
         {/* Level{ */}
         <Row centered>
           <Column width={16} textAlign='center'>
-            <LevelBtnGroup level={level} callback={this.levelBtnGroup_callback} />
+            <LevelBtnGroup activatedLevel={level} onBtnClick={onLevelBtnClick} />
           </Column>
         </Row>
         {/* Level} */}
 
-        {/* TypeSelector{ */}
+        {/*TypeSelector{ */}
         <Row centered>
           <Column width={16}>
-            <TypeSelector callback={this.typeSelector_callback} />
+            <TypeSelector type={type} onChange={onTypeSelectorChange} />
           </Column>
         </Row>
         {/* TypeSelector} */}
@@ -61,13 +89,13 @@ class InfoPanel extends React.Component {
         <Row centered>
           {/* Timer{ */}
           <Column width={8} textAlign='center'>
-            <Checkbox label='定时' />
+            <Checkbox label='定时'  checked={isTiming} onClick={this._onTimerClick} />
           </Column>
           {/* Timer}*/}
 
           {/* Repeat{ */}
           <Column width={8} textAlign='center'>
-            <Checkbox label='重复' />
+            <Checkbox label='重复' checked={isRepeating} onClick={this._onRepeaterClick} />
           </Column>
           {/* Repeat}*/}
         </Row>
@@ -91,16 +119,29 @@ class InfoPanel extends React.Component {
         {/* Cancel Btn{ */}
         <Row centered>
           <Column width={12} >
-            <Button content='返回' fluid color='grey' />
+            <Button content='返回' fluid color='grey' onClick={onCancelClick} />
           </Column>
         </Row>
         {/* Cancel Btn} */}
-        
+
       </Grid>
     )
   }
 }
 
+InfoPanel.propTypes = {
+  name: React.PropTypes.string,
+  level: React.PropTypes.number,
+  type: React.PropTypes.number,
+  isTiming: React.PropTypes.bool,
+  isRepeating: React.PropTypes.bool,
+  onNameInputChange: React.PropTypes.func,
+  onLevelBtnClick: React.PropTypes.func,
+  onTypeSelectorChange: React.PropTypes.func,
+  onTimerClick: React.PropTypes.func,
+  onRepeaterClick: React.PropTypes.func,
+  onCancelClick: React.PropTypes.func,
+}
 
 
 export default InfoPanel

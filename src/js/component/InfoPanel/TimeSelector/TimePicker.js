@@ -20,7 +20,7 @@ let minDate, maxDate, defaultDate
  * @param {moment} defaultDate current defaultDate
  * @param {moment} maxDate current maxDate
  * @param {moment} minDate current minDate
- * @param {function} timepickerCallback callback(date)
+ * @param {function} callback callback(date)
  */
 class Timepicker extends React.Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class Timepicker extends React.Component {
   }
 
   onDateChange(date) {
-    let { timepickerCallback } = this.props
+    let { callback } = this.props
 
     this.setState(prevState => {
       const prevDate = prevState.date || (this.props.defaultDate || moment())
@@ -87,7 +87,7 @@ class Timepicker extends React.Component {
       }
     })
 
-    timepickerCallback(date)
+    callback(date)
   }
 
   render() {

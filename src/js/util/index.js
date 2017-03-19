@@ -36,3 +36,12 @@ export const hide = bool => ({
   height: bool ? 'auto' : '0px',
   overflow: 'hidden'
 })
+
+/**
+ * get new reverse map
+ */
+export const getReverseMap = map => {
+  const arr = [...map.entries()]
+  const newContructor = arr.map( subArr => subArr.reverse() )
+  return new Map(newContructor)
+}

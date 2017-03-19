@@ -1,9 +1,11 @@
 import React from 'react'
+
 import Topbar from './Topbar'
 import MainContent from './MainContent'
-import AddBtn from './AddBtn'
-import InfoPanel from './InfoPanel/index'
-import TimeSelector from './InfoPanel/TimeSelector'
+import AddBtnContainer from '../container/AddBtnContainer'
+import AddPageInfoPanelContainer from '../container/InfoPanelContainer/AddPageInfoPanelContainer'
+import EditPageInfoPanelContainer from '../container/InfoPanelContainer/EditPageInfoPanelContainer'
+import TimeSelectorContainer from '../container/TimeSelectorContainer'
 
 
 /**
@@ -12,15 +14,37 @@ import TimeSelector from './InfoPanel/TimeSelector'
  * - MainContent
  * - AddBtn
  */
-const TargetsManagement = () => (
-	<div id="TargetsManagement">
-		{/*<Topbar />*/}
-		{/*<MainContent />*/}
-		{/*<AddBtn />*/}
-		{/*<InfoPanel />*/}
-		<TimeSelector targetType={1} timeType={1} timeSelectorCallback={ data => console.log(data) } />
-	</div>
-)
+const TargetsManagement = ({
+	route
+}) => (
+		<div id="TargetsManagement">
+			{
+				// route to home page
+				route === 0 && (
+					<div>
+						<Topbar />
+						<MainContent />
+						<AddBtnContainer />
+					</div>
+				)
+			}
+
+			{
+				// route to add page
+				route === 1 && <AddPageInfoPanelContainer />
+			}
+
+			{
+				// route to edit page
+				route === 2 && <EditPageInfoPanelContainer />
+			}
+
+			{
+				// route to set time page
+				route === 3 && <TimeSelectorContainer />
+			}
+		</div>
+	)
 
 
 export default TargetsManagement

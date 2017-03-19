@@ -11,7 +11,7 @@ import Timepicker from './TimePicker'
 let startDate, endDate, minDate, maxDate
 
 /**
- * get min date by targetType
+ * get min date by type
  * @param {number} targetType 
  */
 const getMinDate = targetType => {
@@ -91,53 +91,39 @@ const getMaxDate = (minDate, targetType) => {
 
 /**
  * TimeSelector
- * @param {number} targetType target's type
+ * @param {number} type target's type
  * @param {number} timeType time type
  * @param {moment} startDate
  * @param {moment} endDate
  * @param {moment} minDate
  * @param {moment} maxDate
- * @param {function} timeSelectorCallback callback({startDate, endDate, minDate, maxDate})
+ * @param {function} onStartTimeClick 
+ * @param {function} onEndTimeClick 
+ * @param {function} onConfirmClick 
+ * @param {function} onCancelClick 
  */
 class TimeSelector extends React.Component {
   constructor(props) {
     super(props)
 
-    const { timeType, targetType } = props
+    const { type } = props
 
-    minDate = props.minDate || getMinDate(targetType)
-    maxDate = props.maxDate || getMaxDate(minDate, targetType)
+    minDate = props.minDate || getMinDate(type)
+    maxDate = props.maxDate || getMaxDate(minDate, type)
     startDate = props.startDate || minDate
     endDate = props.endDate || minDate
 
     this.state = {
-      shouldShowStartTime: timeType === 1
+      shouldShowStartTime: true
     }
 
-    this._handleStartTimeBtnClick = this._handleStartTimeBtnClick.bind(this)
-    this._handleEndTimeBtnClick = this._handleEndTimeBtnClick.bind(this)
-    this._handleCancelBtnClick = this._handleCancelBtnClick.bind(this)
-    this._handleConfirmBtnClick = this._handleConfirmBtnClick.bind(this)
+    this._onConfirmClick = this._onConfirmClick.bind(this)
   }
 
-  _handleStartTimeBtnClick() {
-    this.setState({
-      shouldShowStartTime: true
-    })
-  }
+  _onConfirmClick() {
+    const { onConfirmClick } = this.props
 
-  _handleEndTimeBtnClick() {
-    this.setState({
-      shouldShowStartTime: false
-    })
-  }
-
-  _handleCancelBtnClick() {
-
-  }
-
-  _handleConfirmBtnClick() {
-    this.props.timeSelectorCallback({
+    onConfirmClick({
       startDate, 
       endDate, 
       minDate, 
@@ -154,7 +140,10 @@ class TimeSelector extends React.Component {
   }
 
   render() {
-    const { shouldShowStartTime } = this.state
+    const { timeType, onStartTimeClick, onEndTimeClick, onCancelClick } = this.props
+
+    const shouldHideStartTime = timeType === 2
+    const shouldShowOutline = shouldHideStartTime
 
     return (
       <div>
@@ -162,13 +151,13 @@ class TimeSelector extends React.Component {
           <Row>
             {/* startTime{ */}
             <Column width={8} style={{ textAlign: 'right' }}>
-              <Button content='开始时间' basic={!shouldShowStartTime} primary onClick={this._handleStartTimeBtnClick} />
+              <Button content='开始时间' basic={shouldShowOutline} primary onClick={onStartTimeClick} />
             </Column>
             {/* startTime} */}
 
             {/* endTime{ */}
             <Column width={8} style={{ textAlign: 'left' }}>
-              <Button content='结束时间' basic={shouldShowStartTime} primary onClick={this._handleEndTimeBtnClick} />
+              <Button content='结束时间' basic={!shouldShowOutline} primary onClick={onEndTimeClick} />
             </Column>
             {/* endTime} */}
           </Row>
@@ -176,14 +165,14 @@ class TimeSelector extends React.Component {
           <Row>
             <Column>
               {/* start time Timepicker{ */}
-              <div style={hide(shouldShowStartTime)}>
-                <Timepicker defaultDate={startDate} minDate={minDate} maxDate={maxDate} timepickerCallback={this._startTime_timepickerCallback} />
+              <div style={ hide(shouldHideStartTime) }>
+                <Timepicker defaultDate={startDate} minDate={minDate} maxDate={maxDate} callback={this._startTime_timepickerCallback} />
               </div>
               {/* start time Timepicker{ */}
 
               {/* end time Timepicker{ */}
-              <div style={hide(!shouldShowStartTime)}>
-                <Timepicker defaultDate={endDate} minDate={minDate} maxDate={maxDate} timepickerCallback={this._endTime_timepickerCallback} />
+              <div style={hide(!shouldHideStartTime) }>
+                <Timepicker defaultDate={endDate} minDate={minDate} maxDate={maxDate} callback={this._endTime_timepickerCallback} />
               </div>
               {/* end time Timepicker{ */}
             </Column>
@@ -191,16 +180,30 @@ class TimeSelector extends React.Component {
 
           <Row>
             <Column width={8} style={{ textAlign: 'right' }}>
-              <Button content='返回' color='grey' onClick={this._handleCancelBtnClick} />
+              <Button content='返回' color='grey' onClick={onCancelClick} />
             </Column>
             <Column width={8} style={{ textAlign: 'left' }}>
-              <Button content='确认' color='green' onClick={this._handleConfirmBtnClick} />
+              <Button content='确认' color='green' onClick={this._onConfirmClick} />
             </Column>
           </Row>
         </Grid>
       </div>
     )
   }
+}
+
+
+TimeSelector.propTypes = {
+  type: React.PropTypes.number,
+  timeType: React.PropTypes.number,
+  minDate: React.PropTypes.instanceOf(moment),
+  maxDate: React.PropTypes.instanceOf(moment),
+  startDate: React.PropTypes.instanceOf(moment),
+  endDate: React.PropTypes.instanceOf(moment),
+  onStartTimeClick: React.PropTypes.func,
+  onEndTimeClick: React.PropTypes.func,
+  onConfirmClick: React.PropTypes.func,
+  onCancelClick: React.PropTypes.func
 }
 
 

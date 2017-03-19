@@ -1,38 +1,56 @@
 import React from 'react'
 import { Dropdown } from 'semantic-ui-react'
 
-import { allTargetTypes } from '../../store/initialState'
+import { allTargetTypes, allTargetTypes_reverse } from '../../store/initialState'
 
+
+/**
+ * @const {array} 
+ * options for Dropdown
+ */
+const taskTypesOptions = [...allTargetTypes.values()].map(type => ({
+  text: type,
+  value: type
+}))
 
 
 class TypeSelector extends React.Component {
   constructor(props) {
     super(props)
 
-    this.options = Object.values(allTargetTypes).map( (type, index) => ({
-      text: type,
-      value: type  
-    }) )
-    
-    this.value = this.props.value   
-
-    this.handleDropdownChange = this.handleDropdownChange.bind(this)
+    this._onSelectorChange = this._onSelectorChange.bind(this)
   }
 
-  handleDropdownChange(e, result) {
-    const { value: type } = result
-    
-    this.props.callback(type)
+  /**
+   * selector's change event
+   * @param {} e 
+   * @param {object} info 
+   */
+  _onSelectorChange(e, info) {
+    const { onChange } = this.props
+
+    const { value } = info
+    const type = allTargetTypes_reverse.get(value)
+
+    onChange(type)
   }
 
   render() {
+    const { type } = this.props
+    const value = allTargetTypes.get(type)
+
     return (
       <div>
-        <Dropdown fluid selection default options={this.options} onChange={this.handleDropdownChange} />
+        <Dropdown fluid selection value={value} options={taskTypesOptions} onChange={ this._onSelectorChange } ></Dropdown>
       </div>
     )
   }
 }
+
+TypeSelector.propTypes = {
+  type: React.PropTypes.number,
+  onChange: React.PropTypes.func
+};
 
 
 export default TypeSelector
