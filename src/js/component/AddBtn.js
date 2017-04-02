@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'semantic-ui-react'
 
+
 const AddBtn = ({
   click
 }) => (
@@ -9,5 +10,8 @@ const AddBtn = ({
   </div>
 )
 
+AddBtn.propTypes = {
+  click: React.PropTypes.func,
+};
 
 export default AddBtn

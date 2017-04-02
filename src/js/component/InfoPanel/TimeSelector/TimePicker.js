@@ -13,7 +13,7 @@ import $ from '../../../util/jQuery'
 moment.locale('zh-cn')
 
 
-let minDate, maxDate, defaultDate 
+let minDate, maxDate, defaultDate
 
 /**
  * class Timepicker
@@ -63,25 +63,25 @@ class Timepicker extends React.Component {
         }
         // change day, reset hour
         if (isDayChanged) {
-          resetTime('hour', date)          
+          resetTime('hour', date)
           resetTime('minute', date)
         }
         // change month, reset day
         if (isMonthChanged) {
-          resetTime('date', date)          
-          resetTime('hour', date)          
+          resetTime('date', date)
+          resetTime('hour', date)
           resetTime('minute', date)
         }
         // change year, reset month
         if (isYearChanged) {
-          resetTime('month', date)          
-          resetTime('date', date)          
-          resetTime('hour', date)          
+          resetTime('month', date)
+          resetTime('date', date)
+          resetTime('hour', date)
           resetTime('minute', date)
         }
 
       }
-      
+
       return {
         date
       }
@@ -117,6 +117,13 @@ class Timepicker extends React.Component {
       </div>)
   }
 }
+
+Timepicker.propTypes = {
+  defaultDate: React.PropTypes.instanceOf(moment),
+  maxDate: React.PropTypes.instanceOf(moment),
+  minDate: React.PropTypes.instanceOf(moment),
+  callback: React.PropTypes.func
+};
 
 
 export default Timepicker

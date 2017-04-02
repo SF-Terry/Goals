@@ -70,6 +70,11 @@ export const targetModel = {
     maxDate: null,
     /**
      * @var {boolean}
+     * deleted date
+     */
+    deletedDate: null,
+    /**
+     * @var {boolean}
      * is or not Completed
      */
     isCompleted: null,
@@ -82,8 +87,24 @@ export const targetModel = {
      * @var {boolean}
      * is or not repeating
      */
-    isRepeating: false
-  }
+    isRepeating: false,
+    /**
+     * @var {boolean}
+     * is or not topping
+     */
+    isTopping: false,
+    /**
+     * @var {boolean}
+     * is or not deleted
+     */
+    isDeleted: false,
+    /**
+     * @var {moment}
+     * the date when topping
+     */
+    toppingDate: null
+
+}
 
 /**
  * @const {object}
@@ -102,8 +123,13 @@ export const innerStateModel = {
      * @var {number}
      * current mock page id
      * default is 0(home page)
+     * 0 - home page
+     * 1 - adding page
+     * 2 - editing page
+     * 3 - time setting page
+     * 4 - timeline page
      */
-    route: 2,
+    route: 0,
     /**
      * @var {number}
      * prev mock page id
@@ -114,7 +140,7 @@ export const innerStateModel = {
      * @var {object}
      * temporary target
      */
-    tmpTarget: {...targetModel},
+    tmpTarget: { ...targetModel },
     /**
      * @var {object}
      * the time type of time selector
@@ -122,9 +148,38 @@ export const innerStateModel = {
      */
     timeType: 1,
     /**
+     * @var {boolean}
      * show caveat or not
      */
-    shouldShowCaveat: false
+    shouldShowCaveat: false,
+    /**
+     * @var {number}
+     * current type in list
+     * default is 1(today)
+     */
+    listType: 1,
+    /**
+     * @var {boolean}
+     * showing list item modal state
+     */
+    shouldShowListItemModal: false,
+    /**
+     * @var {object}
+     * the target in list item modal
+     */
+    targetInListItemModal: null,
+    /**
+     * page mode
+     * 1 - homepage
+     * 2 - timeline mode
+     * @var {number}
+     * default mode is homepage
+     */
+    mode: 1,
+    /**
+     * email used to export data
+     */
+    email: null
 }
 
 /**
@@ -132,15 +187,15 @@ export const innerStateModel = {
  * all the target types 
  */
 export const allTargetTypes = new Map([
-    [1, 'today'],    
-    [2, 'week'],    
-    [3, 'month'],       
-    [4, 'project'],     
-    [5, 'year'],    
-    [6, 'long'],    
-    [7, 'tomorrow'],    
-    [8, 'nextWeek'],    
-    [9, 'nextMonth'],       
+    [1, 'today'],
+    [2, 'week'],
+    [3, 'month'],
+    [4, 'project'],
+    [5, 'year'],
+    [6, 'long'],
+    [7, 'tomorrow'],
+    [8, 'nextWeek'],
+    [9, 'nextMonth'],
     [10, 'nextYear']
 ])
 
@@ -194,3 +249,22 @@ export const allPages = new Map([
     ['setTime', 3]
 ])
 
+
+/**
+ * @const {map}
+ * months map
+ */
+export const monthsMap = new Map([
+    [1, 'January'],
+    [2, 'February'],
+    [3, 'March'],
+    [4, 'April'],
+    [5, 'May'],
+    [6, 'June'],
+    [7, 'July'],
+    [8, 'August'],
+    [9, 'September'],
+    [10, 'October'],
+    [11, 'November'],
+    [12, 'December']
+])

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { getLocalStore, setLocalStore } from '../store/localStore'
 import $ from './jQuery'
 
@@ -75,4 +76,36 @@ export const showCaveat = msg => {
     hideCaveat()
   }, 1200)
 
+}
+
+/**
+ * get timing info
+ * @param {moment} startDate
+ * @param {moment} endDate
+ */
+export const getTimingInfo = (startDate, endDate) => {
+  const isBefore = moment().isSameOrBefore(startDate);
+  const isDoing = moment().isAfter(startDate) && moment().isSameOrBefore(endDate);
+  const isAfter = moment().isAfter(endDate);
+
+  if (isBefore) {
+    const s = moment().to(startDate, true);
+    return s.replace(/ /g, "") + '后开始';
+  }
+  if (isDoing) {
+    const s = moment().to(endDate, true);
+    return s.replace(/ /g, "") + '后结束';
+  }
+  if (isAfter) {
+    const s = moment().to(endDate, true);
+    return '超时' + s.replace(/ /g, "");
+  }
+}
+
+/**
+ * get target by id
+ * @param {string} id
+ */
+export const getTargetById = id => {
+  return ReduxStore.getState().targets.filter( target => target.id === id )[0]
 }

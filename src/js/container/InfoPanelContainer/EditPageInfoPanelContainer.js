@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 
 import InfoPanel from '../../component/InfoPanel/index'
 
+import { modifyInnerState_route } from '../../action/modifyInnerState'
+import { modifyTarget } from '../../action/modifyTarget'
+// import { getTargetById } from '../../util'
+
 import decorate from './decorator'
 
 
@@ -10,7 +14,21 @@ import decorate from './decorator'
  * confirm button's click event
  */
 const onConfirmClick = () => {
-  
+  // get temporary target 
+  const { tmpTarget } = ReduxStore.getState().innerState
+  const { id } = tmpTarget
+
+  // modify target
+  Object.keys(tmpTarget).map(key => {
+    ReduxStore.dispatch(modifyTarget({
+      id,
+      key,
+      value: tmpTarget[key]
+    }))
+  })
+
+  // route to home page
+  ReduxStore.dispatch(modifyInnerState_route(0))
 }
 
 const EditPageInfoPanelContainer = decorate({

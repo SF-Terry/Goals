@@ -9,7 +9,8 @@ const mapStateToProps = (state) => {
 	const home = allPages.get("home")
 	return {
 		shouldShowCaveat: state.innerState.shouldShowCaveat,
-		route: state.innerState.route || home
+		route: state.innerState.route || home,
+		shouldShowListItemModal: state.innerState.shouldShowListItemModal
 	}
 }
 

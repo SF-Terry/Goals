@@ -40,6 +40,10 @@ class LevelBtnGroup extends React.Component {
   }
 }
 
+LevelBtnGroup.propTypes = {
+  activatedLevel: React.PropTypes.number,
+  onBtnClick: React.PropTypes.func
+};
 
 
 export default LevelBtnGroup

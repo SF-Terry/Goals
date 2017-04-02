@@ -17,10 +17,10 @@ const innerState = (state = { ...innerStateModel }, action) => {
 
   switch (action.type) {
     case 'MODIFY_INNERSTATE_ROUTE':
-      const preRoute = ReduxStore.getState().innerState.route
+      const prevRoute = ReduxStore.getState().innerState.route
       return {
         ...state,
-        "prevRoute": preRoute,
+        prevRoute,
         "route": action.value
       }
     case 'MODIFY_INNERSTATE_TIMETYPE':
@@ -32,6 +32,31 @@ const innerState = (state = { ...innerStateModel }, action) => {
       return {
         ...state,
         "shouldShowCaveat": action.value
+      }
+    case 'MODIFY_INNERSTATE_LISTTYPE':
+      return {
+        ...state,
+        "listType": action.value
+      }
+    case 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL':
+      return {
+        ...state,
+        "shouldShowListItemModal": action.value
+      }
+    case 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL':
+      return {
+        ...state,
+        "targetInListItemModal": action.value
+      }
+    case 'MODIFY_INNERSTATE_MODE':
+      return {
+        ...state,
+        "mode": action.value
+      }
+    case 'MODIFY_INNERSTATE_EMAIL':
+      return {
+        ...state,
+        "email": action.value
       }
     case 'MODIFY_INNERSTATE_TMPTARGET':
       return {

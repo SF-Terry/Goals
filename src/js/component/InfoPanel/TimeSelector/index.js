@@ -108,8 +108,6 @@ class TimeSelector extends React.Component {
 
     const { type } = this.props
 
-    console.log(1, type)
-
     minDate = this.props.minDate || getMinDate(type)
     maxDate = this.props.maxDate || getMaxDate(minDate, type)
     startDate = this.props.startDate || minDate
@@ -197,10 +195,10 @@ class TimeSelector extends React.Component {
 TimeSelector.propTypes = {
   type: React.PropTypes.number,
   timeType: React.PropTypes.number,
-  minDate: React.PropTypes.object,
-  maxDate: React.PropTypes.object,
-  startDate: React.PropTypes.object,
-  endDate: React.PropTypes.object,
+  minDate: React.PropTypes.instanceOf(moment),
+  maxDate: React.PropTypes.instanceOf(moment),
+  startDate: React.PropTypes.instanceOf(moment),
+  endDate: React.PropTypes.instanceOf(moment),
   onStartTimeClick: React.PropTypes.func,
   onEndTimeClick: React.PropTypes.func,
   onConfirmClick: React.PropTypes.func,

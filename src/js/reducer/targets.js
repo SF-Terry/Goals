@@ -27,11 +27,11 @@ const targets = (state = [], action) => {
         target(undefined, action)
       ]
     case 'MODIFY_TARGET':
-      return state.map(target => {
-        if (target.id === action.id) {
-          return target(target, action)
+      return state.map(oneTarget => {
+        if (oneTarget.id === action.id) {
+          return target(oneTarget, action)
         }
-        return target
+        return oneTarget
       })
   }
   return state

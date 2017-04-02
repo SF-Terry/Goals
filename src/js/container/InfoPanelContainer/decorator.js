@@ -15,9 +15,13 @@ import validator from '../../util/validator'
  */
 const getState = () => ReduxStore.getState()
 /**
+ * get innerState
+ */
+const getInnerState = () => getState().innerState
+/**
  * get temporary target
  */
-const getTmpTarget = () => getState().innerState.tmpTarget
+const getTmpTarget = () => getInnerState().tmpTarget
 
 
 /**
@@ -111,7 +115,10 @@ const decorate = ({
        * cancel button click event
        */
       onCancelClick() {
-        dispatch(modifyInnerState_route(0))
+        // route to homepage or timeline
+        const { mode } = getInnerState()
+        const route = mode === 1 ? 0 : 4
+        dispatch(modifyInnerState_route(route))
       },
       /**
        * validate the temporary target

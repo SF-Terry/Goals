@@ -5,6 +5,11 @@
 const MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE'
 const MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE'
 const MODIFY_INNERSTATE_SHOULDSHOWCAVEAT= 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT'
+const MODIFY_INNERSTATE_LISTTYPE= 'MODIFY_INNERSTATE_LISTTYPE'
+const MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL= 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL'
+const MODIFY_INNERSTATE_TARGETINLISTITEMMODAL= 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL'
+const MODIFY_INNERSTATE_MODE= 'MODIFY_INNERSTATE_MODE'
+const MODIFY_INNERSTATE_EMAIL= 'MODIFY_INNERSTATE_EMAIL'
 const MODIFY_INNERSTATE_TMPTARGET = 'MODIFY_INNERSTATE_TMPTARGET'
 const MODIFY_INNERSTATE_TMPTARGET_NAME = 'MODIFY_INNERSTATE_TMPTARGET_NAME'
 const MODIFY_INNERSTATE_TMPTARGET_LEVEL = 'MODIFY_INNERSTATE_TMPTARGET_LEVEL'
@@ -50,6 +55,36 @@ export const modifyInnerState_timeType = manufature(MODIFY_INNERSTATE_TIMETYPE)
 export const modifyInnerState_shouldShowCaveat = manufature(MODIFY_INNERSTATE_SHOULDSHOWCAVEAT)
 
 /**
+ * modify list type in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_listType = manufature(MODIFY_INNERSTATE_LISTTYPE)
+
+/**
+ * modify showing list item modal state in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_shouldShowListItemModal = manufature(MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL)
+
+/**
+ * modify showing list item modal state in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_targetInListItemModal = manufature(MODIFY_INNERSTATE_TARGETINLISTITEMMODAL)
+
+/**
+ * modify page mode
+ * @param  {number} value 
+ */
+export const modifyInnerState_mode = manufature(MODIFY_INNERSTATE_MODE)
+
+/**
+ * modify email
+ * @param  {number} value 
+ */
+export const modifyInnerState_email = manufature(MODIFY_INNERSTATE_EMAIL)
+
+/**
  * modify temporary target in innerState
  * @param {object} value 
  */
@@ -91,6 +126,7 @@ export const modifyInnerState_tmpTarget_isCompleted = manufature(MODIFY_INNERSTA
  */
 export const modifyInnerState_tmpTarget_isRepeating = manufature(MODIFY_INNERSTATE_TMPTARGET_ISREPEATING)
 
+
 /**
  * modify temporary target's create date in innerState
  * @param {boolean} value 
@@ -126,3 +162,4 @@ export const modifyInnerState_tmpTarget_minDate = manufature(MODIFY_INNERSTATE_T
  * @param {boolean} value 
  */
 export const modifyInnerState_tmpTarget_maxDate = manufature(MODIFY_INNERSTATE_TMPTARGET_MAXDATE)
+
