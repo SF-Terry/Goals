@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import TimeSelector from '../component/InfoPanel/TimeSelector/index'
 import { 
@@ -17,10 +18,10 @@ const mapStateToProps = state => {
   return {
     timeType: state.innerState.timeType,
     type: state.innerState.tmpTarget.type,
-    minDate: state.innerState.tmpTarget.minDate,
-    maxDate: state.innerState.tmpTarget.maxDate,
-    startDate: state.innerState.tmpTarget.startDate,
-    endDate: state.innerState.tmpTarget.endDate
+    minDate: state.innerState.tmpTarget.minDate ? moment(state.innerState.tmpTarget.minDate) : null,
+    maxDate: state.innerState.tmpTarget.maxDate ? moment(state.innerState.tmpTarget.maxDate) : null,
+    startDate: state.innerState.tmpTarget.startDate ? moment(state.innerState.tmpTarget.startDate) : null,
+    endDate: state.innerState.tmpTarget.endDate ? moment(state.innerState.tmpTarget.endDate) : null
   }
 }
 
@@ -67,8 +68,8 @@ const mapDispatchToProps = (dispatch) => {
      * cancel button's click event
      */
     onCancelClick() {
-      // route to adding Page info panel
-      const prevRoute = ReduxStore.getState().innerState.prevRoute
+      // route to  adding page or editing page info panel
+      const prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1: 2
       dispatch(modifyInnerState_route(prevRoute))
     }
   }

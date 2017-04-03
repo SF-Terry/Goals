@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Grid, Input, Checkbox } from 'semantic-ui-react'
+import moment from 'moment'
+import { Button, Grid, Input, Checkbox, Segment } from 'semantic-ui-react'
 const { Row, Column } = Grid
 
 import LevelBtnGroup from './LevelBtnGroup'
@@ -67,14 +68,6 @@ class InfoPanel extends React.Component {
     isValidateSuccess && onContinueAddClick()
   }
 
-  /**
-   * TypeSelector component's callback 
-   * @param {String}  type target type
-   */
-  _typeSelector_callback(type) {
-    console.log(type)
-  }
-
   render() {
     const {
       name,
@@ -83,11 +76,15 @@ class InfoPanel extends React.Component {
       isTiming,
       isRepeating,
       onNameInputChange,
+      startDate,
+      endDate,
       onLevelBtnClick,
       onTypeSelectorChange,
       onConfirmClick,
       onContinueAddClick,
-      onCancelClick
+      onCancelClick,
+      startDatePanelClick,
+      endDatePanelClick
     } = this.props
 
     // if onContinueAddClick exsits, show continute to add button
@@ -119,6 +116,7 @@ class InfoPanel extends React.Component {
         </Row>
         {/* TypeSelector} */}
 
+        {/* Timer and Repeat{ */}
         <Row centered>
           {/* Timer{ */}
           <Column width={8} textAlign='center'>
@@ -132,6 +130,28 @@ class InfoPanel extends React.Component {
           </Column>
           {/* Repeat}*/}
         </Row>
+        {/* Timer and Repeat} */}
+
+        {/*timing nfo{ */}
+        {
+          isTiming &&
+          <Row centered>
+            <Column width={6}>
+              <Segment textAlign='center' onClick={startDatePanelClick}>
+                <h3>{startDate.format('HH:mm')}</h3>
+                <h5>{startDate.format('YYYY/M/D')}</h5>
+              </Segment>
+            </Column>
+            <Column width={2} textAlign='center' verticalAlign='middle'></Column>
+            <Column width={6}>
+              <Segment textAlign='center' onClick={endDatePanelClick}>
+                <h3>{endDate.format('HH:mm')}</h3>
+                <h5>{endDate.format('YYYY/M/D')}</h5>
+              </Segment>
+            </Column>
+          </Row>
+        }
+        {/* timingInfo} */}
 
         {/* Confirm Btn{ */}
         <Row centered>
@@ -171,13 +191,17 @@ InfoPanel.propTypes = {
   type: React.PropTypes.number,
   isTiming: React.PropTypes.bool,
   isRepeating: React.PropTypes.bool,
+  startDate: React.PropTypes.instanceOf(moment),
+  endDate: React.PropTypes.instanceOf(moment),
   onNameInputChange: React.PropTypes.func,
   onLevelBtnClick: React.PropTypes.func,
   onTypeSelectorChange: React.PropTypes.func,
   onTimerClick: React.PropTypes.func,
   onRepeaterClick: React.PropTypes.func,
   onCancelClick: React.PropTypes.func,
-  validate: React.PropTypes.func
+  validate: React.PropTypes.func,
+  startDatePanelClick: React.PropTypes.func,
+  endDatePanelClick: React.PropTypes.func
 }
 
 

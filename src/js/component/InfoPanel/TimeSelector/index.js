@@ -113,6 +113,7 @@ class TimeSelector extends React.Component {
     startDate = this.props.startDate || minDate
     endDate = this.props.endDate || minDate
 
+
     this.state = {
       shouldShowStartTime: true
     }
@@ -124,10 +125,10 @@ class TimeSelector extends React.Component {
     const { onConfirmClick } = this.props
 
     onConfirmClick({
-      startDate, 
-      endDate, 
-      minDate, 
-      maxDate
+      startDate: startDate, 
+      endDate: endDate, 
+      minDate: minDate, 
+      maxDate: maxDate
     })
   }
 

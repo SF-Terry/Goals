@@ -41,8 +41,8 @@ export const setStateToLocalStore = store => next => action => {
  * @param {boolean} bool 
  */
 export const hide = bool => ({
-  width: bool ? '100%' : '0px',
-  height: bool ? 'auto' : '0px',
+  width: bool ? '0px' : '100%',
+  height: bool ? '0px' : 'auto',
   overflow: 'hidden'
 })
 

@@ -77,9 +77,8 @@ const sort = (a, b) => {
 }
 
 
-const MainContent = ({ type, items }) => (
+const MainContent = ({ items }) => (
   <div>
-    type: {type}
     <Segment.Group>
       {/* list items { */}
       {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
@@ -90,7 +89,6 @@ const MainContent = ({ type, items }) => (
 )
 
 MainContent.propTypes = {
-  type: React.PropTypes.number,
   items: React.PropTypes.array
 };
 

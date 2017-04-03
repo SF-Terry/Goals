@@ -1,10 +1,17 @@
+import moment from 'moment'
+
 import {
   modifyInnerState_route,
   modifyInnerState_tmpTarget_name,
   modifyInnerState_tmpTarget_level,
   modifyInnerState_tmpTarget_type,
   modifyInnerState_tmpTarget_isTiming,
-  modifyInnerState_tmpTarget_isRepeating
+  modifyInnerState_tmpTarget_isRepeating,
+  modifyInnerState_timeType,
+  modifyInnerState_tmpTarget_startDate,
+  modifyInnerState_tmpTarget_endDate,
+  modifyInnerState_tmpTarget_maxDate,
+  modifyInnerState_tmpTarget_minDate
 } from '../../action/modifyInnerState'
 
 import validator from '../../util/validator'
@@ -45,6 +52,8 @@ const decorate = ({
       type: getTmpTarget().type,
       isTiming: getTmpTarget().isTiming,
       isRepeating: getTmpTarget().isRepeating,
+      startDate: getTmpTarget().startDate ? moment(getTmpTarget().startDate) : null,
+      endDate: getTmpTarget().startDate ? moment(getTmpTarget().endDate) : null,
     }
   }
 
@@ -88,12 +97,23 @@ const decorate = ({
        * @param {boolean} isTiming 
        */
       onTimerClick(isTiming) {
-        // make timer unchecked when timer is checked
-        const shouldUncheck = isTiming
-        shouldUncheck && dispatch(modifyInnerState_tmpTarget_isTiming(false))
-        // show time selector when timer is activated
-        const shouldShowTimeSelector = !isTiming
-        shouldShowTimeSelector && dispatch(modifyInnerState_route(3))
+        // should timing
+        if (!isTiming) {
+          // show time selector(show start time mode) when timer is activated
+          dispatch(modifyInnerState_route(3))
+          // change time type to start time
+          dispatch(modifyInnerState_timeType(1))
+        }
+        // should cancel timing
+        if (isTiming) {
+          // set timer to untime(make timer unchecked when timer is checked)
+          dispatch(modifyInnerState_tmpTarget_isTiming(false))
+          // reset date
+          dispatch(modifyInnerState_tmpTarget_startDate(null))
+          dispatch(modifyInnerState_tmpTarget_endDate(null))
+          dispatch(modifyInnerState_tmpTarget_maxDate(null))
+          dispatch(modifyInnerState_tmpTarget_minDate(null))
+        }
       },
       /**
        * repeater's click event
@@ -127,6 +147,24 @@ const decorate = ({
         const { tmpTarget } = ReduxStore.getState().innerState
         const isValidSuccess = validator.target(tmpTarget)
         return isValidSuccess
+      },
+      /**
+       * start date panel's click event
+       */
+      startDatePanelClick() {
+        // change time type to start time mode
+        dispatch(modifyInnerState_timeType(1))
+        // route to time selector page
+        dispatch(modifyInnerState_route(3))
+      },
+      /**
+       * end date panel's click event
+       */
+      endDatePanelClick() {
+        // change time type to end time mode
+        dispatch(modifyInnerState_timeType(2))
+        // route to time selector page
+        dispatch(modifyInnerState_route(3))
       }
     }
   }

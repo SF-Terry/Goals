@@ -28,6 +28,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "timeType": action.value
       }
+    case 'MODIFY_INNERSTATE_EDITTYPE':
+      return {
+        ...state,
+        "editType": action.value
+      }
     case 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT':
       return {
         ...state,
@@ -47,6 +52,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
       return {
         ...state,
         "targetInListItemModal": action.value
+      }
+    case 'MODIFY_INNERSTATE_PREVLEVEL':
+      return {
+        ...state,
+        "prevLevel": action.value
       }
     case 'MODIFY_INNERSTATE_MODE':
       return {

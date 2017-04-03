@@ -6,8 +6,10 @@ const MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE'
 const MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE'
 const MODIFY_INNERSTATE_SHOULDSHOWCAVEAT= 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT'
 const MODIFY_INNERSTATE_LISTTYPE= 'MODIFY_INNERSTATE_LISTTYPE'
+const MODIFY_INNERSTATE_EDITTYPE= 'MODIFY_INNERSTATE_EDITTYPE'
 const MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL= 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL'
 const MODIFY_INNERSTATE_TARGETINLISTITEMMODAL= 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL'
+const MODIFY_INNERSTATE_PREVLEVEL= 'MODIFY_INNERSTATE_PREVLEVEL'
 const MODIFY_INNERSTATE_MODE= 'MODIFY_INNERSTATE_MODE'
 const MODIFY_INNERSTATE_EMAIL= 'MODIFY_INNERSTATE_EMAIL'
 const MODIFY_INNERSTATE_TMPTARGET = 'MODIFY_INNERSTATE_TMPTARGET'
@@ -49,6 +51,12 @@ export const modifyInnerState_route = manufature(MODIFY_INNERSTATE_ROUTE)
 export const modifyInnerState_timeType = manufature(MODIFY_INNERSTATE_TIMETYPE)
 
 /**
+ * modify time type(edit or add target) in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_editType = manufature(MODIFY_INNERSTATE_EDITTYPE)
+
+/**
  * modify showing caveat state in innerState
  * @param  {number} value 
  */
@@ -71,6 +79,12 @@ export const modifyInnerState_shouldShowListItemModal = manufature(MODIFY_INNERS
  * @param  {number} value 
  */
 export const modifyInnerState_targetInListItemModal = manufature(MODIFY_INNERSTATE_TARGETINLISTITEMMODAL)
+
+/**
+ * modify page mode
+ * @param  {number} value 
+ */
+export const modifyInnerState_prevLevel = manufature(MODIFY_INNERSTATE_PREVLEVEL)
 
 /**
  * modify page mode

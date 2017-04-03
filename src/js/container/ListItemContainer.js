@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import ListItem  from '../component/ListItem'
-import { modifyInnerState_route, modifyInnerState_tmpTarget, modifyInnerState_shouldShowListItemModal, modifyInnerState_targetInListItemModal } from '../action/modifyInnerState'
+import { modifyInnerState_route, modifyInnerState_tmpTarget, modifyInnerState_shouldShowListItemModal, modifyInnerState_targetInListItemModal, modifyInnerState_editType } from '../action/modifyInnerState'
 
 const mapStateToProps = state => {
   return {
@@ -13,6 +13,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onTap(item) {
+      // change edit mode to editting target
+      modifyInnerState_editType(1)
       // change temporary target
       dispatch(modifyInnerState_tmpTarget(item))
       // route to add page

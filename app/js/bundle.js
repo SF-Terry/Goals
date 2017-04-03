@@ -24580,9 +24580,11 @@
 	   */
 	  tmpTarget: _extends({}, targetModel),
 	  /**
-	   * @var {object}
 	   * the time type of time selector
+	   * 1 - 'startTime'
+	   * 2 - 'endTime'
 	   * default is 'startTime'
+	   * @var {object}
 	   */
 	  timeType: 1,
 	  /**
@@ -24596,6 +24598,20 @@
 	   * default is 1(today)
 	   */
 	  listType: 1,
+	  /**
+	   * the type of editting or adding target
+	   * 1 - add target 
+	   * 2 - edit target
+	   * @var {number}
+	   * default is 1(edit)
+	   */
+	  editType: 1,
+	  /**
+	   * @var {number}
+	   * current type in list
+	   * default is 1(today)
+	   */
+	  prevLevel: targetModel.level,
 	  /**
 	   * @var {boolean}
 	   * showing list item modal state
@@ -39625,8 +39641,8 @@
 	 */
 	var hide = exports.hide = function hide(bool) {
 	  return {
-	    width: bool ? '100%' : '0px',
-	    height: bool ? 'auto' : '0px',
+	    width: bool ? '0px' : '100%',
+	    height: bool ? '0px' : 'auto',
 	    overflow: 'hidden'
 	  };
 	};
@@ -41954,8 +41970,10 @@
 	var MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE';
 	var MODIFY_INNERSTATE_SHOULDSHOWCAVEAT = 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT';
 	var MODIFY_INNERSTATE_LISTTYPE = 'MODIFY_INNERSTATE_LISTTYPE';
+	var MODIFY_INNERSTATE_EDITTYPE = 'MODIFY_INNERSTATE_EDITTYPE';
 	var MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL = 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL';
 	var MODIFY_INNERSTATE_TARGETINLISTITEMMODAL = 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL';
+	var MODIFY_INNERSTATE_PREVLEVEL = 'MODIFY_INNERSTATE_PREVLEVEL';
 	var MODIFY_INNERSTATE_MODE = 'MODIFY_INNERSTATE_MODE';
 	var MODIFY_INNERSTATE_EMAIL = 'MODIFY_INNERSTATE_EMAIL';
 	var MODIFY_INNERSTATE_TMPTARGET = 'MODIFY_INNERSTATE_TMPTARGET';
@@ -42000,6 +42018,12 @@
 	var modifyInnerState_timeType = exports.modifyInnerState_timeType = manufature(MODIFY_INNERSTATE_TIMETYPE);
 
 	/**
+	 * modify time type(edit or add target) in innerState
+	 * @param  {number} value 
+	 */
+	var modifyInnerState_editType = exports.modifyInnerState_editType = manufature(MODIFY_INNERSTATE_EDITTYPE);
+
+	/**
 	 * modify showing caveat state in innerState
 	 * @param  {number} value 
 	 */
@@ -42022,6 +42046,12 @@
 	 * @param  {number} value 
 	 */
 	var modifyInnerState_targetInListItemModal = exports.modifyInnerState_targetInListItemModal = manufature(MODIFY_INNERSTATE_TARGETINLISTITEMMODAL);
+
+	/**
+	 * modify page mode
+	 * @param  {number} value 
+	 */
+	var modifyInnerState_prevLevel = exports.modifyInnerState_prevLevel = manufature(MODIFY_INNERSTATE_PREVLEVEL);
 
 	/**
 	 * modify page mode
@@ -42244,6 +42274,10 @@
 	      return _extends({}, state, {
 	        "timeType": action.value
 	      });
+	    case 'MODIFY_INNERSTATE_EDITTYPE':
+	      return _extends({}, state, {
+	        "editType": action.value
+	      });
 	    case 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT':
 	      return _extends({}, state, {
 	        "shouldShowCaveat": action.value
@@ -42259,6 +42293,10 @@
 	    case 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL':
 	      return _extends({}, state, {
 	        "targetInListItemModal": action.value
+	      });
+	    case 'MODIFY_INNERSTATE_PREVLEVEL':
+	      return _extends({}, state, {
+	        "prevLevel": action.value
 	      });
 	    case 'MODIFY_INNERSTATE_MODE':
 	      return _extends({}, state, {
@@ -42408,7 +42446,7 @@
 
 	var _ListItemModalContainer2 = _interopRequireDefault(_ListItemModalContainer);
 
-	var _TimelineContainer = __webpack_require__(989);
+	var _TimelineContainer = __webpack_require__(990);
 
 	var _TimelineContainer2 = _interopRequireDefault(_TimelineContainer);
 
@@ -76469,7 +76507,6 @@
 	    return isTypeMatching(target) && isNotDeleted(target) && isNotCompleted(target);
 	  });
 	  return {
-	    type: type,
 	    items: items
 	  };
 	};
@@ -76583,13 +76620,10 @@
 	};
 
 	var MainContent = function MainContent(_ref) {
-	  var type = _ref.type,
-	      items = _ref.items;
+	  var items = _ref.items;
 	  return _react2.default.createElement(
 	    'div',
 	    null,
-	    'type: ',
-	    type,
 	    _react2.default.createElement(
 	      _semanticUiReact.Segment.Group,
 	      null,
@@ -76601,7 +76635,6 @@
 	};
 
 	MainContent.propTypes = {
-	  type: _react2.default.PropTypes.number,
 	  items: _react2.default.PropTypes.array
 	};
 
@@ -76638,6 +76671,8 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    onTap: function onTap(item) {
+	      // change edit mode to editting target
+	      (0, _modifyInnerState.modifyInnerState_editType)(1);
 	      // change temporary target
 	      dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(item));
 	      // route to add page
@@ -76676,6 +76711,10 @@
 
 	var _reactTappable2 = _interopRequireDefault(_reactTappable);
 
+	var _moment = __webpack_require__(229);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _util = __webpack_require__(339);
 
 	var _initialState = __webpack_require__(228);
@@ -76688,14 +76727,17 @@
 	      onPress = _ref.onPress;
 	  var name = item.name,
 	      level = item.level,
-	      startDate = item.startDate,
-	      endDate = item.endDate;
+	      isTiming = item.isTiming,
+	      theStartDate = item.startDate,
+	      theEndDate = item.endDate;
+
+	  var startDate = theStartDate ? (0, _moment2.default)(theStartDate) : null;
+	  var endDate = theEndDate ? (0, _moment2.default)(theEndDate) : null;
 
 	  var _allTargetLevels$get = _initialState.allTargetLevels.get(level),
 	      color = _allTargetLevels$get.color;
 
-	  var shouldShowTiming = startDate && endDate;
-
+	  var shouldShowTiming = isTiming;
 	  var _onTap = function _onTap(e) {
 	    e.preventDefault();
 	    onTap(item);
@@ -77354,10 +77396,15 @@
 	     * invoked when AddBtn is clicked
 	     */
 	    click: function click() {
+	      // change edit type to adding target
+	      dispatch((0, _modifyInnerState.modifyInnerState_editType)(1));
 	      // route to home page
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(1));
 	      // reset and initial temporary target
-	      dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(_extends({}, _initialState.targetModel)));
+	      dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(_extends({}, _initialState.targetModel, {
+	        level: ReduxStore.getState().innerState.prevLevel,
+	        type: ReduxStore.getState().innerState.listType
+	      })));
 	    }
 	  };
 	};
@@ -77441,9 +77488,10 @@
 	  var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
 
 	  ReduxStore.dispatch((0, _action.addTarget)(tmpTarget));
-
 	  // route to home page
 	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	  // set previous level 
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_prevLevel)(tmpTarget.level));
 	};
 
 	/**
@@ -77454,9 +77502,13 @@
 	  var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
 
 	  ReduxStore.dispatch((0, _action.addTarget)(tmpTarget));
-
+	  // set previous level 
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_prevLevel)(tmpTarget.level));
 	  // reset temporary target
-	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(_extends({}, _initialState.targetModel)));
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(_extends({}, _initialState.targetModel, {
+	    level: ReduxStore.getState().innerState.prevLevel,
+	    type: ReduxStore.getState().innerState.listType
+	  })));
 	};
 
 	var AddPageInfoPanelContainer = (0, _decorator2.default)({
@@ -77483,6 +77535,10 @@
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _moment = __webpack_require__(229);
+
+	var _moment2 = _interopRequireDefault(_moment);
 
 	var _semanticUiReact = __webpack_require__(348);
 
@@ -77590,17 +77646,6 @@
 	      // if validation is successful, invoke function onContinueAddClick
 	      isValidateSuccess && onContinueAddClick();
 	    }
-
-	    /**
-	     * TypeSelector component's callback 
-	     * @param {String}  type target type
-	     */
-
-	  }, {
-	    key: '_typeSelector_callback',
-	    value: function _typeSelector_callback(type) {
-	      console.log(type);
-	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -77611,11 +77656,15 @@
 	          isTiming = _props3.isTiming,
 	          isRepeating = _props3.isRepeating,
 	          onNameInputChange = _props3.onNameInputChange,
+	          startDate = _props3.startDate,
+	          endDate = _props3.endDate,
 	          onLevelBtnClick = _props3.onLevelBtnClick,
 	          onTypeSelectorChange = _props3.onTypeSelectorChange,
 	          onConfirmClick = _props3.onConfirmClick,
 	          onContinueAddClick = _props3.onContinueAddClick,
-	          onCancelClick = _props3.onCancelClick;
+	          onCancelClick = _props3.onCancelClick,
+	          startDatePanelClick = _props3.startDatePanelClick,
+	          endDatePanelClick = _props3.endDatePanelClick;
 
 	      // if onContinueAddClick exsits, show continute to add button
 
@@ -77665,6 +77714,47 @@
 	            _react2.default.createElement(_semanticUiReact.Checkbox, { label: '\u91CD\u590D', checked: isRepeating, onClick: this._onRepeaterClick })
 	          )
 	        ),
+	        isTiming && _react2.default.createElement(
+	          Row,
+	          { centered: true },
+	          _react2.default.createElement(
+	            Column,
+	            { width: 6 },
+	            _react2.default.createElement(
+	              _semanticUiReact.Segment,
+	              { textAlign: 'center', onClick: startDatePanelClick },
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                startDate.format('HH:mm')
+	              ),
+	              _react2.default.createElement(
+	                'h5',
+	                null,
+	                startDate.format('YYYY/M/D')
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(Column, { width: 2, textAlign: 'center', verticalAlign: 'middle' }),
+	          _react2.default.createElement(
+	            Column,
+	            { width: 6 },
+	            _react2.default.createElement(
+	              _semanticUiReact.Segment,
+	              { textAlign: 'center', onClick: endDatePanelClick },
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                endDate.format('HH:mm')
+	              ),
+	              _react2.default.createElement(
+	                'h5',
+	                null,
+	                endDate.format('YYYY/M/D')
+	              )
+	            )
+	          )
+	        ),
 	        _react2.default.createElement(
 	          Row,
 	          { centered: true },
@@ -77705,13 +77795,17 @@
 	  type: _react2.default.PropTypes.number,
 	  isTiming: _react2.default.PropTypes.bool,
 	  isRepeating: _react2.default.PropTypes.bool,
+	  startDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  endDate: _react2.default.PropTypes.instanceOf(_moment2.default),
 	  onNameInputChange: _react2.default.PropTypes.func,
 	  onLevelBtnClick: _react2.default.PropTypes.func,
 	  onTypeSelectorChange: _react2.default.PropTypes.func,
 	  onTimerClick: _react2.default.PropTypes.func,
 	  onRepeaterClick: _react2.default.PropTypes.func,
 	  onCancelClick: _react2.default.PropTypes.func,
-	  validate: _react2.default.PropTypes.func
+	  validate: _react2.default.PropTypes.func,
+	  startDatePanelClick: _react2.default.PropTypes.func,
+	  endDatePanelClick: _react2.default.PropTypes.func
 	};
 
 	exports.default = InfoPanel;
@@ -77957,6 +78051,10 @@
 	  value: true
 	});
 
+	var _moment = __webpack_require__(229);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _modifyInnerState = __webpack_require__(342);
 
 	var _validator = __webpack_require__(889);
@@ -78004,7 +78102,9 @@
 	      level: getTmpTarget().level,
 	      type: getTmpTarget().type,
 	      isTiming: getTmpTarget().isTiming,
-	      isRepeating: getTmpTarget().isRepeating
+	      isRepeating: getTmpTarget().isRepeating,
+	      startDate: getTmpTarget().startDate ? (0, _moment2.default)(getTmpTarget().startDate) : null,
+	      endDate: getTmpTarget().startDate ? (0, _moment2.default)(getTmpTarget().endDate) : null
 	    };
 	  };
 
@@ -78052,12 +78152,23 @@
 	       * @param {boolean} isTiming 
 	       */
 	      onTimerClick: function onTimerClick(isTiming) {
-	        // make timer unchecked when timer is checked
-	        var shouldUncheck = isTiming;
-	        shouldUncheck && dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
-	        // show time selector when timer is activated
-	        var shouldShowTimeSelector = !isTiming;
-	        shouldShowTimeSelector && dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
+	        // should timing
+	        if (!isTiming) {
+	          // show time selector(show start time mode) when timer is activated
+	          dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
+	          // change time type to start time
+	          dispatch((0, _modifyInnerState.modifyInnerState_timeType)(1));
+	        }
+	        // should cancel timing
+	        if (isTiming) {
+	          // set timer to untime(make timer unchecked when timer is checked)
+	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
+	          // reset date
+	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_startDate)(null));
+	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_endDate)(null));
+	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_maxDate)(null));
+	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_minDate)(null));
+	        }
 	      },
 
 	      /**
@@ -78097,6 +78208,26 @@
 
 	        var isValidSuccess = _validator2.default.target(tmpTarget);
 	        return isValidSuccess;
+	      },
+
+	      /**
+	       * start date panel's click event
+	       */
+	      startDatePanelClick: function startDatePanelClick() {
+	        // change time type to start time mode
+	        dispatch((0, _modifyInnerState.modifyInnerState_timeType)(1));
+	        // route to time selector page
+	        dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
+	      },
+
+	      /**
+	       * end date panel's click event
+	       */
+	      endDatePanelClick: function endDatePanelClick() {
+	        // change time type to end time mode
+	        dispatch((0, _modifyInnerState.modifyInnerState_timeType)(2));
+	        // route to time selector page
+	        dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
 	      }
 	    };
 	  };
@@ -78178,7 +78309,6 @@
 	  // get temporary target 
 	  var tmpTarget = ReduxStore.getState().innerState.tmpTarget;
 	  var id = tmpTarget.id;
-
 	  // modify target
 
 	  Object.keys(tmpTarget).map(function (key) {
@@ -78188,9 +78318,10 @@
 	      value: tmpTarget[key]
 	    }));
 	  });
-
 	  // route to home page
 	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	  // set previous level 
+	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_prevLevel)(tmpTarget.level));
 	};
 	// import { getTargetById } from '../../util'
 
@@ -78246,6 +78377,10 @@
 
 	var _reactRedux = __webpack_require__(188);
 
+	var _moment = __webpack_require__(229);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _index = __webpack_require__(893);
 
 	var _index2 = _interopRequireDefault(_index);
@@ -78258,10 +78393,10 @@
 	  return {
 	    timeType: state.innerState.timeType,
 	    type: state.innerState.tmpTarget.type,
-	    minDate: state.innerState.tmpTarget.minDate,
-	    maxDate: state.innerState.tmpTarget.maxDate,
-	    startDate: state.innerState.tmpTarget.startDate,
-	    endDate: state.innerState.tmpTarget.endDate
+	    minDate: state.innerState.tmpTarget.minDate ? (0, _moment2.default)(state.innerState.tmpTarget.minDate) : null,
+	    maxDate: state.innerState.tmpTarget.maxDate ? (0, _moment2.default)(state.innerState.tmpTarget.maxDate) : null,
+	    startDate: state.innerState.tmpTarget.startDate ? (0, _moment2.default)(state.innerState.tmpTarget.startDate) : null,
+	    endDate: state.innerState.tmpTarget.endDate ? (0, _moment2.default)(state.innerState.tmpTarget.endDate) : null
 	  };
 	};
 
@@ -78311,8 +78446,8 @@
 	     * cancel button's click event
 	     */
 	    onCancelClick: function onCancelClick() {
-	      // route to adding Page info panel
-	      var prevRoute = ReduxStore.getState().innerState.prevRoute;
+	      // route to  adding page or editing page info panel
+	      var prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1 : 2;
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(prevRoute));
 	    }
 	  };
@@ -82829,7 +82964,7 @@
 
 	var _modifyInnerState = __webpack_require__(342);
 
-	var _ListItemModal = __webpack_require__(991);
+	var _ListItemModal = __webpack_require__(989);
 
 	var _ListItemModal2 = _interopRequireDefault(_ListItemModal);
 
@@ -82915,6 +83050,148 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(6);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(348);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ListItemModal = function (_React$Component) {
+	  _inherits(ListItemModal, _React$Component);
+
+	  function ListItemModal(props) {
+	    _classCallCheck(this, ListItemModal);
+
+	    var _this = _possibleConstructorReturn(this, (ListItemModal.__proto__ || Object.getPrototypeOf(ListItemModal)).call(this, props));
+
+	    _this.state = {
+	      shouldShowDeleteBtn: false
+	    };
+
+	    _this._onComplete = _this._onComplete.bind(_this);
+	    _this._onTop = _this._onTop.bind(_this);
+	    _this._onMore = _this._onMore.bind(_this);
+	    _this._onDelete = _this._onDelete.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(ListItemModal, [{
+	    key: '_onComplete',
+	    value: function _onComplete() {
+	      var _props = this.props,
+	          target = _props.target,
+	          onComplete = _props.onComplete;
+
+	      onComplete(target);
+	    }
+	  }, {
+	    key: '_onTop',
+	    value: function _onTop() {
+	      var _props2 = this.props,
+	          target = _props2.target,
+	          onTop = _props2.onTop;
+
+	      onTop(target);
+	    }
+	  }, {
+	    key: '_onDelete',
+	    value: function _onDelete() {
+	      var _props3 = this.props,
+	          target = _props3.target,
+	          onDelete = _props3.onDelete;
+
+	      onDelete(target);
+	    }
+	  }, {
+	    key: '_onMore',
+	    value: function _onMore() {
+	      this.setState({
+	        shouldShowDeleteBtn: !this.state.shouldShowDeleteBtn
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var shouldShowDeleteBtn = this.state.shouldShowDeleteBtn;
+	      var _props4 = this.props,
+	          target = _props4.target,
+	          onCancel = _props4.onCancel;
+	      var isTopping = target.isTopping,
+	          isCompleted = target.isCompleted,
+	          isDeleted = target.isDeleted;
+
+	      var shouldShowCompletedBtn = !isDeleted;
+	      var shouldShowToppingBtn = !isDeleted;
+	      var shouldShowMoreBtn = !isDeleted;
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          _semanticUiReact.Modal,
+	          { open: true },
+	          shouldShowCompletedBtn && _react2.default.createElement(
+	            _semanticUiReact.Button,
+	            { fluid: true, onClick: this._onComplete },
+	            isCompleted ? 'Uncompleted' : 'Complete!'
+	          ),
+	          shouldShowToppingBtn && _react2.default.createElement(
+	            _semanticUiReact.Button,
+	            { fluid: true, onClick: this._onTop },
+	            isTopping ? 'Cancale Top' : 'Top'
+	          ),
+	          shouldShowMoreBtn && _react2.default.createElement(
+	            _semanticUiReact.Button,
+	            { fluid: true, onClick: this._onMore },
+	            'More'
+	          ),
+	          (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement(
+	            _semanticUiReact.Button,
+	            { fluid: true, onClick: this._onDelete },
+	            isDeleted ? 'Recover' : 'Delete'
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Button,
+	            { fluid: true, onClick: onCancel },
+	            'Cancel'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ListItemModal;
+	}(_react2.default.Component);
+
+	ListItemModal.propTypes = {
+	  target: _react2.default.PropTypes.object,
+	  onComplete: _react2.default.PropTypes.func,
+	  onTop: _react2.default.PropTypes.func,
+	  onDelete: _react2.default.PropTypes.func,
+	  onCancel: _react2.default.PropTypes.func
+	};
+
+	exports.default = ListItemModal;
+
+/***/ },
+/* 990 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -82929,7 +83206,7 @@
 
 	var _initialState = __webpack_require__(228);
 
-	var _Timeline = __webpack_require__(990);
+	var _Timeline = __webpack_require__(991);
 
 	var _Timeline2 = _interopRequireDefault(_Timeline);
 
@@ -82988,7 +83265,7 @@
 	exports.default = TimelineContainer;
 
 /***/ },
-/* 990 */
+/* 991 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -83135,148 +83412,6 @@
 	  onBackClick: _react2.default.PropTypes.func
 	};
 	exports.default = Timeline;
-
-/***/ },
-/* 991 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(6);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(348);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ListItemModal = function (_React$Component) {
-	  _inherits(ListItemModal, _React$Component);
-
-	  function ListItemModal(props) {
-	    _classCallCheck(this, ListItemModal);
-
-	    var _this = _possibleConstructorReturn(this, (ListItemModal.__proto__ || Object.getPrototypeOf(ListItemModal)).call(this, props));
-
-	    _this.state = {
-	      shouldShowDeleteBtn: false
-	    };
-
-	    _this._onComplete = _this._onComplete.bind(_this);
-	    _this._onTop = _this._onTop.bind(_this);
-	    _this._onMore = _this._onMore.bind(_this);
-	    _this._onDelete = _this._onDelete.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(ListItemModal, [{
-	    key: '_onComplete',
-	    value: function _onComplete() {
-	      var _props = this.props,
-	          target = _props.target,
-	          onComplete = _props.onComplete;
-
-	      onComplete(target);
-	    }
-	  }, {
-	    key: '_onTop',
-	    value: function _onTop() {
-	      var _props2 = this.props,
-	          target = _props2.target,
-	          onTop = _props2.onTop;
-
-	      onTop(target);
-	    }
-	  }, {
-	    key: '_onDelete',
-	    value: function _onDelete() {
-	      var _props3 = this.props,
-	          target = _props3.target,
-	          onDelete = _props3.onDelete;
-
-	      onDelete(target);
-	    }
-	  }, {
-	    key: '_onMore',
-	    value: function _onMore() {
-	      this.setState({
-	        shouldShowDeleteBtn: !this.state.shouldShowDeleteBtn
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var shouldShowDeleteBtn = this.state.shouldShowDeleteBtn;
-	      var _props4 = this.props,
-	          target = _props4.target,
-	          onCancel = _props4.onCancel;
-	      var isTopping = target.isTopping,
-	          isCompleted = target.isCompleted,
-	          isDeleted = target.isDeleted;
-
-	      var shouldShowCompletedBtn = !isDeleted;
-	      var shouldShowToppingBtn = !isDeleted;
-	      var shouldShowMoreBtn = !isDeleted;
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          _semanticUiReact.Modal,
-	          { open: true },
-	          shouldShowCompletedBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onComplete },
-	            isCompleted ? 'Uncompleted' : 'Complete!'
-	          ),
-	          shouldShowToppingBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onTop },
-	            isTopping ? 'Cancale Top' : 'Top'
-	          ),
-	          shouldShowMoreBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onMore },
-	            'More'
-	          ),
-	          (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onDelete },
-	            isDeleted ? 'Recover' : 'Delete'
-	          ),
-	          _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: onCancel },
-	            'Cancel'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ListItemModal;
-	}(_react2.default.Component);
-
-	ListItemModal.propTypes = {
-	  target: _react2.default.PropTypes.object,
-	  onComplete: _react2.default.PropTypes.func,
-	  onTop: _react2.default.PropTypes.func,
-	  onDelete: _react2.default.PropTypes.func,
-	  onCancel: _react2.default.PropTypes.func
-	};
-
-	exports.default = ListItemModal;
 
 /***/ },
 /* 992 */

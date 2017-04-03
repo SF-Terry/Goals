@@ -11,7 +11,6 @@ const mapStateToProps = state => {
   const isNotCompleted = target => !target.isCompleted
   const items = state.targets.filter(target => isTypeMatching(target) && isNotDeleted(target) && isNotCompleted(target))
   return {
-    type,
     items
   }
 }

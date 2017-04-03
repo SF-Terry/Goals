@@ -142,9 +142,11 @@ export const innerStateModel = {
      */
     tmpTarget: { ...targetModel },
     /**
-     * @var {object}
      * the time type of time selector
+     * 1 - 'startTime'
+     * 2 - 'endTime'
      * default is 'startTime'
+     * @var {object}
      */
     timeType: 1,
     /**
@@ -158,6 +160,20 @@ export const innerStateModel = {
      * default is 1(today)
      */
     listType: 1,
+    /**
+     * the type of editting or adding target
+     * 1 - add target 
+     * 2 - edit target
+     * @var {number}
+     * default is 1(edit)
+     */
+    editType: 1,
+    /**
+     * @var {number}
+     * current type in list
+     * default is 1(today)
+     */
+    prevLevel: targetModel.level,
     /**
      * @var {boolean}
      * showing list item modal state
