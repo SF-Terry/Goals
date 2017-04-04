@@ -107,14 +107,6 @@ class TimeSelector extends React.Component {
   constructor(props) {
     super(props)
 
-    const { type } = this.props
-
-    minDate = this.props.minDate || getMinDate(type)
-    maxDate = this.props.maxDate || getMaxDate(minDate, type)
-    startDate = this.props.startDate || minDate
-    endDate = this.props.endDate || minDate
-
-
     this.state = {
       shouldShowStartTime: true
     }
@@ -144,7 +136,12 @@ class TimeSelector extends React.Component {
   }
 
   render() {
-    const { timeType, onStartTimeClick, onEndTimeClick, onCancelClick } = this.props
+    const { type, timeType, onStartTimeClick, onEndTimeClick, onCancelClick } = this.props
+
+    minDate = this.props.minDate || getMinDate(type)
+    maxDate = this.props.maxDate || getMaxDate(minDate, type)
+    startDate = this.props.startDate || minDate
+    endDate = this.props.endDate || minDate
 
     const shouldHideStartTime = timeType === 2
     const shouldShowOutline = shouldHideStartTime

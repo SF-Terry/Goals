@@ -79060,14 +79060,6 @@
 
 	    var _this = _possibleConstructorReturn(this, (TimeSelector.__proto__ || Object.getPrototypeOf(TimeSelector)).call(this, props));
 
-	    var type = _this.props.type;
-
-
-	    minDate = _this.props.minDate || getMinDate(type);
-	    maxDate = _this.props.maxDate || getMaxDate(minDate, type);
-	    startDate = _this.props.startDate || minDate;
-	    endDate = _this.props.endDate || minDate;
-
 	    _this.state = {
 	      shouldShowStartTime: true
 	    };
@@ -79107,11 +79099,17 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props2 = this.props,
+	          type = _props2.type,
 	          timeType = _props2.timeType,
 	          onStartTimeClick = _props2.onStartTimeClick,
 	          onEndTimeClick = _props2.onEndTimeClick,
 	          onCancelClick = _props2.onCancelClick;
 
+
+	      minDate = this.props.minDate || getMinDate(type);
+	      maxDate = this.props.maxDate || getMaxDate(minDate, type);
+	      startDate = this.props.startDate || minDate;
+	      endDate = this.props.endDate || minDate;
 
 	      var shouldHideStartTime = timeType === 2;
 	      var shouldShowOutline = shouldHideStartTime;
