@@ -1,7 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
-import { Segment, Button } from 'semantic-ui-react'
+import { Grid, Segment, Button } from 'semantic-ui-react'
+
+const { Row, Column } = Grid
 
 
 /**
@@ -26,15 +28,23 @@ const sort = (a, b) => {
 
 
 const Recycle = ({ items, onBackClick }) => (
-  <div>
-    <Segment.Group>
-      {/* list items { */}
-      {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
-      {/* list items } */}
-    </Segment.Group>
+  <Grid>
+    <p></p>
 
-    <Button content={'Back'} onClick={onBackClick} />
-  </div>
+    <Row centered>
+      <Column width={12} >
+        <Button content='Back' fluid color='teal' onClick={onBackClick} />
+      </Column>
+    </Row>
+
+    <Row centered>
+      <Column width={16} >
+        {/* list items { */}
+        {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
+        {/* list items } */}
+      </Column>
+    </Row>
+  </Grid>
 
 )
 

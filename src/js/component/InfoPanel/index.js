@@ -95,6 +95,7 @@ class InfoPanel extends React.Component {
 
     return (
       <Grid>
+        <p></p>
         {/*  Name{ */}
         <Row centered>
           <Column width={14}>
@@ -113,7 +114,7 @@ class InfoPanel extends React.Component {
 
         {/*TypeSelector{ */}
         <Row centered>
-          <Column width={16}>
+          <Column width={15}>
             <TypeSelector type={type} onChange={onTypeSelectorChange} />
           </Column>
         </Row>

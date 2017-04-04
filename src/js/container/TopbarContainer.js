@@ -11,7 +11,7 @@ import { showCaveat } from '../util/index'
 
 const mapStateToProps = state => {
   return {
-
+    listType: state.innerState.listType
   }
 }
 

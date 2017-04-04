@@ -1,7 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
-import { Segment, Button, Accordion, Icon } from 'semantic-ui-react'
+import { Segment, Button, Accordion, Icon, Grid } from 'semantic-ui-react'
+
+const { Row, Column } = Grid
 
 
 /**
@@ -38,10 +40,12 @@ const getJsx = timelineInfo => {
   const getTargets = (timelineInfo, year, month, date) => timelineInfo[year][month][date]
 
   return getYears(timelineInfo).map((year, i) => (
-    <Accordion defaultActiveIndex={0} key={i}>
+    <Accordion defaultActiveIndex={0} key={i} fluid>
       <Accordion.Title>
-        <Icon name='dropdown' />
-        {year}
+        <h4>
+          <Icon name='dropdown' />
+          {year}
+        </h4>
       </Accordion.Title>
       <Accordion.Content>
         <div>
@@ -49,8 +53,11 @@ const getJsx = timelineInfo => {
             getMonths(t, year).map((month, i) => (
               <Accordion defaultActiveIndex={0} key={i}>
                 <Accordion.Title>
-                  <Icon name='dropdown' />
-                  {month}
+                  <h5>
+                    &nbsp;&nbsp;
+                    <Icon name='dropdown' />
+                    {month}
+                  </h5>
                 </Accordion.Title>
                 <Accordion.Content>
                   <div>
@@ -58,6 +65,7 @@ const getJsx = timelineInfo => {
                       getDates(t, year, month).map((date, i) => (
                         <Accordion defaultActiveIndex={0} key={i}>
                           <Accordion.Title>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
                             <Icon name='dropdown' />
                             {date}
                           </Accordion.Title>
@@ -86,18 +94,25 @@ const getJsx = timelineInfo => {
 
 
 const Timeline = ({ timelineInfo, onBackClick }) => {
-  return <div>
+  return <Grid>
+    <p></p>
 
-    {getJsx(timelineInfo)}
-    {/*<Segment.Group>*/}
-    {/* list targets { */}
-    {/*{[...targets].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}*/}
-    {/* list targets } */}
-    {/*</Segment.Group>*/}
+    <Row centered>
+      <Column width={12} >
+        <Button content='Back' fluid color='teal' onClick={onBackClick} />
+      </Column>
+    </Row>
 
+    <p></p>
 
-    <Button content={'Back'} onClick={onBackClick} />
-  </div>
+    <Row centered>
+      <Column width={16} >
+        {getJsx(timelineInfo)}
+      </Column>
+    </Row>
+    
+
+  </Grid>
 }
 
 Timeline.propTypes = {

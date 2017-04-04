@@ -42,27 +42,40 @@ class ListItemModal extends React.Component {
     const shouldShowMoreBtn = !isDeleted
     return (
       <div>
-        <Modal open={true}>
-          {
-            shouldShowCompletedBtn &&
-            <Button fluid onClick={this._onComplete}>
-              {isCompleted ? 'Uncompleted' : 'Complete!'}
-            </Button>
-          }
+        <Modal className="ListItemModal" open={true} >
+          <Modal.Content>
+            {
+              shouldShowCompletedBtn &&
+              <Button id="completeBtn" basic fluid onClick={this._onComplete}>
+                {isCompleted ? 'Uncompleted' : 'Complete!'}
+              </Button>
+            }
 
-          {
-            shouldShowToppingBtn &&
-            <Button fluid onClick={this._onTop}>
-              {isTopping ? 'Cancale Top' : 'Top'}
-            </Button>
-          }
+            <p></p>
 
-          {shouldShowMoreBtn && <Button fluid onClick={this._onMore}>More</Button>}
+            {
+              shouldShowToppingBtn &&
+              <Button id="topBtn" basic fluid onClick={this._onTop}>
+                {isTopping ? 'Cancale Top' : 'Top'}
+              </Button>
+            }
 
-          {(shouldShowDeleteBtn || isDeleted) && <Button fluid onClick={this._onDelete}>
-            {isDeleted ? 'Recover' : 'Delete'}
-          </Button>}
-          <Button fluid onClick={onCancel}>Cancel</Button>
+            <p></p>
+
+            {shouldShowMoreBtn && <Button id="moreBtn" basic fluid onClick={this._onMore}>More</Button>}
+
+            <p></p>
+
+            {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" basic fluid onClick={this._onDelete}>
+              {isDeleted ? 'Recover' : 'Delete'}
+            </Button>}
+
+            {
+              (shouldShowDeleteBtn || isDeleted) && <p></p>
+            }
+
+            <Button id="cancelBtn" basic fluid onClick={onCancel}>Cancel</Button>
+          </Modal.Content>
         </Modal>
       </div>
     )

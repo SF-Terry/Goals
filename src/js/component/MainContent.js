@@ -79,11 +79,9 @@ const sort = (a, b) => {
 
 const MainContent = ({ items }) => (
   <div>
-    <Segment.Group>
-      {/* list items { */}
-      {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
-      {/* list items } */}
-    </Segment.Group>
+    {/* list items { */}
+    {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
+    {/* list items } */}
   </div>
 
 )

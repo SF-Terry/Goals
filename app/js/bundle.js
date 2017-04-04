@@ -85,7 +85,7 @@
 
 
 	// module
-	exports.push([module.id, "#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n", ""]);
+	exports.push([module.id, "#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n#TargetsManagement .ListItem {\n  margin: 5px;\n  word-break: break-all; }\n  #TargetsManagement .ListItem .Label {\n    color: #975b33; }\n\n#TargetsManagement .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n.ListItemModal {\n  /* { font color */\n  /* } font color */ }\n  .ListItemModal #deleteBtn {\n    color: #db2828 !important; }\n  .ListItemModal #completeBtn {\n    color: #21ba45 !important; }\n  .ListItemModal #topBtn {\n    color: #f2711c !important; }\n  .ListItemModal #moreBtn {\n    color: #1b1c1d !important; }\n  .ListItemModal #cancelBtn {\n    color: #767676 !important; }\n", ""]);
 
 	// exports
 
@@ -76670,7 +76670,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	  return {
+	    listType: state.innerState.listType
+	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -76806,8 +76808,14 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// activate button by current list type
+	var _activateBtn = function _activateBtn(type, listType) {
+	  return type === listType;
+	};
+
 	var Topbar = function Topbar(_ref) {
-	  var onDayClick = _ref.onDayClick,
+	  var listType = _ref.listType,
+	      onDayClick = _ref.onDayClick,
 	      onWeekClick = _ref.onWeekClick,
 	      onMonthClick = _ref.onMonthClick,
 	      onProjectClick = _ref.onProjectClick,
@@ -76821,6 +76829,8 @@
 	      onRecycleClick = _ref.onRecycleClick,
 	      onImportClick = _ref.onImportClick,
 	      onExportClick = _ref.onExportClick;
+
+
 	  return _react2.default.createElement(
 	    'div',
 	    { style: {
@@ -76832,36 +76842,36 @@
 	      null,
 	      _react2.default.createElement(
 	        _semanticUiReact.Button,
-	        { onClick: onDayClick },
+	        { basic: true, active: _activateBtn(1, listType), onClick: onDayClick },
 	        'D'
 	      ),
 	      _react2.default.createElement(
 	        _semanticUiReact.Button,
-	        { onClick: onWeekClick },
+	        { basic: true, active: _activateBtn(2, listType), onClick: onWeekClick },
 	        'W'
 	      ),
 	      _react2.default.createElement(
 	        _semanticUiReact.Button,
-	        { onClick: onMonthClick },
+	        { basic: true, active: _activateBtn(3, listType), onClick: onMonthClick },
 	        'M'
 	      ),
 	      _react2.default.createElement(
 	        _semanticUiReact.Button,
-	        { onClick: onProjectClick },
+	        { basic: true, active: _activateBtn(4, listType), onClick: onProjectClick },
 	        'P'
 	      ),
 	      _react2.default.createElement(
 	        _semanticUiReact.Dropdown,
-	        { text: 'Fn', floating: true, button: true },
+	        { text: 'Fn', button: true, basic: true },
 	        _react2.default.createElement(
 	          _semanticUiReact.Dropdown.Menu,
 	          null,
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'Year', onClick: onYearClick }),
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'Long', onClick: onLongClick }),
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextDay', onClick: onNextDayClick }),
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextWeek', onClick: onNextWeekClick }),
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextMonth', onClick: onNextMonthClick }),
-	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextYear', onClick: onNextYearClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'Year', active: _activateBtn(5, listType), onClick: onYearClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'Long', active: _activateBtn(6, listType), onClick: onLongClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextDay', active: _activateBtn(7, listType), onClick: onNextDayClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextWeek', active: _activateBtn(8, listType), onClick: onNextWeekClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextMonth', active: _activateBtn(9, listType), onClick: onNextMonthClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: 'NextYear', active: _activateBtn(10, listType), onClick: onNextYearClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { active: true, text: 'Timeline', onClick: onTimelineClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { active: true, text: 'Recycle', onClick: onRecycleClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { active: true, text: 'Import Data', onClick: onImportClick }),
@@ -77045,13 +77055,9 @@
 	  return _react2.default.createElement(
 	    'div',
 	    null,
-	    _react2.default.createElement(
-	      _semanticUiReact.Segment.Group,
-	      null,
-	      [].concat(_toConsumableArray(items)).sort(sort).map(function (item) {
-	        return _react2.default.createElement(_ListItemContainer2.default, { item: item, key: item.id });
-	      })
-	    )
+	    [].concat(_toConsumableArray(items)).sort(sort).map(function (item) {
+	      return _react2.default.createElement(_ListItemContainer2.default, { item: item, key: item.id });
+	    })
 	  );
 	};
 
@@ -77174,15 +77180,16 @@
 	    { onPress: _onPress, onTap: _onTap },
 	    _react2.default.createElement(
 	      _semanticUiReact.Segment,
-	      { inverted: true, color: color },
+	      { className: 'ListItem', inverted: true, color: color },
 	      shouldShowTiming && _react2.default.createElement(
 	        _semanticUiReact.Label,
-	        { color: 'grey' },
+	        { className: 'Label', basic: true },
 	        timingInfo
 	      ),
 	      '\xA0\xA0',
 	      name
-	    )
+	    ),
+	    _react2.default.createElement('p', null)
 	  );
 	};
 
@@ -77938,7 +77945,7 @@
 	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_createDate)((0, _moment2.default)()));
 	  // change the create future date of temporary target
 	  var isFutureType = [7, 8, 9, 10].some(function (n) {
-	    return tmpTarget.type === n;
+	    return getTmpTarget().type === n;
 	  });
 	  if (isFutureType) {
 	    ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_createFutureDate)((0, _moment2.default)()));
@@ -78119,6 +78126,7 @@
 	      return _react2.default.createElement(
 	        _semanticUiReact.Grid,
 	        null,
+	        _react2.default.createElement('p', null),
 	        _react2.default.createElement(
 	          Row,
 	          { centered: true },
@@ -78142,7 +78150,7 @@
 	          { centered: true },
 	          _react2.default.createElement(
 	            Column,
-	            { width: 16 },
+	            { width: 15 },
 	            _react2.default.createElement(_TypeSelector2.default, { type: type, onChange: onTypeSelectorChange })
 	          )
 	        ),
@@ -83597,31 +83605,39 @@
 	        null,
 	        _react2.default.createElement(
 	          _semanticUiReact.Modal,
-	          { open: true },
-	          shouldShowCompletedBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onComplete },
-	            isCompleted ? 'Uncompleted' : 'Complete!'
-	          ),
-	          shouldShowToppingBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onTop },
-	            isTopping ? 'Cancale Top' : 'Top'
-	          ),
-	          shouldShowMoreBtn && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onMore },
-	            'More'
-	          ),
-	          (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: this._onDelete },
-	            isDeleted ? 'Recover' : 'Delete'
-	          ),
+	          { className: 'ListItemModal', open: true },
 	          _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { fluid: true, onClick: onCancel },
-	            'Cancel'
+	            _semanticUiReact.Modal.Content,
+	            null,
+	            shouldShowCompletedBtn && _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { id: 'completeBtn', basic: true, fluid: true, onClick: this._onComplete },
+	              isCompleted ? 'Uncompleted' : 'Complete!'
+	            ),
+	            _react2.default.createElement('p', null),
+	            shouldShowToppingBtn && _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { id: 'topBtn', basic: true, fluid: true, onClick: this._onTop },
+	              isTopping ? 'Cancale Top' : 'Top'
+	            ),
+	            _react2.default.createElement('p', null),
+	            shouldShowMoreBtn && _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { id: 'moreBtn', basic: true, fluid: true, onClick: this._onMore },
+	              'More'
+	            ),
+	            _react2.default.createElement('p', null),
+	            (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { id: 'deleteBtn', basic: true, fluid: true, onClick: this._onDelete },
+	              isDeleted ? 'Recover' : 'Delete'
+	            ),
+	            (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement('p', null),
+	            _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { id: 'cancelBtn', basic: true, fluid: true, onClick: onCancel },
+	              'Cancel'
+	            )
 	          )
 	        )
 	      );
@@ -83749,11 +83765,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var Row = _semanticUiReact.Grid.Row,
+	    Column = _semanticUiReact.Grid.Column;
+
 	/**
 	 * sort list targets
 	 * @param {object} a 
 	 * @param {object} b 
 	 */
+
 	var sort = function sort(a, b) {
 	  // sort by end date 
 	  var aDate = (0, _moment2.default)(a.completeDate);
@@ -83792,12 +83812,16 @@
 	  return getYears(timelineInfo).map(function (year, i) {
 	    return _react2.default.createElement(
 	      _semanticUiReact.Accordion,
-	      { defaultActiveIndex: 0, key: i },
+	      { defaultActiveIndex: 0, key: i, fluid: true },
 	      _react2.default.createElement(
 	        _semanticUiReact.Accordion.Title,
 	        null,
-	        _react2.default.createElement(_semanticUiReact.Icon, { name: 'dropdown' }),
-	        year
+	        _react2.default.createElement(
+	          'h4',
+	          null,
+	          _react2.default.createElement(_semanticUiReact.Icon, { name: 'dropdown' }),
+	          year
+	        )
 	      ),
 	      _react2.default.createElement(
 	        _semanticUiReact.Accordion.Content,
@@ -83812,8 +83836,13 @@
 	              _react2.default.createElement(
 	                _semanticUiReact.Accordion.Title,
 	                null,
-	                _react2.default.createElement(_semanticUiReact.Icon, { name: 'dropdown' }),
-	                month
+	                _react2.default.createElement(
+	                  'h5',
+	                  null,
+	                  '\xA0\xA0',
+	                  _react2.default.createElement(_semanticUiReact.Icon, { name: 'dropdown' }),
+	                  month
+	                )
 	              ),
 	              _react2.default.createElement(
 	                _semanticUiReact.Accordion.Content,
@@ -83828,6 +83857,7 @@
 	                      _react2.default.createElement(
 	                        _semanticUiReact.Accordion.Title,
 	                        null,
+	                        '\xA0\xA0\xA0\xA0',
 	                        _react2.default.createElement(_semanticUiReact.Icon, { name: 'dropdown' }),
 	                        date
 	                      ),
@@ -83859,10 +83889,28 @@
 	      onBackClick = _ref.onBackClick;
 
 	  return _react2.default.createElement(
-	    'div',
+	    _semanticUiReact.Grid,
 	    null,
-	    getJsx(timelineInfo),
-	    _react2.default.createElement(_semanticUiReact.Button, { content: 'Back', onClick: onBackClick })
+	    _react2.default.createElement('p', null),
+	    _react2.default.createElement(
+	      Row,
+	      { centered: true },
+	      _react2.default.createElement(
+	        Column,
+	        { width: 12 },
+	        _react2.default.createElement(_semanticUiReact.Button, { content: 'Back', fluid: true, color: 'teal', onClick: onBackClick })
+	      )
+	    ),
+	    _react2.default.createElement('p', null),
+	    _react2.default.createElement(
+	      Row,
+	      { centered: true },
+	      _react2.default.createElement(
+	        Column,
+	        { width: 16 },
+	        getJsx(timelineInfo)
+	      )
+	    )
 	  );
 	};
 
@@ -83949,11 +83997,15 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var Row = _semanticUiReact.Grid.Row,
+	    Column = _semanticUiReact.Grid.Column;
+
 	/**
 	 * sort list items
 	 * @param {object} a 
 	 * @param {object} b 
 	 */
+
 	var sort = function sort(a, b) {
 	  // sort by deleted date 
 	  var aDate = (0, _moment2.default)(a.deletedDate);
@@ -83973,16 +84025,29 @@
 	  var items = _ref.items,
 	      onBackClick = _ref.onBackClick;
 	  return _react2.default.createElement(
-	    'div',
+	    _semanticUiReact.Grid,
 	    null,
+	    _react2.default.createElement('p', null),
 	    _react2.default.createElement(
-	      _semanticUiReact.Segment.Group,
-	      null,
-	      [].concat(_toConsumableArray(items)).sort(sort).map(function (item) {
-	        return _react2.default.createElement(_ListItemContainer2.default, { item: item, key: item.id });
-	      })
+	      Row,
+	      { centered: true },
+	      _react2.default.createElement(
+	        Column,
+	        { width: 12 },
+	        _react2.default.createElement(_semanticUiReact.Button, { content: 'Back', fluid: true, color: 'teal', onClick: onBackClick })
+	      )
 	    ),
-	    _react2.default.createElement(_semanticUiReact.Button, { content: 'Back', onClick: onBackClick })
+	    _react2.default.createElement(
+	      Row,
+	      { centered: true },
+	      _react2.default.createElement(
+	        Column,
+	        { width: 16 },
+	        [].concat(_toConsumableArray(items)).sort(sort).map(function (item) {
+	          return _react2.default.createElement(_ListItemContainer2.default, { item: item, key: item.id });
+	        })
+	      )
+	    )
 	  );
 	};
 

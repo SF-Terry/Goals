@@ -5,27 +5,33 @@ import {
   Dropdown
 } from 'semantic-ui-react'
 
+// activate button by current list type
+const _activateBtn = (type, listType) => {
+  return type === listType
+}
 
-const Topbar = ({ onDayClick,
-  onWeekClick,
-  onMonthClick, onProjectClick, onYearClick, onLongClick, onNextDayClick, onNextWeekClick, onNextMonthClick, onNextYearClick, onTimelineClick, onRecycleClick, onImportClick, onExportClick }) => (
+const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClick, onYearClick, onLongClick, onNextDayClick, onNextWeekClick, onNextMonthClick, onNextYearClick, onTimelineClick, onRecycleClick, onImportClick, onExportClick }) => {
+
+
+
+  return (
     <div style={{
       textAlign: 'center',
       margin: '20px'
     }}>
-      <Button.Group>
-        <Button onClick={onDayClick}>D</Button>
-        <Button onClick={onWeekClick}>W</Button>
-        <Button onClick={onMonthClick}>M</Button>
-        <Button onClick={onProjectClick}>P</Button>
-        <Dropdown text='Fn' floating button>
+      <Button.Group  >
+        <Button basic active={_activateBtn(1, listType)} onClick={onDayClick}>D</Button>
+        <Button basic active={_activateBtn(2, listType)} onClick={onWeekClick}>W</Button>
+        <Button basic active={_activateBtn(3, listType)} onClick={onMonthClick}>M</Button>
+        <Button basic active={_activateBtn(4, listType)} onClick={onProjectClick}>P</Button>
+        <Dropdown text='Fn' button basic >
           <Dropdown.Menu>
-            <Dropdown.Item text='Year' onClick={onYearClick} />
-            <Dropdown.Item text='Long' onClick={onLongClick} />
-            <Dropdown.Item text='NextDay' onClick={onNextDayClick} />
-            <Dropdown.Item text='NextWeek' onClick={onNextWeekClick} />
-            <Dropdown.Item text='NextMonth' onClick={onNextMonthClick} />
-            <Dropdown.Item text='NextYear' onClick={onNextYearClick} />
+            <Dropdown.Item text='Year' active={_activateBtn(5, listType)} onClick={onYearClick} />
+            <Dropdown.Item text='Long' active={_activateBtn(6, listType)} onClick={onLongClick} />
+            <Dropdown.Item text='NextDay' active={_activateBtn(7, listType)} onClick={onNextDayClick} />
+            <Dropdown.Item text='NextWeek' active={_activateBtn(8, listType)} onClick={onNextWeekClick} />
+            <Dropdown.Item text='NextMonth' active={_activateBtn(9, listType)} onClick={onNextMonthClick} />
+            <Dropdown.Item text='NextYear' active={_activateBtn(10, listType)} onClick={onNextYearClick} />
             <Dropdown.Item active text='Timeline' onClick={onTimelineClick} />
             <Dropdown.Item active text='Recycle' onClick={onRecycleClick} />
             <Dropdown.Item active text='Import Data' onClick={onImportClick} />
@@ -35,6 +41,7 @@ const Topbar = ({ onDayClick,
       </Button.Group>
     </div>
   )
+}
 
 
 Topbar.propTypes = {

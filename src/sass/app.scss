@@ -1,11 +1,49 @@
 #TargetsManagement {
-	#caveat{
+	#caveat {
 		position: fixed; top: 1%; left: 1%; z-index: 9;
 		width: 98%; 
 		text-align: center;
 	}
-  #AddBtn{
+  #AddBtn {
 		// width: 50px; height: 50px;
 		position: fixed; bottom: 10%; right: 10%;
 	}
+
+	.ListItem {
+		margin: 5px;
+		word-break: break-all;
+
+		.Label {
+			color: #975b33;
+		}
+	}
+
+	// Dropdown: cover semantic.css
+	.ui.selection.dropdown {
+		.menu{
+			max-height: ((2.5 * 8.01428571) + rem)!important; // default: 8.01428571rem
+		}
+	}	
 }
+
+
+.ListItemModal {
+	/* { font color */
+  #deleteBtn {
+    color: #db2828!important;
+  }
+  #completeBtn {
+    color: #21ba45!important;
+  }
+  #topBtn {
+    color: #f2711c!important;
+  }
+  #moreBtn {
+    color: #1b1c1d!important;
+  }
+	#cancelBtn {
+		color: #767676!important;
+	}
+  /* } font color */
+}
+

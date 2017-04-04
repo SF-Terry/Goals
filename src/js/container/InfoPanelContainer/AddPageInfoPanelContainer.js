@@ -47,7 +47,7 @@ const onContinueAddClick = () => {
   // change the create date of temporary target
   ReduxStore.dispatch(modifyInnerState_tmpTarget_createDate(moment()))
   // change the create future date of temporary target
-  const isFutureType = [7, 8, 9, 10].some(n => tmpTarget.type === n)
+  const isFutureType = [7, 8, 9, 10].some(n => getTmpTarget().type === n)
   if (isFutureType) {
     ReduxStore.dispatch(modifyInnerState_tmpTarget_createFutureDate(moment()))
   }

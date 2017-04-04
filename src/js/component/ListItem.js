@@ -35,11 +35,12 @@ const ListItem = ({ item, onTap, onPress }) => {
 
   return (
     <Tappable onPress={_onPress} onTap={_onTap}>
-      <Segment inverted color={color} >
-        {shouldShowTiming && <Label color='grey'>{timingInfo}</Label>}
-        &nbsp;&nbsp;
-      {name}
+      <Segment className="ListItem" inverted color={color} >
+        {shouldShowTiming && <Label className="Label" basic>{timingInfo}</Label>}
+          &nbsp;&nbsp;
+        {name}
       </Segment>
+      <p></p>
     </Tappable>
   )
 }
