@@ -76776,7 +76776,9 @@
 	        // save email
 	        dispatch((0, _modifyInnerState.modifyInnerState_email)(promptEmailResult));
 	        // show prompt
-	        var promptDataResult = window.prompt('Please copy data manually', JSON.stringify((0, _localStore.getLocalStore)()));
+	        var data = (0, _localStore.getLocalStore)();
+	        var dataStr = JSON.stringify(data);
+	        var promptDataResult = window.prompt('Please copy data manually', dataStr);
 	        // send email if data prompt confirmed 
 	        if (promptDataResult) {
 	          location.href = 'mailto:' + promptEmailResult + '?subject=' + (0, _moment2.default)().format("YYYY MMMM Do, dddd, h:mm:ss a") + ' By ' + _initialState.storeName;
@@ -78596,9 +78598,20 @@
 	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_type)(type));
 	        // reset timer to untime
 	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
-	        // show time selector when type is 'project' or 'long'
-	        var shouldShowTimeSelector = type === 4 || type === 6;
-	        shouldShowTimeSelector && dispatch((0, _modifyInnerState.modifyInnerState_route)(3));
+	        // // show time selector and reset dates and timetype when type is 'project' or 'long'
+	        // const shouldShowTimeSelector = type === 4 || type === 6
+	        // if (shouldShowTimeSelector) {
+	        //   // route to time selector
+	        //   dispatch(modifyInnerState_route(3))
+	        //   // reset date
+	        //   dispatch(modifyInnerState_tmpTarget_startDate(null))
+	        //   dispatch(modifyInnerState_tmpTarget_endDate(null))
+	        //   dispatch(modifyInnerState_tmpTarget_maxDate(null))
+	        //   dispatch(modifyInnerState_tmpTarget_minDate(null))
+	        //   // reset timetype
+	        //   // ## change time type to start time
+	        //   dispatch(modifyInnerState_timeType(1))
+	        // }
 	      },
 
 	      /**
@@ -78606,6 +78619,12 @@
 	       * @param {boolean} isTiming 
 	       */
 	      onTimerClick: function onTimerClick(isTiming) {
+	        // reset date
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_startDate)(null));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_endDate)(null));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_maxDate)(null));
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_minDate)(null));
+
 	        // should timing
 	        if (!isTiming) {
 	          // show time selector(show start time mode) when timer is activated
@@ -78613,15 +78632,11 @@
 	          // change time type to start time
 	          dispatch((0, _modifyInnerState.modifyInnerState_timeType)(1));
 	        }
+
 	        // should cancel timing
 	        if (isTiming) {
 	          // set timer to untime(make timer unchecked when timer is checked)
 	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_isTiming)(false));
-	          // reset date
-	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_startDate)(null));
-	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_endDate)(null));
-	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_maxDate)(null));
-	          dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_minDate)(null));
 	        }
 	      },
 
@@ -79072,6 +79087,14 @@
 	      shouldShowStartTime: true
 	    };
 
+	    var type = _this.props.type;
+
+
+	    minDate = _this.props.minDate || getMinDate(type);
+	    maxDate = _this.props.maxDate || getMaxDate(minDate, type);
+	    startDate = _this.props.startDate || minDate;
+	    endDate = _this.props.endDate || minDate;
+
 	    _this._onConfirmClick = _this._onConfirmClick.bind(_this);
 	    return _this;
 	  }
@@ -79107,17 +79130,11 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props2 = this.props,
-	          type = _props2.type,
 	          timeType = _props2.timeType,
 	          onStartTimeClick = _props2.onStartTimeClick,
 	          onEndTimeClick = _props2.onEndTimeClick,
 	          onCancelClick = _props2.onCancelClick;
 
-
-	      minDate = this.props.minDate || getMinDate(type);
-	      maxDate = this.props.maxDate || getMaxDate(minDate, type);
-	      startDate = this.props.startDate || minDate;
-	      endDate = this.props.endDate || minDate;
 
 	      var shouldHideStartTime = timeType === 2;
 	      var shouldShowOutline = shouldHideStartTime;

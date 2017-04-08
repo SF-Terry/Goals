@@ -116,7 +116,9 @@ const mapDispatchToProps = dispatch => {
         // save email
         dispatch(modifyInnerState_email(promptEmailResult))
         // show prompt
-        const promptDataResult = window.prompt('Please copy data manually', JSON.stringify(getLocalStore()))
+        const data = getLocalStore()
+        const dataStr = JSON.stringify(data)
+        const promptDataResult = window.prompt('Please copy data manually', dataStr)
         // send email if data prompt confirmed 
         if (promptDataResult) {
           location.href = `mailto:${promptEmailResult}?subject=${moment().format("YYYY MMMM Do, dddd, h:mm:ss a")} By ${storeName}`;

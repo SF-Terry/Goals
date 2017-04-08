@@ -88,15 +88,32 @@ const decorate = ({
         dispatch(modifyInnerState_tmpTarget_type(type))
         // reset timer to untime
         dispatch(modifyInnerState_tmpTarget_isTiming(false))
-        // show time selector when type is 'project' or 'long'
-        const shouldShowTimeSelector = type === 4 || type === 6
-        shouldShowTimeSelector && dispatch(modifyInnerState_route(3))
+        // // show time selector and reset dates and timetype when type is 'project' or 'long'
+        // const shouldShowTimeSelector = type === 4 || type === 6
+        // if (shouldShowTimeSelector) {
+        //   // route to time selector
+        //   dispatch(modifyInnerState_route(3))
+        //   // reset date
+        //   dispatch(modifyInnerState_tmpTarget_startDate(null))
+        //   dispatch(modifyInnerState_tmpTarget_endDate(null))
+        //   dispatch(modifyInnerState_tmpTarget_maxDate(null))
+        //   dispatch(modifyInnerState_tmpTarget_minDate(null))
+        //   // reset timetype
+        //   // ## change time type to start time
+        //   dispatch(modifyInnerState_timeType(1))
+        // }
       },
       /**
        * timer's click event
        * @param {boolean} isTiming 
        */
       onTimerClick(isTiming) {
+        // reset date
+        dispatch(modifyInnerState_tmpTarget_startDate(null))
+        dispatch(modifyInnerState_tmpTarget_endDate(null))
+        dispatch(modifyInnerState_tmpTarget_maxDate(null))
+        dispatch(modifyInnerState_tmpTarget_minDate(null))
+
         // should timing
         if (!isTiming) {
           // show time selector(show start time mode) when timer is activated
@@ -104,15 +121,11 @@ const decorate = ({
           // change time type to start time
           dispatch(modifyInnerState_timeType(1))
         }
+
         // should cancel timing
         if (isTiming) {
           // set timer to untime(make timer unchecked when timer is checked)
           dispatch(modifyInnerState_tmpTarget_isTiming(false))
-          // reset date
-          dispatch(modifyInnerState_tmpTarget_startDate(null))
-          dispatch(modifyInnerState_tmpTarget_endDate(null))
-          dispatch(modifyInnerState_tmpTarget_maxDate(null))
-          dispatch(modifyInnerState_tmpTarget_minDate(null))
         }
       },
       /**
