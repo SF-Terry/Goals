@@ -4,11 +4,11 @@ import moment from 'moment'
 
 import InfoPanel from '../../component/InfoPanel/index'
 
-import { 
-  modifyInnerState_route, 
+import {
+  modifyInnerState_route,
   modifyInnerState_prevLevel,
   modifyInnerState_tmpTarget_createFutureDate
- } from '../../action/modifyInnerState'
+} from '../../action/modifyInnerState'
 import { modifyTarget } from '../../action/modifyTarget'
 // import { getTargetById } from '../../util'
 
@@ -31,13 +31,15 @@ const onConfirmClick = () => {
   }
   // modify target
   Object.keys(getTmpTarget()).map(key => {
-    ReduxStore.dispatch(modifyTarget({
+    // do not change id
+    const isKeyNotId = key != 'id'
+    isKeyNotId && ReduxStore.dispatch(modifyTarget({
       id,
       key,
       value: getTmpTarget()[key]
     }))
   })
-  
+
   // route to home page
   ReduxStore.dispatch(modifyInnerState_route(0))
   // set previous level 

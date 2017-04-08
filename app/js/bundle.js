@@ -78811,7 +78811,9 @@
 	  }
 	  // modify target
 	  Object.keys(getTmpTarget()).map(function (key) {
-	    ReduxStore.dispatch((0, _modifyTarget.modifyTarget)({
+	    // do not change id
+	    var isKeyNotId = key != 'id';
+	    isKeyNotId && ReduxStore.dispatch((0, _modifyTarget.modifyTarget)({
 	      id: id,
 	      key: key,
 	      value: getTmpTarget()[key]
