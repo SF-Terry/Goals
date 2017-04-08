@@ -1,6 +1,5 @@
 import moment from 'moment'
 import { getLocalStore, setLocalStore } from '../store/localStore'
-import $ from './jQuery'
 
 import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
 

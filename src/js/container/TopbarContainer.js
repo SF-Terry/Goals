@@ -7,7 +7,7 @@ import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_mod
 import { setLocalStore, getLocalStore } from '../store/localStore'
 import { storeName } from '../store/initialState'
 import { showCaveat } from '../util/index'
-
+import { confirmModal, promptModal } from '../util/modal'
 
 const mapStateToProps = state => {
   return {
@@ -66,65 +66,78 @@ const mapDispatchToProps = dispatch => {
       dispatch(modifyInnerState_route(5))
     },
     onImportClick() {
-      // show hint
-      const hintConfirmResult = window.confirm(`It's adviced to backup current data before importing any data!`)
+      // show confirm: "It's adviced to backup current data before importing any data!"
+      confirmModal.show({
+        text: `It's adviced to backup current data before importing any data!`,
+        modalConfirmed() {
+          
+          // show prompt: "Please paste data string to import"
+          promptModal.show({
+            text: `Please paste data to import`,
+            modalConfirmed(inputValue) {
+              // data to generate
+              let data = null
 
-      // hint confirmed 
-      if (hintConfirmResult) {
-        let data = null
+              // check pasted data
+              const check = dataStr => {
+                let result = false
+                try {
+                  data = JSON.parse(dataStr)
+                  result = typeof data === 'object' && data.targets != null
+                }
+                catch (e) {
 
-        // show importing prompt
-        const importingPromptResult = window.prompt(`Please paste data you prefer to import`, ``)
+                }
+                return result
+              }
+              const checkResult = check(inputValue)
 
-        // data pasted
-        if (importingPromptResult) {
-          // check data
-          const check = dataStr => {
-            let result = false
-            try { 
-              data = JSON.parse(dataStr)
-              result = typeof data === 'object' && data.targets != null
-            } 
-            catch (e) {
-              
-            } 
-            return result 
-          }
-          const checkResult = check(importingPromptResult)
-
-          // data is okay
-          if (checkResult) {
-            // set localstorage
-            setLocalStore(data)
-            // refresh
-            location.href = location.href
-          }
-          // data is wrong
-          if (!checkResult) {
-            showCaveat(`Data's format was wrong!`)
-          }
+              // data is okay
+              if (checkResult) {
+                // set localstorage
+                setLocalStore(data)
+                // refresh
+                location.href = location.href
+              }
+              // data is wrong
+              if (!checkResult) {
+                showCaveat(`Data's format was wrong!`)
+              }
+            }
+          })
         }
-      }
+      })
     },
     onExportClick() {
-      // confirm exporting mail
       const { email } = ReduxStore.getState().innerState
-      const promptEmailResult = window.prompt(`Please ${email ? 'confirm' : 'set'} email`, email || '')
+      promptModal.show({
+        text: `Please ${email ? 'confirm' : 'set'} email`,
+        defaultValue: email,
+        modalConfirmed(confirmedEmail) {
+          // save email
+          dispatch(modifyInnerState_email(confirmedEmail))
 
-      // email prompt confirmed
-      if (promptEmailResult) {
-        // save email
-        dispatch(modifyInnerState_email(promptEmailResult))
-        // show prompt
-        const data = getLocalStore()
-        const dataStr = JSON.stringify(data)
-        const promptDataResult = window.prompt('Please copy data manually', dataStr)
-        // send email if data prompt confirmed 
-        if (promptDataResult) {
-          location.href = `mailto:${promptEmailResult}?subject=${moment().format("YYYY MMMM Do, dddd, h:mm:ss a")} By ${storeName}`;
+          // show prompt
+          const data = getLocalStore()
+          const dataStr = JSON.stringify(data)
+          const isSupportExecCommand = !!document.execCommand
+          const notion = isSupportExecCommand ? `The data was copied! Send to email?` : `Please copy data manually, and then send to email`
+          promptModal.show({
+            text: notion,
+            defaultValue: dataStr,
+            modalShowed() {
+              $('#targetsManagement-prompt input').select()
+              // copy value in input
+              if (isSupportExecCommand) {
+                document.execCommand('copy')
+              }
+            },
+            modalConfirmed(confirmedEmail) {
+              location.href = `mailto:${confirmedEmail}?subject=${moment().format("YYYY MMMM Do, dddd, h:mm:ss a")} By ${storeName}`;
+            }
+          })
         }
-      }
-
+      })
     }
   }
 }

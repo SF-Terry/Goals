@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Message } from 'semantic-ui-react'
+import { Message, Modal, Button, Icon, Input } from 'semantic-ui-react'
 
 import TopbarContainer from '../container/TopbarContainer'
 import MainContentContainer from '../container/MainContentContainer'
@@ -11,6 +11,8 @@ import TimeSelectorContainer from '../container/TimeSelectorContainer'
 import ListItemModalContainer from '../container/ListItemModalContainer'
 import TimelineContainer from '../container/TimelineContainer'
 import RecycleContainer from '../container/RecycleContainer'
+
+import stateList from '../store/stateList'
 
 
 
@@ -24,65 +26,137 @@ const MessageBox = () => (
 
 
 /**
+ * get prompt confirm method
+ * @param {function} promptConfrim 
+ */
+const getPromptConfrimFn = promptConfrim => {
+	
+	return () => {
+		const inputValue = $('#targetsManagement-prompt input').val()
+		promptConfrim(inputValue)
+	}
+}
+
+
+/**
  * composition
  * - Topbar
  * - MainContent
  * - AddBtn
  */
-const TargetsManagement = ({
-	shouldShowCaveat,
-	shouldShowListItemModal,
-	route
-}) => (
-		<div id="TargetsManagement">
-			{
-				// caveat message
-				shouldShowCaveat && <MessageBox />
-			}
+class TargetsManagement extends React.Component {
+	constructor(props) {
+		super(props)
+
+		// add TargetsManagement to stateList
+		stateList.TargetsManagement = this
+
+		this.state = {
+			confirmModalSetting: {},
+			promptModalSetting: {}
+		}
 
 
-			{
-				// route to home page
-				route === 0 && (
-					<div>
-						<TopbarContainer />
-						<MainContentContainer />
-						<AddBtnContainer />
-					</div>
-				)
-			}
+	}
 
-			{
-				// route to adding page
-				route === 1 && <AddPageInfoPanelContainer />
-			}
+	render() {
+		const { shouldShowCaveat, shouldShowListItemModal, route } = this.props
+		const { confirmModalSetting, promptModalSetting } = this.state
 
-			{
-				// route to editing page
-				route === 2 && <EditPageInfoPanelContainer />
-			}
+		const { showConfirmModal, confirmText, confirmCancel, confirmConfrim } = confirmModalSetting
+		const { showPromptModal, promptText, promptCancel, promptConfrim, promptDefaultValue } = promptModalSetting
 
-			{
-				// route to time setting page
-				route === 3 && <TimeSelectorContainer />
-			}
-
-			{
-				// route to timeline page
-				route === 4 && <TimelineContainer />
-			}
+		return (
+			<div id="TargetsManagement">
+				{
+					// caveat message
+					shouldShowCaveat && <MessageBox />
+				}
 
 
-			{
-				// route to recycle page
-				route === 5 && <RecycleContainer />
-			}
+				{
+					// route to home page
+					route === 0 && (
+						<div>
+							<TopbarContainer />
+							<MainContentContainer />
+							<AddBtnContainer />
+						</div>
+					)
+				}
 
-			{/* show modal { */}
-			{shouldShowListItemModal && <ListItemModalContainer />}
-			{/* show modal } */}
-		</div>
-	)
+				{
+					// route to adding page
+					route === 1 && <AddPageInfoPanelContainer />
+				}
+
+				{
+					// route to editing page
+					route === 2 && <EditPageInfoPanelContainer />
+				}
+
+				{
+					// route to time setting page
+					route === 3 && <TimeSelectorContainer />
+				}
+
+				{
+					// route to timeline page
+					route === 4 && <TimelineContainer />
+				}
+
+
+				{
+					// route to recycle page
+					route === 5 && <RecycleContainer />
+				}
+
+				{/* { list item modal */}
+				{shouldShowListItemModal && <ListItemModalContainer />}
+				{/* } list item modal */}
+
+				{/* { confirm modal */}
+				<Modal open={showConfirmModal}>
+					{/*<Modal.Header>{confirmText}</Modal.Header>*/}
+					<Modal.Content>
+						<h4 className='center'>
+							{confirmText}
+						</h4>
+					</Modal.Content>
+					<Modal.Actions className='center'>
+						<Button color='red' onClick={confirmCancel}>
+							Cancel
+      			</Button>
+						<Button color='green' onClick={confirmConfrim}>
+							Confirm
+      		</Button>
+					</Modal.Actions>
+				</Modal>
+				{/* } confirm modal */}
+
+				{/* { prompt modal */}
+				<Modal open={showPromptModal}>
+					{/*<Modal.Header>{confirmText}</Modal.Header>*/}
+					<Modal.Content>
+						<h5>
+							{promptText}
+						</h5>
+						<Input id="targetsManagement-prompt" fluid focus defaultValue={promptDefaultValue} />
+					</Modal.Content>
+					<Modal.Actions>
+						<Button color='red' onClick={promptCancel}>
+							Cancel
+      			</Button>
+						<Button color='green' onClick={getPromptConfrimFn(promptConfrim)}>
+							Confirm
+      		</Button>
+					</Modal.Actions>
+				</Modal>
+				{/* } prompt modal */}
+			</div>
+		)
+	}
+}
 
 
 TargetsManagement.propTypes = {
@@ -90,5 +164,6 @@ TargetsManagement.propTypes = {
 	shouldShowListItemModal: React.PropTypes.bool,
 	route: React.PropTypes.number
 };
+
 
 export default TargetsManagement

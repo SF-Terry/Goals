@@ -7,7 +7,6 @@ import DatePicker from 'rmc-date-picker/lib/index.web'
 import zhCn from 'rmc-date-picker/lib/locale/zh_CN'
 import moment from 'moment'
 import 'moment/locale/zh-cn.js'
-import $ from '../../../util/jQuery'
 
 // inital moment.locale
 moment.locale('zh-cn')

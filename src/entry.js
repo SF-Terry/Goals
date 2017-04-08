@@ -1,3 +1,7 @@
+// global util
+import $ from './js/util/jQuery'
+window.$ = $
+
 // style
 import './sass/app.scss'
 
