@@ -53,6 +53,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "targetInListItemModal": action.value
       }
+    case 'MODIFY_INNERSTATE_CURRENTDATE':
+      return {
+        ...state,
+        "currentDate": action.value
+      }
     case 'MODIFY_INNERSTATE_PREVLEVEL':
       return {
         ...state,

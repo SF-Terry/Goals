@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { getLocalStore, setLocalStore } from '../store/localStore'
 
-import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
+import { modifyInnerState_shouldShowCaveat, modifyInnerState_currentDate } from '../action/modifyInnerState'
 
 
 /**
@@ -9,6 +9,14 @@ import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
  * timer for hiding caveat
  */
 let caveatTimer = null
+
+/**
+ * @var {number}
+ * timer for auto updating component
+ */
+let autoUpdateComponentTimer = null
+
+
 
 /**
  * console the dispatching and state info
@@ -108,4 +116,15 @@ export const getTimingInfo = (startDate, endDate) => {
  */
 export const getTargetById = id => {
   return ReduxStore.getState().targets.filter( target => target.id === id )[0]
+}
+
+/**
+ * auto update component(can only used on one component)
+ */
+export const autoUpdateComponent = (Component, interval) => {
+  clearInterval(autoUpdateComponentTimer)
+  autoUpdateComponentTimer = setInterval(() => {
+    const isComponentMounted = !Component._calledComponentWillUnmount
+    isComponentMounted && ReduxStore.dispatch(modifyInnerState_currentDate(moment()))
+  }, interval)
 }

@@ -8,7 +8,10 @@ import { allTargetLevels } from '../store/initialState'
 
 
 
-const ListItem = ({ item, onTap, onPress }) => {
+const ListItem = ({ item, currentDate, onTap, onPress }) => {
+  // !!!!!! Attention !!!!!!
+  // import parameter: `currentDate` to update list item in realtime
+
   const {
     name,
     level,
@@ -31,7 +34,6 @@ const ListItem = ({ item, onTap, onPress }) => {
     onPress(item)
   }
   let timingInfo = shouldShowTiming ? getTimingInfo(startDate, endDate) : null
-
 
   return (
     <Tappable onPress={_onPress} onTap={_onTap}>

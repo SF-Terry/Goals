@@ -200,7 +200,11 @@ export const innerStateModel = {
     /**
      * email used to export data
      */
-    email: null
+    email: null,
+    /**
+     * current time, used to update time of targets in realtime
+     */
+    currentDate: moment()
 }
 
 /**

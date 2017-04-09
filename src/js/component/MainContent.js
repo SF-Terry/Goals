@@ -3,6 +3,8 @@ import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
 import { Segment } from 'semantic-ui-react'
 
+import { autoUpdateComponent } from '../util'
+
 
 /**
  * sort list items
@@ -76,15 +78,29 @@ const sort = (a, b) => {
   return 0
 }
 
+class MainContent extends React.Component {
+  constructor(props) {
+    super(props)
 
-const MainContent = ({ items }) => (
-  <div>
-    {/* list items { */}
-    {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
-    {/* list items } */}
-  </div>
+    // auto update component
+    autoUpdateComponent(this, 5000)
+  }
 
-)
+  componentWillUnmount() {
+    
+  }
+
+  render() {
+    const { items } = this.props
+    return (
+      <div>
+        {/* list items { */}
+        {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
+        {/* list items } */}
+      </div>
+    )
+  }
+}
 
 MainContent.propTypes = {
   items: React.PropTypes.array

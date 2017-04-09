@@ -5,8 +5,9 @@ import ListItem  from '../component/ListItem'
 import { modifyInnerState_route, modifyInnerState_tmpTarget, modifyInnerState_shouldShowListItemModal, modifyInnerState_targetInListItemModal, modifyInnerState_editType } from '../action/modifyInnerState'
 
 const mapStateToProps = state => {
+  const { currentDate } = state.innerState
   return {
-    
+    currentDate
   }
 }
 

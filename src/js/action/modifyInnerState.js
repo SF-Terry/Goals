@@ -9,6 +9,7 @@ const MODIFY_INNERSTATE_LISTTYPE= 'MODIFY_INNERSTATE_LISTTYPE'
 const MODIFY_INNERSTATE_EDITTYPE= 'MODIFY_INNERSTATE_EDITTYPE'
 const MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL= 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL'
 const MODIFY_INNERSTATE_TARGETINLISTITEMMODAL= 'MODIFY_INNERSTATE_TARGETINLISTITEMMODAL'
+const MODIFY_INNERSTATE_CURRENTDATE= 'MODIFY_INNERSTATE_CURRENTDATE'
 const MODIFY_INNERSTATE_PREVLEVEL= 'MODIFY_INNERSTATE_PREVLEVEL'
 const MODIFY_INNERSTATE_MODE= 'MODIFY_INNERSTATE_MODE'
 const MODIFY_INNERSTATE_EMAIL= 'MODIFY_INNERSTATE_EMAIL'
@@ -76,10 +77,16 @@ export const modifyInnerState_listType = manufature(MODIFY_INNERSTATE_LISTTYPE)
 export const modifyInnerState_shouldShowListItemModal = manufature(MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL)
 
 /**
- * modify showing list item modal state in innerState
+ * modify target in list item modal in innerState
  * @param  {number} value 
  */
 export const modifyInnerState_targetInListItemModal = manufature(MODIFY_INNERSTATE_TARGETINLISTITEMMODAL)
+
+/**
+ * modify current date state in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_currentDate = manufature(MODIFY_INNERSTATE_CURRENTDATE)
 
 /**
  * modify page mode
