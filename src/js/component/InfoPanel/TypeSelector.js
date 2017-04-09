@@ -1,16 +1,16 @@
 import React from 'react'
 import { Dropdown } from 'semantic-ui-react'
 
-import { allTargetTypes, allTargetTypes_reverse } from '../../store/initialState'
+import { allTargetTypes, allTargetTypes_reverse } from '../../store/initialState/index'
 
 
 /**
  * @const {array} 
  * options for Dropdown
  */
-const taskTypesOptions = [...allTargetTypes.values()].map(type => ({
-  text: type,
-  value: type
+const taskTypesOptions = [...allTargetTypes].map((arr, index) => ({
+  text: arr[1],
+  value: arr[0]
 }))
 
 
@@ -30,18 +30,18 @@ class TypeSelector extends React.Component {
     const { onChange } = this.props
 
     const { value } = info
-    const type = allTargetTypes_reverse.get(value)
+    const type = value
 
     onChange(type)
   }
 
   render() {
     const { type } = this.props
-    const value = allTargetTypes.get(type)
+    const value = type
 
     return (
       <div>
-        <Dropdown fluid selection value={value} options={taskTypesOptions} onChange={ this._onSelectorChange } ></Dropdown>
+        <Dropdown fluid selection defaultValue={value} options={taskTypesOptions} onChange={ this._onSelectorChange } ></Dropdown>
       </div>
     )
   }

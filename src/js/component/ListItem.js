@@ -3,8 +3,8 @@ import { Label, Segment } from 'semantic-ui-react'
 import Tappable from 'react-tappable'
 import moment from 'moment'
 
-import { getTimingInfo } from '../util'
-import { allTargetLevels } from '../store/initialState'
+import getTimingInfo from '../util/lang/getTimingInfo'
+import allTargetLevels from '../store/initialState/allTargetLevels'
 
 
 

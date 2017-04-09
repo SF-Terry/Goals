@@ -37,11 +37,13 @@ const confirmModal = {
     }, modalShowed)
   },
   hide(callback) {
+    // filter special parameters
+    const callbackFn = typeof callback === 'function' ? callback : (() => {})
     stateList.TargetsManagement.setState({
       confirmModalSetting: {
         showConfirmModal: false
       }
-    }, callback)
+    }, callbackFn)
   }
 }
 

@@ -7,7 +7,7 @@ import {
   modifyInnerState_tmpTarget,
   modifyInnerState_editType
 } from '../action/modifyInnerState'
-import { targetModel } from '../store/initialState'
+import { targetModel } from '../store/initialState/index'
 
 const mapStateToProps = (state) => {
   return {

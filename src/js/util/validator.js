@@ -1,10 +1,7 @@
 import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
 
 import { showCaveat } from './index'
-
-
-const nameInvalidMsg = 'Target name is empty!'
-const timeSelectorInvalidMsg = 'Start time cannot be later than end time!'
+import Lang from './lang/index'
 
 
 const validator = {
@@ -14,7 +11,7 @@ const validator = {
     const isNameInValid = t.name === ''
     // if name is invalid, show caveat
     if (isNameInValid) {
-      showCaveat(nameInvalidMsg)
+      showCaveat(Lang.CAVEAT_INFOPANEL_NAME_EMPRTY)
       return false
     } else {
      return true 
@@ -25,7 +22,7 @@ const validator = {
     const isValid = startDate.isSameOrBefore(endDate)
     // if validation is failed, show caveat
     if (!isValid) {
-      showCaveat(timeSelectorInvalidMsg)
+      showCaveat(Lang.CAVEAT_TIMEPICER_START_TIME_IS_AFTER_END_TIME)
     }
     return isValid
   }

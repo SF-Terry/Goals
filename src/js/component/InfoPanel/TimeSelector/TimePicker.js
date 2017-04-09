@@ -4,13 +4,13 @@ import React, { Component } from 'react'
 import 'rmc-picker/assets/index.css'
 import 'rmc-date-picker/assets/index.css'
 import DatePicker from 'rmc-date-picker/lib/index.web'
-import zhCn from 'rmc-date-picker/lib/locale/zh_CN'
 import moment from 'moment'
+import zhCn from 'rmc-date-picker/lib/locale/zh_CN'
+import enUS from 'rmc-date-picker/lib/locale/en_US'
 import 'moment/locale/zh-cn.js'
 
-// inital moment.locale
-moment.locale('zh-cn')
 
+import { getLanguage } from '../../../store/localStore'
 
 let minDate, maxDate, defaultDate
 
@@ -92,9 +92,23 @@ class Timepicker extends React.Component {
   render() {
     const { date } = this.state
 
-    minDate.locale('zh-cn').utcOffset(8)
-    maxDate.locale('zh-cn').utcOffset(8)
-    defaultDate.locale('zh-cn').utcOffset(8)
+    let locale
+
+    const currentLanguage = getLanguage()
+    if (currentLanguage === 'zh') {
+      minDate.locale('zh-cn').utcOffset(8)
+      maxDate.locale('zh-cn').utcOffset(8)
+      defaultDate.locale('zh-cn').utcOffset(8)
+
+      locale = zhCn
+    }
+    if (currentLanguage != 'zh') {
+      minDate.locale('en').utcOffset(8)
+      maxDate.locale('en').utcOffset(8)
+      defaultDate.locale('en').utcOffset(8)
+
+      locale = enUS
+    }
 
     const format = function (date) {
       return date.format('YYYY-MM-DD HH:mm')
@@ -107,7 +121,7 @@ class Timepicker extends React.Component {
             rootNativeProps={{ 'data-xx': 'yy' }}
             defaultDate={date || defaultDate}
             mode={'datetime'}
-            locale={zhCn}
+            locale={locale}
             maxDate={maxDate}
             minDate={minDate}
             onDateChange={this.onDateChange}

@@ -2,8 +2,9 @@ import React from 'react'
 import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
 import { Grid, Segment, Button } from 'semantic-ui-react'
-
 const { Row, Column } = Grid
+
+import Lang from '../util/lang/index'
 
 
 /**
@@ -33,7 +34,7 @@ const Recycle = ({ items, onBackClick }) => (
 
     <Row centered>
       <Column width={12} >
-        <Button content='Back' fluid color='teal' onClick={onBackClick} />
+        <Button content={Lang.CANCEL} fluid color='teal' onClick={onBackClick} />
       </Column>
     </Row>
 

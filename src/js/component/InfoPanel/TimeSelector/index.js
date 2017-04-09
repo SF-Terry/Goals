@@ -4,8 +4,10 @@ const { Row, Column } = Grid
 import moment from 'moment'
 import { hide } from '../../../util'
 import validator from '../../../util/validator'
+import Lang from '../../../util/lang/index'
 
 import Timepicker from './TimePicker'
+
 
 
 
@@ -154,13 +156,13 @@ class TimeSelector extends React.Component {
           <Row>
             {/* startTime{ */}
             <Column width={8} style={{ textAlign: 'right' }}>
-              <Button content='开始时间' basic={shouldShowOutline} primary onClick={onStartTimeClick} />
+              <Button content={Lang.START_TIME} basic={shouldShowOutline} primary onClick={onStartTimeClick} />
             </Column>
             {/* startTime} */}
 
             {/* endTime{ */}
             <Column width={8} style={{ textAlign: 'left' }}>
-              <Button content='结束时间' basic={!shouldShowOutline} primary onClick={onEndTimeClick} />
+              <Button content={Lang.END_TIME} basic={!shouldShowOutline} primary onClick={onEndTimeClick} />
             </Column>
             {/* endTime} */}
           </Row>
@@ -183,10 +185,10 @@ class TimeSelector extends React.Component {
 
           <Row>
             <Column width={8} style={{ textAlign: 'right' }}>
-              <Button content='返回' color='grey' onClick={onCancelClick} />
+              <Button content={Lang.CANCEL} color='grey' onClick={onCancelClick} />
             </Column>
             <Column width={8} style={{ textAlign: 'left' }}>
-              <Button content='确认' color='green' onClick={this._onConfirmClick} />
+              <Button content={Lang.CONFIRM} color='green' onClick={this._onConfirmClick} />
             </Column>
           </Row>
         </Grid>

@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 import { Message, Modal, Button, Icon, Input } from 'semantic-ui-react'
 
@@ -13,8 +14,8 @@ import TimelineContainer from '../container/TimelineContainer'
 import RecycleContainer from '../container/RecycleContainer'
 
 import stateList from '../store/stateList'
-
-
+import { innerStateModel } from '../store/initialState/index'
+import initializeMomentLocale from '../util/lang/initializeMomentLocale'
 
 const MessageBox = () => (
 	<div id='caveat'>
@@ -25,12 +26,13 @@ const MessageBox = () => (
 )
 
 
+
 /**
  * get prompt confirm method
  * @param {function} promptConfrim 
  */
 const getPromptConfrimFn = promptConfrim => {
-	
+
 	return () => {
 		const inputValue = $('#targetsManagement-prompt input').val()
 		promptConfrim(inputValue)
@@ -56,9 +58,11 @@ class TargetsManagement extends React.Component {
 			promptModalSetting: {}
 		}
 
-
 	}
-
+	componentWillMount() {
+		// inital moment.locale
+		initializeMomentLocale()
+	}
 	render() {
 		const { shouldShowCaveat, shouldShowListItemModal, route } = this.props
 		const { confirmModalSetting, promptModalSetting } = this.state

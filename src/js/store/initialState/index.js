@@ -1,13 +1,7 @@
 import moment from 'moment'
 
-import { getReverseMap } from '../util'
-
-
-/**
- * @const {string}
- * name used in localStorage 
- */
-export const storeName = 'TargetsManagement'
+import { getReverseMap } from '../../util/index'
+import Lang from '../../util/lang/index'
 
 
 /**
@@ -212,17 +206,23 @@ export const innerStateModel = {
  * all the target types 
  */
 export const allTargetTypes = new Map([
-    [1, 'today'],
-    [2, 'week'],
-    [3, 'month'],
-    [4, 'project'],
-    [5, 'year'],
-    [6, 'long'],
-    [7, 'tomorrow'],
-    [8, 'nextWeek'],
-    [9, 'nextMonth'],
-    [10, 'nextYear']
+    [1, Lang.TODAY],
+    [2, Lang.WEEK],
+    [3, Lang.MONTH],
+    [4, Lang.PROJECT],
+    [5, Lang.YEAR],
+    [6, Lang.LONG],
+    [7, Lang.TOMORROW],
+    [8, Lang.NEXTWEEK],
+    [9, Lang.NEXTMONTH],
+    [10, Lang.NEXTYEAR]
 ])
+
+// /**
+//  * @const {map}
+//  * all the target types (reverse)
+//  */
+export const allTargetTypes_reverse = getReverseMap(allTargetTypes)
 
 /**
  * @const {map}
@@ -258,34 +258,6 @@ export const toCurrentFutureTypes = new Map([
     [10, 5]
 ])
 
-/**
- * @const {map}
- * all the target types (reverse)
- */
-export const allTargetTypes_reverse = getReverseMap(allTargetTypes)
-
-/**
- * @const {map}
- * all the target levels
- */
-export const allTargetLevels = new Map([
-    [1, {
-        color: 'red',
-        text: 'Imp&Urg'
-    }],
-    [2, {
-        color: 'orange',
-        text: 'Imp'
-    }],
-    [3, {
-        color: 'yellow',
-        text: 'Urg'
-    }],
-    [4, {
-        color: 'blue',
-        text: 'Norm'
-    }],
-])
 
 /**
  * @const {map}
@@ -309,21 +281,3 @@ export const allPages = new Map([
 ])
 
 
-/**
- * @const {map}
- * months map
- */
-export const monthsMap = new Map([
-    [1, 'January'],
-    [2, 'February'],
-    [3, 'March'],
-    [4, 'April'],
-    [5, 'May'],
-    [6, 'June'],
-    [7, 'July'],
-    [8, 'August'],
-    [9, 'September'],
-    [10, 'October'],
-    [11, 'November'],
-    [12, 'December']
-])

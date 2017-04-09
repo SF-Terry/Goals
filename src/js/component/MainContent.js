@@ -98,7 +98,7 @@ class MainContent extends React.Component {
     return (
       <Grid>
         <Row centered>
-          <Column width={15} fluid>
+          <Column width={15}>
             {/* list items { */}
             {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
             {/* list items } */}

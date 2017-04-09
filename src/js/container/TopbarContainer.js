@@ -4,10 +4,12 @@ import moment from 'moment'
 
 import Topbar from '../component/Topbar'
 import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_mode, modifyInnerState_email } from '../action/modifyInnerState'
-import { setLocalStore, getLocalStore } from '../store/localStore'
-import { storeName } from '../store/initialState'
+import { setLocalStore, getLocalStore, setLanguage } from '../store/localStore'
+import { storeName } from '../store/initialState/index'
 import { showCaveat } from '../util/index'
 import { confirmModal, promptModal } from '../util/modal'
+import Lang from '../util/lang/index'
+
 
 const mapStateToProps = state => {
   return {
@@ -68,12 +70,12 @@ const mapDispatchToProps = dispatch => {
     onImportClick() {
       // show confirm: "It's adviced to backup current data before importing any data!"
       confirmModal.show({
-        text: `It's adviced to backup current data before importing any data!`,
+        text: Lang.IMPORT_DATA_ALERT,
         modalConfirmed() {
           
           // show prompt: "Please paste data string to import"
           promptModal.show({
-            text: `Please paste data to import`,
+            text: Lang.IMPORT_DATA_PASTE_NOTION,
             modalConfirmed(inputValue) {
               // data to generate
               let data = null
@@ -101,7 +103,7 @@ const mapDispatchToProps = dispatch => {
               }
               // data is wrong
               if (!checkResult) {
-                showCaveat(`Data's format was wrong!`)
+                showCaveat(Lang.CAVEAT_IMPORT_DATA_FORMAT_WRONG)
               }
             }
           })
@@ -111,7 +113,7 @@ const mapDispatchToProps = dispatch => {
     onExportClick() {
       const { email } = ReduxStore.getState().innerState
       promptModal.show({
-        text: `Please ${email ? 'confirm' : 'set'} email`,
+        text: email ? Lang.EXPORT_DATA_EMAIL_NOTION_CONFRIM : Lang.EXPORT_DATA_EMAIL_NOTION_SET,
         defaultValue: email,
         modalConfirmed(confirmedEmail) {
           // save email
@@ -121,7 +123,7 @@ const mapDispatchToProps = dispatch => {
           const data = getLocalStore()
           const dataStr = JSON.stringify(data)
           const isSupportExecCommand = !!document.execCommand
-          const notion = isSupportExecCommand ? `The data was copied! Send to email?` : `Please copy data manually, and then send to email`
+          const notion = isSupportExecCommand ? Lang.EXPORT_DATA_COPY_SUCCESS : Lang.EXPORT_DATA_COPY_FAILED
           promptModal.show({
             text: notion,
             defaultValue: dataStr,
@@ -138,6 +140,14 @@ const mapDispatchToProps = dispatch => {
           })
         }
       })
+    },
+    onCNClick() {
+      setLanguage('zh')
+      window.location.href = window.location.href
+    },
+    onUSClick() {
+      setLanguage('en')
+      window.location.href = window.location.href
     }
   }
 }

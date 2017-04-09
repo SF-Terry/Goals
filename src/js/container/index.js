@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import TargetsManagement from '../component/TargetsManagement'
-import { allPages } from '../store/initialState'
+import { allPages } from '../store/initialState/index'
 
 
 const mapStateToProps = (state) => {

@@ -1,4 +1,4 @@
-import { innerStateModel } from '../store/initialState'
+import { innerStateModel } from '../store/initialState/index'
 
 
 // get current temporary target

@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import { modifyInnerState_route, modifyInnerState_mode } from '../action/modifyInnerState'
-import { monthsMap } from '../store/initialState'
 import Timeline from '../component/Timeline'
+
+import { modifyInnerState_route, modifyInnerState_mode } from '../action/modifyInnerState'
+import monthsMap from '../store/initialState/monthsMap'
 
 
 const mapStateToProps = state => {
@@ -21,7 +22,7 @@ const mapStateToProps = state => {
       const year = moment(completeDate).year()
       const monthNum = moment(completeDate).month() + 1
       const month = monthsMap.get(monthNum)
-      const date = moment(completeDate).date() + 'st'
+      const date = moment(completeDate).date()
 
       timelineInfo[year] = timelineInfo[year] || {}
       let theYear = timelineInfo[year]

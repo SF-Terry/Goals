@@ -1,4 +1,4 @@
-import { settingModel } from '../store/initialState'
+import { settingModel } from '../store/initialState/index'
 
 
 const setting = (state = { ...settingModel }, action) => {

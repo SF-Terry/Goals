@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, Button } from 'semantic-ui-react'
-
+import Lang from '../util/lang/index'
 
 class ListItemModal extends React.Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ListItemModal extends React.Component {
             {
               shouldShowCompletedBtn &&
               <Button id="completeBtn" fluid color='green' onClick={this._onComplete}>
-                {isCompleted ? 'Uncompleted' : 'Complete!'}
+                {isCompleted ? Lang.UNCOMPLETE : Lang.COMPLETE}
               </Button>
             }
 
@@ -56,25 +56,25 @@ class ListItemModal extends React.Component {
             {
               shouldShowToppingBtn &&
               <Button id="topBtn" fluid color='orange' onClick={this._onTop}>
-                {isTopping ? 'Cancale Top' : 'Top'}
+                {isTopping ? Lang.CANCELTOP : Lang.TOP}
               </Button>
             }
 
             <p></p>
 
-            {shouldShowMoreBtn && <Button id="moreBtn" fluid color='grey' onClick={this._onMore}>More</Button>}
+            {shouldShowMoreBtn && <Button id="moreBtn" fluid color='grey' onClick={this._onMore}>{Lang.MORE}</Button>}
 
             <p></p>
 
             {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" fluid color='red' onClick={this._onDelete}>
-              {isDeleted ? 'Recover' : 'Delete'}
+              {isDeleted ? Lang.RECOVER : Lang.DELETE}
             </Button>}
 
             {
               (shouldShowDeleteBtn || isDeleted) && <p></p>
             }
 
-            <Button id="cancelBtn" fluid onClick={onCancel}>Cancel</Button>
+            <Button id="cancelBtn" fluid onClick={onCancel}>{Lang.CANCEL}</Button>
           </Modal.Content>
         </Modal>
       </div>

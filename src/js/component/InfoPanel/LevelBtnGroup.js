@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Button } from 'semantic-ui-react'
 
-import { allTargetLevels } from '../../store/initialState'
+import allTargetLevels from '../../store/initialState/allTargetLevels'
 
 
 /**

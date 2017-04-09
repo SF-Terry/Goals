@@ -44,7 +44,7 @@ const decorate = ({
   connect,
   InfoPanel,
   onConfirmClick,
-  onContinueAddClick,
+  prop_onContinueAddClick,
   activateNameInput
 }) => {
   const mapStateToProps = state => {
@@ -146,7 +146,7 @@ const decorate = ({
        * continute to add button's click event, used in adding page info panel
        */
       onContinueAddClick() {
-        onContinueAddClick(activateNameInput)
+        prop_onContinueAddClick(activateNameInput)
       },
       /**
        * cancel button click event

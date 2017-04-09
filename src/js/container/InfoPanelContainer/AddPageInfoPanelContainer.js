@@ -15,7 +15,7 @@ import {
   modifyInnerState_prevLevel
 } from '../../action/modifyInnerState'
 
-import { targetModel } from '../../store/initialState'
+import { targetModel } from '../../store/initialState/index'
 import decorate from './decorator'
 
 
@@ -77,7 +77,7 @@ const AddPageInfoPanelContainer = decorate({
   connect,
   InfoPanel,
   onConfirmClick,
-  onContinueAddClick,
+  prop_onContinueAddClick: onContinueAddClick,
   activateNameInput
 })
 

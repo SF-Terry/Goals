@@ -6,6 +6,8 @@ const { Row, Column } = Grid
 import LevelBtnGroup from './LevelBtnGroup'
 import TypeSelector from './TypeSelector'
 
+import Lang from '../../util/lang/index'
+
 
 
 class InfoPanel extends React.Component {
@@ -105,7 +107,7 @@ class InfoPanel extends React.Component {
         {/*  Name{ */}
         <Row centered>
           <Column width={14}>
-            <Input id="InfoPanel_name_input" placeholder='任务内容' fluid value={name} onChange={onNameInputChange} />
+            <Input id="InfoPanel_name_input" placeholder={Lang.INFOPANEL_NAME_INPUT_PLACEHOLDER} fluid value={name} onChange={onNameInputChange} />
           </Column>
         </Row>
         {/*  Name} */}
@@ -130,7 +132,7 @@ class InfoPanel extends React.Component {
         <Row centered>
           {/* Timer{ */}
           <Column width={8} textAlign='center'>
-            <Checkbox label='定时' checked={isTiming} onClick={this._onTimerClick} />
+            <Checkbox label={Lang.INFOPANEL_TIMER} checked={isTiming} onClick={this._onTimerClick} />
           </Column>
           {/* Timer}*/}
 
@@ -138,7 +140,7 @@ class InfoPanel extends React.Component {
           {
             shouldShowRepeater &&
             <Column width={8} textAlign='center'>
-              <Checkbox label='重复' checked={isRepeating} onClick={this._onRepeaterClick} />
+              <Checkbox label={Lang.INFOPANEL_REPEATER} checked={isRepeating} onClick={this._onRepeaterClick} />
             </Column>
           }
           {/* Repeater}*/}
@@ -169,7 +171,7 @@ class InfoPanel extends React.Component {
         {/* Confirm Btn{ */}
         <Row centered>
           <Column width={12} >
-            <Button content='完成' fluid color='blue' onClick={this._onConfirmClick} />
+            <Button content={Lang.CONFIRM} fluid color='blue' onClick={this._onConfirmClick} />
           </Column>
         </Row>
         {/* Confirm Btn} */}
@@ -179,7 +181,7 @@ class InfoPanel extends React.Component {
           exsitContinuteAddBtn &&
           <Row centered>
             <Column width={12} >
-              <Button content='继续添加' fluid color='teal' onClick={this._onContinueAddClick} />
+              <Button content={Lang.INFOPANEL_CONTINUTETOADD} fluid color='teal' onClick={this._onContinueAddClick} />
             </Column>
           </Row>
         }
@@ -188,7 +190,7 @@ class InfoPanel extends React.Component {
         {/* Cancel Btn{ */}
         <Row centered>
           <Column width={12} >
-            <Button content='返回' fluid color='grey' onClick={onCancelClick} />
+            <Button content={Lang.CANCEL} fluid color='grey' onClick={onCancelClick} />
           </Column>
         </Row>
         {/* Cancel Btn} */}

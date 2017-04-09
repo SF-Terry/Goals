@@ -1,4 +1,4 @@
-import { targetModel } from '../store/initialState'
+import { targetModel } from '../store/initialState/index'
 
 
 const target = (state = { ...targetModel }, action) => {

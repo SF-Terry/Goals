@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { allTargetTypeUnits, toCurrentFutureTypes } from '../../store/initialState'
+import { allTargetTypeUnits, toCurrentFutureTypes } from '../../store/initialState/index'
 import { modifyTarget } from '../../action/modifyTarget'
 
 

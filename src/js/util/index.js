@@ -87,30 +87,6 @@ export const showCaveat = msg => {
 }
 
 /**
- * get timing info
- * @param {moment} startDate
- * @param {moment} endDate
- */
-export const getTimingInfo = (startDate, endDate) => {
-  const isBefore = moment().isSameOrBefore(startDate);
-  const isDoing = moment().isAfter(startDate) && moment().isSameOrBefore(endDate);
-  const isAfter = moment().isAfter(endDate);
-
-  if (isBefore) {
-    const s = moment().to(startDate, true);
-    return s.replace(/ /g, "") + '后开始';
-  }
-  if (isDoing) {
-    const s = moment().to(endDate, true);
-    return s.replace(/ /g, "") + '后结束';
-  }
-  if (isAfter) {
-    const s = moment().to(endDate, true);
-    return '超时' + s.replace(/ /g, "");
-  }
-}
-
-/**
  * get target by id
  * @param {string} id
  */
