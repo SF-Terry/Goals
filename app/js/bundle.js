@@ -74696,8 +74696,8 @@
 	                document.execCommand('copy');
 	              }
 	            },
-	            modalConfirmed: function modalConfirmed(confirmedEmail) {
-	              location.href = 'mailto:' + confirmedEmail + '?subject=' + (0, _moment2.default)().format("YYYY MMMM Do, dddd, h:mm:ss a") + ' By ' + _index.storeName;
+	            modalConfirmed: function modalConfirmed() {
+	              window.location.href = 'mailto:' + confirmedEmail + '?subject=' + (0, _moment2.default)().format("YYYY MMMM Do, dddd, h:mm:ss a") + ' By ' + _index.storeName;
 	            }
 	          });
 	        }

@@ -134,8 +134,8 @@ const mapDispatchToProps = dispatch => {
                 document.execCommand('copy')
               }
             },
-            modalConfirmed(confirmedEmail) {
-              location.href = `mailto:${confirmedEmail}?subject=${moment().format("YYYY MMMM Do, dddd, h:mm:ss a")} By ${storeName}`;
+            modalConfirmed() {
+              window.location.href = `mailto:${confirmedEmail}?subject=${moment().format("YYYY MMMM Do, dddd, h:mm:ss a")} By ${storeName}`;
             }
           })
         }
