@@ -38,12 +38,14 @@ const getTmpTarget = () => getInnerState().tmpTarget
  *     @param {React.Component} InfoPanel 
  *     @param {function} onClickConfirm confirm button's click event
  *     @param {function} onClickContinueAdd continute adding button's click event
+ *     @param {function} activateNameInput active name input
  */
 const decorate = ({
   connect,
   InfoPanel,
   onConfirmClick,
-  onContinueAddClick
+  onContinueAddClick,
+  activateNameInput
 }) => {
   const mapStateToProps = state => {
     return {
@@ -143,7 +145,9 @@ const decorate = ({
       /**
        * continute to add button's click event, used in adding page info panel
        */
-      onContinueAddClick,
+      onContinueAddClick() {
+        onContinueAddClick(activateNameInput)
+      },
       /**
        * cancel button click event
        */
@@ -178,6 +182,12 @@ const decorate = ({
         dispatch(modifyInnerState_timeType(2))
         // route to time selector page
         dispatch(modifyInnerState_route(3))
+      },
+      /**
+       * active name input fn
+       */
+      activateNameInput() {
+        activateNameInput && activateNameInput()
       }
     }
   }

@@ -18,6 +18,12 @@ class InfoPanel extends React.Component {
     this._onContinueAddClick = this._onContinueAddClick.bind(this)
   }
 
+  componentDidMount() {
+    // activate name input automatically
+    const { activateNameInput } = this.props
+    activateNameInput && activateNameInput()
+  }
+
   /**
    * timer checkbox's click event
    * @param {*} e 
@@ -99,14 +105,14 @@ class InfoPanel extends React.Component {
         {/*  Name{ */}
         <Row centered>
           <Column width={14}>
-            <Input placeholder='任务内容' fluid value={name} onChange={onNameInputChange} />
+            <Input id="InfoPanel_name_input" placeholder='任务内容' fluid value={name} onChange={onNameInputChange} />
           </Column>
         </Row>
         {/*  Name} */}
 
         {/* Level{ */}
         <Row centered>
-          <Column width={16} textAlign='center'>
+          <Column width={15} textAlign='center'>
             <LevelBtnGroup activatedLevel={level} onBtnClick={onLevelBtnClick} />
           </Column>
         </Row>
@@ -114,7 +120,7 @@ class InfoPanel extends React.Component {
 
         {/*TypeSelector{ */}
         <Row centered>
-          <Column width={15}>
+          <Column width={14}>
             <TypeSelector type={type} onChange={onTypeSelectorChange} />
           </Column>
         </Row>

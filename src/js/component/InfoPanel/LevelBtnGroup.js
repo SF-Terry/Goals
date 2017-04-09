@@ -33,9 +33,9 @@ class LevelBtnGroup extends React.Component {
     })
 
     return (
-      <span>
+      <div>
         {buttons}
-      </span>
+      </div>
     )
   }
 }

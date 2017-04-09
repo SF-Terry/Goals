@@ -46,7 +46,7 @@ class ListItemModal extends React.Component {
           <Modal.Content>
             {
               shouldShowCompletedBtn &&
-              <Button id="completeBtn" basic fluid onClick={this._onComplete}>
+              <Button id="completeBtn" fluid color='green' onClick={this._onComplete}>
                 {isCompleted ? 'Uncompleted' : 'Complete!'}
               </Button>
             }
@@ -55,18 +55,18 @@ class ListItemModal extends React.Component {
 
             {
               shouldShowToppingBtn &&
-              <Button id="topBtn" basic fluid onClick={this._onTop}>
+              <Button id="topBtn" fluid color='orange' onClick={this._onTop}>
                 {isTopping ? 'Cancale Top' : 'Top'}
               </Button>
             }
 
             <p></p>
 
-            {shouldShowMoreBtn && <Button id="moreBtn" basic fluid onClick={this._onMore}>More</Button>}
+            {shouldShowMoreBtn && <Button id="moreBtn" fluid color='grey' onClick={this._onMore}>More</Button>}
 
             <p></p>
 
-            {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" basic fluid onClick={this._onDelete}>
+            {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" fluid color='red' onClick={this._onDelete}>
               {isDeleted ? 'Recover' : 'Delete'}
             </Button>}
 
@@ -74,7 +74,7 @@ class ListItemModal extends React.Component {
               (shouldShowDeleteBtn || isDeleted) && <p></p>
             }
 
-            <Button id="cancelBtn" basic fluid onClick={onCancel}>Cancel</Button>
+            <Button id="cancelBtn" fluid onClick={onCancel}>Cancel</Button>
           </Modal.Content>
         </Modal>
       </div>

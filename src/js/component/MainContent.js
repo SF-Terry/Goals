@@ -1,9 +1,12 @@
 import React from 'react'
 import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
-import { Segment } from 'semantic-ui-react'
+import { Segment, Grid } from 'semantic-ui-react'
 
 import { autoUpdateComponent } from '../util'
+
+
+const { Row, Column } = Grid
 
 
 /**
@@ -87,17 +90,21 @@ class MainContent extends React.Component {
   }
 
   componentWillUnmount() {
-    
+
   }
 
   render() {
     const { items } = this.props
     return (
-      <div>
-        {/* list items { */}
-        {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
-        {/* list items } */}
-      </div>
+      <Grid>
+        <Row centered>
+          <Column width={15} fluid>
+            {/* list items { */}
+            {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
+            {/* list items } */}
+          </Column>
+        </Row>
+      </Grid>
     )
   }
 }

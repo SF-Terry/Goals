@@ -43,7 +43,7 @@ const onConfirmClick = () => {
 /**
  * continute to add button's click event
  */
-const onContinueAddClick = () => {
+const onContinueAddClick = activateNameInput => {
   // change the create date of temporary target
   ReduxStore.dispatch(modifyInnerState_tmpTarget_createDate(moment()))
   // change the create future date of temporary target
@@ -61,13 +61,24 @@ const onContinueAddClick = () => {
     level: ReduxStore.getState().innerState.prevLevel,
     type: ReduxStore.getState().innerState.listType
   }))
+
+  // activate name input
+  activateNameInput && activateNameInput()
+}
+
+/**
+ * activate name input
+ */
+const activateNameInput = () => {
+  $('#InfoPanel_name_input input')[0].focus()
 }
 
 const AddPageInfoPanelContainer = decorate({
   connect,
   InfoPanel,
   onConfirmClick,
-  onContinueAddClick
+  onContinueAddClick,
+  activateNameInput
 })
 
 

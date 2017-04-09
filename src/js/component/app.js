@@ -8,6 +8,9 @@ import { logger, setStateToLocalStore, autoUpdateCurrentTime } from '../util'
 import autoUpdateTargets from '../util/autoUpdateTargets/index'
 import TargetsManagementContainer from '../container/index'
 
+// global util
+import $ from '../util/jquery'
+window.$ = $
 
 
 let store = createStore(
