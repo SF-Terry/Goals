@@ -20,7 +20,8 @@ const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClic
   return (
     <div style={{
       textAlign: 'center',
-      margin: '20px'
+      paddingTop: '20px',
+      paddingBottom: '10px'
     }}>
       <Button.Group  >
         <Button basic active={_activateBtn(1, listType)} onClick={onDayClick}>{Lang.HOME_MENU_BUTTON_D}</Button>

@@ -87,7 +87,7 @@
 
 
 	// module
-	exports.push([module.id, "#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n#TargetsManagement .ListItem {\n  margin: 5px;\n  word-break: break-all; }\n  #TargetsManagement .ListItem .Label {\n    color: #975b33; }\n\n#TargetsManagement .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n/* { common */\n.center {\n  text-align: center !important; }\n\n/* } common */\n", ""]);
+	exports.push([module.id, "html, body {\n  width: 100%;\n  height: 100%;\n  overflow-x: hidden; }\n\n#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n#TargetsManagement .ListItem {\n  margin: 5px;\n  word-break: break-all; }\n  #TargetsManagement .ListItem .Label {\n    color: #975b33; }\n\n#TargetsManagement .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n/* { common */\n.center {\n  text-align: center !important; }\n\n/* } common */\n", ""]);
 
 	// exports
 
@@ -48360,7 +48360,7 @@
 
 	  // { confirm/prompt
 	  CONFIRM_DELETE_COMPLETELY: {
-	    zh: '此操作将彻底此目标，是否确认？',
+	    zh: '本操作将彻底该目标，是否确认？',
 	    en: 'The manuipution will delete this target completely, confirm?'
 	  }
 	  // } confirm/prompt
@@ -83172,7 +83172,8 @@
 	    'div',
 	    { style: {
 	        textAlign: 'center',
-	        margin: '20px'
+	        paddingTop: '20px',
+	        paddingBottom: '10px'
 	      } },
 	    _react2.default.createElement(
 	      _semanticUiReact.Button.Group,
@@ -83743,7 +83744,7 @@
 	        _react2.default.createElement(
 	          _semanticUiReact.Label,
 	          { className: 'Label', color: color, style: {
-	              marginBottom: '3px'
+	              marginBottom: '6px'
 	            } },
 	          timingInfo
 	        ),
@@ -83751,12 +83752,12 @@
 	      ),
 	      _react2.default.createElement(
 	        'span',
-	        null,
+	        { style: {
+	            lineHeight: '22px'
+	          } },
 	        name
 	      )
-	    ),
-	    _react2.default.createElement('p', null),
-	    _react2.default.createElement('p', null)
+	    )
 	  );
 	};
 

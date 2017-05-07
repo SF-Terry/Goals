@@ -53,17 +53,17 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
           shouldShowTiming && 
           <span>
             <Label className="Label" color={color} style={{
-              marginBottom: '3px'
+              marginBottom: '6px'
             }}>{timingInfo}</Label>
             &nbsp;&nbsp;&nbsp;
           </span>
           
         }
 
-        <span>{name}</span>
+        <span style={{
+          lineHeight: '22px'
+        }}>{name}</span>
       </Segment>
-      <p></p>
-      <p></p>
     </Tappable>
   )
 }

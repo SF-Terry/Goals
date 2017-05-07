@@ -326,7 +326,7 @@ const langInfo = {
   
   // { confirm/prompt
   CONFIRM_DELETE_COMPLETELY: {
-    zh: '此操作将彻底此目标，是否确认？',
+    zh: '本操作将彻底该目标，是否确认？',
     en: 'The manuipution will delete this target completely, confirm?'
   }
   // } confirm/prompt
