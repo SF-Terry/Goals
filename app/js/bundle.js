@@ -78491,6 +78491,7 @@
 	var _index = __webpack_require__(339);
 
 	var nameInvalidMsg = 'Target name is empty!';
+	var timeSelectorInvalidMsg = 'Start time cannot be later than end time!';
 
 	var validator = {
 	  // validate the target
@@ -78504,6 +78505,16 @@
 	    } else {
 	      return true;
 	    }
+	  },
+
+	  // validate dates of time selector
+	  timeSelector: function timeSelector(startDate, endDate) {
+	    var isValid = startDate.isSameOrBefore(endDate);
+	    // if validation is failed, show caveat
+	    if (!isValid) {
+	      (0, _index.showCaveat)(timeSelectorInvalidMsg);
+	    }
+	    return isValid;
 	  }
 	};
 
@@ -78658,6 +78669,11 @@
 	      // route to  adding page or editing page info panel
 	      var prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1 : 2;
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(prevRoute));
+	    },
+
+	    // validate dates
+	    validate: function validate(startDate, endDate) {
+	      return startDate.isSameOrBefore(endDate);
 	    }
 	  };
 	};
@@ -78689,6 +78705,10 @@
 	var _moment2 = _interopRequireDefault(_moment);
 
 	var _util = __webpack_require__(339);
+
+	var _validator = __webpack_require__(891);
+
+	var _validator2 = _interopRequireDefault(_validator);
 
 	var _TimePicker = __webpack_require__(895);
 
@@ -78831,10 +78851,14 @@
 	  _createClass(TimeSelector, [{
 	    key: '_onConfirmClick',
 	    value: function _onConfirmClick() {
-	      var onConfirmClick = this.props.onConfirmClick;
+	      var _props = this.props,
+	          onConfirmClick = _props.onConfirmClick,
+	          validate = _props.validate;
 
 
-	      onConfirmClick({
+	      var isValid = _validator2.default.timeSelector(startDate, endDate);
+
+	      isValid && onConfirmClick({
 	        startDate: startDate,
 	        endDate: endDate,
 	        minDate: minDate,
@@ -78854,11 +78878,11 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props,
-	          timeType = _props.timeType,
-	          onStartTimeClick = _props.onStartTimeClick,
-	          onEndTimeClick = _props.onEndTimeClick,
-	          onCancelClick = _props.onCancelClick;
+	      var _props2 = this.props,
+	          timeType = _props2.timeType,
+	          onStartTimeClick = _props2.onStartTimeClick,
+	          onEndTimeClick = _props2.onEndTimeClick,
+	          onCancelClick = _props2.onCancelClick;
 
 
 	      var shouldHideStartTime = timeType === 2;

@@ -3,6 +3,7 @@ import { Button, Grid } from 'semantic-ui-react'
 const { Row, Column } = Grid
 import moment from 'moment'
 import { hide } from '../../../util'
+import validator from '../../../util/validator'
 
 import Timepicker from './TimePicker'
 
@@ -122,9 +123,11 @@ class TimeSelector extends React.Component {
   }
 
   _onConfirmClick() {
-    const { onConfirmClick } = this.props
+    const { onConfirmClick, validate } = this.props
 
-    onConfirmClick({
+    const isValid = validator.timeSelector(startDate, endDate)
+
+    isValid && onConfirmClick({
       startDate: startDate, 
       endDate: endDate, 
       minDate: minDate, 

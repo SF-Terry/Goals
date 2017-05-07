@@ -4,6 +4,7 @@ import { showCaveat } from './index'
 
 
 const nameInvalidMsg = 'Target name is empty!'
+const timeSelectorInvalidMsg = 'Start time cannot be later than end time!'
 
 
 const validator = {
@@ -18,7 +19,15 @@ const validator = {
     } else {
      return true 
     }
-    
+  },
+  // validate dates of time selector
+  timeSelector(startDate, endDate) {
+    const isValid = startDate.isSameOrBefore(endDate)
+    // if validation is failed, show caveat
+    if (!isValid) {
+      showCaveat(timeSelectorInvalidMsg)
+    }
+    return isValid
   }
 }
 

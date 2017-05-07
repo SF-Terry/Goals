@@ -71,6 +71,10 @@ const mapDispatchToProps = (dispatch) => {
       // route to  adding page or editing page info panel
       const prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1: 2
       dispatch(modifyInnerState_route(prevRoute))
+    },
+    // validate dates
+    validate(startDate, endDate) {
+      return startDate.isSameOrBefore(endDate)
     }
   }
 }
