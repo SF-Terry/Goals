@@ -217,6 +217,21 @@ export const allTargetTypes = new Map([
 
 /**
  * @const {map}
+ * all the target type units based on all the target types 
+ * today - day
+ * week - week
+ * month - month
+ * year - year
+ */
+export const allTargetTypeUnits = new Map([
+    [1, 'day'],
+    [2, 'week'],
+    [3, 'month'],
+    [5, 'year']
+])
+
+/**
+ * @const {map}
  * all the target types (reverse)
  */
 export const allTargetTypes_reverse = getReverseMap(allTargetTypes)

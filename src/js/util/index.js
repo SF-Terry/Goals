@@ -4,6 +4,7 @@ import $ from './jQuery'
 
 import { modifyInnerState_shouldShowCaveat } from '../action/modifyInnerState'
 
+
 /**
  * @var {number}
  * timer for hiding caveat

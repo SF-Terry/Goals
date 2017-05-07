@@ -90,6 +90,9 @@ class InfoPanel extends React.Component {
     // if onContinueAddClick exsits, show continute to add button
     const exsitContinuteAddBtn = !!onContinueAddClick
 
+    // hide repeating checkbox when type is 'project' or 'long'
+    const shouldShowRepeater = type != 4 && type != 6
+
     return (
       <Grid>
         {/*  Name{ */}
@@ -124,11 +127,14 @@ class InfoPanel extends React.Component {
           </Column>
           {/* Timer}*/}
 
-          {/* Repeat{ */}
-          <Column width={8} textAlign='center'>
-            <Checkbox label='重复' checked={isRepeating} onClick={this._onRepeaterClick} />
-          </Column>
-          {/* Repeat}*/}
+          {/* Repeater{ */}
+          {
+            shouldShowRepeater &&
+            <Column width={8} textAlign='center'>
+              <Checkbox label='重复' checked={isRepeating} onClick={this._onRepeaterClick} />
+            </Column>
+          }
+          {/* Repeater}*/}
         </Row>
         {/* Timer and Repeat} */}
 

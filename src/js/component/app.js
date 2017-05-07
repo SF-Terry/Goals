@@ -5,7 +5,9 @@ import { createStore, applyMiddleware } from 'redux'
 
 import targetsManagement from '../reducer'
 import { logger, setStateToLocalStore } from '../util'
+import autoUpdateTargets from '../util/autoUpdateTargets'
 import TargetsManagementContainer from '../container/index'
+
 
 
 let store = createStore(
@@ -16,7 +18,8 @@ let store = createStore(
 // sync store to global varible: ReduxStore
 ReduxStore = store
 
-
+// auto update targets
+autoUpdateTargets(5000)
 
 
 
