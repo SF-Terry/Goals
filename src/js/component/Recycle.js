@@ -39,7 +39,7 @@ const Recycle = ({ items, onBackClick }) => (
     </Row>
 
     <Row centered>
-      <Column width={16} >
+      <Column width={15} >
         {/* list items { */}
         {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
         {/* list items } */}

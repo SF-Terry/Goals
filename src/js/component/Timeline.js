@@ -35,9 +35,9 @@ const sort = (a, b) => {
 const getJsx = timelineInfo => {
   const t = timelineInfo
 
-  const getYears = timelineInfo => Object.keys(timelineInfo)
-  const getMonths = (timelineInfo, year) => Object.keys(timelineInfo[year])
-  const getDates = (timelineInfo, year, month) => Object.keys(timelineInfo[year][month])
+  const getYears = timelineInfo => Object.keys(timelineInfo).reverse()
+  const getMonths = (timelineInfo, year) => Object.keys(timelineInfo[year]).reverse()
+  const getDates = (timelineInfo, year, month) => Object.keys(timelineInfo[year][month]).reverse()
   const getTargets = (timelineInfo, year, month, date) => timelineInfo[year][month][date]
 
   return getYears(timelineInfo).map((year, i) => (
@@ -107,7 +107,7 @@ const Timeline = ({ timelineInfo, onBackClick }) => {
     <p></p>
 
     <Row centered>
-      <Column width={16} >
+      <Column width={15} >
         {getJsx(timelineInfo)}
       </Column>
     </Row>

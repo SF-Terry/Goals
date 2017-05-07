@@ -84,7 +84,7 @@ class ListItemModal extends React.Component {
 
             <p></p>
 
-            {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" fluid color='red' onClick={this._onDelete}>
+            {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" fluid color={isDeleted ? 'green' : 'red'} onClick={this._onDelete}>
               {isDeleted ? Lang.RECOVER : Lang.DELETE}
             </Button>}
 

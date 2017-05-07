@@ -32658,7 +32658,6 @@
 	   * the date when topping
 	   */
 	  toppingDate: null
-
 	};
 
 	/**
@@ -83713,6 +83712,7 @@
 	      color = _allTargetLevels$get.color;
 
 	  var shouldShowTiming = isTiming;
+
 	  var _onTap = function _onTap(e) {
 	    e.preventDefault();
 	    onTap(item);
@@ -83723,23 +83723,37 @@
 	  };
 	  var timingInfo = shouldShowTiming ? (0, _getTimingInfo2.default)(startDate, endDate) : null;
 
+	  var shouldShowPoint = !shouldShowTiming;
+
 	  return _react2.default.createElement(
 	    _reactTappable2.default,
 	    { onPress: _onPress, onTap: _onTap },
 	    _react2.default.createElement(
 	      _semanticUiReact.Segment,
-	      { className: 'ListItem', inverted: true, color: color },
-	      shouldShowTiming && _react2.default.createElement(
-	        _semanticUiReact.Label,
-	        { className: 'Label', basic: true },
-	        timingInfo
+	      { className: 'ListItem', basic: true },
+	      shouldShowPoint && _react2.default.createElement(
+	        'span',
+	        null,
+	        _react2.default.createElement(_semanticUiReact.Label, { circular: true, color: color, empty: true, key: color, size: 'mini' }),
+	        '\xA0\xA0\xA0'
 	      ),
 	      shouldShowTiming && _react2.default.createElement(
 	        'span',
 	        null,
-	        '\xA0\xA0'
+	        _react2.default.createElement(
+	          _semanticUiReact.Label,
+	          { className: 'Label', color: color, style: {
+	              marginBottom: '3px'
+	            } },
+	          timingInfo
+	        ),
+	        '\xA0\xA0\xA0'
 	      ),
-	      name
+	      _react2.default.createElement(
+	        'span',
+	        null,
+	        name
+	      )
 	    ),
 	    _react2.default.createElement('p', null),
 	    _react2.default.createElement('p', null)
@@ -84366,32 +84380,44 @@
 	  var isBefore = (0, _moment2.default)().isSameOrBefore(startDate);
 	  var isDoing = (0, _moment2.default)().isAfter(startDate) && (0, _moment2.default)().isSameOrBefore(endDate);
 	  var isAfter = (0, _moment2.default)().isAfter(endDate);
+	  var isTimeline = ReduxStore.getState().innerState.route === 4;
+
+	  if (isTimeline) {
+	    switch (currentLanguage) {
+	      case 'zh':
+	        return '定时';
+	      case 'en':
+	        return 'Timing';
+	    }
+	  }
 
 	  if (isBefore) {
 	    var s = (0, _moment2.default)().to(startDate, true);
-	    if (currentLanguage === 'zh') {
-	      return s.replace(/ /g, "") + '后开始';
-	    }
-	    if (currentLanguage === 'en') {
-	      return 'Start after ' + s;
+	    switch (currentLanguage) {
+	      case 'zh':
+	        return s.replace(/ /g, "") + '后开始';
+	      case 'en':
+	        return 'Start after ' + s;
 	    }
 	  }
+
 	  if (isDoing) {
 	    var _s = (0, _moment2.default)().to(endDate, true);
-	    if (currentLanguage === 'zh') {
-	      return _s.replace(/ /g, "") + '后结束';
-	    }
-	    if (currentLanguage === 'en') {
-	      return 'End after ' + _s;
+	    switch (currentLanguage) {
+	      case 'zh':
+	        return _s.replace(/ /g, "") + '后结束';
+	      case 'en':
+	        return 'End after ' + _s;
 	    }
 	  }
+
 	  if (isAfter) {
 	    var _s2 = (0, _moment2.default)().to(endDate, true);
-	    if (currentLanguage === 'zh') {
-	      return '超时' + _s2.replace(/ /g, "");
-	    }
-	    if (currentLanguage === 'en') {
-	      return 'Timeout: ' + _s2;
+	    switch (currentLanguage) {
+	      case 'zh':
+	        return '超时' + _s2.replace(/ /g, "");
+	      case 'en':
+	        return 'Timeout: ' + _s2;
 	    }
 	  }
 	};
@@ -90388,7 +90414,7 @@
 	            _react2.default.createElement('p', null),
 	            (shouldShowDeleteBtn || isDeleted) && _react2.default.createElement(
 	              _semanticUiReact.Button,
-	              { id: 'deleteBtn', fluid: true, color: 'red', onClick: this._onDelete },
+	              { id: 'deleteBtn', fluid: true, color: isDeleted ? 'green' : 'red', onClick: this._onDelete },
 	              isDeleted ? _index2.default.RECOVER : _index2.default.DELETE
 	            ),
 	            _react2.default.createElement('p', null),
@@ -90568,13 +90594,13 @@
 	  var t = timelineInfo;
 
 	  var getYears = function getYears(timelineInfo) {
-	    return Object.keys(timelineInfo);
+	    return Object.keys(timelineInfo).reverse();
 	  };
 	  var getMonths = function getMonths(timelineInfo, year) {
-	    return Object.keys(timelineInfo[year]);
+	    return Object.keys(timelineInfo[year]).reverse();
 	  };
 	  var getDates = function getDates(timelineInfo, year, month) {
-	    return Object.keys(timelineInfo[year][month]);
+	    return Object.keys(timelineInfo[year][month]).reverse();
 	  };
 	  var getTargets = function getTargets(timelineInfo, year, month, date) {
 	    return timelineInfo[year][month][date];
@@ -90678,7 +90704,7 @@
 	      { centered: true },
 	      _react2.default.createElement(
 	        Column,
-	        { width: 16 },
+	        { width: 15 },
 	        getJsx(timelineInfo)
 	      )
 	    )
@@ -90841,7 +90867,7 @@
 	      { centered: true },
 	      _react2.default.createElement(
 	        Column,
-	        { width: 16 },
+	        { width: 15 },
 	        [].concat(_toConsumableArray(items)).sort(sort).map(function (item) {
 	          return _react2.default.createElement(_ListItemContainer2.default, { item: item, key: item.id });
 	        })

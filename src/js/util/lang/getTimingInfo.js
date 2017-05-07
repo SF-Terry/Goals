@@ -15,33 +15,46 @@ const getTimingInfo = (startDate, endDate) => {
   const isBefore = moment().isSameOrBefore(startDate);
   const isDoing = moment().isAfter(startDate) && moment().isSameOrBefore(endDate);
   const isAfter = moment().isAfter(endDate);
+  const isTimeline = ReduxStore.getState().innerState.route === 4
+
+
+  if (isTimeline) {
+    switch(currentLanguage) {
+      case 'zh':
+        return '定时'
+      case 'en':
+        return 'Timing'
+    }
+  }
+
 
   if (isBefore) {
-    const s = moment().to(startDate, true);
-    if (currentLanguage === 'zh') {
-      return s.replace(/ /g, "") + '后开始';
+    const s = moment().to(startDate, true)
+    switch(currentLanguage) {
+      case 'zh':
+        return s.replace(/ /g, "") + '后开始'
+      case 'en':
+        return 'Start after ' + s
     }
-    if (currentLanguage === 'en') {
-      return 'Start after ' + s;
-    }
-    
   }
+
   if (isDoing) {
-    const s = moment().to(endDate, true);
-    if (currentLanguage === 'zh') {
-      return s.replace(/ /g, "") + '后结束';   
-    }
-    if (currentLanguage === 'en') {
-      return 'End after ' + s;
+    const s = moment().to(endDate, true)
+    switch(currentLanguage) {
+      case 'zh':
+        return s.replace(/ /g, "") + '后结束'
+      case 'en':
+        return 'End after ' + s
     }
   }
+
   if (isAfter) {
-    const s = moment().to(endDate, true);
-    if (currentLanguage === 'zh') {
-      return '超时' + s.replace(/ /g, "");
-    }
-    if (currentLanguage === 'en') {
-      return 'Timeout: ' + s;
+    const s = moment().to(endDate, true)
+    switch(currentLanguage) {
+      case 'zh':
+        return '超时' + s.replace(/ /g, "")
+      case 'en':
+        return 'Timeout: ' + s
     }
   }
 }

@@ -102,7 +102,6 @@ export const targetModel = {
      * the date when topping
      */
     toppingDate: null
-
 }
 
 /**

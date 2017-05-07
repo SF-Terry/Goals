@@ -25,6 +25,7 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
   const { color } = allTargetLevels.get(level)
 
   const shouldShowTiming = isTiming
+
   const _onTap = e => {
     e.preventDefault()
     onTap(item)
@@ -35,12 +36,31 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
   }
   let timingInfo = shouldShowTiming ? getTimingInfo(startDate, endDate) : null
 
+  const shouldShowPoint = !shouldShowTiming
+
+ 
   return (
     <Tappable onPress={_onPress} onTap={_onTap}>
-      <Segment className="ListItem" inverted color={color}  >
-        {shouldShowTiming && <Label className="Label" basic>{timingInfo}</Label>}
-        {shouldShowTiming && <span>&nbsp;&nbsp;</span>}
-        {name}
+      <Segment className="ListItem" basic >
+        { shouldShowPoint && 
+          <span>
+            <Label circular color={color} empty key={color} size='mini' />
+            &nbsp;&nbsp;&nbsp;
+          </span>
+        }
+
+        {
+          shouldShowTiming && 
+          <span>
+            <Label className="Label" color={color} style={{
+              marginBottom: '3px'
+            }}>{timingInfo}</Label>
+            &nbsp;&nbsp;&nbsp;
+          </span>
+          
+        }
+
+        <span>{name}</span>
       </Segment>
       <p></p>
       <p></p>
