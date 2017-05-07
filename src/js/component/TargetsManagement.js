@@ -13,9 +13,11 @@ import ListItemModalContainer from '../container/ListItemModalContainer'
 import TimelineContainer from '../container/TimelineContainer'
 import RecycleContainer from '../container/RecycleContainer'
 
+import Lang from '../util/lang/index'
 import stateList from '../store/stateList'
 import { innerStateModel } from '../store/initialState/index'
 import initializeMomentLocale from '../util/lang/initializeMomentLocale'
+
 
 const MessageBox = () => (
 	<div id='caveat'>
@@ -129,10 +131,10 @@ class TargetsManagement extends React.Component {
 					</Modal.Content>
 					<Modal.Actions className='center'>
 						<Button color='red' onClick={confirmCancel}>
-							Cancel
+							{Lang.CANCEL}
       			</Button>
 						<Button color='green' onClick={confirmConfrim}>
-							Confirm
+							{Lang.CONFIRM}
       		</Button>
 					</Modal.Actions>
 				</Modal>
@@ -149,10 +151,10 @@ class TargetsManagement extends React.Component {
 					</Modal.Content>
 					<Modal.Actions>
 						<Button color='red' onClick={promptCancel}>
-							Cancel
+							{Lang.CANCEL}
       			</Button>
 						<Button color='green' onClick={getPromptConfrimFn(promptConfrim)}>
-							Confirm
+							{Lang.CONFIRM}
       		</Button>
 					</Modal.Actions>
 				</Modal>

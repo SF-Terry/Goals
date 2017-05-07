@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, Button } from 'semantic-ui-react'
 import Lang from '../util/lang/index'
+import { confirmModal } from '../util/modal'
 
 class ListItemModal extends React.Component {
   constructor(props) {
@@ -14,19 +15,36 @@ class ListItemModal extends React.Component {
     this._onTop = this._onTop.bind(this)
     this._onMore = this._onMore.bind(this)
     this._onDelete = this._onDelete.bind(this)
+    this._onCompleteDelete = this._onCompleteDelete.bind(this)
   }
+
   _onComplete() {
     const { target, onComplete } = this.props
     onComplete(target)
   }
+
   _onTop() {
     const { target, onTop } = this.props
     onTop(target)
   }
+
   _onDelete() {
     const { target, onDelete } = this.props
     onDelete(target)
   }
+
+  _onCompleteDelete() {
+    const { target, onCompleteDelete } = this.props
+
+    // confirm deletion
+    confirmModal.show({
+      text: Lang.CONFIRM_DELETE_COMPLETELY, 
+      modalConfirmed() {
+        onCompleteDelete(target)
+      }
+    })
+  }
+
   _onMore() {
     this.setState({
       shouldShowDeleteBtn: !this.state.shouldShowDeleteBtn
@@ -68,6 +86,12 @@ class ListItemModal extends React.Component {
 
             {(shouldShowDeleteBtn || isDeleted) && <Button id="deleteBtn" fluid color='red' onClick={this._onDelete}>
               {isDeleted ? Lang.RECOVER : Lang.DELETE}
+            </Button>}
+
+            <p></p>
+
+            {(shouldShowDeleteBtn || isDeleted) && <Button id="completeDeleteBtn" fluid color='red' onClick={this._onCompleteDelete}>
+              {Lang.COMPLETEDELETE}
             </Button>}
 
             {

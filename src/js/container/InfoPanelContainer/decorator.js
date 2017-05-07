@@ -145,9 +145,9 @@ const decorate = ({
       /**
        * continute to add button's click event, used in adding page info panel
        */
-      onContinueAddClick() {
+      onContinueAddClick: prop_onContinueAddClick ? () => {
         prop_onContinueAddClick(activateNameInput)
-      },
+      } : null ,
       /**
        * cancel button click event
        */

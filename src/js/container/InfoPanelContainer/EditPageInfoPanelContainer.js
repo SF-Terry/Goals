@@ -49,7 +49,8 @@ const onConfirmClick = () => {
 const EditPageInfoPanelContainer = decorate({
   connect,
   InfoPanel,
-  onConfirmClick
+  onConfirmClick,
+  prop_onContinueAddClick: null
 })
 
 

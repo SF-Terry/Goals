@@ -1,4 +1,5 @@
 const MODIFY_TARGET = 'MODIFY_TARGET'
+const DELETE_TARGET = 'DELETE_TARGET'
 
 
 
@@ -12,5 +13,15 @@ export const modifyTarget = ({id, key, value}) => {
     id,
     key,
     value
+  }
+}
+
+/**
+ * 
+ */
+export const deleteTarget = ({ id }) => {
+  return {
+    type: DELETE_TARGET,
+    id
   }
 }

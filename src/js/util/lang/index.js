@@ -59,6 +59,10 @@ const langInfo = {
     zh: '删除',
     en: 'Delte'
   },
+  COMPLETEDELETE: {
+    zh: '彻底删除',
+    en: 'Delete Completely'
+  },
   RECOVER: {
     zh: '恢复',
     en: 'Recover'
@@ -303,6 +307,13 @@ const langInfo = {
     en: `Data's format was wrong!`
   },
   // } caveat
+  
+  // { confirm/prompt
+  CONFIRM_DELETE_COMPLETELY: {
+    zh: '此操作将彻底此目标，是否确认？',
+    en: 'The manuipution will delete this target completely, confirm?'
+  }
+  // } confirm/prompt
 }
 
 // register language

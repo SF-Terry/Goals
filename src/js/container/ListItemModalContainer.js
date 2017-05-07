@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import {
-  modifyTarget
+  modifyTarget,
+  deleteTarget
 } from '../action/modifyTarget'
 import { modifyInnerState_shouldShowListItemModal } from '../action/modifyInnerState'
 
@@ -67,6 +68,14 @@ const mapDispatchToProps = dispatch => {
         id: target.id,
         key: 'isDeleted',
         value: !target.isDeleted
+      }))
+      // hide Modal
+      dispatch(modifyInnerState_shouldShowListItemModal(false))
+    },
+    onCompleteDelete(target) {
+      // delete target
+      dispatch(deleteTarget({
+        id: target.id
       }))
       // hide Modal
       dispatch(modifyInnerState_shouldShowListItemModal(false))

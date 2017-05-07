@@ -1,4 +1,4 @@
-import { storeName } from './initialState/storeName'
+import storeName from './initialState/storeName'
 
 
 export const getLocalStore = () => {
