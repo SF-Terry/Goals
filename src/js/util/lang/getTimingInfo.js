@@ -15,10 +15,12 @@ const getTimingInfo = (startDate, endDate) => {
   const isBefore = moment().isSameOrBefore(startDate);
   const isDoing = moment().isAfter(startDate) && moment().isSameOrBefore(endDate);
   const isAfter = moment().isAfter(endDate);
-  const isTimeline = ReduxStore.getState().innerState.route === 4
+  const currentRoute = ReduxStore.getState().innerState.route
+  const isTimeline = currentRoute === 4
+  const isRecycle = currentRoute === 5
 
 
-  if (isTimeline) {
+  if (isTimeline || isRecycle) {
     switch(currentLanguage) {
       case 'zh':
         return '定时'

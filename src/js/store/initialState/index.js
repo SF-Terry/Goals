@@ -126,6 +126,7 @@ export const innerStateModel = {
      * 2 - editing page
      * 3 - time setting page
      * 4 - timeline page
+     * 5 - recycle page
      */
     route: 0,
     /**
