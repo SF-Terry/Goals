@@ -42,7 +42,7 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
         {shouldShowTiming && <span>&nbsp;&nbsp;</span>}
         {name}
       </Segment>
-      <p>123</p>
+      <p></p>
       <p></p>
     </Tappable>
   )

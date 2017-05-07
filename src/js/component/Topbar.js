@@ -14,7 +14,7 @@ const _activateBtn = (type, listType) => {
   return type === listType
 }
 
-const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClick, onYearClick, onLongClick, onNextDayClick, onNextWeekClick, onNextMonthClick, onNextYearClick, onTimelineClick, onRecycleClick, onImportClick, onExportClick, onCNClick, onUSClick }) => {
+const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClick, onYearClick, onLongClick, onNextDayClick, onNextWeekClick, onNextMonthClick, onNextYearClick, onBufferrClick, onIdeaClick, onTimelineClick, onRecycleClick, onImportClick, onExportClick, onCNClick, onUSClick }) => {
 
 
   return (
@@ -31,6 +31,8 @@ const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClic
           <Dropdown.Menu>
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_YEAR} active={_activateBtn(5, listType)} onClick={onYearClick} />
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_LONG} active={_activateBtn(6, listType)} onClick={onLongClick} />
+            <Dropdown.Item text={Lang.HOME_MENU_BUTTON_BUFFER} active={_activateBtn(11, listType)} onClick={onBufferrClick} />            
+            <Dropdown.Item text={Lang.HOME_MENU_BUTTON_IDEA} active={_activateBtn(12, listType)} onClick={onIdeaClick} />            
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_TOMORROW} active={_activateBtn(7, listType)} onClick={onNextDayClick} />
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_NEXTWEEK} active={_activateBtn(8, listType)} onClick={onNextWeekClick} />
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_NEXTMONTH} active={_activateBtn(9, listType)} onClick={onNextMonthClick} />

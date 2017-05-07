@@ -32759,7 +32759,7 @@
 	 * @const {map}
 	 * all the target types 
 	 */
-	var allTargetTypes = exports.allTargetTypes = new Map([[1, _index3.default.TODAY], [2, _index3.default.WEEK], [3, _index3.default.MONTH], [4, _index3.default.PROJECT], [5, _index3.default.YEAR], [6, _index3.default.LONG], [7, _index3.default.TOMORROW], [8, _index3.default.NEXTWEEK], [9, _index3.default.NEXTMONTH], [10, _index3.default.NEXTYEAR]]);
+	var allTargetTypes = exports.allTargetTypes = new Map([[1, _index3.default.TODAY], [2, _index3.default.WEEK], [3, _index3.default.MONTH], [4, _index3.default.PROJECT], [5, _index3.default.YEAR], [6, _index3.default.LONG], [7, _index3.default.TOMORROW], [8, _index3.default.NEXTWEEK], [9, _index3.default.NEXTMONTH], [10, _index3.default.NEXTYEAR], [11, _index3.default.BUFFER], [12, _index3.default.IDEA]]);
 
 	// /**
 	//  * @const {map}
@@ -48198,6 +48198,14 @@
 	    zh: '十二月',
 	    en: 'December'
 	  },
+	  BUFFER: {
+	    zh: '缓冲',
+	    en: 'Buffer'
+	  },
+	  IDEA: {
+	    zh: '灵感',
+	    en: 'Idea'
+	  },
 	  // } common 
 
 	  // { list > menu > button
@@ -48228,6 +48236,14 @@
 	  HOME_MENU_BUTTON_LONG: {
 	    zh: '长期',
 	    en: 'Long'
+	  },
+	  HOME_MENU_BUTTON_BUFFER: {
+	    zh: '缓冲',
+	    en: 'Buffer'
+	  },
+	  HOME_MENU_BUTTON_IDEA: {
+	    zh: '灵感',
+	    en: 'Idea'
 	  },
 	  HOME_MENU_BUTTON_TOMORROW: {
 	    zh: '明天',
@@ -82985,6 +83001,14 @@
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(6));
 	    },
+	    onBufferrClick: function onBufferrClick() {
+	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(11));
+	    },
+	    onIdeaClick: function onIdeaClick() {
+	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(12));
+	    },
 	    onNextDayClick: function onNextDayClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(7));
@@ -83135,6 +83159,8 @@
 	      onNextWeekClick = _ref.onNextWeekClick,
 	      onNextMonthClick = _ref.onNextMonthClick,
 	      onNextYearClick = _ref.onNextYearClick,
+	      onBufferrClick = _ref.onBufferrClick,
+	      onIdeaClick = _ref.onIdeaClick,
 	      onTimelineClick = _ref.onTimelineClick,
 	      onRecycleClick = _ref.onRecycleClick,
 	      onImportClick = _ref.onImportClick,
@@ -83180,6 +83206,8 @@
 	          null,
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_YEAR, active: _activateBtn(5, listType), onClick: onYearClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_LONG, active: _activateBtn(6, listType), onClick: onLongClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_BUFFER, active: _activateBtn(11, listType), onClick: onBufferrClick }),
+	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_IDEA, active: _activateBtn(12, listType), onClick: onIdeaClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_TOMORROW, active: _activateBtn(7, listType), onClick: onNextDayClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_NEXTWEEK, active: _activateBtn(8, listType), onClick: onNextWeekClick }),
 	          _react2.default.createElement(_semanticUiReact.Dropdown.Item, { text: _index2.default.HOME_MENU_BUTTON_NEXTMONTH, active: _activateBtn(9, listType), onClick: onNextMonthClick }),
@@ -83713,11 +83741,7 @@
 	      ),
 	      name
 	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      '123'
-	    ),
+	    _react2.default.createElement('p', null),
 	    _react2.default.createElement('p', null)
 	  );
 	};
@@ -85658,35 +85682,39 @@
 	 */
 	var getMinDate = function getMinDate(type) {
 	  switch (type) {
+	    // today
 	    case 1:
-	      // today
 	      return (0, _moment2.default)().startOf('day');
+	    // week
 	    case 2:
-	      // week
 	      return (0, _moment2.default)().startOf('week');
+	    // month
 	    case 3:
-	      // month
 	      return (0, _moment2.default)().startOf('month');
+	    // project      
 	    case 4:
-	      // project
 	      return (0, _moment2.default)();
+	    // year
 	    case 5:
-	      // year
 	      return (0, _moment2.default)().startOf('year');
+	    // long
 	    case 6:
-	      // long
+	    // buffer
+	    case 11:
+	    // idea
+	    case 12:
 	      return (0, _moment2.default)();
+	    // tomorrow
 	    case 7:
-	      // tomorrow
 	      return (0, _moment2.default)().startOf('day').add(1, 'days');
+	    // nextWeek
 	    case 8:
-	      // nextWeek
 	      return (0, _moment2.default)().startOf('week').add(1, 'weeks');
+	    // nextMonth
 	    case 9:
-	      // nextMonth
 	      return (0, _moment2.default)().startOf('month').add(1, 'months');
+	    // nextYear
 	    case 10:
-	      // nextYear
 	      return (0, _moment2.default)().startOf('year').add(1, 'years');
 	  }
 	};
@@ -85698,35 +85726,35 @@
 	var getMaxDate = function getMaxDate(minDate, type) {
 	  var targetDate = (0, _moment2.default)(minDate);
 	  switch (type) {
+	    // today
 	    case 1:
-	      // today
 	      return targetDate.add(1, 'days');
+	    // week
 	    case 2:
-	      // week
 	      return targetDate.add(1, 'weeks');
+	    // month
 	    case 3:
-	      // month
 	      return targetDate.add(1, 'months');
+	    // project
 	    case 4:
-	      // project
 	      return targetDate.add(800, 'years');
+	    // year
 	    case 5:
-	      // year
 	      return targetDate.add(1, 'years');
+	    // long
 	    case 6:
-	      // long
 	      return targetDate.add(800, 'years');
+	    // tomorrow
 	    case 7:
-	      // tomorrow
 	      return targetDate.add(1, 'days');
+	    // nextWeek
 	    case 8:
-	      // nextWeek
 	      return targetDate.add(1, 'weeks');
+	    // nextMonth
 	    case 9:
-	      // nextMonth
 	      return targetDate.add(1, 'months');
+	    // nextYear
 	    case 10:
-	      // nextYear
 	      return targetDate.add(1, 'years');
 	  }
 	};

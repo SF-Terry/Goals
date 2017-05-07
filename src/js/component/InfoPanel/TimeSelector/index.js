@@ -19,35 +19,39 @@ let startDate, endDate, minDate, maxDate
  */
 const getMinDate = type => {
   switch (type) {
+    // today
     case 1:
-      // today
       return moment().startOf('day')
+    // week
     case 2:
-      // week
       return moment().startOf('week')
+    // month
     case 3:
-      // month
       return moment().startOf('month')
+    // project      
     case 4:
-      // project
       return moment()
+    // year
     case 5:
-      // year
       return moment().startOf('year')
+    // long
     case 6:
-      // long
+    // buffer
+    case 11:
+    // idea
+    case 12:
       return moment()
+    // tomorrow
     case 7:
-      // tomorrow
       return moment().startOf('day').add(1, 'days')
+    // nextWeek
     case 8:
-      // nextWeek
       return moment().startOf('week').add(1, 'weeks')
+    // nextMonth
     case 9:
-      // nextMonth
       return moment().startOf('month').add(1, 'months')
+    // nextYear
     case 10:
-      // nextYear
       return moment().startOf('year').add(1, 'years')
   }
 }
@@ -59,35 +63,35 @@ const getMinDate = type => {
 const getMaxDate = (minDate, type) => {
   const targetDate = moment(minDate)
   switch (type) {
+    // today
     case 1:
-      // today
       return targetDate.add(1, 'days')
+    // week
     case 2:
-      // week
       return targetDate.add(1, 'weeks')
+    // month
     case 3:
-      // month
       return targetDate.add(1, 'months')
+    // project
     case 4:
-      // project
       return targetDate.add(800, 'years')
+    // year
     case 5:
-      // year
       return targetDate.add(1, 'years')
+    // long
     case 6:
-      // long
       return targetDate.add(800, 'years')
+    // tomorrow
     case 7:
-      // tomorrow
       return targetDate.add(1, 'days')
+    // nextWeek
     case 8:
-      // nextWeek
       return targetDate.add(1, 'weeks')
+    // nextMonth
     case 9:
-      // nextMonth
       return targetDate.add(1, 'months')
+    // nextYear
     case 10:
-      // nextYear
       return targetDate.add(1, 'years')
   }
 }

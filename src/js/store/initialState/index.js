@@ -215,7 +215,9 @@ export const allTargetTypes = new Map([
     [7, Lang.TOMORROW],
     [8, Lang.NEXTWEEK],
     [9, Lang.NEXTMONTH],
-    [10, Lang.NEXTYEAR]
+    [10, Lang.NEXTYEAR],
+    [11, Lang.BUFFER],
+    [12, Lang.IDEA]
 ])
 
 // /**

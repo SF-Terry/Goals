@@ -43,6 +43,14 @@ const mapDispatchToProps = dispatch => {
       dispatch(modifyInnerState_route(0))
       dispatch(modifyInnerState_listType(6))
     },
+    onBufferrClick() {
+      dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_listType(11))
+    },
+    onIdeaClick() {
+      dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_listType(12))
+    },
     onNextDayClick() {
       dispatch(modifyInnerState_route(0))
       dispatch(modifyInnerState_listType(7))

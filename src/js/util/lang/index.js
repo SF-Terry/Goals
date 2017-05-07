@@ -163,6 +163,14 @@ const langInfo = {
     zh: '十二月',
     en: 'December'
   },
+  BUFFER: {
+    zh: '缓冲',
+    en: 'Buffer'
+  },
+  IDEA: {
+    zh: '灵感',
+    en: 'Idea'
+  },
   // } common 
 
   // { list > menu > button
@@ -193,6 +201,14 @@ const langInfo = {
   HOME_MENU_BUTTON_LONG: {
     zh: '长期',
     en: 'Long'
+  },
+  HOME_MENU_BUTTON_BUFFER: {
+    zh: '缓冲',
+    en: 'Buffer'
+  },
+  HOME_MENU_BUTTON_IDEA: {
+    zh: '灵感',
+    en: 'Idea'
   },
   HOME_MENU_BUTTON_TOMORROW: {
     zh: '明天',
