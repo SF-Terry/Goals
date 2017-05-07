@@ -23,7 +23,7 @@ const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClic
       paddingTop: '20px',
       paddingBottom: '10px'
     }}>
-      <Button.Group  >
+      <Button.Group id="TopbarColumn">
         <Button basic active={_activateBtn(1, listType)} onClick={onDayClick}>{Lang.HOME_MENU_BUTTON_D}</Button>
         <Button basic active={_activateBtn(2, listType)} onClick={onWeekClick}>{Lang.HOME_MENU_BUTTON_W}</Button>
         <Button basic active={_activateBtn(3, listType)} onClick={onMonthClick}>{Lang.HOME_MENU_BUTTON_M}</Button>

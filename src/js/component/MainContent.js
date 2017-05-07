@@ -3,6 +3,7 @@ import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
 import { Segment, Grid } from 'semantic-ui-react'
 
+import { isMobile } from '../store/initialState'
 import { autoUpdateComponent } from '../util'
 
 
@@ -95,10 +96,11 @@ class MainContent extends React.Component {
 
   render() {
     const { items } = this.props
+    
     return (
       <Grid>
         <Row centered>
-          <Column width={15}>
+          <Column width={isMobile ? 15 : 13}>
             {/* list items { */}
             {[...items].sort(sort).map(item => <ListItemContainer item={item} key={item.id} />)}
             {/* list items } */}
