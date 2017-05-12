@@ -133,6 +133,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "tmpTarget": getNewTmpTarget('maxDate')
       }
+    case 'MODIFY_INNERSTATE_TMPTARGET_CREATEFUTUREDATE':
+      return {
+        ...state,
+        "tmpTarget": getNewTmpTarget('createFutureDate')
+      }
   }
 
   return state

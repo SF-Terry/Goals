@@ -25,6 +25,7 @@ const MODIFY_INNERSTATE_TMPTARGET_STARTDATE = 'MODIFY_INNERSTATE_TMPTARGET_START
 const MODIFY_INNERSTATE_TMPTARGET_ENDDATE = 'MODIFY_INNERSTATE_TMPTARGET_ENDDATE'
 const MODIFY_INNERSTATE_TMPTARGET_MINDATE = 'MODIFY_INNERSTATE_TMPTARGET_MINDATE'
 const MODIFY_INNERSTATE_TMPTARGET_MAXDATE = 'MODIFY_INNERSTATE_TMPTARGET_MAXDATE'
+const MODIFY_INNERSTATE_TMPTARGET_CREATEFUTUREDATE = 'MODIFY_INNERSTATE_TMPTARGET_CREATEFUTUREDATE'
 
 
 /**
@@ -143,37 +144,43 @@ export const modifyInnerState_tmpTarget_isRepeating = manufature(MODIFY_INNERSTA
 
 /**
  * modify temporary target's create date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_createDate = manufature(MODIFY_INNERSTATE_TMPTARGET_CREATEDATE)
 
 /**
  * modify temporary target's complete date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_completeDate = manufature(MODIFY_INNERSTATE_TMPTARGET_COMPLETEDATE)
 
 /**
  * modify temporary target's start date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_startDate = manufature(MODIFY_INNERSTATE_TMPTARGET_STARTDATE)
 
 /**
  * modify temporary target's end date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_endDate = manufature(MODIFY_INNERSTATE_TMPTARGET_ENDDATE)
 
 /**
  * modify temporary target's minimum date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_minDate = manufature(MODIFY_INNERSTATE_TMPTARGET_MINDATE)
 
 /**
  * modify temporary target's maximum date in innerState
- * @param {boolean} value 
+ * @param {moment} value 
  */
 export const modifyInnerState_tmpTarget_maxDate = manufature(MODIFY_INNERSTATE_TMPTARGET_MAXDATE)
+
+/**
+ * modify temporary target's future date in innerState
+ * @param {moment} value 
+ */
+export const modifyInnerState_tmpTarget_createFutureDate = manufature(MODIFY_INNERSTATE_TMPTARGET_CREATEFUTUREDATE)
 

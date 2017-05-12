@@ -69,10 +69,15 @@ export const targetModel = {
      */
     maxDate: null,
     /**
-     * @var {boolean}
+     * @var {moment}
      * deleted date
      */
     deletedDate: null,
+    /**
+     * @var {boolean}
+     * the date of creating future type
+     */
+    createFutureDate: null,
     /**
      * @var {boolean}
      * is or not Completed
@@ -227,7 +232,26 @@ export const allTargetTypeUnits = new Map([
     [1, 'day'],
     [2, 'week'],
     [3, 'month'],
-    [5, 'year']
+    [5, 'year'],
+    [7, 'day'],
+    [8, 'week'],
+    [9, 'month'],
+    [10, 'year']
+])
+
+/**
+ * @const {map}
+ * future type changes to current type
+ * 7(tomorrow) -> 1(today)
+ * 8(nextWeek) -> 2(week)
+ * 9(nextMonth) -> 3(month)
+ * 10(nextYear) -> 5(year)
+ */
+export const toCurrentFutureTypes = new Map([
+    [7, 1],
+    [8, 2],
+    [9, 3],
+    [10, 5]
 ])
 
 /**

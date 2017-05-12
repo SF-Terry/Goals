@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 
 import targetsManagement from '../reducer'
 import { logger, setStateToLocalStore } from '../util'
-import autoUpdateTargets from '../util/autoUpdateTargets'
+import autoUpdateTargets from '../util/autoUpdateTargets/index'
 import TargetsManagementContainer from '../container/index'
 
 

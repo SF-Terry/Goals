@@ -9,7 +9,7 @@ import { modifyTarget } from '../../action/modifyTarget'
    * @param {object} target 
    */
 const setTargetUnCompleted = id => {
-  dispatch(modifyTarget({
+  ReduxStore.dispatch(modifyTarget({
     id,
     key: 'isCompleted',
     value: false
@@ -34,7 +34,7 @@ const updateTargetDate = ({ id, type, startDate, endDate, minDate, maxDate }) =>
     const beginOfDate = date.startOf(unit)
     const interval = Math.abs(beginOfNow.diff(beginOfDate, unit))
     const resultDate = date.add(interval, unit)
-    dispatch(modifyTarget({
+    ReduxStore.dispatch(modifyTarget({
       id,
       key: dateStr,
       value: resultDate
@@ -66,14 +66,12 @@ const getObsoletedDate = (completeDate, type) => {
   * @param {object} target 
   */
 const settleRepeatingTarget = target => {
-  const dispatch = ReduxStore.dispatch
-
   const {
       id,
-    type,
-    isTiming,
-    isCompleted
-    } = target
+      type,
+      isTiming,
+      isCompleted
+  } = target
   const completeDate = target.completeDate ? moment(target.completeDate) : null
   const startDate = target.startDate ? moment(target.startDate) : null
   const endDate = target.endDate ? moment(target.endDate) : null
