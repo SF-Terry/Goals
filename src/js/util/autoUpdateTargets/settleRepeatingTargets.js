@@ -15,4 +15,4 @@ const settleRepeatingTargets = targets => {
 }
 
 
-export default settleRepeatingTarget
+export default settleRepeatingTargets

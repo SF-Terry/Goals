@@ -90,8 +90,8 @@ class InfoPanel extends React.Component {
     // if onContinueAddClick exsits, show continute to add button
     const exsitContinuteAddBtn = !!onContinueAddClick
 
-    // hide repeating checkbox when type is 'today', 'week', 'month' or 'year'
-    const shouldShowRepeater = type === 1 && type === 2 && type === 3 && type === 5
+    // hide repeating checkbox when type is 'today', 'week', 'month' , 'year', 'tomorrow', 'nextWeek', 'nexMonth', 'nextYear'
+    const shouldShowRepeater = type === 1 || type === 2 || type === 3 || type === 5 || type === 7 || type === 8 || type === 9 || type === 10    
 
     return (
       <Grid>

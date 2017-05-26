@@ -14,7 +14,7 @@ const autoUpdateTargets = timeInterval => {
   setInterval(() => {
     const getTargets = () => ReduxStore.getState().targets
     const targets = getTargets()
-    
+
     // update future targets
     settleFutureTargets(targets)
     // update target by its repeating propery
