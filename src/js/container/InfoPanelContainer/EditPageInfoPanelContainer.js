@@ -40,11 +40,15 @@ const onConfirmClick = () => {
     }))
   })
 
-  // route to home page
-  ReduxStore.dispatch(modifyInnerState_route(0))
+  // jump route
+  _jump(ReduxStore)
+
   // set previous level 
-  ReduxStore.dispatch(modifyInnerState_prevLevel(getTmpTarget().level))
+  const { level } = getTmpTarget()
+  _setPrevLevel(ReduxStore, modifyInnerState_prevLevel, level)
+  
 }
+
 
 const EditPageInfoPanelContainer = decorate({
   connect,
@@ -52,6 +56,39 @@ const EditPageInfoPanelContainer = decorate({
   onConfirmClick,
   prop_onContinueAddClick: null
 })
+
+/**
+ * jump route
+ */
+function _jump(ReduxStore) {
+  const { prevRoute } = ReduxStore.getState().innerState
+  const isTimeline = prevRoute === 4  
+  const isRecycle = prevRoute === 5
+
+  // timeline special situation
+  if (isTimeline) {
+    // route to timeline page
+    return ReduxStore.dispatch(modifyInnerState_route(4))
+  }
+
+  // recycle special situation
+  if (isRecycle) {
+    // route to recycle page
+    return ReduxStore.dispatch(modifyInnerState_route(5))
+  }
+
+
+  // route to home page
+  ReduxStore.dispatch(modifyInnerState_route(0))
+}
+
+
+/**
+ * set previous level 
+ */
+function _setPrevLevel(ReduxStore, modifyInnerState_prevLevel, level) {
+  ReduxStore.dispatch(modifyInnerState_prevLevel(level))
+}
 
 
 export default EditPageInfoPanelContainer

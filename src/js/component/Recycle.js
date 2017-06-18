@@ -46,7 +46,6 @@ const Recycle = ({ items, onBackClick }) => (
       </Column>
     </Row>
   </Grid>
-
 )
 
 Recycle.propTypes = {

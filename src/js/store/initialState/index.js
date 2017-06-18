@@ -184,14 +184,6 @@ export const innerStateModel = {
      */
     targetInListItemModal: null,
     /**
-     * page mode
-     * 1 - homepage
-     * 2 - timeline mode
-     * @var {number}
-     * default mode is homepage
-     */
-    mode: 1,
-    /**
      * email used to export data
      */
     email: null,

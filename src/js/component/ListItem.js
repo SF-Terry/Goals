@@ -8,7 +8,7 @@ import allTargetLevels from '../store/initialState/allTargetLevels'
 
 
 
-const ListItem = ({ item, currentDate, onTap, onPress }) => {
+const ListItem = ({ item, currentDate, onClick, onPress }) => {
   // !!!!!! Attention !!!!!!
   // import parameter: `currentDate` to update list item in realtime
 
@@ -26,9 +26,9 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
 
   const shouldShowTiming = isTiming
 
-  const _onTap = e => {
+  const _onClick = e => {
     e.preventDefault()
-    onTap(item)
+    onClick(item)
   }
 
   const _onPress = () => {
@@ -40,8 +40,8 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
 
  
   return (
-    <Tappable onPress={_onPress} onTap={_onTap}>
-      <Segment className="ListItem" basic >
+    <Tappable onPress={_onPress}>
+      <Segment className="ListItem" basic  onClick={_onClick}>
         { shouldShowPoint && 
           <span>
             <Label circular color={color} empty key={color} size='mini' />
@@ -70,7 +70,7 @@ const ListItem = ({ item, currentDate, onTap, onPress }) => {
 
 ListItem.propTypes = {
   item: React.PropTypes.object,
-  onTap: React.PropTypes.func,
+  onClick: React.PropTypes.func,
   onPress: React.PropTypes.func
 };
 

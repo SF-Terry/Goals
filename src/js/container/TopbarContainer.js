@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import Topbar from '../component/Topbar'
-import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_mode, modifyInnerState_email } from '../action/modifyInnerState'
+import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_email } from '../action/modifyInnerState'
 import { setLocalStore, getLocalStore, setLanguage } from '../store/localStore'
 import storeName from '../store/initialState/storeName'
 import { showCaveat } from '../util/index'
@@ -69,8 +69,6 @@ const mapDispatchToProps = dispatch => {
     },
     onTimelineClick() {
       dispatch(modifyInnerState_route(4))
-      // change page mode to timeline
-      dispatch(modifyInnerState_mode(2))
     },
     onRecycleClick() {
       dispatch(modifyInnerState_route(5))

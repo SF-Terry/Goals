@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import Timeline from '../component/Timeline'
 
-import { modifyInnerState_route, modifyInnerState_mode } from '../action/modifyInnerState'
+import { modifyInnerState_route } from '../action/modifyInnerState'
 import monthsMap from '../store/initialState/monthsMap'
 
 
@@ -47,8 +47,6 @@ const mapDispatchToProps = dispatch => {
     onBackClick() {
       // back to homepage
       dispatch(modifyInnerState_route(0))
-      // change page mode to homepage
-      dispatch(modifyInnerState_mode(1))
     }
   }
 }

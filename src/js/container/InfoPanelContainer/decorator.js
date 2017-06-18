@@ -152,10 +152,9 @@ const decorate = ({
        * cancel button click event
        */
       onCancelClick() {
-        // route to homepage or timeline
-        const { mode } = getInnerState()
-        const route = mode === 1 ? 0 : 4
-        dispatch(modifyInnerState_route(route))
+        // route to previous page
+        const { prevRoute } = ReduxStore.getState().innerState
+        dispatch(modifyInnerState_route(prevRoute))
       },
       /**
        * validate the temporary target

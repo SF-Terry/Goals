@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTap(item) {
+    onClick(item) {
       // change edit mode to editting target
       modifyInnerState_editType(1)
       // change temporary target
