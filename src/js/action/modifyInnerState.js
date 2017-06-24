@@ -3,6 +3,7 @@
  */
 
 const MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE'
+const MODIFY_INNERSTATE_HOMEROUTE = 'MODIFY_INNERSTATE_HOMEROUTE'
 const MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE'
 const MODIFY_INNERSTATE_SHOULDSHOWCAVEAT= 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT'
 const MODIFY_INNERSTATE_LISTTYPE= 'MODIFY_INNERSTATE_LISTTYPE'
@@ -39,11 +40,21 @@ const manufature = type => value => ({
   value
 })
 
+
+
 /**
  * modify route in innerState
  * @param  {number} value 
  */
 export const modifyInnerState_route = manufature(MODIFY_INNERSTATE_ROUTE)
+
+
+/**
+ * modify route in innerState
+ * @param  {number} value 
+ */
+export const modifyInnerState_homeRoute = manufature(MODIFY_INNERSTATE_HOMEROUTE)
+
 
 /**
  * modify time type(time selector) in innerState

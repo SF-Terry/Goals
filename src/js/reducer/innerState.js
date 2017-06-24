@@ -23,6 +23,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         prevRoute,
         "route": action.value
       }
+    case 'MODIFY_INNERSTATE_HOMEROUTE':
+      return {
+        ...state,
+        "homeRoute": action.value
+      }
     case 'MODIFY_INNERSTATE_TIMETYPE':
       return {
         ...state,

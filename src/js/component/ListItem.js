@@ -41,7 +41,7 @@ const ListItem = ({ item, currentDate, onClick, onPress }) => {
  
   return (
     <Tappable onPress={_onPress}>
-      <Segment className="ListItem" basic  onClick={_onClick}>
+      <Segment className="ListItem" basic onClick={_onClick}>
         { shouldShowPoint && 
           <span>
             <Label circular color={color} empty key={color} size='mini' />

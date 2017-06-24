@@ -32695,6 +32695,16 @@
 	   * default is 0(home page)
 	   */
 	  prevRoute: 0,
+
+	  /**
+	   * @var {number} 
+	   * home route
+	   * 0 - normal home page
+	   * 1 - timeline page
+	   * 2 - recycle page
+	   */
+	  homeRoute: 0,
+
 	  /**
 	   * @var {object}
 	   * temporary target
@@ -47838,6 +47848,7 @@
 	 */
 
 	var MODIFY_INNERSTATE_ROUTE = 'MODIFY_INNERSTATE_ROUTE';
+	var MODIFY_INNERSTATE_HOMEROUTE = 'MODIFY_INNERSTATE_HOMEROUTE';
 	var MODIFY_INNERSTATE_TIMETYPE = 'MODIFY_INNERSTATE_TIMETYPE';
 	var MODIFY_INNERSTATE_SHOULDSHOWCAVEAT = 'MODIFY_INNERSTATE_SHOULDSHOWCAVEAT';
 	var MODIFY_INNERSTATE_LISTTYPE = 'MODIFY_INNERSTATE_LISTTYPE';
@@ -47882,6 +47893,12 @@
 	 * @param  {number} value 
 	 */
 	var modifyInnerState_route = exports.modifyInnerState_route = manufature(MODIFY_INNERSTATE_ROUTE);
+
+	/**
+	 * modify route in innerState
+	 * @param  {number} value 
+	 */
+	var modifyInnerState_homeRoute = exports.modifyInnerState_homeRoute = manufature(MODIFY_INNERSTATE_HOMEROUTE);
 
 	/**
 	 * modify time type(time selector) in innerState
@@ -48439,6 +48456,10 @@
 	      return _extends({}, state, {
 	        prevRoute: prevRoute,
 	        "route": action.value
+	      });
+	    case 'MODIFY_INNERSTATE_HOMEROUTE':
+	      return _extends({}, state, {
+	        "homeRoute": action.value
 	      });
 	    case 'MODIFY_INNERSTATE_TIMETYPE':
 	      return _extends({}, state, {
@@ -82975,57 +82996,71 @@
 	  return {
 	    onDayClick: function onDayClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(1));
 	    },
 	    onWeekClick: function onWeekClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(2));
 	    },
 	    onMonthClick: function onMonthClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(3));
 	    },
 	    onProjectClick: function onProjectClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(4));
 	    },
 	    onYearClick: function onYearClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(5));
 	    },
 	    onLongClick: function onLongClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(6));
 	    },
 	    onBufferrClick: function onBufferrClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(11));
 	    },
 	    onIdeaClick: function onIdeaClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(12));
 	    },
 	    onNextDayClick: function onNextDayClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(7));
 	    },
 	    onNextWeekClick: function onNextWeekClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(8));
 	    },
 	    onNextMonthClick: function onNextMonthClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(9));
 	    },
 	    onNextYearClick: function onNextYearClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(0));
 	      dispatch((0, _modifyInnerState.modifyInnerState_listType)(10));
 	    },
 	    onTimelineClick: function onTimelineClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(4));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(4));
 	    },
 	    onRecycleClick: function onRecycleClick() {
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(5));
+	      dispatch((0, _modifyInnerState.modifyInnerState_homeRoute)(5));
 	    },
 	    onImportClick: function onImportClick() {
 	      // show confirm: "It's adviced to backup current data before importing any data!"
@@ -85365,10 +85400,11 @@
 	       * cancel button click event
 	       */
 	      onCancelClick: function onCancelClick() {
-	        // route to previous page
-	        var prevRoute = ReduxStore.getState().innerState.prevRoute;
+	        // route to home page
+	        var _getInnerState = getInnerState(),
+	            homeRoute = _getInnerState.homeRoute;
 
-	        dispatch((0, _modifyInnerState.modifyInnerState_route)(prevRoute));
+	        dispatch((0, _modifyInnerState.modifyInnerState_route)(homeRoute));
 	      },
 
 	      /**

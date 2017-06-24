@@ -135,6 +135,16 @@ export const innerStateModel = {
      * default is 0(home page)
      */
     prevRoute: 0,
+    
+    /**
+     * @var {number} 
+     * home route
+     * 0 - normal home page
+     * 1 - timeline page
+     * 2 - recycle page
+     */
+    homeRoute: 0,
+    
     /**
      * @var {object}
      * temporary target

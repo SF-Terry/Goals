@@ -152,9 +152,9 @@ const decorate = ({
        * cancel button click event
        */
       onCancelClick() {
-        // route to previous page
-        const { prevRoute } = ReduxStore.getState().innerState
-        dispatch(modifyInnerState_route(prevRoute))
+        // route to home page
+        const { homeRoute } = getInnerState()
+        dispatch(modifyInnerState_route(homeRoute))
       },
       /**
        * validate the temporary target

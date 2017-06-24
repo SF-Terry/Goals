@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import Topbar from '../component/Topbar'
-import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_email } from '../action/modifyInnerState'
+import { modifyInnerState_listType, modifyInnerState_route, modifyInnerState_homeRoute, modifyInnerState_email } from '../action/modifyInnerState'
 import { setLocalStore, getLocalStore, setLanguage } from '../store/localStore'
 import storeName from '../store/initialState/storeName'
 import { showCaveat } from '../util/index'
@@ -21,57 +21,71 @@ const mapDispatchToProps = dispatch => {
   return {
     onDayClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(1))
     },
     onWeekClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(2))
     },
     onMonthClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(3))
     },
     onProjectClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(4))
     },
     onYearClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(5))
     },
     onLongClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(6))
     },
     onBufferrClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(11))
     },
     onIdeaClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(12))
     },
     onNextDayClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(7))
     },
     onNextWeekClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(8))
     },
     onNextMonthClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(9))
     },
     onNextYearClick() {
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
       dispatch(modifyInnerState_listType(10))
     },
     onTimelineClick() {
       dispatch(modifyInnerState_route(4))
+      dispatch(modifyInnerState_homeRoute(4))      
     },
     onRecycleClick() {
       dispatch(modifyInnerState_route(5))
+      dispatch(modifyInnerState_homeRoute(5))
     },
     onImportClick() {
       // show confirm: "It's adviced to backup current data before importing any data!"
