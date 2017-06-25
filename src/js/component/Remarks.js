@@ -6,7 +6,7 @@ import {
   Message,
   TextArea
 } from 'semantic-ui-react'
-
+import Lang from '../util/lang/index'
 
 class Remarks extends React.Component {
   constructor(props) {
@@ -66,7 +66,7 @@ class Remarks extends React.Component {
           {
             isRemarkEditing &&
             <Form>
-              <TextArea rows={3} placeholder='备注内容' value={content} onChange={onChange} />
+              <TextArea rows={3} placeholder={Lang.REMARK} value={content} onChange={onChange} />
             </Form>
           }
         </div>

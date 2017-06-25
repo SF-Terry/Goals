@@ -31,6 +31,10 @@ const langInfo = {
     zh: '所有',
     en: 'All'
   },
+  REMARK: {
+    zh: '备注',
+    en: 'Remark'
+  },
   CANCEL: {
     zh: '返回',
     en: 'Cancel'
