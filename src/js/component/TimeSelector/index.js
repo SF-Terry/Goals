@@ -2,9 +2,9 @@ import React from 'react'
 import { Button, Grid } from 'semantic-ui-react'
 const { Row, Column } = Grid
 import moment from 'moment'
-import { hide } from '../../../util'
-import validator from '../../../util/validator'
-import Lang from '../../../util/lang/index'
+import { hide } from '../../util'
+import validator from '../../util/validator'
+import Lang from '../../util/lang/index'
 
 import Timepicker from './TimePicker'
 

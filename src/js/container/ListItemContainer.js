@@ -22,10 +22,10 @@ const mapDispatchToProps = dispatch => {
   return {
     onClick(item) {
       // change edit mode to editting target
-      modifyInnerState_editType(1)
+      dispatch(modifyInnerState_editType(2))
       // change temporary target
       dispatch(modifyInnerState_tmpTarget(item))
-      // route to add page
+      // route to edit page
       dispatch(modifyInnerState_route(2))
     },
     onPress(item) {

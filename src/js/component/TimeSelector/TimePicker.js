@@ -10,7 +10,7 @@ import enUS from 'rmc-date-picker/lib/locale/en_US'
 import 'moment/locale/zh-cn.js'
 
 
-import { getLanguage } from '../../../store/localStore'
+import { getLanguage } from '../../store/localStore'
 
 let minDate, maxDate, defaultDate
 

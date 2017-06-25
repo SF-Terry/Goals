@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import TimeSelector from '../component/InfoPanel/TimeSelector/index'
+import TimeSelector from '../component/TimeSelector/index'
 import { 
   modifyInnerState_route,
   modifyInnerState_timeType,
@@ -69,8 +69,9 @@ const mapDispatchToProps = (dispatch) => {
      */
     onCancelClick() {
       // route to  adding page or editing page info panel
-      const prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1: 2
-      dispatch(modifyInnerState_route(prevRoute))
+      const { editType } = ReduxStore.getState().innerState
+      const route = editType === 1 ? 1 : 2
+      dispatch(modifyInnerState_route(route))
     },
     // validate dates
     validate(startDate, endDate) {

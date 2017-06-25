@@ -85313,10 +85313,10 @@
 	  return {
 	    onClick: function onClick(item) {
 	      // change edit mode to editting target
-	      (0, _modifyInnerState.modifyInnerState_editType)(1);
+	      dispatch((0, _modifyInnerState.modifyInnerState_editType)(2));
 	      // change temporary target
 	      dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget)(item));
-	      // route to add page
+	      // route to edit page
 	      dispatch((0, _modifyInnerState.modifyInnerState_route)(2));
 	    },
 	    onPress: function onPress(item) {
@@ -87170,7 +87170,7 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _index = __webpack_require__(1209);
+	var _index = __webpack_require__(1333);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -87236,8 +87236,10 @@
 	     */
 	    onCancelClick: function onCancelClick() {
 	      // route to  adding page or editing page info panel
-	      var prevRoute = ReduxStore.getState().innerState.editType === 1 ? 1 : 2;
-	      dispatch((0, _modifyInnerState.modifyInnerState_route)(prevRoute));
+	      var editType = ReduxStore.getState().innerState.editType;
+
+	      var route = editType === 1 ? 1 : 2;
+	      dispatch((0, _modifyInnerState.modifyInnerState_route)(route));
 	    },
 
 	    // validate dates
@@ -87252,495 +87254,8 @@
 	exports.default = TimeSelectorContainer;
 
 /***/ },
-/* 1209 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(303);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(661);
-
-	var _moment = __webpack_require__(530);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
-	var _util = __webpack_require__(647);
-
-	var _validator = __webpack_require__(1206);
-
-	var _validator2 = _interopRequireDefault(_validator);
-
-	var _index = __webpack_require__(649);
-
-	var _index2 = _interopRequireDefault(_index);
-
-	var _TimePicker = __webpack_require__(1210);
-
-	var _TimePicker2 = _interopRequireDefault(_TimePicker);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Row = _semanticUiReact.Grid.Row,
-	    Column = _semanticUiReact.Grid.Column;
-
-
-	var startDate = void 0,
-	    endDate = void 0,
-	    minDate = void 0,
-	    maxDate = void 0;
-
-	/**
-	 * get min date by target type
-	 * @param {number} type 
-	 */
-	var getMinDate = function getMinDate(type) {
-	  switch (type) {
-	    // today
-	    case 1:
-	      return (0, _moment2.default)().startOf('day');
-	    // week
-	    case 2:
-	      return (0, _moment2.default)().startOf('week');
-	    // month
-	    case 3:
-	      return (0, _moment2.default)().startOf('month');
-	    // project      
-	    case 4:
-	      return (0, _moment2.default)();
-	    // year
-	    case 5:
-	      return (0, _moment2.default)().startOf('year');
-	    // long
-	    case 6:
-	    // buffer
-	    case 11:
-	    // idea
-	    case 12:
-	      return (0, _moment2.default)();
-	    // tomorrow
-	    case 7:
-	      return (0, _moment2.default)().startOf('day').add(1, 'days');
-	    // nextWeek
-	    case 8:
-	      return (0, _moment2.default)().startOf('week').add(1, 'weeks');
-	    // nextMonth
-	    case 9:
-	      return (0, _moment2.default)().startOf('month').add(1, 'months');
-	    // nextYear
-	    case 10:
-	      return (0, _moment2.default)().startOf('year').add(1, 'years');
-	  }
-	};
-
-	/**
-	 * get max date by target type
-	 * @param {number} type 
-	 */
-	var getMaxDate = function getMaxDate(minDate, type) {
-	  var targetDate = (0, _moment2.default)(minDate);
-	  switch (type) {
-	    // today
-	    case 1:
-	      return targetDate.add(1, 'days');
-	    // week
-	    case 2:
-	      return targetDate.add(1, 'weeks');
-	    // month
-	    case 3:
-	      return targetDate.add(1, 'months');
-	    // project
-	    case 4:
-	      return targetDate.add(800, 'years');
-	    // year
-	    case 5:
-	      return targetDate.add(1, 'years');
-	    // long
-	    case 6:
-	      return targetDate.add(800, 'years');
-	    // tomorrow
-	    case 7:
-	      return targetDate.add(1, 'days');
-	    // nextWeek
-	    case 8:
-	      return targetDate.add(1, 'weeks');
-	    // nextMonth
-	    case 9:
-	      return targetDate.add(1, 'months');
-	    // nextYear
-	    case 10:
-	      return targetDate.add(1, 'years');
-	  }
-	};
-
-	/**
-	 * TimeSelector
-	 * @param {number} type target's type
-	 * @param {number} timeType time type
-	 * @param {moment} startDate
-	 * @param {moment} endDate
-	 * @param {moment} minDate
-	 * @param {moment} maxDate
-	 * @param {function} onStartTimeClick 
-	 * @param {function} onEndTimeClick 
-	 * @param {function} onConfirmClick 
-	 * @param {function} onCancelClick 
-	 */
-
-	var TimeSelector = function (_React$Component) {
-	  _inherits(TimeSelector, _React$Component);
-
-	  function TimeSelector(props) {
-	    _classCallCheck(this, TimeSelector);
-
-	    var _this = _possibleConstructorReturn(this, (TimeSelector.__proto__ || Object.getPrototypeOf(TimeSelector)).call(this, props));
-
-	    _this.state = {
-	      shouldShowStartTime: true
-	    };
-
-	    var type = _this.props.type;
-
-
-	    minDate = _this.props.minDate || getMinDate(type);
-	    maxDate = _this.props.maxDate || getMaxDate(minDate, type);
-	    startDate = _this.props.startDate || minDate;
-	    endDate = _this.props.endDate || minDate;
-
-	    _this._onConfirmClick = _this._onConfirmClick.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(TimeSelector, [{
-	    key: '_onConfirmClick',
-	    value: function _onConfirmClick() {
-	      var _props = this.props,
-	          onConfirmClick = _props.onConfirmClick,
-	          validate = _props.validate;
-
-
-	      var isValid = _validator2.default.timeSelector(startDate, endDate);
-
-	      isValid && onConfirmClick({
-	        startDate: startDate,
-	        endDate: endDate,
-	        minDate: minDate,
-	        maxDate: maxDate
-	      });
-	    }
-	  }, {
-	    key: '_startTime_timepickerCallback',
-	    value: function _startTime_timepickerCallback(date) {
-	      startDate = date;
-	    }
-	  }, {
-	    key: '_endTime_timepickerCallback',
-	    value: function _endTime_timepickerCallback(date) {
-	      endDate = date;
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props2 = this.props,
-	          timeType = _props2.timeType,
-	          onStartTimeClick = _props2.onStartTimeClick,
-	          onEndTimeClick = _props2.onEndTimeClick,
-	          onCancelClick = _props2.onCancelClick;
-
-
-	      var shouldHideStartTime = timeType === 2;
-	      var shouldShowOutline = shouldHideStartTime;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          _semanticUiReact.Grid,
-	          { style: { marginTop: "20px" } },
-	          _react2.default.createElement(
-	            Row,
-	            null,
-	            _react2.default.createElement(
-	              Column,
-	              { width: 8, style: { textAlign: 'right' } },
-	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.START_TIME, basic: shouldShowOutline, primary: true, onClick: onStartTimeClick })
-	            ),
-	            _react2.default.createElement(
-	              Column,
-	              { width: 8, style: { textAlign: 'left' } },
-	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.END_TIME, basic: !shouldShowOutline, primary: true, onClick: onEndTimeClick })
-	            )
-	          ),
-	          _react2.default.createElement(
-	            Row,
-	            null,
-	            _react2.default.createElement(
-	              Column,
-	              null,
-	              _react2.default.createElement(
-	                'div',
-	                { style: (0, _util.hide)(shouldHideStartTime) },
-	                _react2.default.createElement(_TimePicker2.default, { defaultDate: startDate, minDate: minDate, maxDate: maxDate, callback: this._startTime_timepickerCallback })
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { style: (0, _util.hide)(!shouldHideStartTime) },
-	                _react2.default.createElement(_TimePicker2.default, { defaultDate: endDate, minDate: minDate, maxDate: maxDate, callback: this._endTime_timepickerCallback })
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            Row,
-	            null,
-	            _react2.default.createElement(
-	              Column,
-	              { width: 8, style: { textAlign: 'right' } },
-	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.CANCEL, color: 'grey', onClick: onCancelClick })
-	            ),
-	            _react2.default.createElement(
-	              Column,
-	              { width: 8, style: { textAlign: 'left' } },
-	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.CONFIRM, color: 'green', onClick: this._onConfirmClick })
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return TimeSelector;
-	}(_react2.default.Component);
-
-	TimeSelector.propTypes = {
-	  type: _react2.default.PropTypes.number,
-	  timeType: _react2.default.PropTypes.number,
-	  minDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  maxDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  startDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  endDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  onStartTimeClick: _react2.default.PropTypes.func,
-	  onEndTimeClick: _react2.default.PropTypes.func,
-	  onConfirmClick: _react2.default.PropTypes.func,
-	  onCancelClick: _react2.default.PropTypes.func
-	};
-
-	exports.default = TimeSelector;
-
-/***/ },
-/* 1210 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(303);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	__webpack_require__(1211);
-
-	__webpack_require__(1213);
-
-	var _DatePicker = __webpack_require__(1228);
-
-	var _DatePicker2 = _interopRequireDefault(_DatePicker);
-
-	var _moment = __webpack_require__(530);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
-	var _zh_CN = __webpack_require__(1215);
-
-	var _zh_CN2 = _interopRequireDefault(_zh_CN);
-
-	var _en_US = __webpack_require__(1216);
-
-	var _en_US2 = _interopRequireDefault(_en_US);
-
-	__webpack_require__(644);
-
-	var _localStore = __webpack_require__(526);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// datepicker
-
-
-	var minDate = void 0,
-	    maxDate = void 0,
-	    defaultDate = void 0;
-
-	/**
-	 * class Timepicker
-	 * @param {moment} defaultDate current defaultDate
-	 * @param {moment} maxDate current maxDate
-	 * @param {moment} minDate current minDate
-	 * @param {function} callback callback(date)
-	 */
-
-	var Timepicker = function (_React$Component) {
-	  _inherits(Timepicker, _React$Component);
-
-	  function Timepicker(props) {
-	    _classCallCheck(this, Timepicker);
-
-	    var _this = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
-
-	    var that = _this;
-
-	    minDate = props.minDate || (0, _moment2.default)();
-	    maxDate = props.maxDate || (0, _moment2.default)().add(800, 'years');
-	    defaultDate = props.defaultDate || (0, _moment2.default)();
-
-	    _this.state = {
-	      date: null
-	    };
-
-	    _this.onDateChange = _this.onDateChange.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(Timepicker, [{
-	    key: 'onDateChange',
-	    value: function onDateChange(date) {
-	      var _this2 = this;
-
-	      var callback = this.props.callback;
-
-
-	      this.setState(function (prevState) {
-	        var prevDate = prevState.date || _this2.props.defaultDate || (0, _moment2.default)();
-	        if (prevDate) {
-	          var isHourChanged = prevDate.hour() != date.hour();
-	          var isDayChanged = prevDate.date() != date.date();
-	          var isMonthChanged = prevDate.month() != date.month();
-	          var isYearChanged = prevDate.year() != date.year();
-
-	          var resetTime = function resetTime(type, date) {
-	            var testDate = (0, _moment2.default)(date);
-	            var isValid = testDate.isAfter(minDate) && testDate.isBefore(maxDate);
-	            var isDate = type === 'date';
-	            var num = isDate ? 1 : 0;
-	            isValid && date[type](num);
-	          };
-
-	          // change hour, reset minute
-	          if (isHourChanged) {
-	            resetTime('minute', date);
-	          }
-	          // change day, reset hour
-	          if (isDayChanged) {
-	            resetTime('hour', date);
-	            resetTime('minute', date);
-	          }
-	          // change month, reset day
-	          if (isMonthChanged) {
-	            resetTime('date', date);
-	            resetTime('hour', date);
-	            resetTime('minute', date);
-	          }
-	          // change year, reset month
-	          if (isYearChanged) {
-	            resetTime('month', date);
-	            resetTime('date', date);
-	            resetTime('hour', date);
-	            resetTime('minute', date);
-	          }
-	        }
-
-	        return {
-	          date: date
-	        };
-	      });
-
-	      callback(date);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var date = this.state.date;
-
-
-	      var locale = void 0;
-
-	      var currentLanguage = (0, _localStore.getLanguage)();
-	      if (currentLanguage === 'zh') {
-	        minDate.locale('zh-cn').utcOffset(8);
-	        maxDate.locale('zh-cn').utcOffset(8);
-	        defaultDate.locale('zh-cn').utcOffset(8);
-
-	        locale = _zh_CN2.default;
-	      }
-	      if (currentLanguage != 'zh') {
-	        minDate.locale('en').utcOffset(8);
-	        maxDate.locale('en').utcOffset(8);
-	        defaultDate.locale('en').utcOffset(8);
-
-	        locale = _en_US2.default;
-	      }
-
-	      var format = function format(date) {
-	        return date.format('YYYY-MM-DD HH:mm');
-	      };
-
-	      return _react2.default.createElement(
-	        'div',
-	        { style: { margin: '10px 30px' } },
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_DatePicker2.default, {
-	            rootNativeProps: { 'data-xx': 'yy' },
-	            defaultDate: date || defaultDate,
-	            mode: 'datetime',
-	            locale: locale,
-	            maxDate: maxDate,
-	            minDate: minDate,
-	            onDateChange: this.onDateChange
-	          })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Timepicker;
-	}(_react2.default.Component);
-
-	Timepicker.propTypes = {
-	  defaultDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  maxDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  minDate: _react2.default.PropTypes.instanceOf(_moment2.default),
-	  callback: _react2.default.PropTypes.func
-	};
-
-	exports.default = Timepicker;
-
-/***/ },
+/* 1209 */,
+/* 1210 */,
 /* 1211 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -96698,6 +96213,495 @@
 	}(_react2.default.Component);
 
 	exports.default = Remarks;
+
+/***/ },
+/* 1333 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(303);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(661);
+
+	var _moment = __webpack_require__(530);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _util = __webpack_require__(647);
+
+	var _validator = __webpack_require__(1206);
+
+	var _validator2 = _interopRequireDefault(_validator);
+
+	var _index = __webpack_require__(649);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _TimePicker = __webpack_require__(1334);
+
+	var _TimePicker2 = _interopRequireDefault(_TimePicker);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Row = _semanticUiReact.Grid.Row,
+	    Column = _semanticUiReact.Grid.Column;
+
+
+	var startDate = void 0,
+	    endDate = void 0,
+	    minDate = void 0,
+	    maxDate = void 0;
+
+	/**
+	 * get min date by target type
+	 * @param {number} type 
+	 */
+	var getMinDate = function getMinDate(type) {
+	  switch (type) {
+	    // today
+	    case 1:
+	      return (0, _moment2.default)().startOf('day');
+	    // week
+	    case 2:
+	      return (0, _moment2.default)().startOf('week');
+	    // month
+	    case 3:
+	      return (0, _moment2.default)().startOf('month');
+	    // project      
+	    case 4:
+	      return (0, _moment2.default)();
+	    // year
+	    case 5:
+	      return (0, _moment2.default)().startOf('year');
+	    // long
+	    case 6:
+	    // buffer
+	    case 11:
+	    // idea
+	    case 12:
+	      return (0, _moment2.default)();
+	    // tomorrow
+	    case 7:
+	      return (0, _moment2.default)().startOf('day').add(1, 'days');
+	    // nextWeek
+	    case 8:
+	      return (0, _moment2.default)().startOf('week').add(1, 'weeks');
+	    // nextMonth
+	    case 9:
+	      return (0, _moment2.default)().startOf('month').add(1, 'months');
+	    // nextYear
+	    case 10:
+	      return (0, _moment2.default)().startOf('year').add(1, 'years');
+	  }
+	};
+
+	/**
+	 * get max date by target type
+	 * @param {number} type 
+	 */
+	var getMaxDate = function getMaxDate(minDate, type) {
+	  var targetDate = (0, _moment2.default)(minDate);
+	  switch (type) {
+	    // today
+	    case 1:
+	      return targetDate.add(1, 'days');
+	    // week
+	    case 2:
+	      return targetDate.add(1, 'weeks');
+	    // month
+	    case 3:
+	      return targetDate.add(1, 'months');
+	    // project
+	    case 4:
+	      return targetDate.add(800, 'years');
+	    // year
+	    case 5:
+	      return targetDate.add(1, 'years');
+	    // long
+	    case 6:
+	      return targetDate.add(800, 'years');
+	    // tomorrow
+	    case 7:
+	      return targetDate.add(1, 'days');
+	    // nextWeek
+	    case 8:
+	      return targetDate.add(1, 'weeks');
+	    // nextMonth
+	    case 9:
+	      return targetDate.add(1, 'months');
+	    // nextYear
+	    case 10:
+	      return targetDate.add(1, 'years');
+	  }
+	};
+
+	/**
+	 * TimeSelector
+	 * @param {number} type target's type
+	 * @param {number} timeType time type
+	 * @param {moment} startDate
+	 * @param {moment} endDate
+	 * @param {moment} minDate
+	 * @param {moment} maxDate
+	 * @param {function} onStartTimeClick 
+	 * @param {function} onEndTimeClick 
+	 * @param {function} onConfirmClick 
+	 * @param {function} onCancelClick 
+	 */
+
+	var TimeSelector = function (_React$Component) {
+	  _inherits(TimeSelector, _React$Component);
+
+	  function TimeSelector(props) {
+	    _classCallCheck(this, TimeSelector);
+
+	    var _this = _possibleConstructorReturn(this, (TimeSelector.__proto__ || Object.getPrototypeOf(TimeSelector)).call(this, props));
+
+	    _this.state = {
+	      shouldShowStartTime: true
+	    };
+
+	    var type = _this.props.type;
+
+
+	    minDate = _this.props.minDate || getMinDate(type);
+	    maxDate = _this.props.maxDate || getMaxDate(minDate, type);
+	    startDate = _this.props.startDate || minDate;
+	    endDate = _this.props.endDate || minDate;
+
+	    _this._onConfirmClick = _this._onConfirmClick.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(TimeSelector, [{
+	    key: '_onConfirmClick',
+	    value: function _onConfirmClick() {
+	      var _props = this.props,
+	          onConfirmClick = _props.onConfirmClick,
+	          validate = _props.validate;
+
+
+	      var isValid = _validator2.default.timeSelector(startDate, endDate);
+
+	      isValid && onConfirmClick({
+	        startDate: startDate,
+	        endDate: endDate,
+	        minDate: minDate,
+	        maxDate: maxDate
+	      });
+	    }
+	  }, {
+	    key: '_startTime_timepickerCallback',
+	    value: function _startTime_timepickerCallback(date) {
+	      startDate = date;
+	    }
+	  }, {
+	    key: '_endTime_timepickerCallback',
+	    value: function _endTime_timepickerCallback(date) {
+	      endDate = date;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props2 = this.props,
+	          timeType = _props2.timeType,
+	          onStartTimeClick = _props2.onStartTimeClick,
+	          onEndTimeClick = _props2.onEndTimeClick,
+	          onCancelClick = _props2.onCancelClick;
+
+
+	      var shouldHideStartTime = timeType === 2;
+	      var shouldShowOutline = shouldHideStartTime;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          _semanticUiReact.Grid,
+	          { style: { marginTop: "20px" } },
+	          _react2.default.createElement(
+	            Row,
+	            null,
+	            _react2.default.createElement(
+	              Column,
+	              { width: 8, style: { textAlign: 'right' } },
+	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.START_TIME, basic: shouldShowOutline, primary: true, onClick: onStartTimeClick })
+	            ),
+	            _react2.default.createElement(
+	              Column,
+	              { width: 8, style: { textAlign: 'left' } },
+	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.END_TIME, basic: !shouldShowOutline, primary: true, onClick: onEndTimeClick })
+	            )
+	          ),
+	          _react2.default.createElement(
+	            Row,
+	            null,
+	            _react2.default.createElement(
+	              Column,
+	              null,
+	              _react2.default.createElement(
+	                'div',
+	                { style: (0, _util.hide)(shouldHideStartTime) },
+	                _react2.default.createElement(_TimePicker2.default, { defaultDate: startDate, minDate: minDate, maxDate: maxDate, callback: this._startTime_timepickerCallback })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { style: (0, _util.hide)(!shouldHideStartTime) },
+	                _react2.default.createElement(_TimePicker2.default, { defaultDate: endDate, minDate: minDate, maxDate: maxDate, callback: this._endTime_timepickerCallback })
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            Row,
+	            null,
+	            _react2.default.createElement(
+	              Column,
+	              { width: 8, style: { textAlign: 'right' } },
+	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.CANCEL, color: 'grey', onClick: onCancelClick })
+	            ),
+	            _react2.default.createElement(
+	              Column,
+	              { width: 8, style: { textAlign: 'left' } },
+	              _react2.default.createElement(_semanticUiReact.Button, { content: _index2.default.CONFIRM, color: 'green', onClick: this._onConfirmClick })
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TimeSelector;
+	}(_react2.default.Component);
+
+	TimeSelector.propTypes = {
+	  type: _react2.default.PropTypes.number,
+	  timeType: _react2.default.PropTypes.number,
+	  minDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  maxDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  startDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  endDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  onStartTimeClick: _react2.default.PropTypes.func,
+	  onEndTimeClick: _react2.default.PropTypes.func,
+	  onConfirmClick: _react2.default.PropTypes.func,
+	  onCancelClick: _react2.default.PropTypes.func
+	};
+
+	exports.default = TimeSelector;
+
+/***/ },
+/* 1334 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(303);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	__webpack_require__(1211);
+
+	__webpack_require__(1213);
+
+	var _DatePicker = __webpack_require__(1228);
+
+	var _DatePicker2 = _interopRequireDefault(_DatePicker);
+
+	var _moment = __webpack_require__(530);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _zh_CN = __webpack_require__(1215);
+
+	var _zh_CN2 = _interopRequireDefault(_zh_CN);
+
+	var _en_US = __webpack_require__(1216);
+
+	var _en_US2 = _interopRequireDefault(_en_US);
+
+	__webpack_require__(644);
+
+	var _localStore = __webpack_require__(526);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// datepicker
+
+
+	var minDate = void 0,
+	    maxDate = void 0,
+	    defaultDate = void 0;
+
+	/**
+	 * class Timepicker
+	 * @param {moment} defaultDate current defaultDate
+	 * @param {moment} maxDate current maxDate
+	 * @param {moment} minDate current minDate
+	 * @param {function} callback callback(date)
+	 */
+
+	var Timepicker = function (_React$Component) {
+	  _inherits(Timepicker, _React$Component);
+
+	  function Timepicker(props) {
+	    _classCallCheck(this, Timepicker);
+
+	    var _this = _possibleConstructorReturn(this, (Timepicker.__proto__ || Object.getPrototypeOf(Timepicker)).call(this, props));
+
+	    var that = _this;
+
+	    minDate = props.minDate || (0, _moment2.default)();
+	    maxDate = props.maxDate || (0, _moment2.default)().add(800, 'years');
+	    defaultDate = props.defaultDate || (0, _moment2.default)();
+
+	    _this.state = {
+	      date: null
+	    };
+
+	    _this.onDateChange = _this.onDateChange.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Timepicker, [{
+	    key: 'onDateChange',
+	    value: function onDateChange(date) {
+	      var _this2 = this;
+
+	      var callback = this.props.callback;
+
+
+	      this.setState(function (prevState) {
+	        var prevDate = prevState.date || _this2.props.defaultDate || (0, _moment2.default)();
+	        if (prevDate) {
+	          var isHourChanged = prevDate.hour() != date.hour();
+	          var isDayChanged = prevDate.date() != date.date();
+	          var isMonthChanged = prevDate.month() != date.month();
+	          var isYearChanged = prevDate.year() != date.year();
+
+	          var resetTime = function resetTime(type, date) {
+	            var testDate = (0, _moment2.default)(date);
+	            var isValid = testDate.isAfter(minDate) && testDate.isBefore(maxDate);
+	            var isDate = type === 'date';
+	            var num = isDate ? 1 : 0;
+	            isValid && date[type](num);
+	          };
+
+	          // change hour, reset minute
+	          if (isHourChanged) {
+	            resetTime('minute', date);
+	          }
+	          // change day, reset hour
+	          if (isDayChanged) {
+	            resetTime('hour', date);
+	            resetTime('minute', date);
+	          }
+	          // change month, reset day
+	          if (isMonthChanged) {
+	            resetTime('date', date);
+	            resetTime('hour', date);
+	            resetTime('minute', date);
+	          }
+	          // change year, reset month
+	          if (isYearChanged) {
+	            resetTime('month', date);
+	            resetTime('date', date);
+	            resetTime('hour', date);
+	            resetTime('minute', date);
+	          }
+	        }
+
+	        return {
+	          date: date
+	        };
+	      });
+
+	      callback(date);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var date = this.state.date;
+
+
+	      var locale = void 0;
+
+	      var currentLanguage = (0, _localStore.getLanguage)();
+	      if (currentLanguage === 'zh') {
+	        minDate.locale('zh-cn').utcOffset(8);
+	        maxDate.locale('zh-cn').utcOffset(8);
+	        defaultDate.locale('zh-cn').utcOffset(8);
+
+	        locale = _zh_CN2.default;
+	      }
+	      if (currentLanguage != 'zh') {
+	        minDate.locale('en').utcOffset(8);
+	        maxDate.locale('en').utcOffset(8);
+	        defaultDate.locale('en').utcOffset(8);
+
+	        locale = _en_US2.default;
+	      }
+
+	      var format = function format(date) {
+	        return date.format('YYYY-MM-DD HH:mm');
+	      };
+
+	      return _react2.default.createElement(
+	        'div',
+	        { style: { margin: '10px 30px' } },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_DatePicker2.default, {
+	            rootNativeProps: { 'data-xx': 'yy' },
+	            defaultDate: date || defaultDate,
+	            mode: 'datetime',
+	            locale: locale,
+	            maxDate: maxDate,
+	            minDate: minDate,
+	            onDateChange: this.onDateChange
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Timepicker;
+	}(_react2.default.Component);
+
+	Timepicker.propTypes = {
+	  defaultDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  maxDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  minDate: _react2.default.PropTypes.instanceOf(_moment2.default),
+	  callback: _react2.default.PropTypes.func
+	};
+
+	exports.default = Timepicker;
 
 /***/ }
 /******/ ]);
