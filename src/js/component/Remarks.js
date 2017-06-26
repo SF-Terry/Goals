@@ -8,6 +8,15 @@ import {
 } from 'semantic-ui-react'
 import Lang from '../util/lang/index'
 
+
+
+function onBlur(Remarks) {
+  Remarks.setState({
+    isRemarkEditing: false
+  })
+}
+
+
 class Remarks extends React.Component {
   constructor(props) {
     super(props)
@@ -17,17 +26,12 @@ class Remarks extends React.Component {
     }
 
     this.onEditClick = this.onEditClick.bind(this)
-    this.onTextareBlur = this.onTextareBlur.bind(this)
   }
 
   onEditClick() {
     this.setState({
       isRemarkEditing: true
     })
-  }
-
-  onTextareBlur() {
-    console.log('bluring')
   }
 
   render() {
@@ -41,15 +45,16 @@ class Remarks extends React.Component {
     } = this.state
 
     const isEmpty = content.trim() === ''
-
+    const shouldShowColor = !isEmpty && !isRemarkEditing
+    const colorClassName = shouldShowColor ? 'ui yellow message' : ''
     return (
       <div>
         {
-          isEmpty && !isRemarkEditing && 
+          isEmpty && !isRemarkEditing &&
           <span>
             <Icon name='commenting outline' color='blue' size='large' onClick={this.onEditClick} />
             &nbsp;&nbsp;
-          </span> 
+          </span>
         }
 
         <p></p>
@@ -57,7 +62,7 @@ class Remarks extends React.Component {
         <div style={{
           textAlign: 'left'
         }}>
-          {
+          {/*{
             !isEmpty && !isRemarkEditing &&
             <Message color='yellow' onClick={this.onEditClick}>
               {content}
@@ -66,9 +71,25 @@ class Remarks extends React.Component {
           {
             isRemarkEditing &&
             <Form>
-              <TextArea rows={3} placeholder={Lang.REMARK} value={content} onChange={onChange} />
+              <TextArea autoHeight placeholder={Lang.REMARK} value={content} onChange={onChange} />
+            </Form>
+          }*/}
+          {
+            (isRemarkEditing || !isEmpty) &&
+            <Form>
+              <TextArea className={colorClassName} ref={
+                Textarea => {
+                  const self = this
+                  if (Textarea) {
+                    const { ref: textarea } = Textarea
+                    $(textarea).unbind()
+                    $(textarea).bind('blur', () => onBlur(self))
+                  }
+                }
+              } autoHeight placeholder={Lang.REMARK} value={content} onChange={onChange} />
             </Form>
           }
+
         </div>
 
 

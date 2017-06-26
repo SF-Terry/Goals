@@ -75,7 +75,7 @@ const onContinueAddClick = activateNameInput => {
  * activate name input
  */
 const activateNameInput = () => {
-  $('#InfoPanel_name_input input')[0].focus()
+  $('#InfoPanel_name_input')[0].focus()
 }
 
 const AddPageInfoPanelContainer = decorate({
