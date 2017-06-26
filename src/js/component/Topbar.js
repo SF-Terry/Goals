@@ -28,7 +28,7 @@ const Topbar = ({ listType, onDayClick, onWeekClick, onMonthClick, onProjectClic
         <Button basic active={_activateBtn(2, listType)} onClick={onWeekClick}>{Lang.HOME_MENU_BUTTON_W}</Button>
         <Button basic active={_activateBtn(3, listType)} onClick={onMonthClick}>{Lang.HOME_MENU_BUTTON_M}</Button>
         <Button basic active={_activateBtn(4, listType)} onClick={onProjectClick}>{Lang.HOME_MENU_BUTTON_P}</Button>
-        <Dropdown text={Lang.HOME_MENU_BUTTON_MORE} button basic >
+        <Dropdown text={Lang.HOME_MENU_BUTTON_MORE} button basic icon='none'>
           <Dropdown.Menu>
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_YEAR} active={_activateBtn(5, listType)} onClick={onYearClick} />
             <Dropdown.Item text={Lang.HOME_MENU_BUTTON_LONG} active={_activateBtn(6, listType)} onClick={onLongClick} />

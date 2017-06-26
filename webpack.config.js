@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 
-var isProduction = false;
+var isProduction = true;
 
 var plugins = [];
 
