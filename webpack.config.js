@@ -30,23 +30,40 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js.*/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'stage-2', 'react']
-        }
-      },
-      {
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015', 'stage-2', 'react']
+            }
+          }
+        ]
+      }, {
         test: /\.css?/,
-        loader: "style!css"
-      },
-      {
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ]
+      }, {
         test: /\.scss?/,
         exclude: /node_modules/,
-        loader: "style!css!sass"
+        use: [
+          {
+            loader: 'style-loader'
+          }, {
+            loader: 'css-loader'
+          }, {
+            loader: "sass-loader"
+          }
+        ]
       }
     ]
   },
