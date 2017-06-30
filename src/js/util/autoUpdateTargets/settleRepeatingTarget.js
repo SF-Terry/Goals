@@ -1,20 +1,40 @@
 import moment from 'moment'
 
+import {
+  addTarget
+} from '../../action/index'
 import { allTargetTypeUnits } from '../../store/initialState/index'
 import { modifyTarget } from '../../action/modifyTarget'
+import { getTargetById } from '../../util/index'
 
+const getState = () => ReduxStore.getState()
 
 /**
-   * set target completed to uncompleted
-   * @param {object} target 
+   * create a new target
+   * @param {target} target 
    */
-const setTargetUnCompleted = id => {
+const createNewTarget = target => {
+  if (target) {
+    const tmpTarget = {
+      ...target,
+      createDate: moment(),
+      isCompleted: false,
+      completeDate: null
+    }
+    // add target
+    ReduxStore.dispatch(addTarget(tmpTarget))
+  }
+}
+
+// set target's repeating state to false
+function setTargetRepeatingStateFalse(id) {
   ReduxStore.dispatch(modifyTarget({
     id,
-    key: 'isCompleted',
+    key: 'isRepeating',
     value: false
   }))
 }
+
 
 /**
  * update the start date, end date, minimum date and maximum date of target by target's type
@@ -33,7 +53,7 @@ const updateTargetDate = ({ id, type, startDate, endDate, minDate, maxDate }) =>
   const updateDate = (date, dateStr) => {
     const isMaxDate = dateStr === 'maxDate'
     const beginOfDate = moment(date).startOf(unit)
-    
+
     // consider the speicail date: max date(have 1 unit excessively,for example, not 1st 23:59, it's 2st 00:00) 
     const num = isMaxDate ? 1 : 0
 
@@ -73,9 +93,9 @@ const getObsoletedDate = (completeDate, type) => {
 const settleRepeatingTarget = target => {
   const {
       id,
-      type,
-      isTiming,
-      isCompleted
+    type,
+    isTiming,
+    isCompleted
   } = target
   const completeDate = target.completeDate ? moment(target.completeDate) : null
   const startDate = target.startDate ? moment(target.startDate) : null
@@ -96,8 +116,10 @@ const settleRepeatingTarget = target => {
       // completed date is obsoleted
       const isCompletedDateObsoleted = moment().isAfter(obsoletedDate)
       if (isCompletedDateObsoleted) {
-        // set target completed to uncompleted
-        setTargetUnCompleted(id)
+        // set target's repeating state to false
+        setTargetRepeatingStateFalse(id)
+        // create a new target
+        createNewTarget(target)
       }
     }
     // } target is completed

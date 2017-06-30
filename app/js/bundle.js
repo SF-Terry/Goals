@@ -48650,27 +48650,50 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _moment = __webpack_require__(527);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _index = __webpack_require__(526);
+	var _index = __webpack_require__(1193);
+
+	var _index2 = __webpack_require__(526);
 
 	var _modifyTarget = __webpack_require__(645);
 
+	var _index3 = __webpack_require__(637);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var getState = function getState() {
+	  return ReduxStore.getState();
+	};
+
 	/**
-	   * set target completed to uncompleted
-	   * @param {object} target 
+	   * create a new target
+	   * @param {target} target 
 	   */
-	var setTargetUnCompleted = function setTargetUnCompleted(id) {
+	var createNewTarget = function createNewTarget(target) {
+	  if (target) {
+	    var tmpTarget = _extends({}, target, {
+	      createDate: (0, _moment2.default)(),
+	      isCompleted: false,
+	      completeDate: null
+	    });
+	    // add target
+	    ReduxStore.dispatch((0, _index.addTarget)(tmpTarget));
+	  }
+	};
+
+	// set target's repeating state to false
+	function setTargetRepeatingStateFalse(id) {
 	  ReduxStore.dispatch((0, _modifyTarget.modifyTarget)({
 	    id: id,
-	    key: 'isCompleted',
+	    key: 'isRepeating',
 	    value: false
 	  }));
-	};
+	}
 
 	/**
 	 * update the start date, end date, minimum date and maximum date of target by target's type
@@ -48690,7 +48713,7 @@
 	      minDate = _ref.minDate,
 	      maxDate = _ref.maxDate;
 
-	  var unit = _index.allTargetTypeUnits.get(type);
+	  var unit = _index2.allTargetTypeUnits.get(type);
 	  var beginOfNow = (0, _moment2.default)().startOf(type);
 
 	  var updateDate = function updateDate(date, dateStr) {
@@ -48725,7 +48748,7 @@
 	 * @param {number} type 
 	 */
 	var getObsoletedDate = function getObsoletedDate(completeDate, type) {
-	  var unit = _index.allTargetTypeUnits.get(type);
+	  var unit = _index2.allTargetTypeUnits.get(type);
 	  return (0, _moment2.default)(completeDate).endOf(unit);
 	};
 
@@ -48758,8 +48781,10 @@
 	      // completed date is obsoleted
 	      var isCompletedDateObsoleted = (0, _moment2.default)().isAfter(obsoletedDate);
 	      if (isCompletedDateObsoleted) {
-	        // set target completed to uncompleted
-	        setTargetUnCompleted(id);
+	        // set target's repeating state to false
+	        setTargetRepeatingStateFalse(id);
+	        // create a new target
+	        createNewTarget(target);
 	      }
 	    }
 	    // } target is completed
@@ -84643,6 +84668,7 @@
 	  }
 	  // add target
 	  ReduxStore.dispatch((0, _action.addTarget)(getTmpTarget()));
+
 	  // route to home page
 	  ReduxStore.dispatch((0, _modifyInnerState.modifyInnerState_route)(0));
 	  // set previous level 

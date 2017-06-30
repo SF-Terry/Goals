@@ -34,6 +34,7 @@ const onConfirmClick = () => {
   }
   // add target
   ReduxStore.dispatch(addTarget(getTmpTarget()))
+  
   // route to home page
   ReduxStore.dispatch(modifyInnerState_route(0))
   // set previous level 

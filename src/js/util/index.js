@@ -104,3 +104,4 @@ export const autoUpdateComponent = (Component, interval) => {
     isComponentMounted && ReduxStore.dispatch(modifyInnerState_currentDate(moment()))
   }, interval)
 }
+
