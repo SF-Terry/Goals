@@ -57,7 +57,7 @@ const langInfo = {
   },
   DELETE: {
     zh: '删除',
-    en: 'Delte'
+    en: 'Delete'
   },
   COMPLETEDELETE: {
     zh: '彻底删除',

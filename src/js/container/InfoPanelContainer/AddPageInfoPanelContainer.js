@@ -18,8 +18,9 @@ import {
 import { targetModel } from '../../store/initialState/index'
 import decorate from './decorator'
 
-
-const getTmpTarget = () => ReduxStore.getState().innerState.tmpTarget
+const getState = () => ReduxStore.getState()
+const getInnerState = () => getState().innerState
+const getTmpTarget = () => getState().innerState.tmpTarget
 
 /**
  * confirm button's click event
@@ -36,9 +37,12 @@ const onConfirmClick = () => {
   ReduxStore.dispatch(addTarget(getTmpTarget()))
   
   // route to home page
-  ReduxStore.dispatch(modifyInnerState_route(0))
+  const { homeRoute } = getInnerState()
+  ReduxStore.dispatch(modifyInnerState_route(homeRoute))
+
   // set previous level 
-  ReduxStore.dispatch(modifyInnerState_prevLevel(getTmpTarget().level))  
+  const { level } = getTmpTarget()
+  ReduxStore.dispatch(modifyInnerState_prevLevel(level))  
 }
 
 /**

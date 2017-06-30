@@ -9,6 +9,19 @@ var mode = 0;
 
 var isProduction = false;
 
+var plugins = [];
+
+if (isProduction) {
+  plugins.push(new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'));
+  plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify('production')
+    }
+  }));
+  plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
+
+
 try {
   mode = /\d+/.exec(process.argv.filter(arg => /devmode/.test(arg))[0])[0];
   isProduction = process.argv.filter(arg => /devProd/.test(arg)).length > 0;
@@ -60,14 +73,5 @@ module.exports = {
       }
     ]
   },
-  // minify bundle.js
-  plugins: [
-    isProduction ? new webpack.optimize.CommonsChunkPlugin('vendor',  'vendor.js') : null,
-    isProduction ? new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }) : null,
-    isProduction ? new webpack.optimize.UglifyJsPlugin() : null
-  ]
+  plugins: plugins
 }

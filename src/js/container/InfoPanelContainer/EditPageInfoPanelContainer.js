@@ -15,7 +15,8 @@ import { modifyTarget } from '../../action/modifyTarget'
 import decorate from './decorator'
 
 
-
+const getState = () => ReduxStore.getState()
+const getInnerState = () => getState().innerState
 const getTmpTarget = () => ReduxStore.getState().innerState.tmpTarget
 
 /**
@@ -40,13 +41,14 @@ const onConfirmClick = () => {
     }))
   })
 
-  // jump route
-  _jump(ReduxStore)
+  // route to home page
+  const { homeRoute } = getInnerState()
+  ReduxStore.dispatch(modifyInnerState_route(homeRoute))
 
   // set previous level 
   const { level } = getTmpTarget()
   _setPrevLevel(ReduxStore, modifyInnerState_prevLevel, level)
-  
+
 }
 
 
@@ -57,30 +59,6 @@ const EditPageInfoPanelContainer = decorate({
   prop_onContinueAddClick: null
 })
 
-/**
- * jump route
- */
-function _jump(ReduxStore) {
-  const { prevRoute } = ReduxStore.getState().innerState
-  const isTimeline = prevRoute === 4  
-  const isRecycle = prevRoute === 5
-
-  // timeline special situation
-  if (isTimeline) {
-    // route to timeline page
-    return ReduxStore.dispatch(modifyInnerState_route(4))
-  }
-
-  // recycle special situation
-  if (isRecycle) {
-    // route to recycle page
-    return ReduxStore.dispatch(modifyInnerState_route(5))
-  }
-
-
-  // route to home page
-  ReduxStore.dispatch(modifyInnerState_route(0))
-}
 
 
 /**
