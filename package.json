@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "devApp": "webpack --watch",
+    "prodApp": "webpack -p --devmode=0 --devProd",
+    "devPrototype": "webpack --watch --devmode=1",
+    "prodPrototype": "webpack -p --devmode=1 --devProd"
   },
   "keywords": [],
   "author": "",
