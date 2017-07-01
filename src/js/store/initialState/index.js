@@ -33,6 +33,11 @@ export const targetModel = {
      */
     level: 2,
     /**
+     * @var {string}
+     * remark content
+     */
+    remark: '',
+    /**
      * @var {moment}
      * createDate
      */

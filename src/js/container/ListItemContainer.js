@@ -2,7 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import ListItem  from '../component/ListItem'
-import { modifyInnerState_route, modifyInnerState_tmpTarget, modifyInnerState_shouldShowListItemModal, modifyInnerState_targetInListItemModal, modifyInnerState_editType } from '../action/modifyInnerState'
+import { 
+  modifyInnerState_route, 
+  modifyInnerState_tmpTarget, 
+  modifyInnerState_shouldShowListItemModal, 
+  modifyInnerState_targetInListItemModal, 
+  modifyInnerState_editType,
+  modifyInnerState_tmpTarget_isRemarkEditing 
+} from '../action/modifyInnerState'
 
 const mapStateToProps = state => {
   const { currentDate } = state.innerState

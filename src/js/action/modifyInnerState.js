@@ -21,6 +21,7 @@ const MODIFY_INNERSTATE_TMPTARGET_TYPE = 'MODIFY_INNERSTATE_TMPTARGET_TYPE'
 const MODIFY_INNERSTATE_TMPTARGET_ISTIMING = 'MODIFY_INNERSTATE_TMPTARGET_ISTIMING'
 const MODIFY_INNERSTATE_TMPTARGET_ISCOMPLETED = 'MODIFY_INNERSTATE_TMPTARGET_ISCOMPLETED'
 const MODIFY_INNERSTATE_TMPTARGET_ISREPEATING = 'MODIFY_INNERSTATE_TMPTARGET_ISREPEATING'
+const MODIFY_INNERSTATE_TMPTARGET_REMARK = 'MODIFY_INNERSTATE_TMPTARGET_REMARK'
 const MODIFY_INNERSTATE_TMPTARGET_CREATEDATE = 'MODIFY_INNERSTATE_TMPTARGET_CREATEDATE'
 const MODIFY_INNERSTATE_TMPTARGET_COMPLETEDATE = 'MODIFY_INNERSTATE_TMPTARGET_COMPLETEDATE'
 const MODIFY_INNERSTATE_TMPTARGET_STARTDATE = 'MODIFY_INNERSTATE_TMPTARGET_STARTDATE'
@@ -142,6 +143,12 @@ export const modifyInnerState_tmpTarget_level = manufature(MODIFY_INNERSTATE_TMP
 export const modifyInnerState_tmpTarget_type = manufature(MODIFY_INNERSTATE_TMPTARGET_TYPE)
 
 /**
+ * modify temporary target's reamark in innerState
+ * @param {moment} value 
+ */
+export const modifyInnerState_tmpTarget_remark = manufature(MODIFY_INNERSTATE_TMPTARGET_REMARK)
+
+/**
  * modify temporary target's timing state in innerState
  * @param {boolean} value 
  */
@@ -158,7 +165,6 @@ export const modifyInnerState_tmpTarget_isCompleted = manufature(MODIFY_INNERSTA
  * @param {boolean} value 
  */
 export const modifyInnerState_tmpTarget_isRepeating = manufature(MODIFY_INNERSTATE_TMPTARGET_ISREPEATING)
-
 
 /**
  * modify temporary target's create date in innerState

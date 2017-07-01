@@ -5,6 +5,7 @@ const { Row, Column } = Grid
 
 import LevelBtnGroup from './LevelBtnGroup'
 import TypeSelector from '../TypeSelector'
+import Remarks from '../Remarks'
 
 import Lang from '../../util/lang/index'
 
@@ -81,25 +82,29 @@ class InfoPanel extends React.Component {
       name,
       level,
       type,
+      remark,
       isTiming,
       isRepeating,
       onNameInputChange,
       startDate,
       endDate,
+      remarkContent,
       onLevelBtnClick,
       onTypeSelectorChange,
       onConfirmClick,
       onContinueAddClick,
       onCancelClick,
       startDatePanelClick,
-      endDatePanelClick
+      endDatePanelClick,
+      onRemarkEditClick,
+      onRemarkChange
     } = this.props
 
     // if onContinueAddClick exsits, show continute to add button
     const exsitContinuteAddBtn = !!onContinueAddClick
 
     // hide repeating checkbox when type is 'today', 'week', 'month' , 'year', 'tomorrow', 'nextWeek', 'nexMonth', 'nextYear'
-    const shouldShowRepeater = type === 1 || type === 2 || type === 3 || type === 5 || type === 7 || type === 8 || type === 9 || type === 10    
+    const shouldShowRepeater = type === 1 || type === 2 || type === 3 || type === 5 || type === 7 || type === 8 || type === 9 || type === 10
 
     return (
       <Grid>
@@ -167,6 +172,14 @@ class InfoPanel extends React.Component {
           </Row>
         }
         {/* timingInfo} */}
+
+        {/* Remarks{ */}
+        <Row centered>
+          <Column width={14} textAlign='right'>
+            <Remarks isRemarkEditing={false} content={remark} onChange={onRemarkChange}/>
+          </Column>
+        </Row>
+        {/* Remarks} */}
 
         {/* Confirm Btn{ */}
         <Row centered>

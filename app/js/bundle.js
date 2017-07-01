@@ -33184,6 +33184,11 @@
 	   */
 	  level: 2,
 	  /**
+	   * @var {string}
+	   * remark content
+	   */
+	  remark: '',
+	  /**
 	   * @var {moment}
 	   * createDate
 	   */
@@ -49376,6 +49381,7 @@
 	var MODIFY_INNERSTATE_TMPTARGET_ISTIMING = 'MODIFY_INNERSTATE_TMPTARGET_ISTIMING';
 	var MODIFY_INNERSTATE_TMPTARGET_ISCOMPLETED = 'MODIFY_INNERSTATE_TMPTARGET_ISCOMPLETED';
 	var MODIFY_INNERSTATE_TMPTARGET_ISREPEATING = 'MODIFY_INNERSTATE_TMPTARGET_ISREPEATING';
+	var MODIFY_INNERSTATE_TMPTARGET_REMARK = 'MODIFY_INNERSTATE_TMPTARGET_REMARK';
 	var MODIFY_INNERSTATE_TMPTARGET_CREATEDATE = 'MODIFY_INNERSTATE_TMPTARGET_CREATEDATE';
 	var MODIFY_INNERSTATE_TMPTARGET_COMPLETEDATE = 'MODIFY_INNERSTATE_TMPTARGET_COMPLETEDATE';
 	var MODIFY_INNERSTATE_TMPTARGET_STARTDATE = 'MODIFY_INNERSTATE_TMPTARGET_STARTDATE';
@@ -49494,6 +49500,12 @@
 	 * @param {number} value 
 	 */
 	var modifyInnerState_tmpTarget_type = exports.modifyInnerState_tmpTarget_type = manufature(MODIFY_INNERSTATE_TMPTARGET_TYPE);
+
+	/**
+	 * modify temporary target's reamark in innerState
+	 * @param {moment} value 
+	 */
+	var modifyInnerState_tmpTarget_remark = exports.modifyInnerState_tmpTarget_remark = manufature(MODIFY_INNERSTATE_TMPTARGET_REMARK);
 
 	/**
 	 * modify temporary target's timing state in innerState
@@ -50040,6 +50052,10 @@
 	    case 'MODIFY_INNERSTATE_TMPTARGET_TYPE':
 	      return _extends({}, state, {
 	        "tmpTarget": getNewTmpTarget('type')
+	      });
+	    case 'MODIFY_INNERSTATE_TMPTARGET_REMARK':
+	      return _extends({}, state, {
+	        "tmpTarget": getNewTmpTarget('remark')
 	      });
 	    case 'MODIFY_INNERSTATE_TMPTARGET_ISTIMING':
 	      return _extends({}, state, {
@@ -86365,6 +86381,10 @@
 
 	var _TypeSelector2 = _interopRequireDefault(_TypeSelector);
 
+	var _Remarks = __webpack_require__(1332);
+
+	var _Remarks2 = _interopRequireDefault(_Remarks);
+
 	var _index = __webpack_require__(649);
 
 	var _index2 = _interopRequireDefault(_index);
@@ -86480,18 +86500,22 @@
 	          name = _props3.name,
 	          level = _props3.level,
 	          type = _props3.type,
+	          remark = _props3.remark,
 	          isTiming = _props3.isTiming,
 	          isRepeating = _props3.isRepeating,
 	          onNameInputChange = _props3.onNameInputChange,
 	          startDate = _props3.startDate,
 	          endDate = _props3.endDate,
+	          remarkContent = _props3.remarkContent,
 	          onLevelBtnClick = _props3.onLevelBtnClick,
 	          onTypeSelectorChange = _props3.onTypeSelectorChange,
 	          onConfirmClick = _props3.onConfirmClick,
 	          onContinueAddClick = _props3.onContinueAddClick,
 	          onCancelClick = _props3.onCancelClick,
 	          startDatePanelClick = _props3.startDatePanelClick,
-	          endDatePanelClick = _props3.endDatePanelClick;
+	          endDatePanelClick = _props3.endDatePanelClick,
+	          onRemarkEditClick = _props3.onRemarkEditClick,
+	          onRemarkChange = _props3.onRemarkChange;
 
 	      // if onContinueAddClick exsits, show continute to add button
 
@@ -86584,6 +86608,15 @@
 	                endDate.format('YYYY/M/D')
 	              )
 	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          Row,
+	          { centered: true },
+	          _react2.default.createElement(
+	            Column,
+	            { width: 14, textAlign: 'right' },
+	            _react2.default.createElement(_Remarks2.default, { isRemarkEditing: false, content: remark, onChange: onRemarkChange })
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -86795,6 +86828,7 @@
 	      name: getTmpTarget().name,
 	      level: getTmpTarget().level,
 	      type: getTmpTarget().type,
+	      remark: getTmpTarget().remark || '',
 	      isTiming: getTmpTarget().isTiming,
 	      isRepeating: getTmpTarget().isRepeating,
 	      startDate: getTmpTarget().startDate ? (0, _moment2.default)(getTmpTarget().startDate) : null,
@@ -86943,6 +86977,17 @@
 	       */
 	      activateNameInput: function activateNameInput() {
 	        _activateNameInput && _activateNameInput();
+	      },
+
+
+	      /**
+	       * remark's input is changing 
+	       */
+	      onRemarkChange: function onRemarkChange(e, target) {
+	        var value = target.value;
+
+
+	        dispatch((0, _modifyInnerState.modifyInnerState_tmpTarget_remark)(value));
 	      }
 	    };
 	  };
@@ -96552,6 +96597,107 @@
 	}(_TypeSelector3.default);
 
 	exports.default = TimelineTypeSelector;
+
+/***/ },
+/* 1332 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(303);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(661);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Remarks = function (_React$Component) {
+	  _inherits(Remarks, _React$Component);
+
+	  function Remarks(props) {
+	    _classCallCheck(this, Remarks);
+
+	    var _this = _possibleConstructorReturn(this, (Remarks.__proto__ || Object.getPrototypeOf(Remarks)).call(this, props));
+
+	    _this.state = {
+	      isRemarkEditing: _this.props.isRemarkEditing || false
+	    };
+
+	    _this.onEditClick = _this.onEditClick.bind(_this);
+	    _this.onTextareBlur = _this.onTextareBlur.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Remarks, [{
+	    key: 'onEditClick',
+	    value: function onEditClick() {
+	      this.setState({
+	        isRemarkEditing: true
+	      });
+	    }
+	  }, {
+	    key: 'onTextareBlur',
+	    value: function onTextareBlur() {
+	      console.log('bluring');
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          content = _props.content,
+	          onChange = _props.onChange;
+	      var isRemarkEditing = this.state.isRemarkEditing;
+
+
+	      var isEmpty = content.trim() === '';
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        isEmpty && !isRemarkEditing && _react2.default.createElement(
+	          'span',
+	          null,
+	          _react2.default.createElement(_semanticUiReact.Icon, { name: 'commenting outline', color: 'blue', size: 'large', onClick: this.onEditClick }),
+	          '\xA0\xA0'
+	        ),
+	        _react2.default.createElement('p', null),
+	        _react2.default.createElement(
+	          'div',
+	          { style: {
+	              textAlign: 'left'
+	            } },
+	          !isEmpty && !isRemarkEditing && _react2.default.createElement(
+	            _semanticUiReact.Message,
+	            { color: 'yellow', onClick: this.onEditClick },
+	            content
+	          ),
+	          isRemarkEditing && _react2.default.createElement(
+	            _semanticUiReact.Form,
+	            null,
+	            _react2.default.createElement(_semanticUiReact.TextArea, { rows: 3, placeholder: '\u5907\u6CE8\u5185\u5BB9', value: content, onChange: onChange })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Remarks;
+	}(_react2.default.Component);
+
+	exports.default = Remarks;
 
 /***/ }
 /******/ ]);

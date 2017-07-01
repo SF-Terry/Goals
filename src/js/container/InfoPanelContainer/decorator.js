@@ -5,9 +5,10 @@ import {
   modifyInnerState_tmpTarget_name,
   modifyInnerState_tmpTarget_level,
   modifyInnerState_tmpTarget_type,
+  modifyInnerState_timeType,
+  modifyInnerState_tmpTarget_remark,  
   modifyInnerState_tmpTarget_isTiming,
   modifyInnerState_tmpTarget_isRepeating,
-  modifyInnerState_timeType,
   modifyInnerState_tmpTarget_startDate,
   modifyInnerState_tmpTarget_endDate,
   modifyInnerState_tmpTarget_maxDate,
@@ -52,6 +53,7 @@ const decorate = ({
       name: getTmpTarget().name,
       level: getTmpTarget().level,
       type: getTmpTarget().type,
+      remark: getTmpTarget().remark || '',      
       isTiming: getTmpTarget().isTiming,
       isRepeating: getTmpTarget().isRepeating,
       startDate: getTmpTarget().startDate ? moment(getTmpTarget().startDate) : null,
@@ -187,6 +189,15 @@ const decorate = ({
        */
       activateNameInput() {
         activateNameInput && activateNameInput()
+      },
+
+      /**
+       * remark's input is changing 
+       */
+      onRemarkChange(e, target) {
+        const { value } = target
+        
+        dispatch(modifyInnerState_tmpTarget_remark(value))
       }
     }
   }

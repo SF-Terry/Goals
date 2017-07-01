@@ -103,6 +103,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "tmpTarget": getNewTmpTarget('type')
       }
+    case 'MODIFY_INNERSTATE_TMPTARGET_REMARK':
+      return {
+        ...state,
+        "tmpTarget": getNewTmpTarget('remark')
+      }
     case 'MODIFY_INNERSTATE_TMPTARGET_ISTIMING':
       return {
         ...state,
