@@ -4,49 +4,68 @@ import moment from 'moment'
 
 import Timeline from '../component/Timeline'
 
-import { modifyInnerState_route } from '../action/modifyInnerState'
+import {
+  modifyInnerState_route,
+  modifyInnerState_homeRoute,
+  modifyInnerState_timelineType
+} from '../action/modifyInnerState'
 import monthsMap from '../store/initialState/monthsMap'
 
+const getState = () => ReduxStore.getState()
+const getInnerState = () => getState().innerState
 
-const mapStateToProps = state => {
-  const targets = state.targets.filter(target => target.isCompleted && !target.isDeleted)
 
-  /**
+/**
    * get timeline info
    * @param {} targets 
    */
-  const getTimelineInfo = targets => {
-    let timelineInfo = {}
-    targets.map(target => {
-      const { completeDate } = target
-      const year = moment(completeDate).year()
-      const monthNum = moment(completeDate).month() + 1
-      const month = monthsMap.get(monthNum)
-      const date = moment(completeDate).date()
+const getTimelineInfo = targets => {
+  let timelineInfo = {}
+  targets.map(target => {
+    const { completeDate } = target
+    const year = moment(completeDate).year()
+    const monthNum = moment(completeDate).month() + 1
+    const month = monthsMap.get(monthNum)
+    const date = moment(completeDate).date()
 
-      timelineInfo[year] = timelineInfo[year] || {}
-      let theYear = timelineInfo[year]
-      theYear[month] = theYear[month] || {} 
-      let theMonth = theYear[month]
-      theMonth[date] = theMonth[date] || []
-      let theDate = theMonth[date]
-      theDate.push(target)
-    })
-    return timelineInfo
-  }
+    timelineInfo[year] = timelineInfo[year] || {}
+    let theYear = timelineInfo[year]
+    theYear[month] = theYear[month] || {}
+    let theMonth = theYear[month]
+    theMonth[date] = theMonth[date] || []
+    let theDate = theMonth[date]
+    theDate.push(target)
+  })
+  return timelineInfo
+}
 
-  const timelineInfo = getTimelineInfo(targets)
+
+const mapStateToProps = state => {
+  const { timelineType } = getInnerState()
+  let filteredTargets = []
+
+  filteredTargets = state.targets.filter(target => target.isCompleted && !target.isDeleted)
+  filteredTargets = filteredTargets.filter(target => {
+    return timelineType !== 0 ? target.type === timelineType : true
+  })
+  
+  const timelineInfo = getTimelineInfo(filteredTargets)
 
   return {
-    timelineInfo
+    timelineInfo,
+    type: timelineType
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    onTimelineTypeSelectorChange(type) {
+      dispatch(modifyInnerState_timelineType(type))
+    },
     onBackClick() {
       // back to homepage
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
     }
   }
 }

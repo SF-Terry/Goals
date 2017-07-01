@@ -48,6 +48,11 @@ const innerState = (state = { ...innerStateModel }, action) => {
         ...state,
         "listType": action.value
       }
+    case 'MODIFY_INNERSTATE_TIMELINETYPE':
+      return {
+        ...state,
+        "timelineType": action.value
+      }
     case 'MODIFY_INNERSTATE_SHOULDSHOWLISTITEMMODAL':
       return {
         ...state,

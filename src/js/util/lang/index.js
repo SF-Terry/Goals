@@ -27,6 +27,10 @@ const registerLang = info => {
 // define language info
 const langInfo = {
   // { common 
+  ALL: {
+    zh: '所有',
+    en: 'All'
+  },
   CANCEL: {
     zh: '返回',
     en: 'Cancel'

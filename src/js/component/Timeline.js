@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import ListItemContainer from '../container/ListItemContainer'
+import TimelineTypeSelector from './TimelineTypeSelector'
 import { Segment, Button, Accordion, Icon, Grid } from 'semantic-ui-react'
 const { Row, Column } = Grid
 
@@ -28,18 +29,18 @@ const sort = (a, b) => {
 }
 
 
+
+const getYears = timelineInfo => Object.keys(timelineInfo).reverse()
+const getMonths = (timelineInfo, year) => Object.keys(timelineInfo[year]).reverse()
+const getDates = (timelineInfo, year, month) => Object.keys(timelineInfo[year][month]).reverse()
+const getTargets = (timelineInfo, year, month, date) => timelineInfo[year][month][date]
+
 /**
  * get jsx to render
  * @param {object} timelineInfo 
  */
 const getJsx = timelineInfo => {
   const t = timelineInfo
-
-  const getYears = timelineInfo => Object.keys(timelineInfo).reverse()
-  const getMonths = (timelineInfo, year) => Object.keys(timelineInfo[year]).reverse()
-  const getDates = (timelineInfo, year, month) => Object.keys(timelineInfo[year][month]).reverse()
-  const getTargets = (timelineInfo, year, month, date) => timelineInfo[year][month][date]
-
   return getYears(timelineInfo).map((year, i) => (
     <Accordion defaultActiveIndex={0} key={i} fluid>
       <Accordion.Title>
@@ -94,7 +95,7 @@ const getJsx = timelineInfo => {
 }
 
 
-const Timeline = ({ timelineInfo, onBackClick }) => {
+const Timeline = ({ type, onTimelineTypeSelectorChange, timelineInfo, onBackClick }) => {
   return <Grid>
     <p></p>
 
@@ -107,11 +108,17 @@ const Timeline = ({ timelineInfo, onBackClick }) => {
     <p></p>
 
     <Row centered>
+      <Column width={14}>
+        <TimelineTypeSelector type={type} onChange={onTimelineTypeSelectorChange} />
+      </Column>
+    </Row>
+
+    <Row centered>
       <Column width={15} >
         {getJsx(timelineInfo)}
       </Column>
     </Row>
-    
+
 
   </Grid>
 }

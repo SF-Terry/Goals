@@ -170,6 +170,13 @@ export const innerStateModel = {
      */
     listType: 1,
     /**
+     * @var {number}
+     * current type in timeline
+     * default is 0(all)
+     * ...other: ...target's all type
+     */
+    timelineType: 0,
+    /**
      * the type of editting or adding target
      * 1 - add target 
      * 2 - edit target

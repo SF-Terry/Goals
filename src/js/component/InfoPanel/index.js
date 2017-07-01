@@ -4,7 +4,7 @@ import { Button, Grid, Input, Checkbox, Segment } from 'semantic-ui-react'
 const { Row, Column } = Grid
 
 import LevelBtnGroup from './LevelBtnGroup'
-import TypeSelector from './TypeSelector'
+import TypeSelector from '../TypeSelector'
 
 import Lang from '../../util/lang/index'
 

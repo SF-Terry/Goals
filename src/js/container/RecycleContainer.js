@@ -1,7 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { modifyInnerState_route } from '../action/modifyInnerState'
+import { 
+  modifyInnerState_route,
+  modifyInnerState_homeRoute
+} from '../action/modifyInnerState'
 import Recycle from '../component/Recycle'
 
 
@@ -18,6 +21,7 @@ const mapDispatchToProps = dispatch => {
     onBackClick() {
       // back to homepage
       dispatch(modifyInnerState_route(0))
+      dispatch(modifyInnerState_homeRoute(0))
     }
   }
 }

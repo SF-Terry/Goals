@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 // datepicker
 import 'rmc-picker/assets/index.css'
 import 'rmc-date-picker/assets/index.css'
-import DatePicker from 'rmc-date-picker/lib/index.web'
+import DatePicker from 'rmc-date-picker/lib/DatePicker'
 import moment from 'moment'
 import zhCn from 'rmc-date-picker/lib/locale/zh_CN'
 import enUS from 'rmc-date-picker/lib/locale/en_US'
