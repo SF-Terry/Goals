@@ -30,6 +30,10 @@ html, body {
 			max-height: ((2.5 * 8.01428571) + rem)!important; // default: 8.01428571rem
 		}
 	}	
+
+	#TopbarDropdown .icon{
+		opacity: 0;
+	}
 }
 
 

@@ -51118,7 +51118,7 @@ exports = module.exports = __webpack_require__(210)();
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  overflow-x: hidden; }\n\n#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n#TargetsManagement .ListItem {\n  margin: 5px;\n  word-break: break-all; }\n  #TargetsManagement .ListItem .Label {\n    color: #975b33; }\n\n#TargetsManagement .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n/* { common */\n.center {\n  text-align: center !important; }\n\n/* } common */\n", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  overflow-x: hidden; }\n\n#TargetsManagement #caveat {\n  position: fixed;\n  top: 1%;\n  left: 1%;\n  z-index: 9;\n  width: 98%;\n  text-align: center; }\n\n#TargetsManagement #AddBtn {\n  position: fixed;\n  bottom: 10%;\n  right: 10%; }\n\n#TargetsManagement .ListItem {\n  margin: 5px;\n  word-break: break-all; }\n  #TargetsManagement .ListItem .Label {\n    color: #975b33; }\n\n#TargetsManagement .ui.selection.dropdown .menu {\n  max-height: 20.03571rem !important; }\n\n#TargetsManagement #TopbarDropdown .icon {\n  opacity: 0; }\n\n/* { common */\n.center {\n  text-align: center !important; }\n\n/* } common */\n", ""]);
 
 // exports
 
@@ -89411,7 +89411,7 @@ var Topbar = function Topbar(_ref) {
       ),
       _react2.default.createElement(
         _semanticUiReact.Dropdown,
-        { text: _index2.default.HOME_MENU_BUTTON_MORE, button: true, basic: true, icon: '' },
+        { id: 'TopbarDropdown', text: _index2.default.HOME_MENU_BUTTON_MORE, button: true, basic: true, icon: 'triangle down' },
         _react2.default.createElement(
           _semanticUiReact.Dropdown.Menu,
           null,
