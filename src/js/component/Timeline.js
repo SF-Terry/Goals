@@ -114,7 +114,9 @@ const Timeline = ({ type, onTimelineTypeSelectorChange, timelineInfo, onBackClic
     </Row>
 
     <Row centered>
-      <Column width={15} >
+      <Column width={15} style={{
+        textAlign: 'left'
+      }}>
         {getJsx(timelineInfo)}
       </Column>
     </Row>
