@@ -14,7 +14,33 @@ class TimelineTypeSelector extends TypeSelector {
       text: Lang.ALL,
       value: 0
     })
+
+    // update basic text
+    this.taskTypesOptions = this.taskTypesOptions.map(option => {
+      const { value } = option
+      switch (value) {
+        case 1: return {
+          ...option,
+          text: Lang.DAY
+        }
+        case 2: return {
+          ...option,
+          text: Lang.WEEK
+        }
+        case 3: return {
+          ...option,
+          text: Lang.MONTH
+        }
+        case 5: return {
+          ...option,
+          text: Lang.YEAR
+        }
+        default: return option
+      }
+    })
   }
+
+
 
 }
 

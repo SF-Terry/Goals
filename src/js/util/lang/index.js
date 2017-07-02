@@ -79,12 +79,28 @@ const langInfo = {
     zh: '今天',
     en: 'today'
   },
-  WEEK: {
+  THISWEEK: {
     zh: '本周',
     en: 'week'
   },
-  MONTH: {
+  THISMONTH: {
     zh: '本月',
+    en: 'month'
+  },
+  THISYEAR: {
+    zh: '今年',
+    en: 'year'
+  },
+  DAY: {
+    zh: '天',
+    en: 'day'
+  },
+  WEEK: {
+    zh: '周',
+    en: 'week'
+  },
+  MONTH: {
+    zh: '月',
     en: 'month'
   },
   PROJECT: {
@@ -92,7 +108,7 @@ const langInfo = {
     en: 'project'
   },
   YEAR: {
-    zh: '今年',
+    zh: '年',
     en: 'year'
   },
   LONG: {
@@ -173,11 +189,11 @@ const langInfo = {
   },
   BUFFER: {
     zh: '缓冲',
-    en: 'Buffer'
+    en: 'buffer'
   },
   IDEA: {
     zh: '灵感',
-    en: 'Idea'
+    en: 'idea'
   },
   // } common 
 

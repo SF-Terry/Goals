@@ -221,10 +221,10 @@ export const innerStateModel = {
  */
 export const allTargetTypes = new Map([
     [1, Lang.TODAY],
-    [2, Lang.WEEK],
-    [3, Lang.MONTH],
+    [2, Lang.THISWEEK],
+    [3, Lang.THISMONTH],
     [4, Lang.PROJECT],
-    [5, Lang.YEAR],
+    [5, Lang.THISYEAR],
     [6, Lang.LONG],
     [7, Lang.TOMORROW],
     [8, Lang.NEXTWEEK],

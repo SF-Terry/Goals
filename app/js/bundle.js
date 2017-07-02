@@ -6068,12 +6068,28 @@ var langInfo = {
     zh: '今天',
     en: 'today'
   },
-  WEEK: {
+  THISWEEK: {
     zh: '本周',
     en: 'week'
   },
-  MONTH: {
+  THISMONTH: {
     zh: '本月',
+    en: 'month'
+  },
+  THISYEAR: {
+    zh: '今年',
+    en: 'year'
+  },
+  DAY: {
+    zh: '天',
+    en: 'day'
+  },
+  WEEK: {
+    zh: '周',
+    en: 'week'
+  },
+  MONTH: {
+    zh: '月',
     en: 'month'
   },
   PROJECT: {
@@ -6081,7 +6097,7 @@ var langInfo = {
     en: 'project'
   },
   YEAR: {
-    zh: '今年',
+    zh: '年',
     en: 'year'
   },
   LONG: {
@@ -6162,11 +6178,11 @@ var langInfo = {
   },
   BUFFER: {
     zh: '缓冲',
-    en: 'Buffer'
+    en: 'buffer'
   },
   IDEA: {
     zh: '灵感',
-    en: 'Idea'
+    en: 'idea'
   },
   // } common 
 
@@ -8006,7 +8022,7 @@ var innerStateModel = exports.innerStateModel = {
    * @const {map}
    * all the target types 
    */
-};var allTargetTypes = exports.allTargetTypes = new Map([[1, _index3.default.TODAY], [2, _index3.default.WEEK], [3, _index3.default.MONTH], [4, _index3.default.PROJECT], [5, _index3.default.YEAR], [6, _index3.default.LONG], [7, _index3.default.TOMORROW], [8, _index3.default.NEXTWEEK], [9, _index3.default.NEXTMONTH], [10, _index3.default.NEXTYEAR], [11, _index3.default.BUFFER], [12, _index3.default.IDEA]]);
+};var allTargetTypes = exports.allTargetTypes = new Map([[1, _index3.default.TODAY], [2, _index3.default.THISWEEK], [3, _index3.default.THISMONTH], [4, _index3.default.PROJECT], [5, _index3.default.THISYEAR], [6, _index3.default.LONG], [7, _index3.default.TOMORROW], [8, _index3.default.NEXTWEEK], [9, _index3.default.NEXTMONTH], [10, _index3.default.NEXTYEAR], [11, _index3.default.BUFFER], [12, _index3.default.IDEA]]);
 
 // /**
 //  * @const {map}
@@ -94882,6 +94898,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
@@ -94917,6 +94935,32 @@ var TimelineTypeSelector = function (_TypeSelector) {
     !isAdded && _this.taskTypesOptions.splice(0, 0, {
       text: _index2.default.ALL,
       value: 0
+    });
+
+    // update basic text
+    _this.taskTypesOptions = _this.taskTypesOptions.map(function (option) {
+      var value = option.value;
+
+      switch (value) {
+        case 1:
+          return _extends({}, option, {
+            text: _index2.default.DAY
+          });
+        case 2:
+          return _extends({}, option, {
+            text: _index2.default.WEEK
+          });
+        case 3:
+          return _extends({}, option, {
+            text: _index2.default.MONTH
+          });
+        case 5:
+          return _extends({}, option, {
+            text: _index2.default.YEAR
+          });
+        default:
+          return option;
+      }
     });
     return _this;
   }
