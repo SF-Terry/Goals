@@ -148,7 +148,7 @@ const mapDispatchToProps = dispatch => {
             text: notion,
             defaultValue: dataStr,
             modalShowed() {
-              $('#targetsManagement-prompt input').select()
+              $('#targetsManagement-prompt').select()
               // copy value in input
               if (isSupportExecCommand) {
                 document.execCommand('copy')
