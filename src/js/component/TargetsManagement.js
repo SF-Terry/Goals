@@ -36,7 +36,7 @@ const MessageBox = () => (
 const getPromptConfrimFn = promptConfrim => {
 
 	return () => {
-		const inputValue = $('#targetsManagement-prompt input').val()
+		const inputValue = $('#targetsManagement-prompt').val()
 		promptConfrim(inputValue)
 	}
 }

@@ -69658,7 +69658,7 @@ var MessageBox = function MessageBox() {
 var getPromptConfrimFn = function getPromptConfrimFn(promptConfrim) {
 
 	return function () {
-		var inputValue = $('#targetsManagement-prompt input').val();
+		var inputValue = $('#targetsManagement-prompt').val();
 		promptConfrim(inputValue);
 	};
 };
