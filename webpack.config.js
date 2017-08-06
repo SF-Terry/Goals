@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const express = require('express')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const PORT = process.env.PORT
 const BUILD = process.env.BUILD
 
@@ -52,8 +53,6 @@ module.exports = {
     ]
   },
   plugins: BUILD ? [
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
-    new webpack.optimize.UglifyJsPlugin()
   ] : []
 }
 

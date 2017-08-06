@@ -44,6 +44,7 @@
     "rmc-picker": "^3.6.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.7",
     "webpack": "^3.0.0"
   }
