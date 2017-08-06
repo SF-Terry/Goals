@@ -5,6 +5,9 @@ html, body {
 }
 
 #TargetsManagement {
+	max-width: 768px;
+	margin: 0 auto;
+
 	#caveat {
 		position: fixed; top: 1%; left: 1%; z-index: 9;
 		width: 98%; 

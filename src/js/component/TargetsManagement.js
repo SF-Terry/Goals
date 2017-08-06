@@ -132,10 +132,10 @@ class TargetsManagement extends React.Component {
 					<Modal.Actions className='center'>
 						<Button color='red' onClick={confirmCancel}>
 							{Lang.CANCEL}
-      			</Button>
+						</Button>
 						<Button color='green' onClick={confirmConfrim}>
 							{Lang.CONFIRM}
-      		</Button>
+						</Button>
 					</Modal.Actions>
 				</Modal>
 				{/* } confirm modal */}
@@ -152,10 +152,10 @@ class TargetsManagement extends React.Component {
 					<Modal.Actions>
 						<Button color='red' onClick={promptCancel}>
 							{Lang.CANCEL}
-      			</Button>
+						</Button>
 						<Button color='green' onClick={getPromptConfrimFn(promptConfrim)}>
 							{Lang.CONFIRM}
-      		</Button>
+						</Button>
 					</Modal.Actions>
 				</Modal>
 				{/* } prompt modal */}
