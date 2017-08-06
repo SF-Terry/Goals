@@ -9,7 +9,6 @@ import {
   modifyInnerState_homeRoute,
   modifyInnerState_timelineType
 } from '../action/modifyInnerState'
-import monthsMap from '../store/initialState/monthsMap'
 
 const getState = () => ReduxStore.getState()
 const getInnerState = () => getState().innerState
@@ -21,11 +20,11 @@ const getInnerState = () => getState().innerState
    */
 const getTimelineInfo = targets => {
   let timelineInfo = {}
-  targets.map(target => {
+  targets
+    .map(target => {
     const { completeDate } = target
     const year = moment(completeDate).year()
-    const monthNum = moment(completeDate).month() + 1
-    const month = monthsMap.get(monthNum)
+    const month = moment(completeDate).month() + 1
     const date = moment(completeDate).date()
 
     timelineInfo[year] = timelineInfo[year] || {}
@@ -74,6 +73,8 @@ const TimelineContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Timeline)
+
+
 
 
 export default TimelineContainer

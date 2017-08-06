@@ -5,35 +5,33 @@ import TimelineTypeSelector from './TimelineTypeSelector'
 import { Segment, Button, Accordion, Icon, Grid } from 'semantic-ui-react'
 const { Row, Column } = Grid
 
+import monthsMap from '../store/initialState/monthsMap'
 import Lang from '../util/lang/index'
 
 
-/**
- * sort list targets
- * @param {object} a 
- * @param {object} b 
- */
-const sort = (a, b) => {
-  // sort by end date 
-  const aDate = moment(a.completeDate)
-  const bDate = moment(b.completeDate)
-  const isAfter = aDate.isAfter(bDate)
-  const isBefore = aDate.isBefore(bDate)
-  if (isAfter) {
-    return 1
-  }
-  if (isBefore) {
-    return -1
-  }
-  return 0
+function getYears(timelineInfo) {
+  return Object.keys(timelineInfo).reverse()
 }
 
+function getMonthInfos(timelineInfo, year) {
+  return Object.keys(timelineInfo[year])
+    .sort()
+    .reverse()
+    .map(month => {
+      month = parseInt(month)
+      return {
+        number: month,
+        name: monthsMap.get(month)
+      }
+    })
+}
+function getDates(timelineInfo, year, month) {
+  return Object.keys(timelineInfo[year][month]).reverse()
+}
 
-
-const getYears = timelineInfo => Object.keys(timelineInfo).reverse()
-const getMonths = (timelineInfo, year) => Object.keys(timelineInfo[year]).reverse()
-const getDates = (timelineInfo, year, month) => Object.keys(timelineInfo[year][month]).reverse()
-const getTargets = (timelineInfo, year, month, date) => timelineInfo[year][month][date]
+function getTargets(timelineInfo, year, month, date) {
+  return timelineInfo[year][month][date]
+}
 
 /**
  * get jsx to render
@@ -52,19 +50,19 @@ const getJsx = timelineInfo => {
       <Accordion.Content>
         <div>
           {
-            getMonths(t, year).map((month, i) => (
+            getMonthInfos(t, year).map((monthInfo, i) => (
               <Accordion defaultActiveIndex={0} key={i}>
                 <Accordion.Title>
                   <h5>
                     &nbsp;&nbsp;
                     <Icon name='dropdown' />
-                    {month}
+                    {monthInfo.name}
                   </h5>
                 </Accordion.Title>
                 <Accordion.Content>
                   <div>
                     {
-                      getDates(t, year, month).map((date, i) => (
+                      getDates(t, year, monthInfo.number).map((date, i) => (
                         <Accordion defaultActiveIndex={0} key={i}>
                           <Accordion.Title>
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -74,7 +72,7 @@ const getJsx = timelineInfo => {
                           <Accordion.Content>
                             <div>
                               {
-                                getTargets(t, year, month, date).map((target, i) => (
+                                getTargets(t, year, monthInfo.number, date).map((target, i) => (
                                   <ListItemContainer item={target} key={i} />
                                 ))
                               }

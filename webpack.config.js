@@ -1,27 +1,10 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+const express = require('express')
+const PORT = process.env.PORT
+const BUILD = process.env.BUILD
 
-
-var isProduction = true;
-
-var plugins = [];
-
-try {
-  isProduction = process.argv.filter(arg => /devProd/.test(arg)).length > 0;
-} catch (e) {
-
-}
-
-if (isProduction) {
-  plugins.push(new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'));
-  plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify('production')
-    }
-  }));
-  plugins.push(new webpack.optimize.UglifyJsPlugin());
-}
-
+const app = express()
 
 module.exports = {
   entry: './src/entry.js',
@@ -29,6 +12,7 @@ module.exports = {
     path: path.resolve(__dirname, 'app/js'),
     filename: 'bundle.js'
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -67,5 +51,14 @@ module.exports = {
       }
     ]
   },
-  plugins: plugins
+  plugins: BUILD ? [
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
+    new webpack.optimize.UglifyJsPlugin()
+  ] : []
+}
+
+// server
+if (PORT) {
+  app.use(express.static(__dirname))
+  app.listen(PORT)
 }

@@ -91,7 +91,7 @@ export const showCaveat = msg => {
  * @param {string} id
  */
 export const getTargetById = id => {
-  return ReduxStore.getState().targets.filter( target => target.id === id )[0]
+  return ReduxStore.getState().targets.filter(target => target.id === id)[0]
 }
 
 /**

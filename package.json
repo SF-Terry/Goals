@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --watch",
-    "build": "webpack -p",
+    "dev": "cross-env PORT=3000 webpack --watch",
+    "build": "cross-env BUILD=1 webpack -p",
     "server": "http-server -p 8080"
   },
   "keywords": [],
@@ -31,7 +31,9 @@
   "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-preset-stage-2": "^6.22.0",
+    "cross-env": "^5.0.4",
     "css-loader": "^0.26.0",
+    "express": "^4.15.3",
     "file-loader": "^0.9.0",
     "lodash": "^4.17.2",
     "moment": "^2.17.0",
