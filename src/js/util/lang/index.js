@@ -271,7 +271,7 @@ const langInfo = {
   // { info panel  
   INFOPANEL_NAME_INPUT_PLACEHOLDER: {
     zh: '目标',
-    en: 'Target Content'
+    en: `Goal's Content`
   },
   INFOPANEL_IMPORTANT_URGENT: {
     zh: '重急',

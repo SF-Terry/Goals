@@ -20,7 +20,7 @@ window.$ = $
 
 let store = createStore(
   targetsManagement,
-  applyMiddleware(logger, setStateToLocalStore)
+  applyMiddleware(setStateToLocalStore)
 )
 
 // sync store to global varible: ReduxStore
