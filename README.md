@@ -60,7 +60,7 @@ Export data to email
 
 
 # Getting started
-The best way to get started:  [Click here](https://sf-terry.github.io/tm/)
+The best way to get started:  [Click here](https://sf-terry.github.io/goals)
 
 
 # Contributing
