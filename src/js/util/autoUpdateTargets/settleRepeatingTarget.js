@@ -31,9 +31,14 @@ const updateTargetDate = ({ id, type, startDate, endDate, minDate, maxDate }) =>
   const beginOfNow = moment().startOf(type)
 
   const updateDate = (date, dateStr) => {
-    const beginOfDate = date.startOf(unit)
-    const interval = Math.abs(beginOfNow.diff(beginOfDate, unit))
-    const resultDate = date.add(interval, unit)
+    const isMaxDate = dateStr === 'maxDate'
+    const beginOfDate = moment(date).startOf(unit)
+    
+    // consider the speicail date: max date(have 1 unit excessively,for example, not 1st 23:59, it's 2st 00:00) 
+    const num = isMaxDate ? 1 : 0
+
+    const interval = Math.abs(beginOfNow.diff(beginOfDate, unit)) + num
+    const resultDate = moment(date).add(interval, unit)
     ReduxStore.dispatch(modifyTarget({
       id,
       key: dateStr,
@@ -58,7 +63,7 @@ const updateTargetDate = ({ id, type, startDate, endDate, minDate, maxDate }) =>
  */
 const getObsoletedDate = (completeDate, type) => {
   const unit = allTargetTypeUnits.get(type)
-  return completeDate.endOf(unit)
+  return moment(completeDate).endOf(unit)
 }
 
 /**

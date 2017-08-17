@@ -13,7 +13,6 @@ const sort = (a, b) => {
   // sort by deleted date 
   const aDate = moment(a.deletedDate)
   const bDate = moment(b.deletedDate)
-  // console.log(1, aDate, bDate)
   const isAfter = aDate.isAfter(bDate)
   const isBefore = aDate.isBefore(bDate)
   if (isAfter) {
