@@ -1,6 +1,6 @@
 # Introduction
 **Goals** helps us manage our short and long goals easily.  
-I've tried plenty of todo Apps in the past, but none was expected, for they were both design for public, so developers added features as much as possible, i.e., there were too many features i didn't need. Besides, most of apps stored your data on cloud, which might not protect our privancy.  
+I've tried plenty of todo Apps in the past, but none was expected, for they were both design for public, so developers added features as much as possible, i.e., there were too many features we didn't need. Besides, most of apps stored our data on cloud, which might not protect our privancy.  
 So I decided to start this project, which must be concise, easy to use, safe and supports necessary features.
 
 # Screenshots
