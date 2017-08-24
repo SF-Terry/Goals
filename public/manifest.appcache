@@ -1,0 +1,17 @@
+CACHE MANIFEST
+
+CACHE:
+index.html
+favicon.ico
+js/bundle.js
+js/vendor.js
+css/themes/default/assets/fonts/icons.eot
+css/themes/default/assets/fonts/icons.otf
+css/themes/default/assets/fonts/icons.svg
+css/themes/default/assets/fonts/icons.ttf
+css/themes/default/assets/fonts/icons.woff
+css/themes/default/assets/fonts/icons.woff2
+css/themes/default/assets/images/flags.png
+css/semantic.css
+
+# 201708241206

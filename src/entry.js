@@ -6,4 +6,4 @@ import './sass/app.scss'
 import 'babel-polyfill'
 
 // app
-import './js/component/app.js'
+import './js/component/app.js'   

@@ -56,9 +56,9 @@ module.exports = {
     ]
   },
   plugins: BUILD ? [
-    new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin()
   ] : [
-    new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin()
   ]
 }
 
