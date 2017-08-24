@@ -2,6 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const express = require('express')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+
 const PORT = process.env.PORT
 const BUILD = process.env.BUILD
 
@@ -53,7 +56,10 @@ module.exports = {
     ]
   },
   plugins: BUILD ? [
-  ] : []
+    new BundleAnalyzerPlugin()
+  ] : [
+    new BundleAnalyzerPlugin()
+  ]
 }
 
 // server

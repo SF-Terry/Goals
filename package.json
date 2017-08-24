@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env PORT=3000 webpack --watch",
+    "dev": "cross-env PORT=3000 webpack --w",
     "build": "cross-env BUILD=1 webpack -p",
     "server": "http-server -p 8080"
   },
@@ -46,6 +46,7 @@
     "style-loader": "^0.13.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.7",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.9.0"
   }
 }
