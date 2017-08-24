@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env PORT=3000 webpack --w",
-    "build": "cross-env BUILD=1 webpack -p",
+    "build": "cross-env BUILD=1 webpack -p --w",
     "server": "http-server -p 8080"
   },
   "keywords": [],

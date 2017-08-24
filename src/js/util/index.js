@@ -34,13 +34,11 @@ export const logger = store => next => action => {
  * Sync the localStorage
  */
 export const setStateToLocalStore = store => next => action => {
+  
   let result = next(action)
-  // save state to localStorage
+
   setLocalStore(store.getState())
 
-  // Console
-  // console.log('before localStorage state: ', store.getState())
-  console.log('localStorage: ', getLocalStore())
   return result
 }
 
