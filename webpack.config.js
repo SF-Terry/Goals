@@ -13,7 +13,7 @@ const app = express()
 module.exports = {
   entry: './src/entry.js',
   output: {
-    path: path.resolve(__dirname, 'app/js'),
+    path: path.resolve(__dirname, 'public/js'),
     filename: 'bundle.js'
   },
   devtool: 'source-map',
