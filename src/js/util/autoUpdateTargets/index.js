@@ -7,7 +7,7 @@ import settleFutureTargets from './settleFutureTargets'
 
 /**
  * auto update targets
- * @param {number} interval
+ * @param {number} timeInterval
  */
 const autoUpdateTargets = timeInterval => {
   // settle repeating target every 'timeInterval' millisconds

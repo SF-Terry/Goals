@@ -30,7 +30,7 @@ const updateTargetType = (id, type) => {
 
 
 /**
- * update futrue target
+ * update future target
  * @param {object} target
  */
 const settleFutureTarget = target => {

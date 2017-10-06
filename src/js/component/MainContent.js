@@ -64,7 +64,7 @@ const sort = (a, b) => {
           return 1
         }
       }
-      if (isSameLevel) {
+      if (isSameIsTiming) {
         // sort by start date 
         const aDate = moment(a.startDate)
         const bDate = moment(b.startDate)

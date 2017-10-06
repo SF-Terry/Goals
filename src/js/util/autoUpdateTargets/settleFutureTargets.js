@@ -2,7 +2,7 @@ import settleFutureTarget from './settleFutureTarget'
 
 
 /**
- * update futrue targets
+ * update futrue targets,like 'tomorrow', 'nextMonth', 'nextYear'
  * @param {array} targets
  */
 const settleFutureTargets = targets => {

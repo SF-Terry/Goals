@@ -48590,7 +48590,7 @@
 
 	/**
 	 * auto update targets
-	 * @param {number} interval
+	 * @param {number} timeInterval
 	 */
 	var autoUpdateTargets = function autoUpdateTargets(timeInterval) {
 	  // settle repeating target every 'timeInterval' millisconds
@@ -48626,7 +48626,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * update target by its repeating propery
+	 * update target by its repeating property
 	 * @param {array} targets
 	 */
 	var settleRepeatingTargets = function settleRepeatingTargets(targets) {
@@ -48868,7 +48868,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * update futrue targets
+	 * update futrue targets,like 'tomorrow', 'nextMonth', 'nextYear'
 	 * @param {array} targets
 	 */
 	var settleFutureTargets = function settleFutureTargets(targets) {
@@ -48927,7 +48927,7 @@
 	};
 
 	/**
-	 * update futrue target
+	 * update future target
 	 * @param {object} target
 	 */
 	var settleFutureTarget = function settleFutureTarget(target) {
@@ -83568,7 +83568,7 @@
 	          return 1;
 	        }
 	      }
-	      if (isSameLevel) {
+	      if (isSameIsTiming) {
 	        // sort by start date 
 	        var _aDate = (0, _moment2.default)(a.startDate);
 	        var _bDate = (0, _moment2.default)(b.startDate);

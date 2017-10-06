@@ -2,7 +2,7 @@ import settleRepeatingTarget from './settleRepeatingTarget'
 
 
 /**
- * update target by its repeating propery
+ * update target by its repeating property
  * @param {array} targets
  */
 const settleRepeatingTargets = targets => {
